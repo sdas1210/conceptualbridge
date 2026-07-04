@@ -3,6 +3,10 @@
     {
       "source": "/api/fetch-jobs",
       "destination": "/api/fetch-jobs.js"
+    },
+    {
+      "source": "/api/fetch-questions",
+      "destination": "/api/fetch-questions.js"
     }
   ]
 }
