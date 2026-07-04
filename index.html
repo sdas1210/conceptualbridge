@@ -2,28 +2,105 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conceptual Bridge</title>
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0, #3182ce);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite; /* Animated moving background gradient */
+            animation: gradientBG 15s ease infinite;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header-container {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         h1 {
             color: white;
             font-size: 3.5rem;
+            margin: 0 0 10px 0;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 1.5s ease-out forwards; /* Smooth text entrance animation */
+            animation: fadeInUp 1.2s ease-out forwards;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
+        .subtitle {
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out 0.3s forwards; /* Appears slightly after h1 */
+        }
+
+        /* Responsive Dashboard Grid Container */
+        .portal-grid {
+            display: flex;
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out 0.6s forwards; /* Appears last */
+        }
+
+        /* Glassmorphic Portal Navigation Cards */
+        .portal-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            flex: 1;
+            max-width: 400px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .portal-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .icon-box {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .portal-card h2 {
+            margin: 0 0 12px 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .portal-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        /* Animations mapping */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -36,9 +113,41 @@
                 transform: translateY(0);
             }
         }
+
+        /* Responsive Breakpoint for Mobile Phones */
+        @media (max-width: 650px) {
+            .portal-grid {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            h1 { font-size: 2.5rem; }
+            .portal-card { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to Conceptual Bridge</h1>
+
+    <div class="header-container">
+        <h1>Welcome to Conceptual Bridge</h1>
+        <p class="subtitle">Your ultimate preparation hub for competitive examinations</p>
+    </div>
+
+    <div class="portal-grid">
+        <!-- Route 2 Linked Page: Jobs Corner -->
+        <a href="jobs.html" class="portal-card">
+            <div class="icon-box">💼</div>
+            <h2>Jobs Corner</h2>
+            <p>Stay updated with real-time official notifications, results announcement dates, and recruitment timelines.</p>
+        </a>
+
+        <!-- ₹1 Exam Module Linked Page: Exam Corner -->
+        <a href="exams.html" class="portal-card">
+            <div class="icon-box">✍️</div>
+            <h2>Exam Corner</h2>
+            <p>Access high-quality mock test packages. Practice with scrambled options and get instant live rankings.</p>
+        </a>
+    </div>
+
 </body>
 </html>
