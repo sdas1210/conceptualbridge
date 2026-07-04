@@ -1,0 +1,201 @@
+Q| Which institution's researchers developed smart peptides for pH-responsive medical applications in June 2025? / কোন প্রতিষ্ঠানের গবেষকরা ২০২৫ সালের জুনে পিএইচ-রেসপন্সিভ (pH-responsive) চিকিৎসা প্রয়োগের জন্য স্মার্ট পেপটাইড তৈরি করেছেন?
+A| BITS Pilani / বিআইটিএস পিলানি (BITS Pilani)
+B| BIT Mesra / বিআইটি মেসরা (BIT Mesra)
+C| IIT Delhi / আইআইটি দিল্লি (IIT Delhi)
+D| IIT Guwahati / আইআইটি গুয়াহাটি (IIT Guwahati)
+Shift|08/01/2026 9:00 AM-10:30 AM
+Correct|B
+
+Q| Which 2025 novel by Colum McCann follows a journalist on a submarine cable-laying ship? / ক্যালাম ম্যাকক্যানের ২০২৫ সালের কোন উপন্যাসটি সাবমেরিন কেবল-লেয়িং জাহাজে থাকা এক সাংবাদিকের কাহিনী অনুসরণ করে?
+A| Silver Elite / সিলভার এলিট (Silver Elite)
+B| Wild Dark Shore / ওয়াইল্ড ডার্ক শোর (Wild Dark Shore)
+C| Twist / টুইস্ট (Twist)
+D| Under the Eye of the Big Bird / আন্ডার দ্য আই অফ দ্য বিগ বার্ড (Under the Eye of the Big Bird)
+Shift|04/12/2025 12:45 PM-2:15 PM
+Correct|C
+
+Q| How much percentage of the rural population has access to all-season roads in India in the Sustainable Development Report 2025? / টেকসই উন্নয়ন প্রতিবেদন (Sustainable Development Report) ২০২৫ অনুযায়ী, ভারতে গ্রামীণ জনসংখ্যার কত শতাংশের বারোমাসি রাস্তায় প্রবেশাধিকার রয়েছে?
+A| 95.6% / ৯৫.৬%
+B| 93.7% / ৯৩.৭%
+C| 99.0% / ৯৯.০%
+D| 89.9% / ৮৯.৯%
+Shift|15/12/2025 4:30 PM-6:00 PM
+Correct|C
+
+Q| In which of the following Sustainable Development Goals (SDGs) is India on track or maintaining SDG achievement, as per the Sustainable Development Report 2025? / টেকসই উন্নয়ন প্রতিবেদন ২০২৫ অনুসারে, নিচের কোন টেকসই উন্নয়ন লক্ষ্যমাত্রায় (SDGs) ভারত সঠিক পথে রয়েছে বা লক্ষ্যমাত্রা বজায় রাখছে?
+A| SDG 1 / SDG 1
+B| SDG 13 / SDG 13
+C| SDG 14 / SDG 14
+D| SDG 9 / SDG 9
+Shift|23/12/2025 12:45 PM-2:15 PM
+Correct|A
+
+Q| In which of the following months, during the 'Genomics Data Conclave', was the 'Genomelndia Data' dedicated to the researchers by Narendra Modi, Prime Minister of India? / 'জেনোমিক্স ডেটা কনক্লেভ' চলাকালীন কোন মাসে ভারতের প্রধানমন্ত্রী নরেন্দ্র মোদী গবেষকদের উদ্দেশ্যে 'জেনোমইন্ডিয়া ডেটা' (GenomeIndia Data) উৎসর্গ করেছিলেন?
+A| January 2025 / জানুয়ারি ২০২৫
+B| April 2025 / এপ্রিল ২০২৫
+C| June 2025 / জুন ২০২৫
+D| March 2025 / মার্চ ২০২৫
+Shift|01/12/2025 4:30 PM-6:00 PM
+Correct|A
+
+Q| Which athlete broke the Australian national 200 m record with a time of 20.02 seconds at the Golden Spike meet in Ostrava in 2025? / ওস্ট্রাভায় ২০২৫ সালের গোল্ডেন স্পাইক মিটে ২০.০২ সেকেন্ড সময় নিয়ে কোন অ্যাথলেট অস্ট্রেলিয়ার জাতীয় ২০০ মিটার রেকর্ড ভেঙেছেন?
+A| Gout Gout / গৌত গৌত (Gout Gout)
+B| Aidan Murphy / এইডান মারফি (Aidan Murphy)
+C| Reynier Mena / রেইনিয়ার মেনা (Reynier Mena)
+D| Armand Duplantis / আরমান্ড ডুপ্লান্টিস (Armand Duplantis)
+Shift|21/12/2025 12:45 PM-2:15 PM
+Correct|A
+
+Q| The earlier Bilateral Investment Treaty (BIT) between India and Kyrgyzstan, which was replaced in 2025, was originally enforced in which year? / ভারত ও কিরগিজস্তানের মধ্যকার পূর্ববর্তী দ্বিপাক্ষিক বিনিয়োগ চুক্তি (BIT), যা ২০২৫ সালে প্রতিস্থাপিত হয়েছিল, তা মূলত কোন বছর কার্যকর হয়েছিল?
+A| 2000 / ২০00
+B| 2010 / ২০১০
+C| 2021 / ২০২১
+D| 2019 / ২০১৯
+Shift|03/12/2025 9:00 AM-10:30 AM
+Correct|A
+
+Q| Who became the first athlete in history to run sub-10 s in the 100 m for 11 consecutive years? / ইতিহাসের প্রথম অ্যাথলেট হিসেবে কে টানা ১১ বছর ১০০ মিটারে ১০ সেকেন্ডের কম সময়ে (sub-10 s) দৌড়ানোর কীর্তি গড়েছেন?
+A| Usain Bolt / উসেইন বোল্ট (Usain Bolt)
+B| Trayvon Bromell / ট্রেভন ব্রমেল (Trayvon Bromell)
+C| Akani Simbine / আকানি সিম্বাইন (Akani Simbine)
+D| Andre De Grasse / আন্দ্রে দে গ্রাস (Andre De Grasse)
+Shift|09/12/2025 4:30 PM-6:00 PM
+Correct|C
+
+Q| What honourarium did the P C Chandra Puraskaar include? / পি সি চন্দ্র পুরস্কারের (P C Chandra Puraskaar) সম্মানীর পরিমাণ কত ছিল?
+A| ₹20 lakh / ₹২০ লাখ
+B| ₹15 lakh / ₹১৫ লাখ
+C| ₹10 lakh / ₹১০ lakh
+D| ₹5 lakh / ₹৫ লাখ
+Shift|16/12/2025 4:30 PM-6:00 PM
+Correct|A
+
+Q| Which of the following banks of India reported a 33 per cent rise in standalone net profit at ₹5,004 crore for the fourth quarter (Q4) of the financial year 2024-25 (FY25)? / ভারতের কোন ব্যাংক ২০২৪-২৫ অর্থবর্ষের (FY25) চতুর্থ ত্রৈমাসিকে (Q4) একক নিট লাভে ৩৩ শতাংশ বৃদ্ধির সাথে ৫,০০৪ কোটি টাকা লাভ করেছে বলে জানিয়েছে?
+A| Canara Bank / কানারা ব্যাংক (Canara Bank)
+B| Bank of Baroda / ব্যাংক অফ বরোদা (Bank of Baroda)
+C| State Bank of India / স্টেট ব্যাংক অফ ইন্ডিয়া (State Bank of India)
+D| Punjab National Bank / পাঞ্জাব ন্যাশনাল ব্যাংক (Punjab National Bank)
+Shift|27/11/2025 12:45 PM-2:15 PM
+Correct|A
+
+Q| Which book, launched by Union Minister Dharmendra Pradhan at the World Book Fair 2025, is part of the PM YUVA 2.0 scheme? / বিশ্ব বইমেলা ২০২৫-এ কেন্দ্রীয় মন্ত্রী ধর্মেন্দ্র প্রধান কর্তৃক উন্মোচিত কোন বইটি পিএম যুব ২.০ (PM YUVA 2.0) প্রকল্পের অংশ?
+A| Indian Renaissance: The Modi Decade / ইন্ডিয়ান রেনেসাঁ: দ্য মোদি ডিকেড (Indian Renaissance: The Modi Decade)
+B| The Elsewhereans / দ্য এলসহোয়্যারিয়ানস (The Elsewhereans)
+C| The Saga of Kudopali / দ্য সাগা অফ কুদোপালি (The Saga of Kudopali)
+D| Death of a Gentleman / ডেথ অফ এ জেন্টলম্যান (Death of a Gentleman)
+Shift|08/12/2025 12:45 PM-2:15 PM
+Correct|C
+
+Q| As announced in the April 2025 Monetary Policy Committee meeting, the Reserve Bank of India aims to keep liquidity surplus close to what percentage of deposits? / এপ্রিল ২০২৫-এর মুদ্রানীতি কমিটির (Monetary Policy Committee) বৈঠকে ঘোষণা অনুযায়ী, রিজার্ভ ব্যাংক অফ ইন্ডিয়া তারল্য উদ্বৃত্ত আমানতের কত শতাংশের কাছাকাছি রাখার লক্ষ্য নির্ধারণ করেছে?
+A| 0.5% / ০.৫%
+B| 2% / ২%
+C| 1% / ১%
+D| 1.5% / ১.৫%
+Shift|23/12/2025 4:30 PM-6:00 PM
+Correct|C
+
+Q| Which team won the 2025 EFL Championship playoff final and secured promotion to the Premier League? / কোন দল ২০২৫ সালের ইএফএল চ্যাম্পিয়নশিপ প্লে-অফ ফাইনালে জিতে প্রিমিয়ার লিগে উন্নীত হয়েছে?
+A| Southampton / সাউদাম্পটন (Southampton)
+B| Sunderland / সান্ডারল্যান্ড (Sunderland)
+C| Sheffield United / শেফিল্ড ইউনাইটেড (Sheffield United)
+D| Leeds United / লিডস ইউনাইটেড (Leeds United)
+Shift|26/12/2025 9:00 AM-10:30 AM
+Correct|B
+
+Q| Which sprinter broke his own national 200 m record with a run of 20.02 seconds in Ostrava? / ওস্ট্রাভায় ২০.০২ সেকেন্ডে দৌড়ে কোন স্প্রিন্টার নিজেরই জাতীয় ২০০ মিটার রেকর্ড ভেঙেছেন?
+A| Gout Gout / গৌত গৌত (Gout Gout)
+B| Reynier Mena / রেইনিয়ার মেনা (Reynier Mena)
+C| Victor Lopez / ভিক্টর লোপেজ (Victor Lopez)
+D| Lamine Yamal / লামিনে ইয়ামাল (Lamine Yamal)
+Shift|19/12/2025 12:45 PM-2:15 PM
+Correct|A
+
+Q| Who set a new world record in the men's 100 m freestyle swimming at Olympic Games Paris, 2024? / প্যারিস অলিম্পিক গেমস ২০২৪-এ পুরুষদের ১০০ মিটার ফ্রিস্টাইল সাঁতারে কে নতুন বিশ্ব রেকর্ড গড়েছেন?
+A| David Popovici / ডেভিড পপোভিসি (David Popovici)
+B| Kyle Chalmers / কাইল চালমার্স (Kyle Chalmers)
+C| Tom Dean / টম ডিন (Tom Dean)
+D| Pan Zhanle / প্যান জানলে (Pan Zhanle)
+Shift|24/12/2025 12:45 PM-2:15 PM
+Correct|D
+
+Q| Which of the following missions led to the establishment of a National Biobank at the CSIR-Institute of Genomics and Integrative Biology (IGIB), New Delhi, in July 2025? / কোন মিশনের ফলে ২০২৫ সালের জুলাই মাসে নয়াদিল্লির সিএসআইআর-ইনституটিউট অফ জেনোমিক্স অ্যান্ড ইন্টিগ্রেティブ বায়োলজি (IGIB)-তে একটি জাতীয় বায়োব্যাংক (National Biobank) প্রতিষ্ঠিত হয়?
+A| Bharat GeneBank Initiative / ভারত জিনব্যাংক উদ্যোগ (Bharat GeneBank Initiative)
+B| Phenome India Project / ফিনোম ইন্ডিয়া প্রজেক্ট (Phenome India Project)
+C| Genome India Mission / জেনোম ইন্ডিয়া মিশন (Genome India Mission)
+D| India Biotech 2030 Mission / ইন্ডিয়া বায়োটেক ২০৩০ মিশন (India Biotech 2030 Mission)
+Shift|21/12/2025 12:45 PM-2:15 PM
+Correct|B
+
+Q| In 2025, which authority raised serious objections to the Aparajita Bill 2024, calling its proposed punishments under BNS excessively harsh and disproportionate? / ২০২৫ সালে কোন কর্তৃপক্ষ অপরাজিতা বিল ২০২৪-এর তীব্র আপত্তি জানিয়ে বিএনএস (BNS)-এর অধীনে এর প্রস্তাবিত শাস্তিগুলোকে অতিরিক্ত কঠোর ও অসঙ্গতিপূর্ণ বলে অভিহিত করেছে?
+A| Supreme Court / সুপ্রিম কোর্ট
+B| Central Government / কেন্দ্রীয় সরকার
+C| Law Commission of India / ভারতের আইন কমিশন (Law Commission of India)
+D| National Commission for Women / জাতীয় মহিলা কমিশন (National Commission for Women)
+Shift|11/12/2025 9:00 AM-10:30 AM
+Correct|B
+
+Q| Valueattics Reinsurance, India's first private reinsurer, which received the nod of the Insurance Regulatory and Development Authority of India (IRDAI) to commence reinsurance business in India in March 2025 is promoted by which of the following individuals/entities? / ভ্যালুঅ্যাটিক্স রিইন্সুরেন্স (Valueattics Reinsurance), ভারতের প্রথম বেসরকারি পুনঃবীমাকারী প্রতিষ্ঠান, যেটি ২০২৫ সালের মার্চ মাসে ভারতে পুনঃবীমা ব্যবসা শুরু করার জন্য আইআরডিএআই (IRDAI)-এর অনুমোদন পেয়েছে, এটি নিচের কোন ব্যক্তি/সংস্থা দ্বারা প্রবর্তিত?
+A| Nandan Nilekani and SBI Life / নন্দন নিলেকানি এবং এসবিআই লাইফ (Nandan Nilekani and SBI Life)
+B| Uday Kotak and LIC / উদয় কোটাক এবং এলআইসি (Uday Kotak and LIC)
+C| Rakesh Jhunjhunwala and Axis Bank / রাকেশ ঝুনঝুনওয়ালা এবং অ্যাক্সিস ব্যাংক (Rakesh Jhunjhunwala and Axis Bank)
+D| Prem Watsa and Kamesh Goyal / প্রেম ওয়াটসা এবং কামেশ গোয়েল (Prem Watsa and Kamesh Goyal)
+Shift|03/02/2026 12:45 PM-2:15 PM
+Correct|D
+
+Q| As per Sustainable Development Goals - National Indicator Framework Progress Report, 2025, what was the percentage of waste processed in 2024-25, from 17.97% in 2015-16, indicating significant progress in waste management efficiency in India? / টেকসই উন্নয়ন লক্ষ্যমাত্রা - জাতীয় সূচক কাঠামো অগ্রগতি প্রতিবেদন (Sustainable Development Goals - National Indicator Framework Progress Report) ২০২৫ অনুসারে, ভারতে বর্জ্য ব্যবস্থাপনা দক্ষতার উল্লেখযোগ্য অগ্রগতি নির্দেশ করে, বর্জ্য প্রক্রিয়াকরণের হার ২০১৫-১৬ সালের ১৭.৯৭% থেকে বেড়ে ২০২৪-২৫ সালে কত শতাংশ হয়েছে?
+A| 55.65% / ৫৫.৬৫%
+B| 45% / ৪৫%
+C| 60% / ৬০%
+D| 80.7% / ৮০.৭%
+Shift|03/12/2025 4:30 PM-6:00 PM
+Correct|D
+
+Q| Which young swimmer matched Michael Phelps's achievement by setting three individual world records at one meet during the Canadian Trials? / কোন তরুণ সাঁতারু কানাডিয়ান ট্রায়ালসের একটি মিটেই তিনটি একক বিশ্ব রেকর্ড গড়ে মাইকেল ফেলপসের কীর্তি স্পর্শ করেছেন?
+A| Athing Mu-Nikolayev / অ্যাথিং মু-নিকোলায়েভ (Athing Mu-Nikolayev)
+B| Sydney McLaughlin-Levrone / সিডনি ম্যাকلاফলিন-লেভরন (Sydney McLaughlin-Levrone)
+C| Summer McIntosh / সামার ম্যাকইন্টশ (Summer McIntosh)
+D| Beatrice Chebet / বিয়াট্রিস চেবেট (Beatrice Chebet)
+Shift|14/12/2025 9:00 AM-10:30 AM
+Correct|C
+
+Q| How many critical highway segments are outlined in the report on India's Priority Corridors for Zero-Emission Trucking for the adoption of zero-emission trucks? / জিরো-এমিশন (নির্গমনহীন) ট্রাক গ্রহণের জন্য 'ইন্ডিয়াস প্রায়োরিটি করিডোরস FOR জিরো-এমিশন ট্রাকিং' প্রতিবেদনে কতটি গুরুত্বপূর্ণ মহাসড়ক অংশের রূপরেখা দেওয়া হয়েছে?
+A| Five / পাঁচটি
+B| Ten / দশটি
+C| Twelve / বারোটি
+D| Eight / আটটি
+Shift|03/12/2025 9:00 AM-10:30 AM
+Correct|B
+
+Q| In June 2025, the Multi-Purpose Decontamination System technology was transferred to which companies? / ২০২৫ সালের জুনে মাল্টি-পারপাস ডিকন্টামিনেশন সিস্টেম (Multi-Purpose Decontamination System) প্রযুক্তি কোন কোম্পানিগুলোর কাছে হস্তান্তর করা হয়েছিল?
+A| Bharat Forge and Metaltech Motor Bodies Pvt Ltd / ভারত ফোর্জ এবং মেটালটেক মোটর বডিস প্রাঃ লিঃ (Bharat Forge and Metaltech Motor Bodies Pvt Ltd)
+B| Bharat Electronics Ltd and Tata Advanced Systems Ltd / ভারত ইলেকট্রনিক্স লিঃ এবং টাটা অ্যাডভান্সড সিস্টেমস লিঃ (Bharat Electronics Ltd and Tata Advanced Systems Ltd)
+C| BEML Ltd and Bharat Electronics Ltd / বিইএমএল লিঃ এবং ভারত ইলেকট্রনিক্স লিঃ (BEML Ltd and Bharat Electronics Ltd)
+D| Dass Hitachi Ltd and Goma Engineering Pvt Ltd / ডাস হিতাচি লিঃ এবং গোমা ইঞ্জিনিয়ারিং প্রাঃ লিঃ (Dass Hitachi Ltd and Goma Engineering Pvt Ltd)
+Shift|15/12/2025 4:30 PM-6:00 PM
+Correct|D
+
+Q| Who inaugurated the Esports Conclave 2025 in New Delhi? / নয়াদিল্লিতে এস্পোর্টস কনক্লেভ ২০২৫ (Esports Conclave 2025)-এর উদ্বোধন কে করেছিলেন?
+A| Narendra Modi / নরেন্দ্র মোদী
+B| Mansukh Mandaviya / মনসুখ মাণ্ডব্য
+C| Anurag Thakur / অনুরাগ ঠাকুর
+D| Raksha Nikhil Khadse / রক্ষা নিখিল খড়সে
+Shift|10/02/2026 4:30 PM-6:00 PM
+Correct|D
+
+Q| The Defense Research and Development Organisation (DRDO) lab in which city has created an advanced polymeric membrane designed for high-pressure desalination of sea water in May 2025? / ডিফেন্স রিসার্চ অ্যান্ড Desenvolvimento অর্গানাইজেশন (DRDO)-এর কোন শহরের ল্যাব ২০২৫ সালের মে মাসে সমুদ্রের জল উচ্চ-চাপে লবণমুক্ত করার জন্য একটি উন্নত পলিমারিক মেমব্রেন তৈরি করেছে?
+A| Pune / পুনে
+B| Bengaluru / বেঙ্গালুরু
+C| Kanpur / কানপুর
+D| Hyderabad / হায়দরাবাদ
+Shift|08/12/2025 12:45 PM-2:15 PM
+Correct|C
+
+Q| In August 2025, the first phase of the Darwin Tree of Life (DToL) project neared completion. What is the primary aim of this international biodiversity initiative? / ২০২৫ সালের আগস্টে ডারউইন ট্রি অফ লাইফ (DToL) প্রকল্পের প্রথম ধাপ সমাপ্তির কাছাকাছি পৌঁছেছিল। এই আন্তর্জাতিক জীববৈচিত্র্য উদ্যোগের প্রাথমিক উদ্দেশ্য কী?
+A| To engineer climate-resilient crops using data from ancestral plant genomes / পূর্বপুরুষের উদ্ভিদের জিনোম থেকে প্রাপ্ত তথ্য ব্যবহার করে জলবায়ু-সহনশীল ফসল তৈরি করা
+B| To sequence the genomes of all eukaryotic species in Britain and Ireland / ব্রিটেন ও আয়ারল্যান্ডের সমস্ত ইউক্যারিওটিক প্রজাতির জিনোম সিকোয়েন্স করা
+C| To map human migration patterns through ancient DNA found in fossils / জীবাশ্মে পাওয়া প্রাচীন ডিএনএ-র মাধ্যমে মানুষের অভিবাসনের ধরণ মানচিত্রভুক্ত করা
+D| To decode the genetic basis of rare diseases in isolated human populations / বিচ্ছিন্ন মানব জনগোষ্ঠীর বিরল রোগের জেনেটিক ভিত্তি উন্মোচন করা
+Shift|24/12/2025 4:30 PM-6:00 PM
+Correct|B
+
+Exam|RRB GROUP D
