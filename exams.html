@@ -31,92 +31,104 @@
         }
         .back-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-        h1 {
-            text-align: center;
-            margin: 0 0 10px 0;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+        h1 { text-align: center; margin: 0 0 10px 0; text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+        .subtitle { text-align: center; color: #cbd5e1; margin-bottom: 40px; }
 
-        .subtitle {
-            text-align: center;
-            color: #cbd5e1;
-            margin-bottom: 40px;
-        }
-
-        /* Subject Streams Card Grid Layout */
-        .exams-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+        .container-wrapper {
             max-width: 1000px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
         }
 
-        .exam-card {
+        .section-panel {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 14px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.15);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Mode Selectors Setup */
+        .config-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .config-bar label { font-weight: 600; font-size: 1rem; }
+        .config-bar select {
+            background: #2d3748;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Subject Streams Card Grid Layout */
+        .exams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .exam-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
         .exam-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        .stream-tag {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #63b3ed;
-            margin-bottom: 8px;
-        }
-
-        .exam-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 0 0 12px 0;
-        }
-
-        .meta-info {
-            display: flex;
-            gap: 15px;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px;
-        }
-
-        .price-tag {
-            background: #48bb78;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-        }
+        .exam-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 15px 0; }
 
         .start-btn {
-            background: #0070f3;
+            background: #3182ce;
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 6px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
-            font-size: 1rem;
             transition: background 0.2s;
-            box-shadow: 0 4px 10px rgba(0, 112, 243, 0.3);
         }
-        .start-btn:hover { background: #0056b3; }
+        .start-btn:hover { background: #2b6cb0; }
+
+        .badge-free { background: #48bb78; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; }
+        .badge-premium { background: #ed8936; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; }
+
+        .lock-text { color: #cbd5e1; font-style: italic; text-align: center; padding: 20px 0; font-size: 1.1rem; }
 
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
@@ -129,58 +141,64 @@
 
     <a href="index.html" class="back-btn">← Home</a>
     <h1>✍️ Exam Corner</h1>
-    <p class="subtitle">Access premium 100-Question full length Mock Series simulations</p>
+    <p class="subtitle">Select your test module preference parameters below</p>
 
-    <div class="exams-grid">
-        <div class="exam-card">
-            <div>
-                <div class="stream-tag">Technical Engineering</div>
-                <div class="exam-title">RRB Technician Grade I (Electrical)</div>
-                <div class="meta-info">
-                    <span>⏱️ 90 Mins</span>
-                    <span>❓ 100 Questions</span>
-                    <span class="price-tag">₹1 Only</span>
+    <div class="container-wrapper">
+        
+        <div class="section-panel">
+            <div class="section-title">
+                <span>🆓 Practice Core Engine</span>
+                <span class="badge-free">FREE TIERS ACTIVE</span>
+            </div>
+
+            <div class="config-bar">
+                <label for="question-count-select">Set Exam Matrix Length:</label>
+                <select id="question-count-select">
+                    <option value="10">10 Questions (10 Minutes Time Limit)</option>
+                    <option value="20">20 Questions (20 Minutes Time Limit)</option>
+                </select>
+            </div>
+
+            <div class="exams-grid">
+                <div class="exam-card">
+                    <h3 class="exam-title">📐 Mathematics Test Bank</h3>
+                    <button class="start-btn" onclick="launchFreeTest('Mathematics')">Launch Free Module</button>
+                </div>
+                <div class="exam-card">
+                    <h3 class="exam-title">🧠 General Intelligence (GI)</h3>
+                    <button class="start-btn" onclick="launchFreeTest('GI')">Launch Free Module</button>
+                </div>
+                <div class="exam-card">
+                    <h3 class="exam-title">🔬 General Science (GS)</h3>
+                    <button class="start-btn" onclick="launchFreeTest('GS')">Launch Free Module</button>
+                </div>
+                <div class="exam-card">
+                    <h3 class="exam-title">📰 General Awareness & CA</h3>
+                    <button class="start-btn" onclick="launchFreeTest('GACA')">Launch Free Module</button>
+                </div>
+                <div class="exam-card" style="grid-column: 1 / -1;">
+                    <h3 class="exam-title">🔥 ALL SUBJECTS COMBINED (3:3:1:3 CBT-1 Composite Ratio)</h3>
+                    <button class="start-btn" style="background:#0070f3;" onclick="launchFreeTest('ALL')">Launch Full Mock Simulator</button>
                 </div>
             </div>
-            <button class="start-btn" onclick="launchMockTest('electrical')">Unlock Test Pass</button>
         </div>
 
-        <div class="exam-card">
-            <div>
-                <div class="stream-tag">General Awareness</div>
-                <div class="exam-title">SSC Core General Science Mock</div>
-                <div class="meta-info">
-                    <span>⏱️ 60 Mins</span>
-                    <span>❓ 100 Questions</span>
-                    <span class="price-tag">₹1 Only</span>
-                </div>
+        <div class="section-panel" style="border-color: rgba(237, 137, 54, 0.3);">
+            <div class="section-title">
+                <span style="color:#fbd38d;">🏆 Premium Exam Pass Ecosystem</span>
+                <span class="badge-premium">COMMERCIAL HUB</span>
             </div>
-            <button class="start-btn" onclick="launchMockTest('science')">Unlock Test Pass</button>
+            <div class="lock-text">🔒 Full 100-Question / 90-Min Live Ranking Modules Will Be Available Soon!</div>
+            <button class="back-btn" style="width:100%; text-align:center; box-sizing:border-box;" onclick="window.location.href='index.html'">Return to Main Gate</button>
         </div>
 
-        <div class="exam-card">
-            <div>
-                <div class="stream-tag">Mathematics</div>
-                <div class="exam-title">WB State Board Mathematical Framework</div>
-                <div class="meta-info">
-                    <span>⏱️ 90 Mins</span>
-                    <span>❓ 100 Questions</span>
-                    <span class="price-tag">₹1 Only</span>
-                </div>
-            </div>
-            <button class="start-btn" onclick="launchMockTest('math')">Unlock Test Pass</button>
-        </div>
     </div>
 
     <script>
-        function launchMockTest(subjectCode) {
-            // Placeholder interceptor checking workflow
-            const confirmPass = confirm(`Deduct ₹1 from your account wallet pass token to load this ${subjectCode} exam setup?`);
-            if (confirmPass) {
-                alert("Wallet deduction authorization token validated. Shuffling test matrix...");
-                // This link will cleanly trigger your test portal logic later
-                window.location.href = `quiz-portal.html?subject=${subjectCode}`;
-            }
+        function launchFreeTest(topicCode) {
+            const size = document.getElementById('question-count-select').value;
+            // Passes configuration setup parameters directly through browser URL query lines safely
+            window.location.href = `quiz-portal.html?topic=${topicCode}&limit=${size}`;
         }
     </script>
 </body>
