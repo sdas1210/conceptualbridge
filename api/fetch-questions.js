@@ -6,22 +6,28 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/json');
 
-    const { topic, limit } = req.query;
+    let { topic, limit } = req.query;
     const totalNeeded = parseInt(limit) || 10;
+
+    // Force incoming parameters to match exact lower-case folder names on GitHub
+    let targetFolder = 'math';
+    if (topic === 'GI') targetFolder = 'gi';
+    if (topic === 'GS') targetFolder = 'gs';
+    if (topic === 'GACA' || topic === 'gaca') targetFolder = 'gaca';
 
     try {
         const questionsDir = path.join(process.cwd(), 'questions');
 
-        const readFolderQuestions = (folderName) => {
-            const targetFolder = path.join(questionsDir, folderName.toLowerCase());
-            if (!fs.existsSync(targetFolder)) return [];
+        const readFolderQuestions = (folder) => {
+            const targetFolderPath = path.join(questionsDir, folder);
+            if (!fs.existsSync(targetFolderPath)) return [];
 
-            const files = fs.readdirSync(targetFolder);
+            const files = fs.readdirSync(targetFolderPath);
             let combinedQuestions = [];
 
             files.forEach(file => {
                 if (path.extname(file) === '.txt') {
-                    const filePath = path.join(targetFolder, file);
+                    const filePath = path.join(targetFolderPath, file);
                     const content = fs.readFileSync(filePath, 'utf8');
                     
                     const blocks = content.split('\n\n').filter(b => b.trim().length > 0);
@@ -32,13 +38,12 @@ export default async function handler(req, res) {
                     blocks.forEach(block => {
                         const lines = block.split('\n');
                         let isQuestionBlock = false;
-                        let parsedBlock = { text: "" }; // Initialize empty text string
+                        let parsedBlock = { text: "" };
 
                         lines.forEach(l => {
                             const cleanLine = l.trim();
-                            if (!cleanLine) return; // Skip empty lines inside the block
+                            if (!cleanLine) return;
                             
-                            // Check for standard line markers
                             if (cleanLine.startsWith('Q|')) {
                                 isQuestionBlock = true;
                                 parsedBlock.text += cleanLine.replace('Q|', '') + " ";
@@ -62,8 +67,6 @@ export default async function handler(req, res) {
                             } else if (cleanLine.startsWith('Level|')) {
                                 parsedBlock.level = cleanLine.replace('Level|', '');
                             } else {
-                                // SMART TRICK: If the line doesn't start with any tag, 
-                                // append it directly to the question text (catches stacked Bengali translation strings!)
                                 if (isQuestionBlock && !parsedBlock.a) {
                                     parsedBlock.text += "<br><br>" + cleanLine;
                                 }
@@ -75,7 +78,6 @@ export default async function handler(req, res) {
                         }
                     });
 
-                    // Apply global tags
                     questionsInFile = questionsInFile.map(q => {
                         return {
                             ...q,
@@ -101,12 +103,12 @@ export default async function handler(req, res) {
             const gsQuestions = shuffleArray(readFolderQuestions('gs')).slice(0, 1 * factor);
             const gacaQuestions = shuffleArray(readFolderQuestions('gaca')).slice(0, 3 * factor);
 
-            if (mathQuestions.length === 0 && mathQuestions.length === 0 && gsQuestions.length === 0 && gacaQuestions.length === 0) {
+            if (mathQuestions.length === 0 && giQuestions.length === 0 && gsQuestions.length === 0 && gacaQuestions.length === 0) {
                 return res.status(404).json({ status: 'not_found' });
             }
             finalPool = [...mathQuestions, ...giQuestions, ...gsQuestions, ...gacaQuestions];
         } else {
-            finalPool = readFolderQuestions(topic);
+            finalPool = readFolderQuestions(targetFolder);
             if (finalPool.length === 0) {
                 return res.status(404).json({ status: 'not_found' });
             }
