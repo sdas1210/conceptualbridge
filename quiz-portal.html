@@ -61,32 +61,35 @@
         }
 
         function renderExamWindow() {
-            if(examDataMatrix.length === 0) return;
-            const currentItem = examDataMatrix[activeIndex];
-            
-            document.getElementById('current-index-label').innerText = `Question ${activeIndex + 1} of ${examDataMatrix.length}`;
-            document.getElementById('target-question-text').innerHTML = currentItem.text;
-            
-            const container = document.getElementById('target-options-container');
-            container.innerHTML = '';
-            
-            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d];
-            optArray.forEach((opt, idx) => {
-                const isSelected = selectedAnswers[activeIndex] === idx;
-                const optHtml = `
-                    <div class="option-item ${isSelected ? 'selected' : ''}" onclick="selectOptionIndex(${idx})">
-                        <input type="radio" name="quiz-opt" id="opt-${idx}" ${isSelected ? 'checked' : ''}>
-                        <label style="cursor:pointer; width:100%;" for="opt-${idx}"><strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}</label>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', optHtml);
-            });
+    if(examDataMatrix.length === 0) return;
+    const currentItem = examDataMatrix[activeIndex];
+    
+    // Display Question counter along with Exam source details dynamically!
+    const examLabel = currentItem.exam ? `[${currentItem.exam} - ${currentItem.shift || ''}]` : '';
+    document.getElementById('current-index-label').innerText = `Question ${activeIndex + 1} of ${examDataMatrix.length} ${examLabel}`;
+    
+    document.getElementById('target-question-text').innerHTML = currentItem.text;
+    
+    const container = document.getElementById('target-options-container');
+    container.innerHTML = '';
+    
+    const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d];
+    optArray.forEach((opt, idx) => {
+        const isSelected = selectedAnswers[activeIndex] === idx;
+        const optHtml = `
+            <div class="option-item ${isSelected ? 'selected' : ''}" onclick="selectOptionIndex(${idx})">
+                <input type="radio" name="quiz-opt" id="opt-${idx}" ${isSelected ? 'checked' : ''}>
+                <label style="cursor:pointer; width:100%;" for="opt-${idx}"><strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}</label>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', optHtml);
+    });
 
-            const nextBtn = document.getElementById('next-action-btn');
-            nextBtn.innerText = (activeIndex === examDataMatrix.length - 1) ? "Save & Finish" : "Save & Next";
+    const nextBtn = document.getElementById('next-action-btn');
+    nextBtn.innerText = (activeIndex === examDataMatrix.length - 1) ? "Save & Finish" : "Save & Next";
 
-            renderPaletteGrid();
-        }
+    renderPaletteGrid();
+}
 
         function selectOptionIndex(idx) {
             selectedAnswers[activeIndex] = idx;
