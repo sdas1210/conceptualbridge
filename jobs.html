@@ -1,11 +1,171 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs Corner - Conceptual Bridge</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0, #3182ce);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background 0.3s;
+        }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+        h1 {
+            text-align: center;
+            margin: 0 0 10px 0;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 40px;
+        }
+
+        /* 3-Column Alert Board Grid */
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .board-column {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .alert-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .alert-item:hover {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .alert-item a {
+            color: #63b3ed;
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        .alert-item a:hover { color: #90cdf4; }
+
+        .date-badge {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .loading-text {
+            color: #cbd5e1;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 900px) {
+            .board-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Home</a>
+    <h1>💼 Jobs Corner</h1>
+    <p class="subtitle">Real-time official updates and exam timelines</p>
+
+    <div class="board-grid">
+        <div class="board-column">
+            <div class="column-header">⚡ Latest Vacancies</div>
+            <div id="vacancies-loader" class="loading-text">Fetching live notifications...</div>
+            <ul class="alert-list" id="vacancies-list"></ul>
+        </div>
+
+        <div class="board-column">
+            <div class="column-header">🎟️ Admit Cards</div>
+            <div id="admit-loader" class="loading-text">Fetching live notifications...</div>
+            <ul class="alert-list" id="admit-list"></ul>
+        </div>
+
+        <div class="board-column">
+            <div class="column-header">🎓 Exam Results</div>
+            <div id="results-loader" class="loading-text">Fetching live notifications...</div>
+            <ul class="alert-list" id="results-list"></ul>
+        </div>
+    </div>
+
+    <script>
         const targetFeedUrl = '/api/fetch-jobs';
 
         async function fetchJobFeeds() {
             try {
                 const response = await fetch(targetFeedUrl);
                 
-                // If Vercel returns an error code (like 404 or 500)
                 if (!response.ok) {
                     throw new Error(`Server returned status code ${response.status}`);
                 }
@@ -13,7 +173,7 @@
                 const data = await response.json();
 
                 if (data.status === 'ok' && data.items) {
-                    // Clear all loading texts safely
+                    // Hide the text loaders
                     document.getElementById('vacancies-loader').style.display = 'none';
                     document.getElementById('admit-loader').style.display = 'none';
                     document.getElementById('results-loader').style.display = 'none';
@@ -42,8 +202,7 @@
 
                     checkEmptyLists();
                 } else {
-                    // If the server answered but sent an error package
-                    throw new Error(data.message || "Unexpected data structure from server.");
+                    throw new Error(data.message || "Unexpected server response layout.");
                 }
             } catch (err) {
                 console.error("Feed error:", err);
@@ -67,3 +226,5 @@
 
         fetchJobFeeds();
     </script>
+</body>
+</html>
