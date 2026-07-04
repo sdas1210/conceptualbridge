@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Exam Portal - Conceptual Bridge</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0, #3182ce);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none; /* Anti-cheat: Prevents students from highlighting and copying text */
+        }
+
+        /* Top Header Navigation Strip */
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-area h2 { margin: 0; font-size: 1.4rem; letter-spacing: 0.5px; }
+        
+        .timer-box {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Main Workspace Container */
+        .exam-workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left Side: Question and Options Display Engine */
+        .question-section {
+            flex: 3;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .question-num {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #63b3ed;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .option-item.selected {
+            background: rgba(49, 130, 206, 0.3);
+            border-color: #3182ce;
+            box-shadow: 0 0 10px rgba(49, 130, 206, 0.2);
+        }
+
+        .option-item input[type="radio"] {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        /* Action Buttons Area */
+        .controls-footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.15); color: white; }
+        .btn-primary { background: #3182ce; color: white; }
+        .btn-submit { background: #48bb78; color: white; }
+
+        /* Right Side: TCS Style Palette Sidebar */
+        .sidebar-panel {
+            flex: 1;
+            max-width: 320px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .palette-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            overflow-y: auto;
+            max-height: 60%;
+            padding-right: 5px;
+        }
+
+        .palette-dot {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .palette-dot.active { border: 2px solid #3182ce; font-weight: 700; }
+        .palette-dot.answered { background: #48bb78; border-color: #48bb78; color: white; }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Mobile Optimization Viewport Rules */
+        @media (max-width: 850px) {
+            .exam-workspace { flex-direction: column-reverse; overflow-y: auto; }
+            .sidebar-panel { max-width: 100%; border-left: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .grid-container { grid-template-columns: repeat(8, 1fr); }
+            body { overflow: auto; height: auto; min-height: 100vh; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <!-- Anti-cheat: Blocks Right-Click Menu -->
+
+    <header>
+        <div class="logo-area">
+            <h2>Conceptual Bridge Portal</h2>
+        </div>
+        <div class="timer-box">
+            <span>⏱️</span> <span id="clock-display">90:00</span>
+        </div>
+    </header>
+
+    <div class="exam-workspace">
+        <!-- Question Box Engine Module -->
+        <div class="question-section">
+            <div>
+                <div class="question-box">
+                    <div class="question-num" id="current-index-label">Question 1 of 3</div>
+                    <p class="question-text" id="target-question-text">Loading exam data matrix...</p>
+                </div>
+
+                <div class="options-list" id="target-options-container">
+                    <!-- Javascript populates interactive fields here dynamically -->
+                </div>
+            </div>
+
+            <div class="controls-footer">
+                <button class="btn btn-secondary" onclick="navigateQuestion(-1)">Previous</button>
+                <button class="btn btn-primary" id="next-action-btn" onclick="navigateQuestion(1)">Save & Next</button>
+            </div>
+        </div>
+
+        <!-- Palette Grid Interactive Panel -->
+        <div class="sidebar-panel">
+            <div>
+                <div class="palette-title">Question Navigation Matrix</div>
+                <div class="grid-container" id="palette-grid-holder">
+                    <!-- Numbers populated dynamically -->
+                </div>
+            </div>
+            
+            <button class="btn btn-submit" style="width: 100%; margin-top: 20px;" onclick="triggerExamSubmission()">Submit Whole Exam</button>
+        </div>
+    </div>
+
+    <script>
+        // High quality dynamic question array containing your bilingual phrasing layout model
+        const examDataMatrix = [
+            {
+                text: "A dealer buys two articles X and Y for ₹3,400 each. He marks each of them at the same price. He sells X by giving two successive discounts of 10% and 50% and still earns 323 as profit. If he sells Y at a single discount of 28%, then what is the profit percentage on Y?<br><br>একজন ব্যবসায়ী দুটি সামগ্রী X এবং Y প্রতিটি ৩,৪০০ টাকায় কেনেন। তিনি প্রতিটির ধার্য মূল্য একই রাখেন। তিনি X সামগ্রীটি ১০% এবং ৫০% দুটি পরপর ছাড় দিয়ে বিক্রি করেন এবং তবুও ৩২৩ টাকা লাভ করেন। যদি তিনি Y সামগ্রীটি ২৮% একক ছাড়ে বিক্রি করেন, তবে Y-এর উপর লাভের শতাংশ কত?",
+                options: ["74%", "75%", "75.2%", "74.2%"],
+                correct: 2
+            },
+            {
+                text: "The ratio of the speed of a car, a train and a bus is 5 : 9 : 4. The average speed of the car, the train and the bus together is 72 km/h. What is the average speed of the car and the train together?<br><br>একটি গাড়ি, একটি ট্রেন এবং একটি বাসের গতিবেগের অনুপাত হল 5 : 9 : 4। গাড়ি, ট্রেন এবং বাসটির মোট গড় গতিবেগ হল 72 কিমি/ঘণ্টা। গাড়ি এবং ট্রেনটির একত্রে গড় গতিবেগ কত?",
+                options: ["84 km/h", "96 km/h", "78 km/h", "82 km/h"],
+                correct: 0
+            },
+            {
+                text: "An electric motor drawing 5 Amperes from a 220V line operates for 2 hours. What is the total power rating of the motor?<br><br>একটি বৈদ্যুতিক মোটর 220V লাইন থেকে 5 অ্যাম্পিয়ার বিদ্যুৎ গ্রহণ করে 2 ঘণ্টা ধরে চলে। মোটরটির মোট ক্ষমতা (Power Rating) কত?",
+                options: ["1100 W", "2200 W", "550 W", "4400 W"],
+                correct: 0
+            }
+        ];
+
+        let activeIndex = 0;
+        let selectedAnswers = new Array(examDataMatrix.length).fill(null);
+        let timeRemainingSeconds = 90 * 60; // 90 minutes count
+
+        // Timer Execution
+        const timerEngine = setInterval(() => {
+            if (timeRemainingSeconds <= 0) {
+                clearInterval(timerEngine);
+                alert("Time's up! Collecting test responses securely.");
+                triggerExamSubmission();
+            } else {
+                timeRemainingSeconds--;
+                const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0');
+                const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('clock-display').innerText = `${mins}:${secs}`;
+            }
+        }, 1000);
+
+        // Core Render Layout Controller
+        function renderExamWindow() {
+            const currentItem = examDataMatrix[activeIndex];
+            
+            // Set labels
+            document.getElementById('current-index-label').innerText = `Question ${activeIndex + 1} of ${examDataMatrix.length}`;
+            document.getElementById('target-question-text').innerHTML = currentItem.text;
+            
+            // Render Options Area
+            const container = document.getElementById('target-options-container');
+            container.innerHTML = '';
+            
+            currentItem.options.forEach((opt, idx) => {
+                const isSelected = selectedAnswers[activeIndex] === idx;
+                const optHtml = `
+                    <div class="option-item ${isSelected ? 'selected' : ''}" onclick="selectOptionIndex(${idx})">
+                        <input type="radio" name="quiz-opt" id="opt-${idx}" ${isSelected ? 'checked' : ''}>
+                        <label style="cursor:pointer;" for="opt-${idx}"><strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}</label>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', optHtml);
+            });
+
+            // Handle Button text swap conditions
+            const nextBtn = document.getElementById('next-action-btn');
+            if (activeIndex === examDataMatrix.length - 1) {
+                nextBtn.innerText = "Save & Finish";
+            } else {
+                nextBtn.innerText = "Save & Next";
+            }
+
+            renderPaletteGrid();
+        }
+
+        function selectOptionIndex(idx) {
+            selectedAnswers[activeIndex] = idx;
+            renderExamWindow();
+        }
+
+        function renderPaletteGrid() {
+            const grid = document.getElementById('palette-grid-holder');
+            grid.innerHTML = '';
+            
+            examDataMatrix.forEach((_, idx) => {
+                let statusClass = '';
+                if (idx === activeIndex) statusClass = 'active';
+                else if (selectedAnswers[idx] !== null) statusClass = 'answered';
+
+                const cell = `<div class="palette-dot ${statusClass}" onclick="jumpToQuestion(${idx})">${idx + 1}</div>`;
+                grid.insertAdjacentHTML('beforeend', cell);
+            });
+        }
+
+        function navigateQuestion(direction) {
+            let nextPos = activeIndex + direction;
+            if (nextPos >= 0 && nextPos < examDataMatrix.length) {
+                activeIndex = nextPos;
+                renderExamWindow();
+            } else if (nextPos === examDataMatrix.length) {
+                triggerExamSubmission();
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            activeIndex = idx;
+            renderExamWindow();
+        }
+
+        function triggerExamSubmission() {
+            clearInterval(timerEngine);
+            let score = 0;
+            
+            examDataMatrix.forEach((q, i) => {
+                if (selectedAnswers[i] === q.correct) {
+                    score++;
+                }
+            });
+
+            // Display beautiful summary matrix calculation box output layout 
+            alert(`Exam Submitted Successfully!\n\nYour Total Score: ${score} / ${examDataMatrix.length}\nPercentage: ${((score / examDataMatrix.length) * 100).toFixed(1)}%`);
+            window.location.href = 'exams.html';
+        }
+
+        // Initialize display execution loop on document run
+        renderExamWindow();
+    </script>
+</body>
+</html>
