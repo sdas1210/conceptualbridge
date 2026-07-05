@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const { secret } = req.query;
 
     // SECURITY KEY: Change 'manoj_admin_2026' to whatever secure password you want!
-    const ADMIN_SECRET = 'manoj_admin_2026'; 
+    const ADMIN_SECRET = 'shodas_admin_2026'; 
 
     if (!secret || secret !== ADMIN_SECRET) {
         // If someone guesses or opens this randomly, they just see a generic 404 error
