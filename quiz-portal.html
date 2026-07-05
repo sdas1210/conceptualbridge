@@ -31,7 +31,7 @@
         .tcs-header {
             background-color: var(--tcs-blue);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -39,7 +39,19 @@
             font-size: 1.1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Space between logo and text title */
+        }
+        
+        .brand-logo {
+            height: 38px; /* Fits elegantly inside the TCS dark blue bar */
+            width: auto;
+            border-radius: 4px;
+            background: white; /* Creates a clean backdrop profile container for the logo graphic */
+            padding: 2px;
+        }
         .section-bar {
             background-color: #e5e7eb;
             border-bottom: 1px solid var(--tcs-border);
