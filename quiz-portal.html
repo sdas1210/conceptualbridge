@@ -345,7 +345,19 @@
                     questionStates[0] = 1;
 
                     // Header overwrite prevention applied successfully
-                    document.getElementById('active-section-label').innerText = `${activeTopic.toUpperCase()}`;
+
+                    // Map short codes to their full professional TCS exam names
+                    let formattedSectionTitle = activeTopic;
+                    if (activeTopic === 'GACA' || activeTopic === 'gaca') {
+                        formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
+                    } else if (activeTopic === 'GS' || activeTopic === 'gs') {
+                        formattedSectionTitle = 'GENERAL SCIENCE';
+                    } else if (activeTopic === 'GI' || activeTopic === 'gi') {
+                        formattedSectionTitle = 'GENERAL INTELLIGENCE';
+                    } else if (activeTopic === 'Mathematics') {
+                        formattedSectionTitle = 'MATHEMATICS';
+                    }
+                    document.getElementById('active-section-label').innerText = formattedSectionTitle;
                     
                     document.getElementById('quiz-workspace').style.display = 'flex';
                     startClockCountdown();
