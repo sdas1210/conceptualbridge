@@ -59,14 +59,12 @@
             font-size: 1.1rem;
         }
 
-        /* Unified Ribbon layout container holding both Subject Tab and Dropdown */
+        /* Gray Ribbon containing the Subject Title */
         .section-bar {
             background-color: #e5e7eb;
             border-bottom: 1px solid var(--tcs-border);
-            padding: 6px 20px;
+            padding: 8px 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .section-tab {
@@ -77,19 +75,6 @@
             font-weight: bold;
             font-size: 0.9rem;
             border-radius: 4px;
-        }
-
-        /* TCS-style drop down look right inside the ribbon pane */
-        .lang-selector-ribbon {
-            padding: 5px 10px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            border-radius: 4px;
-            border: 1px solid var(--tcs-blue);
-            background: white;
-            color: var(--tcs-blue);
-            cursor: pointer;
-            outline: none;
         }
 
         /* Main Workspace split panel */
@@ -109,12 +94,29 @@
             position: relative;
         }
 
+        /* Question Sub-Header Panel containing Question No. and Language Selector */
         .question-header {
-            padding: 15px 25px;
+            padding: 12px 25px;
             border-bottom: 1px solid var(--tcs-border);
             font-weight: bold;
             font-size: 1rem;
             background-color: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* TCS-style Dropdown look inside the question header space */
+        .lang-selector-header {
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid var(--tcs-blue);
+            background: white;
+            color: var(--tcs-blue);
+            cursor: pointer;
+            outline: none;
         }
 
         .question-content {
@@ -281,7 +283,6 @@
 </head>
 <body>
 
-    <!-- Header block with Clean Title and Countdown Alignment -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
@@ -290,31 +291,26 @@
         <div class="timer-box">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
-    <!-- Active Section Tab bar ribbon with Relocated Dropdown Drop Down Menu -->
     <div class="section-bar">
         <div class="section-tab" id="active-section-label">General Section</div>
-        
-        <!-- Relocated to the exact Blue Pen Highlight Box Location -->
-        <select class="lang-selector-ribbon" id="view-lang-select" onchange="toggleViewLanguage()">
-            <option value="EN">English</option>
-            <option value="BN">Bengali</option>
-        </select>
     </div>
 
-    <!-- Core Grid split panels -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
-        <!-- Left Side Pane -->
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
+                
+                <select class="lang-selector-header" id="view-lang-select" onchange="toggleViewLanguage()">
+                    <option value="EN">English</option>
+                    <option value="BN">Bengali</option>
+                </select>
             </div>
             
             <div class="question-content">
                 <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
                 <div class="options-container" id="target-options-container"></div>
                 
-                <!-- Bottom Right White Workspace Metadata Panel Badge Placement -->
                 <div class="meta-bottom-right" id="shift-label-view"></div>
             </div>
 
@@ -327,7 +323,6 @@
             </div>
         </div>
 
-        <!-- Right Side Pane Dashboard -->
         <div class="dashboard-panel">
             <div class="profile-box">
                 <div class="profile-avatar">👨‍🎓</div>
@@ -446,10 +441,7 @@
             }
 
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`;
-            
-            // Placed squarely above the bottom action bar on the right side
             document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : '';
-            
             document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text);
             
             const container = document.getElementById('target-options-container');
