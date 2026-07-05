@@ -8,10 +8,17 @@
     {
       "source": "/api/fetch-questions",
       "destination": "/api/fetch-questions.js"
+    },
+    {
+      "source": "/api/admin-stats",
+      "destination": "/api/admin-stats.js"
     }
   ],
   "functions": {
     "api/fetch-questions.js": {
+      "includeFiles": "questions/**"
+    },
+    "api/admin-stats.js": {
       "includeFiles": "questions/**"
     }
   }
