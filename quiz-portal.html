@@ -27,7 +27,7 @@
             user-select: none;
         }
 
-        /* Top System Ribbon */
+        /* Top System Ribbon Style Update */
         .tcs-header {
             background-color: var(--tcs-blue);
             color: white;
@@ -39,19 +39,22 @@
             font-size: 1.1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        /* Branding Containers Setup */
         .brand-wrapper {
             display: flex;
             align-items: center;
-            gap: 12px; /* Space between logo and text title */
+            gap: 12px;
         }
-        
+
         .brand-logo {
-            height: 38px; /* Fits elegantly inside the TCS dark blue bar */
+            height: 38px;
             width: auto;
             border-radius: 4px;
-            background: white; /* Creates a clean backdrop profile container for the logo graphic */
+            background: white;
             padding: 2px;
         }
+
         .section-bar {
             background-color: #e5e7eb;
             border-bottom: 1px solid var(--tcs-border);
@@ -245,9 +248,12 @@
 </head>
 <body>
 
-    <!-- Header line block -->
+    <!-- Header line block with Logo Integration -->
     <div class="tcs-header">
-        <span id="exam-title-display">Mock Exam Hub</span>
+        <div class="brand-wrapper">
+            <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
+            <span id="exam-title-display">Conceptual Bridge - Online Assessment</span>
+        </div>
         <div class="timer-box">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
@@ -319,8 +325,6 @@
         let examDataMatrix = [];
         let activeIndex = 0;
         
-        // Tracking states array system matching TCS conventions:
-        // 0 = Not Visited, 1 = Not Answered, 2 = Answered, 3 = Marked for Review
         let questionStates = [];
         let selectedAnswers = [];
         let timeRemainingSeconds = questionLimit * 60;
@@ -338,12 +342,10 @@
                     examDataMatrix = targetQuestions;
                     selectedAnswers = new Array(examDataMatrix.length).fill(null);
                     
-                    // Initialize all questions as 0 (Not Visited), except the first one which is 1 (Not Answered)
                     questionStates = new Array(examDataMatrix.length).fill(0);
                     questionStates[0] = 1;
 
-                    // Apply layout tags header variables dynamically
-                    document.getElementById('exam-title-display').innerText = `${activeTopic.toUpperCase()} - ONLINE ASSESSMENT`;
+                    // Header overwrite prevention applied successfully
                     document.getElementById('active-section-label').innerText = `${activeTopic.toUpperCase()}`;
                     
                     document.getElementById('quiz-workspace').style.display = 'flex';
@@ -381,7 +383,6 @@
             if (examDataMatrix.length === 0) return;
             const currentItem = examDataMatrix[activeIndex];
             
-            // Mark current question as Not Answered if it was only Visited
             if (questionStates[activeIndex] === 0) {
                 questionStates[activeIndex] = 1;
             }
@@ -417,21 +418,21 @@
 
         function clearResponse() {
             selectedAnswers[activeIndex] = null;
-            questionStates[activeIndex] = 1; // Resets back to simple Not Answered
+            questionStates[activeIndex] = 1;
             renderExamWindow();
         }
 
         function saveAndNext() {
             if (selectedAnswers[activeIndex] !== null) {
-                questionStates[activeIndex] = 2; // State Flag Answered (Green)
+                questionStates[activeIndex] = 2;
             } else {
-                questionStates[activeIndex] = 1; // State Flag Not Answered (Red)
+                questionStates[activeIndex] = 1;
             }
             moveToNextOrWrap();
         }
 
         function markForReview() {
-            questionStates[activeIndex] = 3; // State Flag Review (Purple)
+            questionStates[activeIndex] = 3;
             moveToNextOrWrap();
         }
 
