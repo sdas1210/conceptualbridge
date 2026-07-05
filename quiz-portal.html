@@ -3,97 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Examination Engine - Conceptual Bridge</title>
+    <title>TCS iON Digital Assessment Engine</title>
     <style>
+        :root {
+            --tcs-blue: #1e3a8a;
+            --tcs-light-bg: #f3f4f6;
+            --tcs-border: #d1d5db;
+            --status-not-visited: #e5e7eb;
+            --status-not-answered: #ef4444;
+            --status-answered: #22c55e;
+            --status-review: #a855f7;
+        }
+
         body {
             margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #1a202c;
+            font-family: Arial, sans-serif;
+            background-color: var(--tcs-light-bg);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Top System Ribbon */
+        .tcs-header {
+            background-color: var(--tcs-blue);
             color: white;
-            padding: 20px;
-        }
-        .quiz-container {
-            max-width: 800px;
-            margin: 40px auto;
-            background: #2d3748;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .header-bar {
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #4a5568;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-        .timer-box {
-            background: #e53e3e;
-            padding: 8px 16px;
-            border-radius: 6px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .option-item {
-            background: #4a5568;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
+
+        .section-bar {
+            background-color: #e5e7eb;
+            border-bottom: 1px solid var(--tcs-border);
+            padding: 8px 20px;
             display: flex;
-            align-items: center;
             gap: 10px;
         }
-        .option-item:hover { background: #718096; }
-        .option-item.selected { background: #3182ce; border: 1px solid #63b3ed; }
-        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
-        .btn {
-            background: #3182ce;
-            color: white;
-            border: none;
-            padding: 12px 24px;
+
+        .section-tab {
+            background: white;
+            border: 1px solid var(--tcs-blue);
+            color: var(--tcs-blue);
+            padding: 6px 16px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-radius: 4px;
+        }
+
+        /* Main Workspace split panel */
+        .main-workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left Side: Question Desk */
+        .question-panel {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-right: 1px solid var(--tcs-border);
+        }
+
+        .question-header {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--tcs-border);
+            font-weight: bold;
+            font-size: 1rem;
+            background-color: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .question-content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .options-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid var(--tcs-border);
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
+            background-color: #fff;
+            transition: background 0.2s;
         }
-        .btn:hover { background: #2b6cb0; }
-        .palette-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
-        .palette-dot {
-            width: 35px;
-            height: 35px;
-            background: #4a5568;
-            border-radius: 50%;
+
+        .option-row:hover { background-color: #f9fafb; }
+        .option-row.selected {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .option-row input { margin-right: 12px; transform: scale(1.2); }
+
+        /* Action Footer Tray */
+        .action-tray {
+            padding: 15px 25px;
+            border-top: 1px solid var(--tcs-border);
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-tcs {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid var(--tcs-border);
+            font-size: 0.9rem;
+        }
+
+        .btn-white { background: white; color: #374151; }
+        .btn-white:hover { background: #f9fafb; }
+        .btn-purple { background: var(--status-review); color: white; border: none; }
+        .btn-purple:hover { background: #9333ea; }
+        .btn-blue { background: #2563eb; color: white; border: none; }
+        .btn-blue:hover { background: #1d4ed8; }
+
+        /* Right Side: Student Tracker Dashboard */
+        .dashboard-panel {
+            flex: 1;
+            min-width: 280px;
+            max-width: 340px;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-box {
+            padding: 20px;
+            border-bottom: 1px solid var(--tcs-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            background: #cbd5e1;
+            border-radius: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            font-weight: bold;
+            font-size: 1.5rem;
         }
-        .palette-dot.active { background: #3182ce; }
-        .palette-dot.answered { background: #48bb78; }
+
+        .palette-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .palette-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .palette-cell {
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            border: 1px solid #d1d5db;
+            position: relative;
+        }
+
+        /* TCS Palette Shapes Strategy mapped via states */
+        .state-0 { background-color: var(--status-not-visited); color: #374151; }
+        .state-1 { background-color: var(--status-not-answered); color: white; border-radius: 50% 50% 0 0; }
+        .state-2 { background-color: var(--status-answered); color: white; border-radius: 0 0 50% 50%; }
+        .state-3 { background-color: var(--status-review); color: white; border-radius: 50%; }
+
+        .active-cell { box-shadow: 0 0 0 3px #3b82f6; }
+
+        /* Stats Legend Box */
+        .legend-box {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid var(--tcs-border);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
+
+        @media (max-width: 768px) {
+            .main-workspace { flex-direction: column; }
+            .dashboard-panel { max-width: 100%; min-width: 100%; height: 250px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="quiz-container" id="main-interface">
-        <div class="header-bar">
-            <span id="current-index-label" style="font-weight: 600; color: #cbd5e1;">Loading Matrix...</span>
-            <div class="timer-box" id="clock-display">00:00</div>
-        </div>
-
-        <div id="target-question-text" style="font-size: 1.25rem; line-height: 1.6; margin-bottom: 25px;"></div>
-        <div id="target-options-container"></div>
-
-        <div class="nav-buttons">
-            <button class="btn" onclick="navigateQuestion(-1)">← Previous</button>
-            <button class="btn" id="next-action-btn" onclick="navigateQuestion(1)">Save & Next →</button>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid #4a5568; margin-top: 40px;">
-        <div class="palette-grid" id="palette-grid-holder"></div>
+    <!-- Header line block -->
+    <div class="tcs-header">
+        <span id="exam-title-display">Mock Exam Hub</span>
+        <div class="timer-box">Time Left: <span id="clock-display">00:00</span></div>
     </div>
+
+    <!-- Active Section Tab bar ribbon -->
+    <div class="section-bar">
+        <div class="section-tab" id="active-section-label">General Section</div>
+    </div>
+
+    <!-- Core Grid split panels -->
+    <div class="main-workspace" id="quiz-workspace" style="display: none;">
+        
+        <!-- Left Side Pane -->
+        <div class="question-panel">
+            <div class="question-header">
+                <span id="question-number-title">Question No. 1</span>
+                <span style="color: #6b7280; font-size: 0.85rem;" id="shift-label-view"></span>
+            </div>
+            
+            <div class="question-content">
+                <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
+                <div class="options-container" id="target-options-container"></div>
+            </div>
+
+            <div class="action-tray">
+                <div>
+                    <button class="btn-tcs btn-white" onclick="markForReview()">Mark for Review & Next</button>
+                    <button class="btn-tcs btn-white" style="margin-left:8px;" onclick="clearResponse()">Clear Response</button>
+                </div>
+                <button class="btn-tcs btn-blue" onclick="saveAndNext()">Save & Next</button>
+            </div>
+        </div>
+
+        <!-- Right Side Pane Dashboard -->
+        <div class="dashboard-panel">
+            <div class="profile-box">
+                <div class="profile-avatar">👨‍🎓</div>
+                <div>
+                    <div style="font-weight: bold; font-size: 0.95rem;">Candidate Student</div>
+                    <div style="color: #6b7280; font-size: 0.8rem;">ID: CB-2026</div>
+                </div>
+            </div>
+
+            <div class="palette-container">
+                <div class="palette-title">Choose a Question:</div>
+                <div class="palette-grid" id="palette-grid-holder"></div>
+            </div>
+
+            <!-- Dashboard Color Legend Mapping Matrix -->
+            <div class="legend-box">
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-answered)"></span> Answered</div>
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-answered)"></span> Not Answered</div>
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-review)"></span> Marked for Review</div>
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-visited)"></span> Not Visited</div>
+            </div>
+            
+            <button class="btn-tcs btn-blue" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
+        </div>
+
+    </div>
+
+    <!-- Dynamic Blocker Fallback Node screen -->
+    <div id="fallback-screen-holder"></div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -102,49 +306,47 @@
 
         let examDataMatrix = [];
         let activeIndex = 0;
+        
+        // Tracking states array system matching TCS conventions:
+        // 0 = Not Visited, 1 = Not Answered, 2 = Answered, 3 = Marked for Review
+        let questionStates = [];
         let selectedAnswers = [];
         let timeRemainingSeconds = questionLimit * 60;
         let timerEngine = null;
 
         async function initializeQuizEngine() {
             try {
-                // Uses clean absolute location targeting routing protocols
                 const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`);
-                
-                if (!response.ok) {
-                    showMissingFileScreen(`Server responded with bad status: ${response.status}`);
-                    return;
-                }
+                if (!response.ok) { showMissingFileScreen(); return; }
 
                 const payload = await response.json();
-                
-                let targetQuestions = [];
-                if (payload && payload.status === 'ok' && Array.isArray(payload.data)) {
-                    targetQuestions = payload.data;
-                } else if (Array.isArray(payload)) {
-                    targetQuestions = payload;
-                }
+                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []);
 
                 if (targetQuestions.length > 0) {
                     examDataMatrix = targetQuestions;
                     selectedAnswers = new Array(examDataMatrix.length).fill(null);
+                    
+                    // Initialize all questions as 0 (Not Visited), except the first one which is 1 (Not Answered)
+                    questionStates = new Array(examDataMatrix.length).fill(0);
+                    questionStates[0] = 1;
+
+                    // Apply layout tags header variables dynamically
+                    document.getElementById('exam-title-display').innerText = `${activeTopic.toUpperCase()} - ONLINE ASSESSMENT`;
+                    document.getElementById('active-section-label').innerText = `${activeTopic.toUpperCase()}`;
+                    
+                    document.getElementById('quiz-workspace').style.display = 'flex';
                     startClockCountdown();
                     renderExamWindow();
-                } else {
-                    showMissingFileScreen("The server returned an empty array or wrong data format.");
-                }
-            } catch (err) {
-                showMissingFileScreen(`Error processing layout files: ${err.message}`);
-            }
+                } else { showMissingFileScreen(); }
+            } catch (err) { showMissingFileScreen(); }
         }
 
-        function showMissingFileScreen(debugMessage) {
-            document.getElementById('main-interface').innerHTML = `
-                <div style="text-align:center; padding: 20px;">
-                    <h1 style="font-size:2.2rem; color:#fc8181; margin-bottom:10px;">⚠️ Content Available Soon</h1>
-                    <p style="color:#cbd5e1; font-size:1.1rem; margin-bottom:10px;">The data matrix question bank for "${activeTopic}" is currently undergoing alignment processing updates.</p>
-                    <p style="color:#a0aec0; font-size:0.9rem; font-style:italic; margin-bottom:30px;">Debug: ${debugMessage}</p>
-                    <button onclick="window.location.href='exams.html'" style="background:#3182ce; color:white; border:none; padding:12px 30px; font-weight:700; border-radius:6px; cursor:pointer;">← Go Back</button>
+        function showMissingFileScreen() {
+            document.getElementById('fallback-screen-holder').innerHTML = `
+                <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; font-family:sans-serif; background:#1a365d; color:white; padding:20px;">
+                    <h1>⚠️ Content Available Soon</h1>
+                    <p>The matrix question bank is undergoing engineering optimization sync routines.</p>
+                    <button onclick="window.location.href='exams.html'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Go Back</button>
                 </div>
             `;
         }
@@ -153,7 +355,6 @@
             timerEngine = setInterval(() => {
                 if (timeRemainingSeconds <= 0) {
                     clearInterval(timerEngine);
-                    alert("Time boundary reached! Transmitting metrics logs.");
                     triggerExamSubmission();
                 } else {
                     timeRemainingSeconds--;
@@ -168,8 +369,13 @@
             if (examDataMatrix.length === 0) return;
             const currentItem = examDataMatrix[activeIndex];
             
-            const examLabel = currentItem.exam ? `[${currentItem.exam} - ${currentItem.shift || ''}]` : '';
-            document.getElementById('current-index-label').innerText = `Question ${activeIndex + 1} of ${examDataMatrix.length} ${examLabel}`;
+            // Mark current question as Not Answered if it was only Visited
+            if (questionStates[activeIndex] === 0) {
+                questionStates[activeIndex] = 1;
+            }
+
+            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`;
+            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} ${currentItem.shift || ''}` : '';
             document.getElementById('target-question-text').innerHTML = currentItem.text;
             
             const container = document.getElementById('target-options-container');
@@ -179,16 +385,15 @@
             optArray.forEach((opt, idx) => {
                 const isSelected = selectedAnswers[activeIndex] === idx;
                 const optHtml = `
-                    <div class="option-item ${isSelected ? 'selected' : ''}" onclick="selectOptionIndex(${idx})">
-                        <input type="radio" name="quiz-opt" id="opt-${idx}" ${isSelected ? 'checked' : ''} style="display:none;">
-                        <label style="cursor:pointer; width:100%;"><strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}</label>
+                    <div class="option-row ${isSelected ? 'selected' : ''}" onclick="selectOptionIndex(${idx})">
+                        <input type="radio" name="tcs-opt" id="opt-${idx}" ${isSelected ? 'checked' : ''}>
+                        <label style="cursor:pointer; width:100%; font-weight:600;" for="opt-${idx}">
+                            (${String.fromCharCode(65 + idx)}) ${opt}
+                        </label>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', optHtml);
             });
-
-            const nextBtn = document.getElementById('next-action-btn');
-            nextBtn.innerText = (activeIndex === examDataMatrix.length - 1) ? "Save & Finish" : "Save & Next →";
 
             renderPaletteGrid();
         }
@@ -198,26 +403,33 @@
             renderExamWindow();
         }
 
-        function renderPaletteGrid() {
-            const grid = document.getElementById('palette-grid-holder');
-            grid.innerHTML = '';
-            examDataMatrix.forEach((_, idx) => {
-                let statusClass = '';
-                if (idx === activeIndex) statusClass = 'active';
-                else if (selectedAnswers[idx] !== null) statusClass = 'answered';
-
-                const cell = `<div class="palette-dot ${statusClass}" onclick="jumpToQuestion(${idx})">${idx + 1}</div>`;
-                grid.insertAdjacentHTML('beforeend', cell);
-            });
+        function clearResponse() {
+            selectedAnswers[activeIndex] = null;
+            questionStates[activeIndex] = 1; // Resets back to simple Not Answered
+            renderExamWindow();
         }
 
-        function navigateQuestion(direction) {
-            let nextPos = activeIndex + direction;
-            if (nextPos >= 0 && nextPos < examDataMatrix.length) {
-                activeIndex = nextPos;
+        function saveAndNext() {
+            if (selectedAnswers[activeIndex] !== null) {
+                questionStates[activeIndex] = 2; // State Flag Answered (Green)
+            } else {
+                questionStates[activeIndex] = 1; // State Flag Not Answered (Red)
+            }
+            moveToNextOrWrap();
+        }
+
+        function markForReview() {
+            questionStates[activeIndex] = 3; // State Flag Review (Purple)
+            moveToNextOrWrap();
+        }
+
+        function moveToNextOrWrap() {
+            if (activeIndex < examDataMatrix.length - 1) {
+                activeIndex++;
                 renderExamWindow();
-            } else if (nextPos === examDataMatrix.length) {
-                triggerExamSubmission();
+            } else {
+                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit.");
+                renderPaletteGrid();
             }
         }
 
@@ -226,13 +438,29 @@
             renderExamWindow();
         }
 
+        function renderPaletteGrid() {
+            const grid = document.getElementById('palette-grid-holder');
+            grid.innerHTML = '';
+            
+            questionStates.forEach((stateValue, idx) => {
+                const isActive = idx === activeIndex;
+                const cellHtml = `
+                    <div class="palette-cell state-${stateValue} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
+                        ${idx + 1}
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', cellHtml);
+            });
+        }
+
         function triggerExamSubmission() {
             if (timerEngine) clearInterval(timerEngine);
             let score = 0;
             examDataMatrix.forEach((q, i) => {
                 if (selectedAnswers[i] === q.correct) score++;
             });
-            alert(`Exam Session Complete!\n\nScore: ${score} / ${examDataMatrix.length}\nAccuracy: ${((score / examDataMatrix.length) * 100).toFixed(1)}%`);
+            
+            alert(`Exam Session Logged Successfully!\n\nTotal Questions: ${examDataMatrix.length}\nCorrect Answers: ${score}\nFinal Score Metrics: ${((score / examDataMatrix.length) * 100).toFixed(1)}%`);
             window.location.href = 'exams.html';
         }
 
