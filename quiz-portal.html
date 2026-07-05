@@ -54,39 +54,19 @@
             display: block;
         }
 
-        .header-right-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .lang-selector {
-            padding: 4px 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            border-radius: 4px;
-            border: 1px solid white;
-            background: var(--tcs-blue);
-            color: white;
-            cursor: pointer;
-        }
-
-        .lang-selector option {
-            background: white;
-            color: #333;
-        }
-
         .timer-box {
             font-weight: bold;
             font-size: 1.1rem;
         }
 
+        /* Unified Ribbon layout container holding both Subject Tab and Dropdown */
         .section-bar {
             background-color: #e5e7eb;
             border-bottom: 1px solid var(--tcs-border);
-            padding: 8px 20px;
+            padding: 6px 20px;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .section-tab {
@@ -97,6 +77,19 @@
             font-weight: bold;
             font-size: 0.9rem;
             border-radius: 4px;
+        }
+
+        /* TCS-style drop down look right inside the ribbon pane */
+        .lang-selector-ribbon {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid var(--tcs-blue);
+            background: white;
+            color: var(--tcs-blue);
+            cursor: pointer;
+            outline: none;
         }
 
         /* Main Workspace split panel */
@@ -129,7 +122,7 @@
             padding: 25px;
             overflow-y: auto;
             position: relative;
-            padding-bottom: 50px; /* Leave space for bottom-right meta badge */
+            padding-bottom: 50px;
         }
 
         .options-container {
@@ -288,24 +281,24 @@
 </head>
 <body>
 
-    <!-- Header block with Logo & Dropdown Selector -->
+    <!-- Header block with Clean Title and Countdown Alignment -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
             <span id="exam-title-display">Conceptual Bridge - Online Assessment</span>
         </div>
-        <div class="header-right-controls">
-            <select class="lang-selector" id="view-lang-select" onchange="toggleViewLanguage()">
-                <option value="EN">English</option>
-                <option value="BN">Bengali</option>
-            </select>
-            <div class="timer-box">Time Left: <span id="clock-display">00:00</span></div>
-        </div>
+        <div class="timer-box">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
-    <!-- Active Section Tab bar ribbon -->
+    <!-- Active Section Tab bar ribbon with Relocated Dropdown Drop Down Menu -->
     <div class="section-bar">
         <div class="section-tab" id="active-section-label">General Section</div>
+        
+        <!-- Relocated to the exact Blue Pen Highlight Box Location -->
+        <select class="lang-selector-ribbon" id="view-lang-select" onchange="toggleViewLanguage()">
+            <option value="EN">English</option>
+            <option value="BN">Bengali</option>
+        </select>
     </div>
 
     <!-- Core Grid split panels -->
@@ -321,7 +314,7 @@
                 <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
                 <div class="options-container" id="target-options-container"></div>
                 
-                <!-- Relocated Bottom Right Metadata Flag -->
+                <!-- Bottom Right White Workspace Metadata Panel Badge Placement -->
                 <div class="meta-bottom-right" id="shift-label-view"></div>
             </div>
 
@@ -370,7 +363,7 @@
 
         let examDataMatrix = [];
         let activeIndex = 0;
-        let currentLanguage = "EN"; // tracks dynamic language selection
+        let currentLanguage = "EN";
         
         let questionStates = [];
         let selectedAnswers = [];
@@ -392,7 +385,6 @@
                     questionStates = new Array(examDataMatrix.length).fill(0);
                     questionStates[0] = 1;
 
-                    // Standardizing Ribbon Title Headers
                     let formattedSectionTitle = activeTopic;
                     if (activeTopic === 'GACA' || activeTopic === 'gaca') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
                     else if (activeTopic === 'GS' || activeTopic === 'gs') formattedSectionTitle = 'GENERAL SCIENCE';
@@ -432,11 +424,10 @@
             }, 1000);
         }
 
-        // Helper helper logic to parse multilingual entries dynamically on the '/' splitter icon
         function getLocalizedText(rawString) {
             if (!rawString) return "";
             const parts = rawString.split('/');
-            if (parts.length < 2) return rawString.trim(); // fallback if non-translated fallback line exists
+            if (parts.length < 2) return rawString.trim();
             
             return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim();
         }
@@ -456,10 +447,9 @@
 
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`;
             
-            // Render specific metadata properties cleanly in the right bottom position
+            // Placed squarely above the bottom action bar on the right side
             document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : '';
             
-            // Dynamic language extraction injection rules
             document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text);
             
             const container = document.getElementById('target-options-container');
