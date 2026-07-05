@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "rewrites": [
     {
       "source": "/api/fetch-jobs",
@@ -8,5 +9,10 @@
       "source": "/api/fetch-questions",
       "destination": "/api/fetch-questions.js"
     }
-  ]
+  ],
+  "functions": {
+    "api/fetch-questions.js": {
+      "includeFiles": "questions/**"
+    }
+  }
 }
