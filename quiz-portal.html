@@ -308,7 +308,8 @@
             font-size: 1.1rem;
             color: #4b5563;
         }
-        
+
+        /* RESTORED: Standard two-button space separation layout for Stage 1 Footer */
         .wizard-footer {
             height: 60px;
             background: #f3f4f6;
@@ -319,27 +320,11 @@
             padding: 0 30px;
         }
         
-        /* TCS-style Multi-tier Bottom Ribbon Layout */
+        /* 3-Column Center-Aligned Flex Layout for Stage 2 Bottom Footer */
         .wizard-footer-fullwidth {
+            padding: 12px 30px;
             background: #f3f4f6;
             border-top: 1px solid var(--tcs-border);
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        /* Upper section for Language Switcher (aligned bottom-left above action bar) */
-        .footer-row-top {
-            padding: 15px 30px 5px 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        /* Lower section for action buttons with perfect centering */
-        .footer-row-bottom {
-            padding: 10px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -425,7 +410,7 @@
             .dashboard-panel { max-width: 100%; min-width: 100%; height: 250px; }
             .wizard-container { flex-direction: column; }
             .wizard-right { max-width: 100%; height: auto; border-left: none; border-bottom: 1px solid var(--tcs-border); padding: 20px; }
-            .footer-row-bottom { flex-direction: column; gap: 15px; }
+            .wizard-footer-fullwidth { flex-direction: column; gap: 15px; }
             .footer-col-left, .footer-col-center, .footer-col-right { justify-content: center; text-align: center; }
         }
     </style>
@@ -523,6 +508,7 @@
             <div class="wizard-name">Shovan Das</div>
         </div>
     </div>
+    <!-- RESTORED: Class configuration set to classic two-side footer format -->
     <div class="wizard-footer" id="step-footer-1">
         <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
@@ -550,6 +536,15 @@
                 </ol>
 
                 <div class="lower-declarations-box">
+                    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <label style="font-weight: bold; font-size: 0.9rem; color: #374151;">Choose your default language:</label>
+                        <select id="wizard-lang-dropdown" style="padding: 4px 10px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af; background: white; color: #1e3a8a; cursor: pointer;">
+                            <option value="EN">English</option>
+                            <option value="BN">Bengali</option>
+                        </select>
+                    </div>
+                    <p style="color: #b91c1c; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px; font-weight: 500;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</p>
+                    
                     <h4 style="margin-bottom: 6px; font-size: 0.95rem;">Declaration:</h4>
                     <div style="display: flex; align-items: flex-start; gap: 10px;">
                         <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.2); margin-top: 3px; cursor: pointer;">
@@ -563,32 +558,15 @@
             </div>
         </div>
         
-        <!-- MATCHED TO TCS iON LAYOUT MANIPULATION SCHEME -->
+        <!-- Bottom bar with centered Action Trigger Button -->
         <div class="wizard-footer-fullwidth">
-            
-            <!-- Tier 1: Aligned Bottom Left (Upper space of the Action Ribbon) -->
-            <div class="footer-row-top">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <label style="font-weight: bold; font-size: 0.88rem; color: #374151;">Choose your default language:</label>
-                    <select id="wizard-lang-dropdown" style="padding: 4px 10px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af; background: white; color: #1e3a8a; cursor: pointer;">
-                        <option value="EN">English</option>
-                        <option value="BN">Bengali</option>
-                    </select>
-                </div>
-                <span style="color: #b91c1c; font-size: 0.78rem; font-weight: 500; margin-top: 3px; display: block;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</span>
+            <div class="footer-col-left">
+                <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
             </div>
-
-            <!-- Tier 2: Lower Control Track with Absolute Centered Action Trigger -->
-            <div class="footer-row-bottom">
-                <div class="footer-col-left">
-                    <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
-                </div>
-                <div class="footer-col-center">
-                    <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
-                </div>
-                <div class="footer-col-right"></div>
+            <div class="footer-col-center">
+                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
             </div>
-
+            <div class="footer-col-right"></div>
         </div>
     </div>
 
@@ -779,7 +757,6 @@
             renderExamWindow();
         }
 
-        style="width:100%; font-weight:600;"
         function renderExamWindow() {
             if (examDataMatrix.length === 0) return;
             const currentItem = examDataMatrix[activeIndex];
