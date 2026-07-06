@@ -266,7 +266,7 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
 
-        /* Onboarding Wizard Setup Styles */
+        /* Onboarding Wizard Layout Configuration */
         .wizard-container {
             flex: 1;
             display: flex;
@@ -344,6 +344,8 @@
             font-size: 0.85rem;
             border: 1px solid #9ca3af;
         }
+        
+        /* Updated Next Button styling rules supporting disabled lock status */
         .btn-wizard-next {
             background: #3b82f6;
             color: white;
@@ -353,6 +355,12 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        .btn-wizard-next:disabled {
+            background: #cbd5e1;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
         .btn-wizard-ready {
             background: #22d3ee;
             color: #083344;
@@ -391,6 +399,7 @@
 </head>
 <body>
 
+    <!-- Header block with Clean Title -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
@@ -399,12 +408,15 @@
         <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
+    <!-- Active Section Tab bar ribbon -->
     <div class="section-bar" id="ribbon-bar-container" style="display: none;">
         <div class="section-tab" id="active-section-label">General Section</div>
     </div>
 
+    <!-- STAGE 1: GENERAL INSTRUCTIONS (SCROLL WATCHER APPLIED HERE) -->
     <div class="wizard-container" id="step-instructions-1">
-        <div class="wizard-left">
+        <!-- Target tracking id added: 'instruction-scroll-pane' -->
+        <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
             <ol style="padding-left: 20px;">
                 <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You need not terminate the examination or submit your paper.</li>
@@ -470,6 +482,9 @@
                 <li>After clicking the <strong>Save & Next</strong> button for the last question in a Section, you will automatically be taken to the first question of the next Section in sequence.</li>
                 <li>You can move the mouse cursor over the name of a Section to view the answering status for that Section.</li>
             </ol>
+            <p style="text-align: center; font-weight: bold; padding: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; color: #166534; margin-top: 20px;">
+                📜 End of Instructions page text log wrapper. Scroll confirmed. You may now continue.
+            </p>
         </div>
         <div class="wizard-right">
             <div class="wizard-avatar">👨‍🎓</div>
@@ -478,14 +493,16 @@
     </div>
     <div class="wizard-footer" id="step-footer-1">
         <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
-        <button class="btn-wizard-next" onclick="goToWizardStageTwo()">Next</button>
+        <!-- Initialized as disabled dynamically -->
+        <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
     </div>
 
 
+    <!-- STAGE 2: SPECIFIC EXAM RULES ENGINE -->
     <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
             <div class="wizard-left">
-                <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings Initialization Block</h2>
+                <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings</h2>
                 
                 <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 10px;">
                     <span id="wizard-duration-lbl">Duration: 13 Mins</span>
@@ -531,8 +548,10 @@
     </div>
 
 
+    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE) -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
+        <!-- Left Side Pane -->
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
@@ -559,6 +578,7 @@
             </div>
         </div>
 
+        <!-- Right Side Pane Dashboard -->
         <div class="dashboard-panel">
             <div class="profile-box">
                 <div class="profile-avatar">👨‍🎓</div>
@@ -630,6 +650,20 @@
 
                 } else { showMissingFileScreen(); }
             } catch (err) { showMissingFileScreen(); }
+        }
+
+        /* NEW SCROLL TRACKER ALGORITHM FUNCTION */
+        function checkInstructionScrollProgress() {
+            const container = document.getElementById('instruction-scroll-pane');
+            const nextButton = document.getElementById('instruction-next-action-btn');
+            
+            // Checks if user position reaches the bottom boundary within a 5px threshold layout allowance
+            const totalScrollHeight = container.scrollHeight;
+            const currentPosition = container.scrollTop + container.clientHeight;
+            
+            if (totalScrollHeight - currentPosition <= 5) {
+                nextButton.disabled = false; // Unlocks the Next button step
+            }
         }
 
         function goToWizardStageTwo() {
