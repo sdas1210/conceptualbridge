@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conceptual Bridge - Admin Metrics Panel</title>
+    <style>
+        /* Security Overlay Guard Styles */
+        #security-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a365d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white;
+        }
+        .gate-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            max-width: 320px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .gate-box h2 { margin-top: 0; font-size: 1.4rem; }
+        .gate-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .gate-box button {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .gate-box button:hover { background: #38a169; }
+        .error-msg { color: #fc8181; font-size: 12px; margin-top: 10px; display: none; }
+
+        /* Main Dashboard Styles (Initially Hidden) */
+        #dashboard-contents {
+            display: none; /* Controlled via security check */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        .dashboard-metrics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+            color: white;
+        }
+        .hero-card {
+            background: linear-gradient(135deg, #2b6cb0 0%, #3182ce 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-tag {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.9;
+        }
+        .hero-card h3 { margin: 4px 0 0 0; font-size: 18px; font-weight: 600; }
+        .metric-value { font-size: 36px; font-weight: bold; }
+        
+        .sections-analytics-wrapper h4 {
+            margin: 10px 0 16px 0;
+            color: #e2e8f0;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .section-row-item { margin-bottom: 16px; }
+        .section-meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #e2e8f0;
+            margin-bottom: 6px;
+        }
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .progress-fill {
+            background: #48bb78;
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.1, 1, 0.1, 1);
+            box-shadow: 0 0 8px rgba(72, 187, 120, 0.5);
+        }
+        .btn-back {
+            display: inline-block;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.15); }
+    </style>
+</head>
+<body>
+
+    <div id="security-gate">
+        <div class="gate-box">
+            <h2>Admin Verification</h2>
+            <p style="font-size:12px; opacity:0.8; margin:0;">Provide security secret key to access node metrics dashboard.</p>
+            <input type="password" id="admin-secret-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') verifyAdminToken()">
+            <button onclick="verifyAdminToken()">Unlock Dashboard</button>
+            <div class="error-msg" id="gate-error">Invalid key phrase validation.</div>
+        </div>
+    </div>
+
+    <div id="dashboard-contents">
+        <div class="dashboard-metrics-grid">
+            <div class="metric-card hero-card">
+                <div class="card-meta">
+                    <span class="card-tag">Aggregate System Sync</span>
+                    <h3>Total Questions Matrix</h3>
+                </div>
+                <div class="metric-value" id="total-questions-display">0</div>
+            </div>
+
+            <div class="sections-analytics-wrapper">
+                <h4>Content Bank Distribution</h4>
+                
+                <div class="section-row-item">
+                    <div class="section-meta-info">
+                        <strong>Mathematics (MATH)</strong>
+                        <span id="count-math">0 Questions</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-fill" id="fill-math"></div></div>
+                </div>
+
+                <div class="section-row-item">
+                    <div class="section-meta-info">
+                        <strong>General Intelligence (GI)</strong>
+                        <span id="count-gi">0 Questions</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-fill" id="fill-gi"></div></div>
+                </div>
+
+                <div class="section-row-item">
+                    <div class="section-meta-info">
+                        <strong>General Science (GS)</strong>
+                        <span id="count-gs">0 Questions</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-fill" id="fill-gs"></div></div>
+                </div>
+
+                <div class="section-row-item">
+                    <div class="section-meta-info">
+                        <strong>General Awareness & CA (GACA)</strong>
+                        <span id="count-gaca">0 Questions</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-fill" id="fill-gaca"></div></div>
+                </div>
+            </div>
+
+            <a href="index.html" class="btn-back">← Return to Homepage</a>
+        </div>
+    </div>
+
+    <script>
+        const HARDCODED_PHRASE = 'shodas_admin_2026';
+
+        // Checks session storage so you don't have to keep re-entering the password on refresh
+        if (sessionStorage.getItem('admin_authenticated') === 'true') {
+            grantAccess(HARDCODED_PHRASE);
+        }
+
+        function verifyAdminToken() {
+            const token = document.getElementById('admin-secret-input').value;
+            if (token === HARDCODED_PHRASE) {
+                sessionStorage.setItem('admin_authenticated', 'true');
+                grantAccess(token);
+            } else {
+                document.getElementById('gate-error').style.display = 'block';
+            }
+        }
+
+        function grantAccess(token) {
+            document.getElementById('security-gate').style.display = 'none';
+            document.getElementById('dashboard-contents').style.display = 'flex';
+            loadAdminStats(token);
+        }
+
+        async function loadAdminStats(token) {
+            const API_URL = `/api/admin-stats?secret=${token}`; 
+            
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) return;
+                
+                const payload = await response.json();
+                if (payload.status === 'success') {
+                    const stats = payload.statistics;
+                    
+                    document.getElementById('total-questions-display').innerText = stats.totalQuestions;
+                    
+                    document.getElementById('count-math').innerText = stats.sections.MATH + ' Questions';
+                    document.getElementById('fill-math').style.width = stats.allocationRatios.MATH + '%';
+                    
+                    document.getElementById('count-gi').innerText = stats.sections.GI + ' Questions';
+                    document.getElementById('fill-gi').style.width = stats.allocationRatios.GI + '%';
+                    
+                    document.getElementById('count-gs').innerText = stats.sections.GS + ' Questions';
+                    document.getElementById('fill-gs').style.width = stats.allocationRatios.GS + '%';
+                    
+                    document.getElementById('count-gaca').innerText = stats.sections.GACA + ' Questions';
+                    document.getElementById('fill-gaca').style.width = stats.allocationRatios.GACA + '%';
+                }
+            } catch (error) {
+                console.error('Failed to load metrics:', error);
+            }
+        }
+    </script>
+</body>
+</html>
