@@ -396,10 +396,8 @@
             cursor: not-allowed;
         }
 
-        /* UPDATED: Added margin-top: auto to push the line down to match Slide2.JPG */
         .lower-declarations-box {
             margin-top: auto; 
-            min-margin-top: 60px;
             border-top: 1px solid var(--tcs-border); 
             padding-top: 20px;
         }
@@ -422,7 +420,6 @@
 </head>
 <body>
 
-    <!-- Header block with Clean Title -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
@@ -431,12 +428,10 @@
         <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
-    <!-- Active Section Tab bar ribbon -->
     <div class="section-bar" id="ribbon-bar-container" style="display: none;">
         <div class="section-tab" id="active-section-label">General Section</div>
     </div>
 
-    <!-- STAGE 1: GENERAL INSTRUCTIONS -->
     <div class="wizard-container" id="step-instructions-1">
         <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
@@ -520,7 +515,6 @@
     </div>
 
 
-    <!-- STAGE 2: SPECIFIC EXAM RULES ENGINE -->
     <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
             <div class="wizard-left">
@@ -575,7 +569,6 @@
     </div>
 
 
-    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
         <div class="question-panel">
@@ -743,7 +736,8 @@
             }, 1000);
         }
 
-        getLocalizedText(rawString) {
+        /* FIXED: Prepended 'function' keyword so compilation does not throw errors */
+        function getLocalizedText(rawString) {
             if (!rawString) return "";
             const parts = rawString.split('/');
             if (parts.length < 2) return rawString.trim();
@@ -840,7 +834,7 @@
                         ${idx + 1}
                     </div>
                 `;
-                grid.beforeend(cellHtml);
+                grid.insertAdjacentHTML('beforeend', cellHtml);
             });
         }
 
