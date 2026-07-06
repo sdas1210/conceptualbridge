@@ -266,9 +266,7 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
 
-        /* ========================================================
-           NEW INSTRUCTIONS WIZARD STYLING (MATCHING 225/226 JPG)
-           ======================================================== */
+        /* Onboarding Wizard Layout Style Rules */
         .wizard-container {
             flex: 1;
             display: flex;
@@ -385,9 +383,7 @@
         <div class="section-tab" id="active-section-label">General Section</div>
     </div>
 
-    <!-- ========================================================
-       STAGE 1: GENERAL INSTRUCTIONS ENGINE (225.JPG)
-       ======================================================== -->
+    <!-- STAGE 1: GENERAL INSTRUCTIONS ENGINE (225.JPG) -->
     <div class="wizard-container" id="step-instructions-1">
         <div class="wizard-left">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
@@ -445,9 +441,7 @@
     </div>
 
 
-    <!-- ========================================================
-       STAGE 2: SPECIFIC EXAM RULES ENGINE (226.JPG)
-       ======================================================== -->
+    <!-- STAGE 2: SPECIFIC EXAM RULES ENGINE (226.JPG) -->
     <div class="wizard-container" id="step-instructions-2" style="display: none;">
         <div class="wizard-left">
             <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings Initialization Block</h2>
@@ -466,7 +460,6 @@
                 <li>There is no negative marking for the questions that you have not attempted.</li>
             </ol>
 
-            <!-- Interactive Settings tray elements from 226.JPG -->
             <div style="margin-top: 40px; border: 1px solid var(--tcs-border); padding: 20px; background: #f9fafb; border-radius: 6px;">
                 <div style="margin-bottom: 15px;">
                     <label style="font-weight: bold; font-size: 0.95rem; margin-right: 10px;">Choose your default language:</label>
@@ -489,15 +482,14 @@
             <div class="wizard-name">Shovan Das</div>
         </div>
     </div>
+    <!-- FIXED BUTTON EVENT NAMING MISMATCH HERE -->
     <div class="wizard-footer" id="step-footer-2" style="display: none;">
         <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
         <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
     </div>
 
 
-    <!-- ========================================================
-       STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE)
-       ======================================================== -->
+    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE) -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
         <!-- Left Side Pane -->
@@ -584,7 +576,6 @@
                     questionStates = new Array(examDataMatrix.length).fill(0);
                     questionStates[0] = 1;
 
-                    // Compute full section label titles
                     let formattedSectionTitle = activeTopic;
                     if (activeTopic === 'GACA' || activeTopic === 'gaca') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
                     else if (activeTopic === 'GS' || activeTopic === 'gs') formattedSectionTitle = 'GENERAL SCIENCE';
@@ -593,7 +584,6 @@
                     
                     document.getElementById('active-section-label').innerText = formattedSectionTitle;
 
-                    // Dynamically map properties into Stage 2 Instructions Panel (226.JPG)
                     document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`;
                     document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`;
                     document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`;
@@ -603,7 +593,6 @@
             } catch (err) { showMissingFileScreen(); }
         }
 
-        /* Instructions Wizard Navigation Routines */
         function goToWizardStageTwo() {
             document.getElementById('step-instructions-1').style.display = 'none';
             document.getElementById('step-footer-1').style.display = 'none';
@@ -623,16 +612,14 @@
             document.getElementById('ready-begin-action-btn').disabled = !isChecked;
         }
 
-        function launchExamWorkspace() {
-            // Pick up language choice selected on screen 2
+        /* Matches the button trigger signature perfectly now */
+        function launchExamMatrixWorkspace() {
             currentLanguage = document.getElementById('wizard-lang-dropdown').value;
             document.getElementById('view-lang-select').value = currentLanguage;
 
-            // Hide the entire onboarding wizard structures
             document.getElementById('step-instructions-2').style.display = 'none';
             document.getElementById('step-footer-2').style.display = 'none';
 
-            // Unveil assessment layout components
             document.getElementById('timer-header-wrapper').style.display = 'block';
             document.getElementById('ribbon-bar-container').style.display = 'flex';
             document.getElementById('quiz-workspace').style.display = 'flex';
