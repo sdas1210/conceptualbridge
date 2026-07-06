@@ -308,17 +308,8 @@
             font-size: 1.1rem;
             color: #4b5563;
         }
-        .wizard-footer {
-            height: 60px;
-            background: #f3f4f6;
-            border-top: 1px solid var(--tcs-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-        }
         
-        /* UPDATED: 3-Column Center-Aligned Grid System for Stage 2 Footer */
+        /* 3-Column Center-Aligned Flex Layout for Stage 2 Bottom Footer */
         .wizard-footer-fullwidth {
             padding: 12px 30px;
             background: #f3f4f6;
@@ -328,7 +319,6 @@
             align-items: center;
         }
 
-        /* Forces left, middle, and right columns to have identical proportional spatial bounds */
         .footer-col-left {
             flex: 1;
             display: flex;
@@ -340,11 +330,7 @@
             justify-content: center;
         }
         .footer-col-right {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 0.82rem;
+            flex: 1; /* Keeps spacing equal for precise centering of column 2 */
         }
 
         .symbol-row {
@@ -384,7 +370,7 @@
             background: #22d3ee;
             color: #083344;
             border: 1px solid #06b6d4;
-            padding: 10px 30px;
+            padding: 12px 40px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
@@ -414,12 +400,13 @@
             .wizard-container { flex-direction: column; }
             .wizard-right { max-width: 100%; height: auto; border-left: none; border-bottom: 1px solid var(--tcs-border); padding: 20px; }
             .wizard-footer-fullwidth { flex-direction: column; gap: 15px; }
-            .footer-col-left, .footer-col-center, .footer-col-right { justify-content: center; align-items: center; text-align: center; }
+            .footer-col-left, .footer-col-center, .footer-col-right { justify-content: center; text-align: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Header block with Clean Title -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
@@ -428,10 +415,12 @@
         <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
+    <!-- Active Section Tab bar ribbon -->
     <div class="section-bar" id="ribbon-bar-container" style="display: none;">
         <div class="section-tab" id="active-section-label">General Section</div>
     </div>
 
+    <!-- STAGE 1: GENERAL INSTRUCTIONS -->
     <div class="wizard-container" id="step-instructions-1">
         <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
@@ -514,6 +503,7 @@
     </div>
 
 
+    <!-- STAGE 2: SPECIFIC EXAM RULES ENGINE -->
     <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
             <div class="wizard-left">
@@ -533,7 +523,17 @@
                     <li>There is no negative marking for the questions that you have not attempted.</li>
                 </ol>
 
+                <!-- RELOCATED: Language choice option card wrapper restored right here before the declaration -->
                 <div class="lower-declarations-box">
+                    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <label style="font-weight: bold; font-size: 0.9rem; color: #374151;">Choose your default language:</label>
+                        <select id="wizard-lang-dropdown" style="padding: 4px 10px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af; background: white; color: #1e3a8a; cursor: pointer;">
+                            <option value="EN">English</option>
+                            <option value="BN">Bengali</option>
+                        </select>
+                    </div>
+                    <p style="color: #b91c1c; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px; font-weight: 500;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</p>
+                    
                     <h4 style="margin-bottom: 6px; font-size: 0.95rem;">Declaration:</h4>
                     <div style="display: flex; align-items: flex-start; gap: 10px;">
                         <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.2); margin-top: 3px; cursor: pointer;">
@@ -547,31 +547,23 @@
             </div>
         </div>
         
+        <!-- Bottom bar with centered Action Trigger Button -->
         <div class="wizard-footer-fullwidth">
             <div class="footer-col-left">
                 <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
             </div>
-            
             <div class="footer-col-center">
                 <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
             </div>
-            
-            <div class="footer-col-right">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <label style="font-weight: bold; color: #374151;">Choose your default language:</label>
-                    <select id="wizard-lang-dropdown" style="padding: 4px 8px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af; background: white; color: #1e3a8a; cursor: pointer;">
-                        <option value="EN">English</option>
-                        <option value="BN">Bengali</option>
-                    </select>
-                </div>
-                <span style="color: #b91c1c; font-weight: 500; margin-top: 3px;">Please note all questions will appear in your default language.</span>
-            </div>
+            <div class="footer-col-right"></div>
         </div>
     </div>
 
 
+    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE) -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
+        <!-- Left Side Pane -->
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
@@ -598,6 +590,7 @@
             </div>
         </div>
 
+        <!-- Right Side Pane Dashboard -->
         <div class="dashboard-panel">
             <div class="profile-box">
                 <div class="profile-avatar">👨‍🎓</div>
@@ -740,8 +733,6 @@
             }, 1000);
         }
 
-        // Helper logic to parse multilingual entries dynamically on the '/' splitter icon
-        // If default language matches what's picked in onboarding, all questions are strictly mapped to that version
         function getLocalizedText(rawString) {
             if (!rawString) return "";
             const parts = rawString.split('/');
