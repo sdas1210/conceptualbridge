@@ -308,6 +308,17 @@
             font-size: 1.1rem;
             color: #4b5563;
         }
+
+        /* RESTORED: Standard two-button space separation layout for Stage 1 Footer */
+        .wizard-footer {
+            height: 60px;
+            background: #f3f4f6;
+            border-top: 1px solid var(--tcs-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
         
         /* 3-Column Center-Aligned Flex Layout for Stage 2 Bottom Footer */
         .wizard-footer-fullwidth {
@@ -330,7 +341,7 @@
             justify-content: center;
         }
         .footer-col-right {
-            flex: 1; /* Keeps spacing equal for precise centering of column 2 */
+            flex: 1;
         }
 
         .symbol-row {
@@ -497,6 +508,7 @@
             <div class="wizard-name">Shovan Das</div>
         </div>
     </div>
+    <!-- RESTORED: Class configuration set to classic two-side footer format -->
     <div class="wizard-footer" id="step-footer-1">
         <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
@@ -523,7 +535,6 @@
                     <li>There is no negative marking for the questions that you have not attempted.</li>
                 </ol>
 
-                <!-- RELOCATED: Language choice option card wrapper restored right here before the declaration -->
                 <div class="lower-declarations-box">
                     <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <label style="font-weight: bold; font-size: 0.9rem; color: #374151;">Choose your default language:</label>
