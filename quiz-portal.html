@@ -266,7 +266,9 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
 
-        /* Onboarding Wizard Layout Style Rules */
+        /* ========================================================
+           WIZARD STRUCTURAL RE-ALIGNMENT MODS (MATCHING 227.JPG)
+           ======================================================== */
         .wizard-container {
             flex: 1;
             display: flex;
@@ -317,6 +319,17 @@
             align-items: center;
             padding: 0 30px;
         }
+        
+        /* Full-Width Footer Configuration matching 227.JPG bottom bar */
+        .wizard-footer-fullwidth {
+            padding: 15px 30px;
+            background: #f3f4f6;
+            border-top: 1px solid var(--tcs-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .symbol-row {
             display: flex;
             align-items: center;
@@ -347,7 +360,7 @@
             background: #22d3ee;
             color: #083344;
             border: 1px solid #06b6d4;
-            padding: 12px 35px;
+            padding: 10px 30px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
@@ -357,6 +370,13 @@
             color: #94a3b8;
             border-color: #cbd5e1;
             cursor: not-allowed;
+        }
+
+        /* 227.JPG specific lower declarations panel container look */
+        .lower-declarations-box {
+            margin-top: 40px; 
+            border-top: 1px solid var(--tcs-border); 
+            padding-top: 20px;
         }
 
         @media (max-width: 768px) {
@@ -369,7 +389,6 @@
 </head>
 <body>
 
-    <!-- Header block with Clean Title -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
@@ -378,12 +397,10 @@
         <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
-    <!-- Active Section Tab bar ribbon -->
     <div class="section-bar" id="ribbon-bar-container" style="display: none;">
         <div class="section-tab" id="active-section-label">General Section</div>
     </div>
 
-    <!-- STAGE 1: GENERAL INSTRUCTIONS ENGINE (225.JPG) -->
     <div class="wizard-container" id="step-instructions-1">
         <div class="wizard-left">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
@@ -419,16 +436,6 @@
                     </ul>
                 </li>
             </ol>
-            <h4 style="margin-top: 25px;">Answering a Question:</h4>
-            <ol start="4" style="padding-left: 20px;">
-                <li>Procedure for answering a multiple choice (MCQ) type question:
-                    <ul style="padding-left: 20px; margin-top: 5px;">
-                        <li>Choose one answer from the 4 options (A,B,C,D) given below the question, click on the row selection box.</li>
-                        <li>To deselect your chosen answer, click on the <strong>Clear Response</strong> button.</li>
-                        <li>To save your answer, you MUST click on the <strong>Save & Next</strong> button.</li>
-                    </ul>
-                </li>
-            </ol>
         </div>
         <div class="wizard-right">
             <div class="wizard-avatar">👨‍🎓</div>
@@ -441,58 +448,57 @@
     </div>
 
 
-    <!-- STAGE 2: SPECIFIC EXAM RULES ENGINE (226.JPG) -->
-    <div class="wizard-container" id="step-instructions-2" style="display: none;">
-        <div class="wizard-left">
-            <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings Initialization Block</h2>
-            
-            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 10px;">
-                <span id="wizard-duration-lbl">Duration: 10 Mins</span>
-                <span id="wizard-marks-lbl">Maximum Marks: 10</span>
-            </div>
-
-            <p style="font-weight: bold;">Read the following instructions carefully.</p>
-            <ol style="padding-left: 20px; line-height: 1.8;">
-                <li>The test contains <span id="wizard-count-lbl" style="font-weight: bold;">10</span> total questions.</li>
-                <li>Each question has 4 options out of which only one is correct.</li>
-                <li>You have to finish the test within the allocated runtime matrix window limit.</li>
-                <li>You will be awarded 1 mark for each correct answer and 0.00 will be deducted for each wrong answer.</li>
-                <li>There is no negative marking for the questions that you have not attempted.</li>
-            </ol>
-
-            <div style="margin-top: 40px; border: 1px solid var(--tcs-border); padding: 20px; background: #f9fafb; border-radius: 6px;">
-                <div style="margin-bottom: 15px;">
-                    <label style="font-weight: bold; font-size: 0.95rem; margin-right: 10px;">Choose your default language:</label>
-                    <select id="wizard-lang-dropdown" style="padding: 5px 12px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af;">
-                        <option value="EN">English</option>
-                        <option value="BN">Bengali</option>
-                    </select>
-                </div>
-                <p style="color: #b91c1c; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</p>
+    <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
+        <div class="wizard-container">
+            <div class="wizard-left">
+                <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings Initialization Block</h2>
                 
-                <h4 style="margin-bottom: 8px; border-top: 1px solid #e5e7eb; padding-top: 15px;">Declaration:</h4>
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                    <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.3); margin-top: 4px; cursor: pointer;">
-                    <label for="declaration-checkbox" style="font-size: 0.9rem; cursor: pointer; font-weight: 500;">I have understood and agree to all the instructions. I declare that I am not in possession of any electronic device or reference material.</label>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 10px;">
+                    <span id="wizard-duration-lbl">Duration: 10 Mins</span>
+                    <span id="wizard-marks-lbl">Maximum Marks: 10</span>
+                </div>
+
+                <p style="font-weight: bold;">Read the following instructions carefully.</p>
+                <ol style="padding-left: 20px; line-height: 1.8;">
+                    <li>The test contains <span id="wizard-count-lbl" style="font-weight: bold;">10</span> total questions.</li>
+                    <li>Each question has 4 options out of which only one is correct.</li>
+                    <li>You have to finish the test within the allocated runtime matrix window limit.</li>
+                    <li>You will be awarded 1 mark for each correct answer and 0.33 will be deducted for each wrong answer.</li>
+                    <li>There is no negative marking for the questions that you have not attempted.</li>
+                </ol>
+
+                <div class="lower-declarations-box">
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-weight: bold; font-size: 0.9rem; margin-right: 10px;">Choose your default language:</label>
+                        <select id="wizard-lang-dropdown" style="padding: 4px 10px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af;">
+                            <option value="EN">English</option>
+                            <option value="BN">Bengali</option>
+                        </select>
+                    </div>
+                    <p style="color: #b91c1c; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</p>
+                    
+                    <h4 style="margin-bottom: 6px; font-size: 0.95rem;">Declaration:</h4>
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.2); margin-top: 3px; cursor: pointer;">
+                        <label for="declaration-checkbox" style="font-size: 0.88rem; cursor: pointer; font-weight: bold; color: #374151;">I have understood and agree to all the instructions.</label>
+                    </div>
                 </div>
             </div>
+            <div class="wizard-right">
+                <div class="wizard-avatar">👨‍🎓</div>
+                <div class="wizard-name">Shovan Das</div>
+            </div>
         </div>
-        <div class="wizard-right">
-            <div class="wizard-avatar">👨‍🎓</div>
-            <div class="wizard-name">Shovan Das</div>
+        
+        <div class="wizard-footer-fullwidth">
+            <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
+            <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
         </div>
-    </div>
-    <!-- FIXED BUTTON EVENT NAMING MISMATCH HERE -->
-    <div class="wizard-footer" id="step-footer-2" style="display: none;">
-        <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
-        <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
     </div>
 
 
-    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE) -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
-        <!-- Left Side Pane -->
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
@@ -519,7 +525,6 @@
             </div>
         </div>
 
-        <!-- Right Side Pane Dashboard -->
         <div class="dashboard-panel">
             <div class="profile-box">
                 <div class="profile-avatar">👨‍🎓</div>
@@ -596,13 +601,11 @@
         function goToWizardStageTwo() {
             document.getElementById('step-instructions-1').style.display = 'none';
             document.getElementById('step-footer-1').style.display = 'none';
-            document.getElementById('step-instructions-2').style.display = 'flex';
-            document.getElementById('step-footer-2').style.display = 'flex';
+            document.getElementById('stage-two-wrapper-node').style.display = 'flex';
         }
 
         function backToWizardStageOne() {
-            document.getElementById('step-instructions-2').style.display = 'none';
-            document.getElementById('step-footer-2').style.display = 'none';
+            document.getElementById('stage-two-wrapper-node').style.display = 'none';
             document.getElementById('step-instructions-1').style.display = 'flex';
             document.getElementById('step-footer-1').style.display = 'flex';
         }
@@ -612,13 +615,12 @@
             document.getElementById('ready-begin-action-btn').disabled = !isChecked;
         }
 
-        /* Matches the button trigger signature perfectly now */
         function launchExamMatrixWorkspace() {
+            // Locks the global language default configuration parameter 
             currentLanguage = document.getElementById('wizard-lang-dropdown').value;
             document.getElementById('view-lang-select').value = currentLanguage;
 
-            document.getElementById('step-instructions-2').style.display = 'none';
-            document.getElementById('step-footer-2').style.display = 'none';
+            document.getElementById('stage-two-wrapper-node').style.display = 'none';
 
             document.getElementById('timer-header-wrapper').style.display = 'block';
             document.getElementById('ribbon-bar-container').style.display = 'flex';
@@ -762,7 +764,7 @@
                 if (selectedAnswers[i] === q.correct) score++;
             });
             
-            alert(`Exam Session Logged Successfully!\n\nTotal Questions: ${examDataMatrix.length}\nCorrect Answers: ${score}\nFinal Score Metrics: ${((score / examDataMatrix.length) * 100).toFixed(1)}%`);
+            alert("Exam Session Logged Successfully!\n\nTotal Questions: " + examDataMatrix.length + "\nCorrect Answers: " + score + "\nFinal Score Metrics: " + ((score / examDataMatrix.length) * 100).toFixed(1) + "%");
             window.location.href = 'exams.html';
         }
 
