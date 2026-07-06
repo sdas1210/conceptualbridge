@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TCS iON Digital Assessment Engine</title>
+    <title>Testbook - Online Assessment Engine</title>
     <style>
         :root {
             --tcs-blue: #1e3a8a;
-            --tcs-light-bg: #f3f4f6;
-            --tcs-border: #d1d5db;
+            --tcs-light-bg: #ffffff;
+            --tcs-border: #e5e7eb;
             --status-not-visited: #e5e7eb;
             --status-not-answered: #ef4444;
             --status-answered: #22c55e;
@@ -27,30 +27,34 @@
             user-select: none;
         }
 
-        /* Top System Ribbon Style Update */
+        /* Top System Ribbon Style - Testbook Match */
         .tcs-header {
-            background-color: var(--tcs-blue);
-            color: white;
+            background-color: #ffffff;
+            color: #333;
             padding: 8px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .brand-wrapper {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .brand-logo {
-            height: 40px;
+            height: 24px;
             width: auto;
-            border-radius: 4px;
             display: block;
+        }
+
+        .sub-header-title {
+            color: #6b7280;
+            font-size: 11px;
+            margin-left: 5px;
         }
 
         .timer-box {
@@ -184,7 +188,7 @@
         .btn-blue { background: #2563eb; color: white; border: none; }
         .btn-blue:hover { background: #1d4ed8; }
 
-        /* Right Side: Student Tracker Dashboard */
+        /* Right Side Panels */
         .dashboard-panel {
             flex: 1;
             min-width: 280px;
@@ -266,7 +270,7 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
 
-        /* Onboarding Onboarding Wizard Layout Configuration */
+        /* Onboarding Layout */
         .wizard-container {
             flex: 1;
             display: flex;
@@ -277,7 +281,7 @@
             flex: 4;
             padding: 25px 40px;
             overflow-y: auto;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             line-height: 1.6;
         }
         .wizard-right {
@@ -292,24 +296,21 @@
             padding: 40px 20px;
         }
         .wizard-avatar {
-            width: 90px;
-            height: 90px;
+            width: 70px;
+            height: 70px;
             background: #e2e8f0;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 15px;
-            border: 2px solid var(--tcs-border);
         }
         .wizard-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #4b5563;
+            font-size: 1rem;
+            color: #333;
         }
 
-        /* RESTORED: Standard two-button space separation layout for Stage 1 Footer */
         .wizard-footer {
             height: 60px;
             background: #f3f4f6;
@@ -320,7 +321,6 @@
             padding: 0 30px;
         }
         
-        /* 3-Column Center-Aligned Flex Layout for Stage 2 Bottom Footer */
         .wizard-footer-fullwidth {
             padding: 12px 30px;
             background: #f3f4f6;
@@ -330,19 +330,9 @@
             align-items: center;
         }
 
-        .footer-col-left {
-            flex: 1;
-            display: flex;
-            justify-content: flex-start;
-        }
-        .footer-col-center {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-        .footer-col-right {
-            flex: 1;
-        }
+        .footer-col-left { flex: 1; display: flex; justify-content: flex-start; }
+        .footer-col-center { flex: 1; display: flex; justify-content: center; }
+        .footer-col-right { flex: 1; }
 
         .symbol-row {
             display: flex;
@@ -377,32 +367,93 @@
             cursor: not-allowed;
         }
 
-        .btn-wizard-ready {
-            background: #22d3ee;
-            color: #083344;
-            border: 1px solid #06b6d4;
-            padding: 12px 40px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-wizard-ready:disabled {
-            background: #cbd5e1;
-            color: #94a3b8;
-            border-color: #cbd5e1;
-            cursor: not-allowed;
-        }
-
+        /* Testbook Image-Matching Form Layout Elements */
         .lower-declarations-box {
             margin-top: 40px; 
-            border-top: 1px solid var(--tcs-border); 
-            padding-top: 20px;
+            border-top: 1px solid #e5e7eb; 
+            padding-top: 15px;
+            width: 100%;
         }
 
-        .important-warning-text {
-            color: #b91c1c;
+        .lang-row-select {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #333333;
+            margin-bottom: 12px;
+        }
+
+        .lang-row-select select {
+            padding: 2px 4px;
+            font-size: 12px;
+            border: 1px solid #a3a3a3;
+            background: #ffffff;
+            border-radius: 2px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .warning-notice-text {
+            color: #ef4444; 
+            font-size: 12px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        .declaration-heading-title {
+            font-size: 13px;
             font-weight: bold;
-            margin: 10px 0;
+            color: #333;
+            margin: 0 0 8px 0;
+        }
+
+        .checkbox-row-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 15px;
+            margin-bottom: 0;
+        }
+
+        .checkbox-row-wrapper label {
+            font-size: 13px;
+            color: #333333;
+            cursor: pointer;
+            user-select: none;
+            font-weight: normal;
+        }
+
+        .checkbox-row-wrapper input[type="checkbox"] {
+            margin: 0;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .btn-testbook-prev {
+            background: #7dd3fc !important;
+            color: #0369a1 !important;
+            border: 1px solid #bae6fd !important;
+            font-size: 13px !important;
+            padding: 6px 18px !important;
+            border-radius: 3px !important;
+        }
+
+        .btn-testbook-ready {
+            background: #a5f3fc !important;
+            color: #0e7490 !important;
+            border: 1px solid #cffafe !important;
+            font-size: 13px !important;
+            padding: 6px 24px !important;
+            border-radius: 3px !important;
+        }
+        .btn-testbook-ready:disabled {
+            background: #cbd5e1 !important;
+            color: #94a3b8 !important;
+            border-color: #cbd5e1 !important;
+            cursor: not-allowed;
         }
 
         @media (max-width: 768px) {
@@ -417,11 +468,11 @@
 </head>
 <body>
 
-    <!-- Header block with Clean Title -->
+    <!-- Flat Testbook Styled Banner Header -->
     <div class="tcs-header">
         <div class="brand-wrapper">
-            <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
-            <span id="exam-title-display">Conceptual Bridge - Online Assessment</span>
+            <span style="font-weight: bold; font-size: 1.2rem; color: #0284c7;">testbook</span>
+            <span class="sub-header-title" id="sub-header-banner-text">RRB NTPC Graduate 2025 CBT 2: General Awareness - Live Test</span>
         </div>
         <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
     </div>
@@ -458,7 +509,7 @@
                 </div>
             </div>
 
-            <p class="important-warning-text" style="margin-left: 20px;">The Mark For Review status for a question simply indicates that you would like to look at that question again. If a question is answered, but marked for review, then the answer will be considered for evaluation unless the status is modified by the candidate.</p>
+            <p style="margin-left: 20px; color: #ef4444;">The Mark For Review status for a question simply indicates that you would like to look at that question again. If a question is answered, but marked for review, then the answer will be considered for evaluation unless the status is modified by the candidate.</p>
             
             <h3 style="margin-top: 25px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 4px;">Navigating to a Question :</h3>
             <ol start="3" style="padding-left: 20px;">
@@ -471,8 +522,8 @@
                 </li>
             </ol>
             
-            <p class="important-warning-text" style="margin-left: 20px;">Note that your answer for the current question will not be saved, if you navigate to another question directly by clicking on a question number without saving the answer to the previous question.</p>
-            <p style="margin-left: 20px; font-weight: bold;">You can view all the questions by clicking on the Question Paper button. <span style="color: #b91c1c;">This feature is provided, so that if you want you can just see the entire question paper at a glance.</span></p>
+            <p style="margin-left: 20px; color: #ef4444;">Note that your answer for the current question will not be saved, if you navigate to another question directly by clicking on a question number without saving the answer to the previous question.</p>
+            <p style="margin-left: 20px; font-weight: bold;">You can view all the questions by clicking on the Question Paper button. <span style="color: #ef4444;">This feature is provided, so that if you want you can just see the entire question paper at a glance.</span></p>
 
             <h3 style="margin-top: 25px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 4px;">Answering a Question :</h3>
             <ol start="4" style="padding-left: 20px;">
@@ -487,7 +538,7 @@
                 <li>Procedure for answering a numerical answer type question :
                     <ol style="padding-left: 20px; margin-top: 5px; list-style-type: decimal;">
                         <li>To enter a number as your answer, use the virtual numerical keypad.</li>
-                        <li>A fraction (e.g. -0.3 or .3) can be entered as an answer with or without "0" before the decimal point. <span style="color: #b91c1c;">As many as four decimal points, e.g. 12.5435 or 0.003 or -932.6711 or 12.82 can be entered.</span></li>
+                        <li>A fraction (e.g. -0.3 or .3) can be entered as an answer with or without "0" before the decimal point. <span style="color: #ef4444;">As many as four decimal points, e.g. 12.5435 or 0.003 or -932.6711 or 12.82 can be entered.</span></li>
                         <li>To clear your answer, click on the <strong>Clear Response</strong> button</li>
                         <li>To save your answer, you MUST click on the <strong>Save & Next</strong> button</li>
                     </ol>
@@ -504,11 +555,10 @@
             </p>
         </div>
         <div class="wizard-right">
-            <div class="wizard-avatar">👨‍🎓</div>
-            <div class="wizard-name">Shovan Das</div>
+            <div class="wizard-avatar">😃</div>
+            <div class="wizard-name" style="font-weight: bold; text-align: center; margin-top: 5px;">Shovan</div>
         </div>
     </div>
-    <!-- RESTORED: Class configuration set to classic two-side footer format -->
     <div class="wizard-footer" id="step-footer-1">
         <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
@@ -519,66 +569,66 @@
     <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
             <div class="wizard-left">
-                <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings</h2>
+                <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: normal; font-size: 1.6rem; margin-top: 10px; margin-bottom: 30px; color:#222;">RRB NTPC Graduate 2025 CBT 2: General Awareness - Live Test</h2>
                 
-                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 20px; padding-bottom: 10px;">
                     <span id="wizard-duration-lbl">Duration: 13 Mins</span>
-                    <span id="wizard-marks-lbl">Maximum Marks: 25</span>
+                    <span id="wizard-marks-lbl" style="font-weight: bold;">Maximum Marks: 25</span>
                 </div>
 
-                <p style="font-weight: bold;">Read the following instructions carefully.</p>
-                <ol style="padding-left: 20px; line-height: 1.8;">
-                    <li>The test contains <span id="wizard-count-lbl" style="font-weight: bold;">25</span> total questions.</li>
+                <p style="font-size: 13px; margin-bottom: 10px;">Read the following instructions carefully.</p>
+                <ol style="padding-left: 20px; line-height: 1.8; font-size: 13px; margin-top: 0;">
+                    <li>The test contains <span id="wizard-count-lbl">25</span> total questions.</li>
                     <li>Each question has 4 options out of which only one is correct.</li>
-                    <li>You have to finish the test within the allocated runtime matrix window limit.</li>
+                    <li>You have to finish the test in 13 minutes.</li>
                     <li>You will be awarded 1 mark for each correct answer and 0.33 will be deducted for each wrong answer.</li>
                     <li>There is no negative marking for the questions that you have not attempted.</li>
                 </ol>
 
+                <!-- Restructured Match Block to align exactly to image 226.JPG -->
                 <div class="lower-declarations-box">
-                    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                        <label style="font-weight: bold; font-size: 0.9rem; color: #374151;">Choose your default language:</label>
-                        <select id="wizard-lang-dropdown" style="padding: 4px 10px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af; background: white; color: #1e3a8a; cursor: pointer;">
+                    <div class="lang-row-select">
+                        <label>Choose your default language:</label>
+                        <select id="wizard-lang-dropdown" onchange="validateLanguageSelection()">
+                            <option value="">-- Select --</option>
                             <option value="EN">English</option>
                             <option value="BN">Bengali</option>
                         </select>
                     </div>
-                    <p style="color: #b91c1c; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px; font-weight: 500;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</p>
                     
-                    <h4 style="margin-bottom: 6px; font-size: 0.95rem;">Declaration:</h4>
-                    <div style="display: flex; align-items: flex-start; gap: 10px;">
-                        <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.2); margin-top: 3px; cursor: pointer;">
-                        <label for="declaration-checkbox" style="font-size: 0.88rem; cursor: pointer; font-weight: bold; color: #374151;">I have understood and agree to all the instructions.</label>
+                    <p class="warning-notice-text">Please note all questions will appear in your default language. This language can be changed for a particular question later on</p>
+                    
+                    <h4 class="declaration-heading-title">Declaration:</h4>
+                    <div class="checkbox-row-wrapper">
+                        <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()">
+                        <label for="declaration-checkbox">I have understood and agree to all the instructions.</label>
                     </div>
                 </div>
             </div>
             <div class="wizard-right">
-                <div class="wizard-avatar">👨‍🎓</div>
-                <div class="wizard-name">Shovan Das</div>
+                <div class="wizard-avatar">😃</div>
+                <div class="wizard-name" style="font-weight: bold; text-align: center; margin-top: 5px;">Shovan</div>
             </div>
         </div>
         
-        <!-- Bottom bar with centered Action Trigger Button -->
+        <!-- Bottom layout matches exact button colorings -->
         <div class="wizard-footer-fullwidth">
             <div class="footer-col-left">
-                <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
+                <button class="btn-tcs btn-testbook-prev" onclick="backToWizardStageOne()">Previous</button>
             </div>
             <div class="footer-col-center">
-                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
+                <button class="btn-wizard-ready btn-testbook-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
             </div>
             <div class="footer-col-right"></div>
         </div>
     </div>
 
 
-    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE) -->
+    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
-        
-        <!-- Left Side Pane -->
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
-                
                 <select class="lang-selector-header" id="view-lang-select" onchange="toggleViewLanguage()">
                     <option value="EN">English</option>
                     <option value="BN">Bengali</option>
@@ -588,7 +638,6 @@
             <div class="question-content">
                 <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
                 <div class="options-container" id="target-options-container"></div>
-                
                 <div class="meta-bottom-right" id="shift-label-view"></div>
             </div>
 
@@ -601,12 +650,11 @@
             </div>
         </div>
 
-        <!-- Right Side Pane Dashboard -->
         <div class="dashboard-panel">
             <div class="profile-box">
-                <div class="profile-avatar">👨‍🎓</div>
+                <div class="profile-avatar">😃</div>
                 <div>
-                    <div style="font-weight: bold; font-size: 0.95rem;">Shovan Das</div>
+                    <div style="font-weight: bold; font-size: 0.95rem;">Shovan</div>
                     <div style="color: #6b7280; font-size: 0.8rem;">ID: CB-2026</div>
                 </div>
             </div>
@@ -625,7 +673,6 @@
             
             <button class="btn-tcs btn-blue" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
         </div>
-
     </div>
 
     <div id="fallback-screen-holder"></div>
@@ -665,8 +712,8 @@
                     else if (activeTopic === 'Mathematics') formattedSectionTitle = 'MATHEMATICS';
                     
                     document.getElementById('active-section-label').innerText = formattedSectionTitle;
-
-                    document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`;
+                    document.getElementById('wizard-exam-main-title').innerText = `RRB NTPC Graduate 2025 CBT 2: ${formattedSectionTitle} - Live Test`;
+                    document.getElementById('sub-header-banner-text').innerText = `RRB NTPC Graduate 2025 CBT 2: ${formattedSectionTitle} - Live Test`;
                     document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`;
                     document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`;
                     document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length;
@@ -699,9 +746,16 @@
             document.getElementById('step-footer-1').style.display = 'flex';
         }
 
+        function validateLanguageSelection() {
+            toggleReadyToBeginButtonState();
+        }
+
         function toggleReadyToBeginButtonState() {
             const isChecked = document.getElementById('declaration-checkbox').checked;
-            document.getElementById('ready-begin-action-btn').disabled = !isChecked;
+            const langValue = document.getElementById('wizard-lang-dropdown').value;
+            
+            // Require both checkbox verification and explicit selection match
+            document.getElementById('ready-begin-action-btn').disabled = !(isChecked && langValue !== "");
         }
 
         function launchExamMatrixWorkspace() {
