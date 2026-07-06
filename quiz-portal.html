@@ -266,7 +266,7 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
 
-        /* Onboarding Onboarding Wizard Layout Configuration */
+        /* Onboarding Wizard Layout Configuration */
         .wizard-container {
             flex: 1;
             display: flex;
@@ -309,7 +309,17 @@
             color: #4b5563;
         }
         
-        /* 3-Column Center-Aligned Flex Layout for Stage 2 Bottom Footer */
+        /* Fixed Footer styling block with standard spaces */
+        .wizard-footer {
+            height: 60px;
+            background: #f3f4f6;
+            border-top: 1px solid var(--tcs-border);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            box-sizing: border-box;
+        }
+        
         .wizard-footer-fullwidth {
             padding: 12px 30px;
             background: #f3f4f6;
@@ -330,7 +340,7 @@
             justify-content: center;
         }
         .footer-col-right {
-            flex: 1; /* Keeps spacing equal for precise centering of column 2 */
+            flex: 1;
         }
 
         .symbol-row {
@@ -359,6 +369,7 @@
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
+            margin-left: auto; /* Explicitly pushes the Next button completely to the right edge */
         }
         .btn-wizard-next:disabled {
             background: #cbd5e1;
@@ -406,7 +417,6 @@
 </head>
 <body>
 
-    <!-- Header block with Clean Title -->
     <div class="tcs-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
@@ -415,12 +425,10 @@
         <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
     </div>
 
-    <!-- Active Section Tab bar ribbon -->
     <div class="section-bar" id="ribbon-bar-container" style="display: none;">
         <div class="section-tab" id="active-section-label">General Section</div>
     </div>
 
-    <!-- STAGE 1: GENERAL INSTRUCTIONS -->
     <div class="wizard-container" id="step-instructions-1">
         <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
@@ -497,13 +505,13 @@
             <div class="wizard-name">Shovan Das</div>
         </div>
     </div>
+    
     <div class="wizard-footer" id="step-footer-1">
         <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
     </div>
 
 
-    <!-- STAGE 2: SPECIFIC EXAM RULES ENGINE -->
     <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
             <div class="wizard-left">
@@ -523,7 +531,6 @@
                     <li>There is no negative marking for the questions that you have not attempted.</li>
                 </ol>
 
-                <!-- RELOCATED: Language choice option card wrapper restored right here before the declaration -->
                 <div class="lower-declarations-box">
                     <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <label style="font-weight: bold; font-size: 0.9rem; color: #374151;">Choose your default language:</label>
@@ -547,7 +554,6 @@
             </div>
         </div>
         
-        <!-- Bottom bar with centered Action Trigger Button -->
         <div class="wizard-footer-fullwidth">
             <div class="footer-col-left">
                 <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
@@ -560,14 +566,11 @@
     </div>
 
 
-    <!-- STAGE 3: LIVE ASSESSMENT WORKSPACE (CORE PORTAL ENGINE) -->
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
         
-        <!-- Left Side Pane -->
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
-                
                 <select class="lang-selector-header" id="view-lang-select" onchange="toggleViewLanguage()">
                     <option value="EN">English</option>
                     <option value="BN">Bengali</option>
@@ -577,7 +580,6 @@
             <div class="question-content">
                 <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
                 <div class="options-container" id="target-options-container"></div>
-                
                 <div class="meta-bottom-right" id="shift-label-view"></div>
             </div>
 
@@ -590,7 +592,6 @@
             </div>
         </div>
 
-        <!-- Right Side Pane Dashboard -->
         <div class="dashboard-panel">
             <div class="profile-box">
                 <div class="profile-avatar">👨‍🎓</div>
@@ -614,7 +615,6 @@
             
             <button class="btn-tcs btn-blue" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
         </div>
-
     </div>
 
     <div id="fallback-screen-holder"></div>
@@ -673,6 +673,15 @@
             
             if (totalScrollHeight - currentPosition <= 5) {
                 nextButton.disabled = false;
+            }
+        }
+
+        // Auto-scroll function added as a helper to automatically bypass scroll lock in testing if needed
+        function bypassScrollLock() {
+            const container = document.getElementById('instruction-scroll-pane');
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+                checkInstructionScrollProgress();
             }
         }
 
@@ -830,7 +839,7 @@
                         ${idx + 1}
                     </div>
                 `;
-                grid.insertAdjacentHTML('beforeend', cellHtml);
+                grid.beforeend(cellHtml);
             });
         }
 
