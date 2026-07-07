@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conceptual Bridge - Authentication Gate</title>
+    <title>Conceptual Bridge</title>
     <style>
         body {
             display: flex;
@@ -18,117 +18,46 @@
             animation: gradientBG 15s ease infinite;
             padding: 20px;
             box-sizing: border-box;
-            position: relative;
+            position: relative; /* Crucial for positioning the footer absolute element */
         }
 
         .header-container {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         h1 {
             color: white;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin: 0 0 10px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out forwards;
             text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .subtitle {
             color: #e2e8f0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out 0.3s forwards;
         }
 
-        /* Authentication Container Card */
-        .auth-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-            box-sizing: border-box;
-            text-align: center;
-            color: white;
-        }
-
-        .auth-container h2 {
-            margin: 0 0 8px 0;
-            font-size: 1.6rem;
-            font-weight: 600;
-        }
-
-        .auth-prompt-desc {
-            font-size: 0.9rem;
-            color: #e2e8f0;
-            margin-bottom: 24px;
-            opacity: 0.9;
-        }
-
-        /* Social OAuth Buttons Layout */
-        .oauth-btn-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .btn-oauth {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-sizing: border-box;
-            border: none;
-        }
-
-        .btn-google {
-            background-color: #ffffff;
-            color: #333333;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .btn-google:hover {
-            background-color: #f7f9fa;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-        }
-
-        .btn-facebook {
-            background-color: #1877f2;
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(24,119,242,0.2);
-        }
-        .btn-facebook:hover {
-            background-color: #166fe5;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(24,119,242,0.3);
-        }
-
-        .social-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Post-Auth Dashboard Panel (Swapped view via JS) */
+        /* Responsive Dashboard Grid Container */
         .portal-grid {
-            display: none; /* Initially hidden until sign-in confirmation */
+            display: flex;
             gap: 30px;
             max-width: 900px;
             width: 100%;
             justify-content: center;
-            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out 0.6s forwards;
         }
 
+        /* Glassmorphic Portal Navigation Cards */
         .portal-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -153,16 +82,33 @@
             box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .icon-box { font-size: 3rem; margin-bottom: 20px; }
-        .portal-card h2 { margin: 0 0 12px 0; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px; }
-        .portal-card p { margin: 0; font-size: 1rem; color: #cbd5e1; line-height: 1.5; }
+        .icon-box {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
 
+        .portal-card h2 {
+            margin: 0 0 12px 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .portal-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        /* Glassmorphic Bottom-Right Counter badge */
         .viewer-counter-badge {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 30px;
             padding: 8px 16px;
@@ -174,6 +120,9 @@
             color: white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             z-index: 1000;
+            pointer-events: none; /* Keeps background clickable */
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards 1s;
         }
 
         .pulse-dot {
@@ -181,56 +130,69 @@
             height: 8px;
             background-color: #48bb78;
             border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
             animation: pulse 1.6s infinite;
         }
 
+        /* Animations mapping */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(72, 187, 120, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0); }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(72, 187, 120, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+            }
+        }
+
+        /* Responsive Breakpoint for Mobile Phones */
         @media (max-width: 650px) {
-            .portal-grid { flex-direction: column; align-items: center; gap: 20px; }
-            h1 { font-size: 2.2rem; }
+            .portal-grid {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            h1 { font-size: 2.5rem; }
+            .portal-card { padding: 30px 20px; }
+            .viewer-counter-badge {
+                position: static;
+                margin-top: 30px;
+                bottom: auto;
+                right: auto;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="header-container">
-        <h1>Conceptual Bridge</h1>
+        <h1>Welcome to Conceptual Bridge</h1>
         <p class="subtitle">Your ultimate preparation hub for competitive examinations</p>
     </div>
 
-    <div class="auth-container" id="auth-gate-box">
-        <h2>Sign In to Continue</h2>
-        <p class="auth-prompt-desc">Unlock jobs analytics matrices and test engines.</p>
-        
-        <div class="oauth-btn-stack">
-            <button class="btn-oauth btn-google" onclick="triggerOAuthRedirect('Google')">
-                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
-                Continue with Google
-            </button>
-            
-            <button class="btn-oauth btn-facebook" onclick="triggerOAuthRedirect('Facebook')">
-                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" alt="FB Logo">
-                Continue with Facebook
-            </button>
-        </div>
-        
-        <p style="font-size:11px; color:#cbd5e1; margin-top:20px; opacity:0.7;">
-            💡 Developer Note: Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> to bypass this screen instantly.
-        </p>
-    </div>
-
-    <div class="portal-grid" id="main-platform-hub">
+    <div class="portal-grid">
         <a href="jobs.html" class="portal-card">
             <div class="icon-box">💼</div>
             <h2>Jobs Corner</h2>
@@ -250,40 +212,16 @@
     </div>
 
     <script>
-        // Check local persistence layer to see if authentication is already verified
-        if (sessionStorage.getItem('user_authenticated') === 'true') {
-            displayDashboardWorkspace();
-        }
-
-        function triggerOAuthRedirect(providerLabel) {
-            alert(`${providerLabel} Auth Redirect Triggered!\n\nSimulating handshake exchange configuration window layer.`);
-            sessionStorage.setItem('user_authenticated', 'true');
-            displayDashboardWorkspace();
-        }
-
-        function displayDashboardWorkspace() {
-            document.getElementById('auth-gate-box').style.display = 'none';
-            document.getElementById('main-platform-hub').style.display = 'flex';
-        }
-
-        // DEVELOPER BYPASS PARAMETERS CONFIGURATION
-        // Listens for 'Ctrl + Shift + D' sequence across the layout window
-        window.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'd') {
-                event.preventDefault();
-                console.log("Developer Authentication Bypass Flag Initiated.");
-                sessionStorage.setItem('user_authenticated', 'true');
-                displayDashboardWorkspace();
-            }
-        });
-
         async function incrementCounter() {
             try {
+                // Connecting to a lightweight, public cross-origin hit generator counter
                 const namespace = "conceptualbridge.in";
                 const key = "homepage";
                 const url = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+                
                 const response = await fetch(url);
                 const data = await response.json();
+                
                 if (data && data.value) {
                     document.getElementById('visit-count').innerText = data.value.toLocaleString();
                 } else {
@@ -295,6 +233,7 @@
         }
 
         function fallbackCounter() {
+            // High quality fallback tracker simulation loop to look live if public script clusters lag
             let localHits = localStorage.getItem('mock_visits') || Math.floor(Math.random() * 45) + 120;
             localHits = parseInt(localHits) + 1;
             localStorage.setItem('mock_visits', localHits);
