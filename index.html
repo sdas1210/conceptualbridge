@@ -18,12 +18,63 @@
             animation: gradientBG 15s ease infinite;
             padding: 20px;
             box-sizing: border-box;
-            position: relative; /* Crucial for positioning the footer absolute element */
+            position: relative; /* Crucial for positioning top-right and bottom-right absolute elements */
+        }
+
+        /* Top Right Auth Action Header Buttons */
+        .top-auth-navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .btn-auth-nav {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-auth-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
         .header-container {
             text-align: center;
             margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Integrated Glassmorphic Brand Logo */
+        .main-brand-logo {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out forwards;
+            background-color: #ffffff; /* Ensures contrast for black line arts */
         }
 
         h1 {
@@ -32,7 +83,7 @@
             margin: 0 0 10px 0;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 1.2s ease-out forwards;
+            animation: fadeInUp 1.2s ease-out 0.2s forwards;
             text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
@@ -42,7 +93,7 @@
             margin: 0;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 1.2s ease-out 0.3s forwards;
+            animation: fadeInUp 1.2s ease-out 0.4s forwards;
         }
 
         /* Responsive Dashboard Grid Container */
@@ -169,6 +220,11 @@
 
         /* Responsive Breakpoint for Mobile Phones */
         @media (max-width: 650px) {
+            .top-auth-navbar {
+                position: static;
+                margin-bottom: 20px;
+                justify-content: center;
+            }
             .portal-grid {
                 flex-direction: column;
                 align-items: center;
@@ -187,7 +243,15 @@
 </head>
 <body>
 
+    <div class="top-navigation-ribbon-wrapper">
+        <div class="viewer-counter-badge" style="display:none;"></div> <div class="top-auth-navbar">
+            <button class="btn-auth-nav" onclick="alert('Log In handler triggered!')">Log In</button>
+            <button class="btn-auth-nav" onclick="alert('Sign Up handler triggered!')">Sign Up</button>
+        </div>
+    </div>
+
     <div class="header-container">
+        <img class="main-brand-logo" src="logo.jpg" alt="Conceptual Bridge Logo">
         <h1>Welcome to Conceptual Bridge</h1>
         <p class="subtitle">Your ultimate preparation hub for competitive examinations</p>
     </div>
