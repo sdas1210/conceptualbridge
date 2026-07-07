@@ -408,6 +408,63 @@
             margin: 10px 0;
         }
 
+        /* NEW STYLE: Scorecard Performance Table Layout Mapping */
+        .report-page-container {
+            flex: 1;
+            display: none; /* Controlled explicitly via submit code switch */
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0);
+            padding: 40px 20px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .score-glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 35px;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            color: white;
+            text-align: center;
+        }
+
+        .score-glass-card h2 { margin: 0 0 5px 0; font-size: 1.8rem; letter-spacing: 0.5px; }
+        .score-glass-card p { margin: 0 0 25px 0; color: #cbd5e1; font-size: 0.95rem; }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .metrics-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .metrics-table td {
+            padding: 14px 10px;
+        }
+
+        .metrics-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .highlight-total-row {
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 1.2rem;
+            color: #22d3ee;
+            border-bottom: 2px solid #22d3ee !important;
+        }
+
         @media (max-width: 768px) {
             .main-workspace { flex-direction: column; }
             .dashboard-panel { max-width: 100%; min-width: 100%; height: 250px; }
@@ -420,7 +477,7 @@
 </head>
 <body>
 
-    <div class="tcs-header">
+    <div class="tcs-header" id="master-global-header">
         <div class="brand-wrapper">
             <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
             <span id="exam-title-display">Conceptual Bridge - Online Assessment</span>
@@ -620,6 +677,44 @@
         </div>
     </div>
 
+    <div class="report-page-container" id="quiz-report-workspace">
+        <div class="score-glass-card">
+            <h2>Performance Metrics Report</h2>
+            <p>Conceptual Bridge Evaluation Analytics Matrix Engine</p>
+            
+            <table class="metrics-table">
+                <tr>
+                    <td>Total Questions</td>
+                    <td id="res-total">0</td>
+                </tr>
+                <tr>
+                    <td>Total Attempted</td>
+                    <td id="res-attempted">0</td>
+                </tr>
+                <tr>
+                    <td>Total Correct Answers</td>
+                    <td id="res-correct" style="color: #48bb78;">0</td>
+                </tr>
+                <tr>
+                    <td>Total Wrong Answers</td>
+                    <td id="res-wrong" style="color: #f56565;">0</td>
+                </tr>
+                <tr>
+                    <td>Negative Marking Applied</td>
+                    <td>0.33 Per Mistake</td>
+                </tr>
+                <tr class="highlight-total-row">
+                    <td>Total Marks Obtained</td>
+                    <td id="res-final-score">0.00</td>
+                </tr>
+            </table>
+
+            <button class="btn-tcs btn-blue" style="width: 100%; padding: 14px; border-radius: 8px; font-size: 1rem;" onclick="window.location.href='exams.html'">
+                ← Return to Exam Corner
+            </button>
+        </div>
+    </div>
+
     <div id="fallback-screen-holder"></div>
 
     <script>
@@ -736,7 +831,6 @@
             }, 1000);
         }
 
-        /* FIXED: Prepended 'function' keyword so compilation does not throw errors */
         function getLocalizedText(rawString) {
             if (!rawString) return "";
             const parts = rawString.split('/');
@@ -834,19 +928,51 @@
                         ${idx + 1}
                     </div>
                 `;
-                grid.insertAdjacentHTML('beforeend', cellHtml);
+                grid.innerHTML += cellHtml;
             });
         }
 
+        /* DYNAMIC SCORE CALCULATOR HANDLER METHOD */
         function triggerExamSubmission() {
             if (timerEngine) clearInterval(timerEngine);
-            let score = 0;
-            examDataMatrix.forEach((q, i) => {
-                if (selectedAnswers[i] === q.correct) score++;
-            });
             
-            alert("Exam Session Logged Successfully!\n\nTotal Questions: " + examDataMatrix.length + "\nCorrect Answers: " + score + "\nFinal Score Metrics: " + ((score / examDataMatrix.length) * 100).toFixed(1) + "%");
-            window.location.href = 'exams.html';
+            let totalQuestions = examDataMatrix.length;
+            let attempted = 0;
+            let correct = 0;
+            let wrong = 0;
+
+            // Loop and process marks arrays
+            selectedAnswers.forEach((answerIndex, qIndex) => {
+                if (answerIndex !== null) {
+                    attempted++;
+                    if (answerIndex === examDataMatrix[qIndex].correct) {
+                        correct++;
+                    } else {
+                        wrong++;
+                    }
+                }
+            });
+
+            // Standard Indian Railways Negative Marking Paradigm Logic: Correct - (Wrong * 0.33)
+            let finalScore = correct - (wrong * 0.33);
+
+            // Hide Workspace components
+            document.getElementById('timer-header-wrapper').style.display = 'none';
+            document.getElementById('ribbon-bar-container').style.display = 'none';
+            document.getElementById('quiz-workspace').style.display = 'none';
+            
+            // Adjust header context
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary";
+
+            // Map and load numbers inside report summary block elements
+            document.getElementById('res-total').innerText = totalQuestions;
+            document.getElementById('res-attempted').innerText = attempted;
+            document.getElementById('res-correct').innerText = correct;
+            document.getElementById('res-wrong').innerText = wrong;
+            document.getElementById('res-final-score').innerText = finalScore.toFixed(2);
+
+            // Display Scorecard container workspace page
+            document.getElementById('quiz-report-workspace').style.display = 'flex';
         }
 
         initializeQuizEngine();
