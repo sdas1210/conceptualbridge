@@ -27,7 +27,6 @@
             user-select: none;
         }
 
-        /* Top System Ribbon Style Update */
         .tcs-header {
             background-color: var(--tcs-blue);
             color: white;
@@ -75,7 +74,6 @@
             border-radius: 4px;
         }
 
-        /* Main Workspace split panel */
         .main-workspace {
             display: flex;
             flex: 1;
@@ -141,12 +139,60 @@
         }
 
         .option-row:hover { background-color: #f9fafb; }
+        
+        /* Regular Exam State Selections */
         .option-row.selected {
             background-color: #eff6ff;
             border-color: #3b82f6;
         }
 
+        /* NEW REVIEW MODE OPTION HIGHLIGHTS */
+        .option-row.review-correct {
+            background-color: #f0fdf4 !important;
+            border-color: #22c55e !important;
+            color: #15803d !important;
+        }
+
+        .option-row.review-wrong {
+            background-color: #fef2f2 !important;
+            border-color: #ef4444 !important;
+            color: #b91c1c !important;
+        }
+
         .option-row input { margin-right: 12px; transform: scale(1.2); }
+
+        /* NEW STYLE: Review Mode Information Boxes */
+        .review-status-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .review-status-box.right {
+            background-color: #dcfce7;
+            border: 1px solid #22c55e;
+            color: #15803d;
+        }
+        .review-status-box.wrong {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .databox-row {
+            display: flex;
+            gap: 20px;
+        }
+        .databox {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
         .meta-bottom-right {
             position: absolute;
@@ -183,8 +229,9 @@
         .btn-white:hover { background: #f9fafb; }
         .btn-blue { background: #2563eb; color: white; border: none; }
         .btn-blue:hover { background: #1d4ed8; }
+        .btn-orange { background: #ed8936; color: white; border: none; }
+        .btn-orange:hover { background: #dd6b20; }
 
-        /* Right Side: Student Tracker Dashboard */
         .dashboard-panel {
             flex: 1;
             min-width: 280px;
@@ -266,7 +313,6 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
 
-        /* Onboarding Wizard Layout Configuration */
         .wizard-container {
             flex: 1;
             display: flex;
@@ -311,7 +357,6 @@
             color: #4b5563;
         }
         
-        /* 2-Side Footer alignment strategy */
         .wizard-footer {
             height: 60px;
             background: #f3f4f6;
@@ -322,7 +367,6 @@
             box-sizing: border-box;
         }
         
-        /* 3-Column Center-Aligned Flex Layout for Stage 2 Bottom Footer */
         .wizard-footer-fullwidth {
             padding: 12px 30px;
             background: #f3f4f6;
@@ -332,19 +376,9 @@
             align-items: center;
         }
 
-        .footer-col-left {
-            flex: 1;
-            display: flex;
-            justify-content: flex-start;
-        }
-        .footer-col-center {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-        .footer-col-right {
-            flex: 1;
-        }
+        .footer-col-left { flex: 1; display: flex; justify-content: flex-start; }
+        .footer-col-center { flex: 1; display: flex; justify-content: center; }
+        .footer-col-right { flex: 1; }
 
         .symbol-row {
             display: flex;
@@ -374,11 +408,7 @@
             cursor: pointer;
             margin-left: auto;
         }
-        .btn-wizard-next:disabled {
-            background: #cbd5e1;
-            color: #94a3b8;
-            cursor: not-allowed;
-        }
+        .btn-wizard-next:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
 
         .btn-wizard-ready {
             background: #22d3ee;
@@ -389,53 +419,37 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .btn-wizard-ready:disabled {
-            background: #cbd5e1;
-            color: #94a3b8;
-            border-color: #cbd5e1;
-            cursor: not-allowed;
-        }
+        .btn-wizard-ready:disabled { background: #cbd5e1; color: #94a3b8; border-color: #cbd5e1; cursor: not-allowed; }
 
-        .lower-declarations-box {
-            margin-top: auto; 
-            border-top: 1px solid var(--tcs-border); 
-            padding-top: 20px;
-        }
+        .lower-declarations-box { margin-top: auto; border-top: 1px solid var(--tcs-border); padding-top: 20px; }
+        .important-warning-text { color: #b91c1c; font-weight: bold; margin: 10px 0; }
 
-        .important-warning-text {
-            color: #b91c1c;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        /* NEW STYLE: Scorecard Performance Table Layout Mapping */
+        /* CHANGED STYLE: White Page Report Layout Configuration */
         .report-page-container {
             flex: 1;
-            display: none; /* Controlled explicitly via submit code switch */
+            display: none;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0);
+            background-color: #ffffff; /* Clean White Page Background */
             padding: 40px 20px;
             overflow-y: auto;
             box-sizing: border-box;
         }
 
-        .score-glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
+        .score-flat-card {
+            background: #ffffff;
+            border: 1px solid var(--tcs-border);
+            border-radius: 12px;
             padding: 35px;
             width: 100%;
-            max-width: 650px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-            color: white;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            color: #333333;
             text-align: center;
         }
 
-        .score-glass-card h2 { margin: 0 0 5px 0; font-size: 1.8rem; letter-spacing: 0.5px; }
-        .score-glass-card p { margin: 0 0 25px 0; color: #cbd5e1; font-size: 0.95rem; }
+        .score-flat-card h2 { margin: 0 0 5px 0; font-size: 1.8rem; color: var(--tcs-blue); }
+        .score-flat-card p { margin: 0 0 25px 0; color: #6b7280; font-size: 0.95rem; }
 
         .metrics-table {
             width: 100%;
@@ -445,25 +459,23 @@
             font-size: 1rem;
         }
 
-        .metrics-table tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .metrics-table td {
-            padding: 14px 10px;
-        }
-
-        .metrics-table td:last-child {
-            text-align: right;
-            font-weight: bold;
-        }
+        .metrics-table tr { border-bottom: 1px solid var(--tcs-border); }
+        .metrics-table td { padding: 14px 10px; color: #4b5563; }
+        .metrics-table td:last-child { text-align: right; font-weight: bold; color: #111827; }
 
         .highlight-total-row {
-            background: rgba(255, 255, 255, 0.08);
+            background: #f0fdfa;
             font-size: 1.2rem;
-            color: #22d3ee;
-            border-bottom: 2px solid #22d3ee !important;
+            color: #0d9488;
+            border-bottom: 2px solid #0d9488 !important;
         }
+        .highlight-total-row td { color: #0d9488 !important; }
+        
+        .report-btn-stack {
+            display: flex;
+            gap: 15px;
+        }
+        .report-btn-stack button { flex: 1; padding: 14px; font-size: 0.95rem; }
 
         @media (max-width: 768px) {
             .main-workspace { flex-direction: column; }
@@ -471,7 +483,7 @@
             .wizard-container { flex-direction: column; }
             .wizard-right { max-width: 100%; height: auto; border-left: none; border-bottom: 1px solid var(--tcs-border); padding: 20px; }
             .wizard-footer-fullwidth { flex-direction: column; gap: 15px; }
-            .footer-col-left, .footer-col-center, .footer-col-right { justify-content: center; text-align: center; }
+            .report-btn-stack { flex-direction: column; }
         }
     </style>
 </head>
@@ -556,9 +568,6 @@
                 <li>After clicking the <strong>Save & Next</strong> button for the last question in a Section, you will automatically be taken to the first question of the next Section in sequence.</li>
                 <li>You can move the mouse cursor over the name of a Section to view the answering status for that Section.</li>
             </ol>
-            <p style="text-align: center; font-weight: bold; padding: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; color: #166534; margin-top: 20px;">
-                📜 End of Instructions page text log wrapper. Scroll confirmed. You may now continue.
-            </p>
         </div>
         <div class="wizard-right">
             <div class="wizard-avatar">👨‍🎓</div>
@@ -570,7 +579,6 @@
         <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
     </div>
-
 
     <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
@@ -599,9 +607,6 @@
                             <option value="BN">Bengali</option>
                         </select>
                     </div>
-                    <p style="color: #b91c1c; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px; font-weight: 500;">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</p>
-                    
-                    <h4 style="margin-bottom: 6px; font-size: 0.95rem;">Declaration:</h4>
                     <div style="display: flex; align-items: flex-start; gap: 10px;">
                         <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.2); margin-top: 3px; cursor: pointer;">
                         <label for="declaration-checkbox" style="font-size: 0.88rem; cursor: pointer; font-weight: bold; color: #374151;">I have understood and agree to all the instructions.</label>
@@ -625,9 +630,7 @@
         </div>
     </div>
 
-
     <div class="main-workspace" id="quiz-workspace" style="display: none;">
-        
         <div class="question-panel">
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
@@ -640,15 +643,21 @@
             <div class="question-content">
                 <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
                 <div class="options-container" id="target-options-container"></div>
+                
+                <div id="review-feedback-container"></div>
+                
                 <div class="meta-bottom-right" id="shift-label-view"></div>
             </div>
 
             <div class="action-tray">
                 <div>
-                    <button class="btn-tcs btn-white" onclick="markForReview()">Mark for Review & Next</button>
-                    <button class="btn-tcs btn-white" style="margin-left:8px;" onclick="clearResponse()">Clear Response</button>
+                    <button class="btn-tcs btn-white" id="action-btn-review" onclick="markForReview()">Mark for Review & Next</button>
+                    <button class="btn-tcs btn-white" style="margin-left:8px;" id="action-btn-clear" onclick="clearResponse()">Clear Response</button>
                 </div>
-                <button class="btn-tcs btn-blue" onclick="saveAndNext()">Save & Next</button>
+                <div>
+                    <button class="btn-tcs btn-orange" id="action-btn-report" style="display:none; margin-right:8px;" onclick="alert('Report routine initiated.')">⚠️ REPORT</button>
+                    <button class="btn-tcs btn-blue" id="action-btn-savenext" onclick="saveAndNext()">Save & Next</button>
+                </div>
             </div>
         </div>
 
@@ -673,12 +682,12 @@
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-visited)"></span> Not Visited</div>
             </div>
             
-            <button class="btn-tcs btn-blue" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
+            <button class="btn-tcs btn-blue" id="action-btn-submit" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
         </div>
     </div>
 
     <div class="report-page-container" id="quiz-report-workspace">
-        <div class="score-glass-card">
+        <div class="score-flat-card">
             <h2>Performance Metrics Report</h2>
             <p>Conceptual Bridge Evaluation Analytics Matrix Engine</p>
             
@@ -693,11 +702,11 @@
                 </tr>
                 <tr>
                     <td>Total Correct Answers</td>
-                    <td id="res-correct" style="color: #48bb78;">0</td>
+                    <td id="res-correct" style="color: #16a34a;">0</td>
                 </tr>
                 <tr>
                     <td>Total Wrong Answers</td>
-                    <td id="res-wrong" style="color: #f56565;">0</td>
+                    <td id="res-wrong" style="color: #dc2626;">0</td>
                 </tr>
                 <tr>
                     <td>Negative Marking Applied</td>
@@ -709,9 +718,14 @@
                 </tr>
             </table>
 
-            <button class="btn-tcs btn-blue" style="width: 100%; padding: 14px; border-radius: 8px; font-size: 1rem;" onclick="window.location.href='exams.html'">
-                ← Return to Exam Corner
-            </button>
+            <div class="report-btn-stack">
+                <button class="btn-tcs btn-white" style="border:1px solid var(--tcs-border);" onclick="window.location.href='exams.html'">
+                    Return to Exam Corner
+                </button>
+                <button class="btn-tcs btn-blue" onclick="activateReviewMode()">
+                    View Your Performance
+                </button>
+            </div>
         </div>
     </div>
 
@@ -730,6 +744,9 @@
         let selectedAnswers = [];
         let timeRemainingSeconds = questionLimit * 60;
         let timerEngine = null;
+        
+        // NEW METRIC LAYOUT COMPILER CONTROLLERS
+        let isReviewModeActive = false; 
 
         async function initializeQuizEngine() {
             try {
@@ -765,13 +782,9 @@
         function checkInstructionScrollProgress() {
             const container = document.getElementById('instruction-scroll-pane');
             const nextButton = document.getElementById('instruction-next-action-btn');
-            
             const totalScrollHeight = container.scrollHeight;
             const currentPosition = container.scrollTop + container.clientHeight;
-            
-            if (totalScrollHeight - currentPosition <= 5) {
-                nextButton.disabled = false;
-            }
+            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; }
         }
 
         function goToWizardStageTwo() {
@@ -786,6 +799,8 @@
             document.getElementById('step-footer-1').style.display = 'flex';
         }
 
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress);
+
         function toggleReadyToBeginButtonState() {
             const isChecked = document.getElementById('declaration-checkbox').checked;
             document.getElementById('ready-begin-action-btn').disabled = !isChecked;
@@ -794,13 +809,10 @@
         function launchExamMatrixWorkspace() {
             currentLanguage = document.getElementById('wizard-lang-dropdown').value;
             document.getElementById('view-lang-select').value = currentLanguage;
-
             document.getElementById('stage-two-wrapper-node').style.display = 'none';
-
             document.getElementById('timer-header-wrapper').style.display = 'block';
             document.getElementById('ribbon-bar-container').style.display = 'flex';
             document.getElementById('quiz-workspace').style.display = 'flex';
-
             startClockCountdown();
             renderExamWindow();
         }
@@ -835,7 +847,6 @@
             if (!rawString) return "";
             const parts = rawString.split('/');
             if (parts.length < 2) return rawString.trim();
-            
             return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim();
         }
 
@@ -848,7 +859,7 @@
             if (examDataMatrix.length === 0) return;
             const currentItem = examDataMatrix[activeIndex];
             
-            if (questionStates[activeIndex] === 0) {
+            if (questionStates[activeIndex] === 0 && !isReviewModeActive) {
                 questionStates[activeIndex] = 1;
             }
 
@@ -857,16 +868,39 @@
             document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text);
             
             const container = document.getElementById('target-options-container');
+            const feedbackContainer = document.getElementById('review-feedback-container');
             container.innerHTML = '';
+            feedbackContainer.innerHTML = '';
             
             const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d];
+            const userChoice = selectedAnswers[activeIndex];
+            const correctChoice = currentItem.correct;
+
             optArray.forEach((opt, idx) => {
-                const isSelected = selectedAnswers[activeIndex] === idx;
+                let statusClass = '';
+                let isCheckedAttr = '';
+
+                if (isReviewModeActive) {
+                    // Review mode styling logic
+                    if (userChoice === idx && userChoice !== correctChoice) {
+                        statusClass = 'review-wrong'; // Selected option was wrong (Mark Red)
+                    } else if (idx === correctChoice) {
+                        statusClass = 'review-correct'; // Correct option path (Mark Green)
+                    }
+                    if (userChoice === idx) isCheckedAttr = 'checked';
+                } else {
+                    // Normal exam selection layout routing
+                    if (userChoice === idx) {
+                        statusClass = 'selected';
+                        isCheckedAttr = 'checked';
+                    }
+                }
+
                 const localizedOption = getLocalizedText(opt);
                 const optHtml = `
-                    <div class="option-row ${isSelected ? 'selected' : ''}" onclick="selectOptionIndex(${idx})">
-                        <input type="radio" name="tcs-opt" id="opt-${idx}" ${isSelected ? 'checked' : ''}>
-                        <label style="cursor:pointer; width:100%; font-weight:600;" for="opt-${idx}">
+                    <div class="option-row ${statusClass}" ${!isReviewModeActive ? `onclick="selectOptionIndex(${idx})"` : ''}>
+                        <input type="radio" name="tcs-opt" id="opt-${idx}" ${isCheckedAttr} ${isReviewModeActive ? 'disabled' : ''}>
+                        <label style="cursor:${isReviewModeActive ? 'default' : 'pointer'}; width:100%; font-weight:600;" for="opt-${idx}">
                             (${String.fromCharCode(65 + idx)}) ${localizedOption}
                         </label>
                     </div>
@@ -874,21 +908,55 @@
                 container.insertAdjacentHTML('beforeend', optHtml);
             });
 
+            // NEW CONDITIONAL: Compile Feedback Text Blocks for Review Mode
+            if (isReviewModeActive) {
+                if (userChoice === null) {
+                    feedbackContainer.innerHTML = `
+                        <div class="review-status-box wrong">
+                            <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (userChoice === correctChoice) {
+                    feedbackContainer.innerHTML = `
+                        <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
+                    `;
+                } else {
+                    feedbackContainer.innerHTML = `
+                        <div class="review-status-box wrong">
+                            <div>YOUR CHOICE WAS WRONG</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Your Choice:</strong> Option ${String.fromCharCode(65 + userChoice)}</div>
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
             renderPaletteGrid();
         }
 
         function selectOptionIndex(idx) {
+            if (isReviewModeActive) return;
             selectedAnswers[activeIndex] = idx;
             renderExamWindow();
         }
 
         function clearResponse() {
+            if (isReviewModeActive) return;
             selectedAnswers[activeIndex] = null;
             questionStates[activeIndex] = 1;
             renderExamWindow();
         }
 
         function saveAndNext() {
+            if (isReviewModeActive) {
+                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); }
+                return;
+            }
             if (selectedAnswers[activeIndex] !== null) {
                 questionStates[activeIndex] = 2;
             } else {
@@ -898,6 +966,7 @@
         }
 
         function markForReview() {
+            if (isReviewModeActive) return;
             questionStates[activeIndex] = 3;
             moveToNextOrWrap();
         }
@@ -928,20 +997,24 @@
                         ${idx + 1}
                     </div>
                 `;
-                grid.innerHTML += cellHtml;
+                grid.insertAdjacentHTML('beforeend', cellHtml);
             });
         }
 
-        /* DYNAMIC SCORE CALCULATOR HANDLER METHOD */
         function triggerExamSubmission() {
             if (timerEngine) clearInterval(timerEngine);
+            
+            // If already in review mode, Submit functions as direct Return route line 
+            if (isReviewModeActive) {
+                window.location.href = 'exams.html';
+                return;
+            }
             
             let totalQuestions = examDataMatrix.length;
             let attempted = 0;
             let correct = 0;
             let wrong = 0;
 
-            // Loop and process marks arrays
             selectedAnswers.forEach((answerIndex, qIndex) => {
                 if (answerIndex !== null) {
                     attempted++;
@@ -953,26 +1026,58 @@
                 }
             });
 
-            // Standard Indian Railways Negative Marking Paradigm Logic: Correct - (Wrong * 0.33)
             let finalScore = correct - (wrong * 0.33);
 
-            // Hide Workspace components
+            // Hide normal runtime items
             document.getElementById('timer-header-wrapper').style.display = 'none';
             document.getElementById('ribbon-bar-container').style.display = 'none';
             document.getElementById('quiz-workspace').style.display = 'none';
             
-            // Adjust header context
+            // Update Headers
             document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary";
 
-            // Map and load numbers inside report summary block elements
+            // Inject Scores table parameters
             document.getElementById('res-total').innerText = totalQuestions;
             document.getElementById('res-attempted').innerText = attempted;
             document.getElementById('res-correct').innerText = correct;
             document.getElementById('res-wrong').innerText = wrong;
             document.getElementById('res-final-score').innerText = finalScore.toFixed(2);
 
-            // Display Scorecard container workspace page
+            // Swap out view to flat white metrics report container panel
             document.getElementById('quiz-report-workspace').style.display = 'flex';
+        }
+
+        /* NEW METHOD: Transition parameters into frozen Performance Review State */
+        function activateReviewMode() {
+            isReviewModeActive = true;
+            
+            // Hide report page and restore quiz workspace split framework
+            document.getElementById('quiz-report-workspace').style.display = 'none';
+            document.getElementById('ribbon-bar-container').style.display = 'flex';
+            document.getElementById('quiz-workspace').style.display = 'flex';
+            
+            // Modify tray labels and configurations
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode";
+            
+            // Disable actionable mutation buttons
+            document.getElementById('action-btn-review').disabled = true;
+            document.getElementById('action-btn-review').style.opacity = '0.5';
+            document.getElementById('action-btn-review').style.cursor = 'not-allowed';
+            
+            document.getElementById('action-btn-clear').disabled = true;
+            document.getElementById('action-btn-clear').style.opacity = '0.5';
+            document.getElementById('action-btn-clear').style.cursor = 'not-allowed';
+            
+            // Reveal Caution report mechanism button
+            document.getElementById('action-btn-report').style.display = 'inline-block';
+            
+            // Update save next label and change layout submission configurations
+            document.getElementById('action-btn-savenext').innerText = "Next Question →";
+            document.getElementById('action-btn-submit').innerText = "Return to Exam Corner";
+            
+            // Snap back navigation to question 1 and refresh rendering window maps
+            activeIndex = 0;
+            renderExamWindow();
         }
 
         initializeQuizEngine();
