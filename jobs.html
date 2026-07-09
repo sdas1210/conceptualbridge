@@ -1,411 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobs Corner - Conceptual Bridge</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(-45deg, #1a365d, #2a4365, #2b6cb0, #3182ce);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white;
-            min-height: 100vh;
-            padding: 30px 20px;
-            box-sizing: border-box;
-        }
+let activeSourceSelection = 'wb';
+let currentLoadedItems = []; 
 
-        .back-btn {
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: background 0.3s;
-        }
-        .back-btn:hover { background: rgba(255, 255, 255, 0.2); }
+async function fetchJobFeeds(source = 'wb') {
+    resetBoardWorkspace();
 
-        h1 {
-            text-align: center;
-            margin: 0 0 10px 0;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+    try {
+        const response = await fetch(`/api/fetch-jobs?source=${source}`);
+        if (!response.ok) throw new Error(`Server returned status code ${response.status}`);
 
-        .subtitle {
-            text-align: center;
-            color: #cbd5e1;
-            margin-bottom: 25px;
-        }
+        const data = await response.json();
 
-        .feed-tabs-container {
-            display: flex;
-            gap: 15px;
-            max-width: 650px;
-            margin: 0 auto 35px auto;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 6px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .feed-btn {
-            flex: 1;
-            padding: 12px 16px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .feed-btn.active {
-            background: #2b6cb0;
-            color: white;
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 12px rgba(43, 108, 176, 0.4);
-        }
-
-        .feed-btn.inactive {
-            background: transparent;
-            color: #cbd5e1;
-        }
-        .feed-btn.inactive:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-        }
-
-        .board-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .board-column {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .column-header {
-            font-size: 1.3rem;
-            font-weight: 700;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* WINDOWS VISTA AERO STYLE LIST ITEMS */
-        .alert-item {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: transform 0.2s, background 0.2s, border-color 0.2s;
-        }
-        .alert-item:hover {
-            transform: translateX(4px);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        .alert-item a {
-            color: #63b3ed;
-            text-decoration: none;
-            font-weight: 600;
-            display: block;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-        }
-        .alert-item a:hover { color: #90cdf4; }
-
-        .date-badge {
-            font-size: 0.8rem;
-            color: #cbd5e1;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-
-        .loading-text {
-            color: #cbd5e1;
-            font-style: italic;
-            text-align: center;
-            padding: 20px;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @media (max-width: 900px) {
-            .board-grid { grid-template-columns: 1fr; }
-            .feed-tabs-container { flex-direction: column; gap: 8px; max-width: 100%; }
-        }
-    </style>
-</head>
-<body>
-
-    <a href="index.html" class="back-btn">← Home</a>
-    <h1>💼 Jobs Corner</h1>
-    <p class="subtitle">Real-time official updates and exam timelines</p>
-
-    <div class="feed-tabs-container">
-        <button id="btn-wb" class="feed-btn active" onclick="switchJobFeed('wb')">
-            🏢 WB JOBS (IndGovtJobs Feed)
-        </button>
-        <button id="btn-rozgar" class="feed-btn inactive" onclick="switchJobFeed('rozgar')">
-            🔥 Karmasandhan Feed
-        </button>
-    </div>
-
-    <div class="board-grid">
-        <div class="board-column">
-            <div class="column-header">⚡ Latest Vacancies</div>
-            <div id="vacancies-loader" class="loading-text">Fetching live notifications...</div>
-            <ul class="alert-list" id="vacancies-list"></ul>
-        </div>
-
-        <div class="board-column">
-            <div class="column-header">🎟️ Admit Cards</div>
-            <div id="admit-loader" class="loading-text">Fetching live notifications...</div>
-            <ul class="alert-list" id="admit-list"></ul>
-        </div>
-
-        <div class="board-column">
-            <div class="column-header">🎓 Exam Results</div>
-            <div id="results-loader" class="loading-text">Fetching live notifications...</div>
-            <ul class="alert-list" id="results-list"></ul>
-        </div>
-    </div>
-
-    <!-- WINDOWS VISTA AERO GLASS MODAL OVERLAY WRAPPER -->
-    <div id="job-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
-        
-        <!-- VISTA AERO WINDOW CONTAINER (High Translucency & Crisp Specular Border Overlays) -->
-        <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%); backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.35); border-top-color: rgba(255, 255, 255, 0.55); border-left-color: rgba(255, 255, 255, 0.55); border-radius: 12px; max-width: 700px; width: 100%; padding: 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2); display: flex; flex-direction: column; max-height: 85vh; overflow-y: auto; color: white; font-family: 'Segoe UI', Arial, sans-serif;">
+        if (data.status === 'ok' && data.items) {
             
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 15px; margin-bottom: 20px; text-shadow: 0 1px 4px rgba(0,0,0,0.6);">
-                <h3 id="modal-job-title" style="margin: 0; font-size: 1.4rem; color: #93c5fd; padding-right: 20px; line-height: 1.4; font-weight: 500;">Notification Details</h3>
-                <button onclick="closeJobModal()" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; font-weight: 500; padding: 4px 12px; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.6)'; this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'; this.style.borderColor='rgba(255,255,255,0.2)'">✕</button>
-            </div>
+            // ROLLING MEMORY LOGIC: Load historically saved links from past browser sessions
+            let savedStorageKey = `cached_jobs_${source}`;
+            let historicalArchive = JSON.parse(localStorage.getItem(savedStorageKey)) || [];
+            
+            // Merge streams and filter out any duplicates by checking unique titles
+            let combinedStreams = [...data.items, ...historicalArchive];
+            let uniqueMap = new Map();
+            combinedStreams.forEach(item => uniqueMap.set(item.title, item));
+            
+            // Convert back to array and sort by publication date descending (Newest first)
+            currentLoadedItems = Array.from(uniqueMap.values()).sort((a, b) => {
+                return new Date(b.pubDate) - new Date(a.pubDate);
+            });
 
-            <!-- TRANSPARENT DATA FIELD DETAIL MATRIX MAPS -->
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; text-align: left; background: rgba(0, 0, 0, 0.15); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;">
-                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255,255,255,0.02);">
-                    <td style="padding: 14px; font-weight: 600; color: #cbd5e1; width: 35%; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Publish Date:</td>
-                    <td id="modal-job-date" style="padding: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.12);">
-                    <td style="padding: 14px; font-weight: 600; color: #cbd5e1; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Information Category:</td>
-                    <td id="modal-job-type" style="padding: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255,255,255,0.02);">
-                    <td style="padding: 14px; font-weight: 600; color: #cbd5e1; vertical-align: top; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Brief Summary:</td>
-                    <td id="modal-job-desc" style="padding: 14px; font-size: 0.95rem; line-height: 1.6; color: #f1f5f9; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr id="row-lastdate" style="border-bottom: 1px solid rgba(255, 255, 255, 0.12);">
-                    <td style="padding: 14px; font-weight: 600; color: #fbcfe8; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Last Date of Application:</td>
-                    <td id="modal-job-lastdate" style="padding: 14px; font-weight: 600; color: #f472b6; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr id="row-agelimit" style="border-bottom: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255,255,255,0.02);">
-                    <td style="padding: 14px; font-weight: 600; color: #fed7aa; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Age Limit for General:</td>
-                    <td id="modal-job-agelimit" style="padding: 14px; color: #fb923c; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr id="row-reservation" style="border-bottom: 1px solid rgba(255, 255, 255, 0.12);">
-                    <td style="padding: 14px; font-weight: 600; color: #fef08a; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Reservation:</td>
-                    <td id="modal-job-reservation" style="padding: 14px; color: #facc15; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr id="row-totalvacancy" style="border-bottom: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255,255,255,0.02);">
-                    <td style="padding: 14px; font-weight: 600; color: #bbf7d0; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Total Vacancy:</td>
-                    <td id="modal-job-totalvacancy" style="padding: 14px; color: #4ade80; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-                <tr id="row-qualification">
-                    <td style="padding: 14px; font-weight: 600; color: #bfdbfe; vertical-align: top; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Educational Qualification:</td>
-                    <td id="modal-job-qualification" style="padding: 14px; color: #60a5fa; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">-</td>
-                </tr>
-            </table>
+            // Keep local cache restricted to the top 40 entries over time to preserve memory space
+            if (currentLoadedItems.length > 40) currentLoadedItems = currentLoadedItems.slice(0, 40);
+            localStorage.setItem(savedStorageKey, JSON.stringify(currentLoadedItems));
 
-            <div style="display: flex; gap: 15px; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
-                <button onclick="closeJobModal()" style="flex: 1; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255,255,255,0.05); color: white; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">Back to Board</button>
-                <a id="modal-external-link" href="#" target="_blank" style="flex: 1; padding: 12px; background: rgba(43, 108, 176, 0.6); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center; text-decoration: none; font-weight: 600; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s;" onmouseover="this.style.background='rgba(43, 108, 176, 0.85)'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='rgba(43, 108, 176, 0.6)'; this.style.transform='none'">Open Source Site →</a>
-            </div>
-        </div>
-    </div>
+            document.getElementById('vacancies-loader').style.display = 'none';
+            document.getElementById('admit-loader').style.display = 'none';
+            document.getElementById('results-loader').style.display = 'none';
 
-    <script>
-        let activeSourceSelection = 'wb';
-        let currentLoadedItems = []; 
+            currentLoadedItems.forEach((item, index) => {
+                const title = item.title;
+                const dateStr = item.pubDate ? item.pubDate.split(' ')[0] : 'Live';
 
-        async function fetchJobFeeds(source = 'wb') {
-            resetBoardWorkspace();
+                const lowerTitle = title.toLowerCase();
+                let categoryType = "Vacancy";
+                if (lowerTitle.includes('result') || lowerTitle.includes('marks') || lowerTitle.includes('scorecard')) {
+                    categoryType = "Result";
+                } else if (lowerTitle.includes('admit') || lowerTitle.includes('call letter') || lowerTitle.includes('hall ticket')) {
+                    categoryType = "Admit Card";
+                }
 
-            try {
-                const response = await fetch(`/api/fetch-jobs?source=${source}`);
-                if (!response.ok) throw new Error(`Server returned status code ${response.status}`);
+                const itemHtml = `
+                    <li class="alert-item">
+                        <a href="javascript:void(0)" onclick="openJobModal(${index}, '${categoryType}')">${title}</a>
+                        <span class="date-badge">${dateStr}</span>
+                    </li>
+                `;
 
-                const data = await response.json();
-
-                if (data.status === 'ok' && data.items) {
-                    currentLoadedItems = data.items;
-
-                    document.getElementById('vacancies-loader').style.display = 'none';
-                    document.getElementById('admit-loader').style.display = 'none';
-                    document.getElementById('results-loader').style.display = 'none';
-
-                    data.items.forEach((item, index) => {
-                        const title = item.title;
-                        const dateStr = item.pubDate ? item.pubDate.split(' ')[0] : 'Live';
-
-                        const lowerTitle = title.toLowerCase();
-                        let categoryType = "Vacancy";
-                        if (lowerTitle.includes('result') || lowerTitle.includes('marks') || lowerTitle.includes('scorecard')) {
-                            categoryType = "Result";
-                        } else if (lowerTitle.includes('admit') || lowerTitle.includes('call letter') || lowerTitle.includes('hall ticket')) {
-                            categoryType = "Admit Card";
-                        }
-
-                        const itemHtml = `
-                            <li class="alert-item">
-                                <a href="javascript:void(0)" onclick="openJobModal(${index}, '${categoryType}')">${title}</a>
-                                <span class="date-badge">${dateStr}</span>
-                            </li>
-                        `;
-
-                        if (categoryType === "Result") {
-                            document.getElementById('results-list').insertAdjacentHTML('beforeend', itemHtml);
-                        } else if (categoryType === "Admit Card") {
-                            document.getElementById('admit-list').insertAdjacentHTML('beforeend', itemHtml);
-                        } else {
-                            document.getElementById('vacancies-list').insertAdjacentHTML('beforeend', itemHtml);
-                        }
-                    });
-
-                    checkEmptyLists();
+                if (categoryType === "Result") {
+                    document.getElementById('results-list').insertAdjacentHTML('beforeend', itemHtml);
+                } else if (categoryType === "Admit Card") {
+                    document.getElementById('admit-list').insertAdjacentHTML('beforeend', itemHtml);
                 } else {
-                    throw new Error(data.message || "Unexpected server response layout.");
-                }
-            } catch (err) {
-                console.error("Feed error:", err);
-                document.querySelectorAll('.loading-text').forEach(el => {
-                    el.style.color = '#ff8080';
-                    el.innerText = `Sync Error: ${err.message}`;
-                });
-            }
-        }
-
-        function openJobModal(index, categoryType) {
-            const targetItem = currentLoadedItems[index];
-            if (!targetItem) return;
-
-            document.getElementById('modal-job-title').innerText = targetItem.title;
-            document.getElementById('modal-job-date').innerText = targetItem.pubDate ? targetItem.pubDate.split(' ')[0] : 'Live';
-            document.getElementById('modal-job-type').innerText = categoryType;
-            
-            let cleanDesc = targetItem.description.replace(/<[^>]*>/g, '').trim();
-            if (cleanDesc.length > 250) cleanDesc = cleanDesc.substring(0, 250) + "...";
-            document.getElementById('modal-job-desc').innerText = cleanDesc || "Official announcement data tables ready for inspection.";
-            
-            const metadataRows = ['row-lastdate', 'row-agelimit', 'row-reservation', 'row-totalvacancy', 'row-qualification'];
-
-            if (categoryType === "Vacancy") {
-                metadataRows.forEach(rowId => document.getElementById(rowId).style.display = 'table-row');
-                
-                document.getElementById('modal-job-lastdate').innerText = targetItem.lastDate || "Refer to Source Document";
-                document.getElementById('modal-job-agelimit').innerText = targetItem.ageLimit || "18 - 38 Years";
-                document.getElementById('modal-job-reservation').innerText = targetItem.reservation || "APPLICABLE";
-                document.getElementById('modal-job-totalvacancy').innerText = targetItem.totalVacancy || "Check Source Matrix";
-                document.getElementById('modal-job-qualification').innerText = targetItem.qualification || "Check Qualifications";
-            } else {
-                metadataRows.forEach(rowId => document.getElementById(rowId).style.display = 'none');
-            }
-
-            document.getElementById('modal-external-link').href = targetItem.link;
-            document.getElementById('job-modal-overlay').style.display = 'flex';
-        }
-
-        function closeJobModal() {
-            document.getElementById('job-modal-overlay').style.display = 'none';
-        }
-
-        function resetBoardWorkspace() {
-            ['vacancies', 'admit', 'results'].forEach(type => {
-                const loader = document.getElementById(`${type}-loader`);
-                const list = document.getElementById(`${type}-list`);
-                list.innerHTML = '';
-                loader.style.color = '#cbd5e1';
-                loader.style.display = 'block';
-                loader.innerText = 'Fetching live notifications...';
-            });
-        }
-
-        function switchJobFeed(targetSource) {
-            if (activeSourceSelection === targetSource) return;
-            activeSourceSelection = targetSource;
-
-            const wbBtn = document.getElementById('btn-wb');
-            const rozgarBtn = document.getElementById('btn-rozgar');
-
-            if (targetSource === 'wb') {
-                wbBtn.className = 'feed-btn active';
-                rozgarBtn.className = 'feed-btn inactive';
-            } else {
-                wbBtn.className = 'feed-btn inactive';
-                rozgarBtn.className = 'feed-btn active';
-            }
-
-            fetchJobFeeds(targetSource);
-        }
-
-        function checkEmptyLists() {
-            ['vacancies', 'admit', 'results'].forEach(type => {
-                const list = document.getElementById(`${type}-list`);
-                if (list.children.length === 0) {
-                    const loader = document.getElementById(`${type}-loader`);
-                    loader.style.display = 'block';
-                    loader.innerText = "No updates found in this section.";
+                    document.getElementById('vacancies-list').insertAdjacentHTML('beforeend', itemHtml);
                 }
             });
-        }
 
-        fetchJobFeeds('wb');
-    </script>
-</body>
-</html>
+            checkEmptyLists();
+        } else {
+            throw new Error(data.message || "Unexpected server response layout.");
+        }
+    } catch (err) {
+        console.error("Feed error:", err);
+        document.querySelectorAll('.loading-text').forEach(el => {
+            el.style.color = '#ff8080';
+            el.innerText = `Sync Error: ${err.message}`;
+        });
+    }
+}
+
+function openJobModal(index, categoryType) {
+    const targetItem = currentLoadedItems[index];
+    if (!targetItem) return;
+
+    document.getElementById('modal-job-title').innerText = targetItem.title;
+    document.getElementById('modal-job-date').innerText = targetItem.pubDate ? targetItem.pubDate.split(' ')[0] : 'Live';
+    document.getElementById('modal-job-type').innerText = categoryType;
+    
+    let cleanDesc = targetItem.description.replace(/<[^>]*>/g, '').trim();
+    if (cleanDesc.length > 250) cleanDesc = cleanDesc.substring(0, 250) + "...";
+    document.getElementById('modal-job-desc').innerText = cleanDesc || "Official announcement data tables ready for inspection.";
+    
+    const metadataRows = ['row-lastdate', 'row-agelimit', 'row-reservation', 'row-totalvacancy', 'row-qualification'];
+
+    if (categoryType === "Vacancy") {
+        metadataRows.forEach(rowId => document.getElementById(rowId).style.display = 'table-row');
+        
+        document.getElementById('modal-job-lastdate').innerText = targetItem.lastDate || "Refer to Source Document";
+        document.getElementById('modal-job-agelimit').innerText = targetItem.ageLimit || "18 - 38 Years";
+        document.getElementById('modal-job-reservation').innerText = targetItem.reservation || "APPLICABLE";
+        document.getElementById('modal-job-totalvacancy').innerText = targetItem.totalVacancy || "Check Source Matrix";
+        document.getElementById('modal-job-qualification').innerText = targetItem.qualification || "Check Qualifications";
+    } else {
+        metadataRows.forEach(rowId => document.getElementById(rowId).style.display = 'none');
+    }
+
+    document.getElementById('modal-external-link').href = targetItem.link;
+    document.getElementById('job-modal-overlay').style.display = 'flex';
+}
+
+function closeJobModal() {
+    document.getElementById('job-modal-overlay').style.display = 'none';
+}
+
+function resetBoardWorkspace() {
+    ['vacancies', 'admit', 'results'].forEach(type => {
+        const loader = document.getElementById(`${type}-loader`);
+        const list = document.getElementById(`${type}-list`);
+        list.innerHTML = '';
+        loader.style.color = '#cbd5e1';
+        loader.style.display = 'block';
+        loader.innerText = 'Fetching live notifications...';
+    });
+}
+
+function switchJobFeed(targetSource) {
+    if (activeSourceSelection === targetSource) return;
+    activeSourceSelection = targetSource;
+
+    const wbBtn = document.getElementById('btn-wb');
+    const rozgarBtn = document.getElementById('btn-rozgar');
+
+    if (targetSource === 'wb') {
+        wbBtn.className = 'feed-btn active';
+        rozgarBtn.className = 'feed-btn inactive';
+    } else {
+        wbBtn.className = 'feed-btn inactive';
+        rozgarBtn.className = 'feed-btn active';
+    }
+
+    fetchJobFeeds(targetSource);
+}
+
+function checkEmptyLists() {
+    ['vacancies', 'admit', 'results'].forEach(type => {
+        const list = document.getElementById(`${type}-list`);
+        if (list.children.length === 0) {
+            const loader = document.getElementById(`${type}-loader`);
+            loader.style.display = 'block';
+            loader.innerText = "No updates found in this section.";
+        }
+    });
+}
+
+fetchJobFeeds('wb');
