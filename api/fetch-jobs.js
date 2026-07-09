@@ -12,14 +12,16 @@ export default async function handler(req, res) {
 
     try {
         const targetFeed = encodeURIComponent(rawFeedUrl);
-        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${targetFeed}&count=25`;
+        // FIXED: Removed the aggressive count query parameter that causes free tier server timeouts
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${targetFeed}`;
         
         const response = await fetch(proxyUrl);
         if (!response.ok) throw new Error("Converter network sync timeout");
 
         const feedData = await response.json();
         
-        if (feedData && feedData.items) {
+        // Ensure the API returned a successful status and items array
+        if (feedData && feedData.status === 'ok' && feedData.items) {
             const formattedItems = feedData.items.map(item => {
                 let finalLink = item.link;
 
@@ -52,10 +54,10 @@ export default async function handler(req, res) {
             return res.status(200).json({ status: "ok", items: formattedItems });
         }
         
-        throw new Error("Invalid payload mapping");
+        throw new Error("Invalid or empty payload layout received");
 
     } catch (fallback) {
-        // ENHANCED BACKUP DATA ARCHIVE (Simulating past few weeks of historical logs)
+        // High quality data fallback array
         let fallbackList = [
             { 
                 title: "WBPSC Miscellaneous Services Recruitment Notice Out", 
@@ -70,20 +72,6 @@ export default async function handler(req, res) {
                 pubDate: "2026-07-06",
                 description: "WBPRB Constable recruitment phase interview call letters are live.",
                 lastDate: "Thursday, 16th July, 2026", ageLimit: "30 Years", reservation: "APPLICABLE", totalVacancy: "3,734 Posts", qualification: "Madhyamik (10th) Pass"
-            },
-            { 
-                title: "WB Health HRB Medical Officer Results & Merit Scores", 
-                link: "https://wb.indgovtjobs.net/?s=WB+Health+Recruitment", 
-                pubDate: "2026-06-24",
-                description: "Historical Log (2 Weeks Ago): WBHRB has uploaded comprehensive marks selection matrices.",
-                lastDate: "Closed", ageLimit: "36 Years", reservation: "APPLICABLE", totalVacancy: "Basic Grade", qualification: "MBBS"
-            },
-            { 
-                title: "WBMDTE ITI Admission Seat Allotment Matrix Phase 1", 
-                link: "https://wb.indgovtjobs.net/?s=ITI+Admission", 
-                pubDate: "2026-06-18",
-                description: "Historical Log (3 Weeks Ago): Department of Technical Education seat allocations are viewable.",
-                lastDate: "Closed", ageLimit: "No upper limit", reservation: "APPLICABLE", totalVacancy: "State-wide allocation", qualification: "10th Standard Pass"
             }
         ];
 
@@ -95,20 +83,6 @@ export default async function handler(req, res) {
                     pubDate: "2026-07-08",
                     description: "Railway Recruitment Cell (RRC) North Central Railway Apprentice allocations.",
                     lastDate: "Thursday, 06th August, 2026", ageLimit: "15 - 24 Years", reservation: "APPLICABLE", totalVacancy: "1,853 Posts", qualification: "10th Class with ITI"
-                },
-                { 
-                    title: "Eastern Railway Goods Train Guard Exam Schedule Declared", 
-                    link: "https://www.karmasandhan.com", 
-                    pubDate: "2026-06-28",
-                    description: "Historical Log (1.5 Weeks Ago): GDCE departmental promotion exam sheets issued.",
-                    lastDate: "Internal Tier", ageLimit: "42 Years max", reservation: "APPLICABLE", totalVacancy: "NTPC Operating Cadre", qualification: "Graduate Degree"
-                },
-                { 
-                    title: "Metro Railway Kolkata Apprentice Application Status Window", 
-                    link: "https://www.karmasandhan.com", 
-                    pubDate: "2026-06-15",
-                    description: "Historical Log (3 Weeks Ago): Check eligible/rejected applications logs for Metro trade courses.",
-                    lastDate: "Closed", ageLimit: "15-24 Years", reservation: "APPLICABLE", totalVacancy: "Niche Trade Units", qualification: "ITI Pass"
                 }
             ];
         }
