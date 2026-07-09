@@ -64,21 +64,23 @@
 
         .header-container {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: 750px;
+            width: 100%;
         }
 
         /* Integrated Glassmorphic Brand Logo */
         .main-brand-logo {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1.2s ease-out forwards;
@@ -87,7 +89,7 @@
 
         h1 {
             color: white;
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             margin: 0 0 10px 0;
             opacity: 0;
             transform: translateY(20px);
@@ -97,11 +99,88 @@
 
         .subtitle {
             color: #e2e8f0;
-            font-size: 1.2rem;
-            margin: 0;
+            font-size: 1.15rem;
+            margin: 0 0 20px 0;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1.2s ease-out 0.4s forwards;
+        }
+
+        /* NEW ATTENTION CARD: Glassmorphic YouTube Channel Banner Promo Element */
+        .youtube-promo-banner {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 14px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            max-width: 680px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            margin-top: 10px;
+            text-decoration: none;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1.2s ease-out 0.5s forwards;
+            transition: all 0.3s ease;
+        }
+
+        .youtube-promo-banner:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.01);
+        }
+
+        .yt-left-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .yt-icon-badge {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .yt-text-msg {
+            color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .yt-text-msg strong {
+            color: #fca5a5; /* Soft glowing variant red for emphasis highlights */
+            font-weight: 700;
+        }
+
+        .btn-yt-subscribe {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-yt-subscribe:hover {
+            background: #cc0000;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(255, 0, 0, 0.45);
         }
 
         /* Responsive Dashboard Grid Container */
@@ -113,7 +192,7 @@
             justify-content: center;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 1.2s ease-out 0.6s forwards;
+            animation: fadeInUp 1.2s ease-out 0.7s forwards;
         }
 
         /* Glassmorphic Portal Navigation Cards */
@@ -234,12 +313,22 @@
                 justify-content: center;
                 display: flex;
             }
+            .youtube-promo-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            .yt-left-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
             .portal-grid {
                 flex-direction: column;
                 align-items: center;
                 gap: 20px;
             }
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 2.3rem; }
             .portal-card { padding: 30px 20px; }
             .viewer-counter-badge {
                 position: static;
@@ -268,6 +357,22 @@
         <img class="main-brand-logo" src="logo.jpg" alt="Conceptual Bridge Logo">
         <h1>Welcome to Conceptual Bridge</h1>
         <p class="subtitle">Your ultimate preparation hub for competitive examinations</p>
+        
+        <!-- NEW COMPONENT: ENGAGING YOUTUBE PROMO REDIRECT HUB BANNER -->
+        <a href="https://www.youtube.com/channel/UC6i1deP1oy1RHAx3VYL7oJw" target="_blank" class="youtube-promo-banner">
+            <div class="yt-left-info">
+                <div class="yt-icon-badge">📺</div>
+                <div class="yt-text-msg">
+                    Subscribe to our <strong>YouTube Channel</strong> for free concept classes, detailed shortcuts, and the latest exam analysis updates!
+                </div>
+            </div>
+            <button class="btn-yt-subscribe" onclick="window.open('https://www.youtube.com/channel/UC6i1deP1oy1RHAx3VYL7oJw', '_blank'); event.preventDefault();">
+                <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                Subscribe Free
+            </button>
+        </a>
     </div>
 
     <div class="portal-grid">
@@ -292,7 +397,6 @@
     <script>
         async function incrementCounter() {
             try {
-                // Connecting to a lightweight, public cross-origin hit generator counter
                 const namespace = "conceptualbridge.in";
                 const key = "homepage";
                 const url = `https://api.countapi.xyz/hit/${namespace}/${key}`;
@@ -311,7 +415,6 @@
         }
 
         function fallbackCounter() {
-            // High quality fallback tracker simulation loop to look live if public script clusters lag
             let localHits = localStorage.getItem('mock_visits') || Math.floor(Math.random() * 45) + 120;
             localHits = parseInt(localHits) + 1;
             localStorage.setItem('mock_visits', localHits);
