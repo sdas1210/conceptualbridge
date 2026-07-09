@@ -3,5 +3,5 @@ Tags| RRB Group D, 10, GACA, 100-Series, CEN 08/2024
 English| 8VPQawDm0gM
 Bengali| WCzS7yHYUXs
 PDF_English| ga1_eng.pdf
-PDF_Bengali| ga1_ben.pdf
-Test_Source| 1.txt
+PDF_Bengali| none
+Test_Source| /gaca/1.txt
