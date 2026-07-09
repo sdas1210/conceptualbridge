@@ -127,16 +127,21 @@
             gap: 12px;
         }
 
+        
         .alert-item {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02); /* Made even more see-through */
+            backdrop-filter: blur(4px);            /* Adds a subtle frosted glass effect */
+            -webkit-backdrop-filter: blur(4px);
             padding: 12px 15px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Faded border */
             transition: transform 0.2s, background 0.2s;
         }
+
+        /* This makes sure it lights up cleanly when students hover over it */
         .alert-item:hover {
-            transform: translateX(4px);
             background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .alert-item a {
