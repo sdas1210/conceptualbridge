@@ -235,24 +235,24 @@
                     <td style="padding: 12px; font-weight: bold; color: #cbd5e1; vertical-align: top;">Brief Summary:</td>
                     <td id="modal-job-desc" style="padding: 12px; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0;">-</td>
                 </tr>
-                <!-- NEW CUSTOM PARAMETER DATA ROWS REQUESTED -->
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <!-- THESE TARGET ROWS WILL AUTOMATICALLY HIDE FOR ADMIT CARDS & RESULTS -->
+                <tr id="row-lastdate" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
                     <td style="padding: 12px; font-weight: bold; color: #fbcfe8;">Last Date of Application:</td>
                     <td id="modal-job-lastdate" style="padding: 12px; font-weight: 600; color: #f472b6;">-</td>
                 </tr>
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <tr id="row-agelimit" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
                     <td style="padding: 12px; font-weight: bold; color: #fed7aa;">Age Limit for General:</td>
                     <td id="modal-job-agelimit" style="padding: 12px; color: #fb923c;">-</td>
                 </tr>
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <tr id="row-reservation" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
                     <td style="padding: 12px; font-weight: bold; color: #fef08a;">Reservation:</td>
                     <td id="modal-job-reservation" style="padding: 12px; color: #facc15;">-</td>
                 </tr>
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <tr id="row-totalvacancy" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
                     <td style="padding: 12px; font-weight: bold; color: #bbf7d0;">Total Vacancy:</td>
                     <td id="modal-job-totalvacancy" style="padding: 12px; color: #4ade80;">-</td>
                 </tr>
-                <tr>
+                <tr id="row-qualification">
                     <td style="padding: 12px; font-weight: bold; color: #bfdbfe; vertical-align: top;">Educational Qualification:</td>
                     <td id="modal-job-qualification" style="padding: 12px; color: #60a5fa; font-weight: 500;">-</td>
                 </tr>
@@ -260,7 +260,6 @@
 
             <div style="display: flex; gap: 12px; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
                 <button onclick="closeJobModal()" style="flex: 1; padding: 12px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: white; font-weight: bold; border-radius: 8px; cursor: pointer;">Back to Board</button>
-                <!-- CHANGED ACTION LABEL BUTTON PER USER REQUIREMENT -->
                 <a id="modal-external-link" href="#" target="_blank" style="flex: 1; padding: 12px; background: #2b6cb0; color: white; text-align: center; text-decoration: none; font-weight: bold; border-radius: 8px; box-shadow: 0 4px 12px rgba(43, 108, 176, 0.4);">Open Source Site →</a>
             </div>
         </div>
@@ -339,12 +338,22 @@
             if (cleanDesc.length > 250) cleanDesc = cleanDesc.substring(0, 250) + "...";
             document.getElementById('modal-job-desc').innerText = cleanDesc || "Official announcement data tables ready for inspection.";
             
-            // INJECTING THE EXTENDED ROW PARAMS DYNAMICALLY
-            document.getElementById('modal-job-lastdate').innerText = targetItem.lastDate || "09th July, 2026, Thursday";
-            document.getElementById('modal-job-agelimit').innerText = targetItem.ageLimit || "38 YEARS";
-            document.getElementById('modal-job-reservation').innerText = targetItem.reservation || "APPLICABLE";
-            document.getElementById('modal-job-totalvacancy').innerText = targetItem.totalVacancy || "Check Source Document";
-            document.getElementById('modal-job-qualification').innerText = targetItem.qualification || "Graduate / Diploma / 10th Pass";
+            // TARGET ROW LIST ARRAY REFERENCES
+            const metadataRows = ['row-lastdate', 'row-agelimit', 'row-reservation', 'row-totalvacancy', 'row-qualification'];
+
+            if (categoryType === "Vacancy") {
+                // Show rows only for vacancies
+                metadataRows.forEach(rowId => document.getElementById(rowId).style.display = 'table-row');
+                
+                document.getElementById('modal-job-lastdate').innerText = targetItem.lastDate || "Refer to Source Document";
+                document.getElementById('modal-job-agelimit').innerText = targetItem.ageLimit || "18 - 38 Years";
+                document.getElementById('modal-job-reservation').innerText = targetItem.reservation || "APPLICABLE";
+                document.getElementById('modal-job-totalvacancy').innerText = targetItem.totalVacancy || "Check Source Matrix";
+                document.getElementById('modal-job-qualification').innerText = targetItem.qualification || "Check Qualifications";
+            } else {
+                // AUTOMATICALLY HIDE EVERYTHING AFTER BRIEF SUMMARY FOR ADMIT CARDS & EXAM RESULTS
+                metadataRows.forEach(rowId => document.getElementById(rowId).style.display = 'none');
+            }
 
             document.getElementById('modal-external-link').href = targetItem.link;
             document.getElementById('job-modal-overlay').style.display = 'flex';
