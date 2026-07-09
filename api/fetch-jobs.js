@@ -6,9 +6,10 @@ export default async function handler(req, res) {
     // Read the chosen feed track selection from the frontend parameters
     const { source } = req.query;
 
-    let rawFeedUrl = 'https://wb.indgovtjobs.net/feed'; // Default Option 1
+    let rawFeedUrl = 'https://wb.indgovtjobs.net/feed'; // Option 1
     if (source === 'rozgar') {
-        rawFeedUrl = 'https://rozgarupdates.in/feed';  // Option 2
+        // FIXED: Swapped out the blocked feed with FreeJobAlert's stable public RSS XML link
+        rawFeedUrl = 'https://www.freejobalert.com/feed/'; 
     }
 
     try {
@@ -25,7 +26,6 @@ export default async function handler(req, res) {
                 title: item.title,
                 link: item.link,
                 pubDate: item.pubDate ? item.pubDate.split(' ')[0] : new Date().toISOString().split('T')[0],
-                // MODIFIED: Added description fallback mapping extraction strings
                 description: item.description || item.content || "Official exam notice details are fully accessible via the official link button below."
             }));
             
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         throw new Error("Invalid payload mapping");
 
     } catch (fallback) {
-        // High quality fallback array based on source criteria selections (Includes localized summaries)
+        // High quality fallback array based on source criteria selections
         let fallbackList = [
             { 
                 title: "WBPSC Miscellaneous Services Recruitment Notice 2026 Out", 
@@ -61,19 +61,19 @@ export default async function handler(req, res) {
             fallbackList = [
                 { 
                     title: "RRB NTPC Group C Vacancy Online Form 2026 Released", 
-                    link: "https://rozgarupdates.in/", 
+                    link: "https://www.freejobalert.com", 
                     pubDate: "2026-07-08",
                     description: "Railway Recruitment Board (RRB) Non-Technical Popular Categories (NTPC) registration portals are active. Undergraduate and Graduate tracks are both open for submission."
                 },
                 { 
                     title: "SSC CGL Exam Notification & Combined Matrix Windows Active", 
-                    link: "https://rozgarupdates.in/", 
+                    link: "https://www.freejobalert.com", 
                     pubDate: "2026-07-05",
                     description: "Staff Selection Commission opens Tier 1 application portal configurations for the Combined Graduate Level Examination. Last date to pay exam fees is approaching rapidly."
                 },
                 { 
                     title: "Railway Recruitment Board Technician Grade 1 Forms Extended", 
-                    link: "https://rozgarupdates.in/", 
+                    link: "https://www.freejobalert.com", 
                     pubDate: "2026-07-02",
                     description: "Official update notice: Deadline to upload structural signature documents and submit applications for Signal Technician vacancies has been officially extended."
                 }
