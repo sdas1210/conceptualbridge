@@ -40,7 +40,54 @@
         .subtitle {
             text-align: center;
             color: #cbd5e1;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
+        }
+
+        /* NEW STYLE: Glassmorphic Feed Switcher Tabs Bar */
+        .feed-tabs-container {
+            display: flex;
+            gap: 15px;
+            max-width: 650px;
+            margin: 0 auto 35px auto;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .feed-btn {
+            flex: 1;
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Active State matching the primary blue design language */
+        .feed-btn.active {
+            background: #2b6cb0;
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(43, 108, 176, 0.4);
+        }
+
+        /* Inactive Glassmorphic layout options */
+        .feed-btn.inactive {
+            background: transparent;
+            color: #cbd5e1;
+        }
+        .feed-btn.inactive:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
         }
 
         /* 3-Column Alert Board Grid */
@@ -130,6 +177,7 @@
 
         @media (max-width: 900px) {
             .board-grid { grid-template-columns: 1fr; }
+            .feed-tabs-container { flex-direction: column; gap: 8px; max-width: 100%; }
         }
     </style>
 </head>
@@ -138,6 +186,16 @@
     <a href="index.html" class="back-btn">← Home</a>
     <h1>💼 Jobs Corner</h1>
     <p class="subtitle">Real-time official updates and exam timelines</p>
+
+    <!-- NEW INTERFACE COMPONENT: INTERACTIVE MULTI-SOURCE SELECTOR TABS -->
+    <div class="feed-tabs-container">
+        <button id="btn-wb" class="feed-btn active" onclick="switchJobFeed('wb')">
+            🏢 WB JOBS (IndGovtJobs Feed)
+        </button>
+        <button id="btn-rozgar" class="feed-btn inactive" onclick="switchJobFeed('rozgar')">
+            🔥 Rozgar Updates Feed
+        </button>
+    </div>
 
     <div class="board-grid">
         <div class="board-column">
@@ -160,11 +218,16 @@
     </div>
 
     <script>
-        const targetFeedUrl = '/api/fetch-jobs';
+        // Track the actively selected data pipeline stream variable
+        let activeSourceSelection = 'wb';
 
-        async function fetchJobFeeds() {
+        async function fetchJobFeeds(source = 'wb') {
+            // Restore default text loader messages and clear lists across columns
+            resetBoardWorkspace();
+
             try {
-                const response = await fetch(targetFeedUrl);
+                // Pass source tracking string to the server request parameter context
+                const response = await fetch(`/api/fetch-jobs?source=${source}`);
                 
                 if (!response.ok) {
                     throw new Error(`Server returned status code ${response.status}`);
@@ -173,7 +236,7 @@
                 const data = await response.json();
 
                 if (data.status === 'ok' && data.items) {
-                    // Hide the text loaders
+                    // Hide text elements to unlock display canvas list injection paths
                     document.getElementById('vacancies-loader').style.display = 'none';
                     document.getElementById('admit-loader').style.display = 'none';
                     document.getElementById('results-loader').style.display = 'none';
@@ -213,6 +276,39 @@
             }
         }
 
+        function resetBoardWorkspace() {
+            // Re-enable individual sections loaders and empty lists
+            ['vacancies', 'admit', 'results'].forEach(type => {
+                const loader = document.getElementById(`${type}-loader`);
+                const list = document.getElementById(`${type}-list`);
+                
+                list.innerHTML = '';
+                loader.style.color = '#cbd5e1';
+                loader.style.display = 'block';
+                loader.innerText = 'Fetching live notifications...';
+            });
+        }
+
+        function switchJobFeed(targetSource) {
+            if (activeSourceSelection === targetSource) return;
+            activeSourceSelection = targetSource;
+
+            const wbBtn = document.getElementById('btn-wb');
+            const rozgarBtn = document.getElementById('btn-rozgar');
+
+            // Toggle CSS view selectors cleanly
+            if (targetSource === 'wb') {
+                wbBtn.className = 'feed-btn active';
+                rozgarBtn.className = 'feed-btn inactive';
+            } else {
+                wbBtn.className = 'feed-btn inactive';
+                rozgarBtn.className = 'feed-btn active';
+            }
+
+            // Fire fetch operation focusing strictly on the new target channel
+            fetchJobFeeds(targetSource);
+        }
+
         function checkEmptyLists() {
             ['vacancies', 'admit', 'results'].forEach(type => {
                 const list = document.getElementById(`${type}-list`);
@@ -224,7 +320,8 @@
             });
         }
 
-        fetchJobFeeds();
+        // Trigger default initial call matching the source parameters
+        fetchJobFeeds('wb');
     </script>
 </body>
 </html>
