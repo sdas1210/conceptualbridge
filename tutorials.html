@@ -54,7 +54,6 @@
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
         }
 
-        /* VISTA HUB GRID SELECTION ARCHITECTURE */
         .hub-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -94,7 +93,6 @@
         .hub-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
         .hub-title { font-size: 1.15rem; font-weight: 500; margin: 0; line-height: 1.4; }
 
-        /* YOUTUBE STUDIO TABLE DISPLAY WRAPPER (Hidden Initially) */
         .table-display-section {
             display: none;
             max-width: 1200px;
@@ -137,7 +135,6 @@
             border: 1px solid rgba(255, 255, 255, 0.15); padding: 2px 6px; border-radius: 3px; color: #93c5fd; text-transform: uppercase;
         }
 
-        /* BUTTON CONTROL LAYER ELEMENTS */
         .btn-studio {
             display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border-radius: 4px; font-size: 0.85rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.2s ease; white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.25); border-top-color: rgba(255, 255, 255, 0.4); border-left-color: rgba(255, 255, 255, 0.4); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
@@ -152,7 +149,6 @@
         .lang-pill { padding: 2px 6px; font-size: 0.7rem; border-radius: 3px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; cursor: pointer; font-weight: 600; }
         .lang-pill.active { background: linear-gradient(180deg, #3182ce 0%, #2b6cb0 100%); border-color: rgba(255,255,255,0.3); color: white; }
 
-        /* MOCK ASSESSMENT MODALS */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
         }
@@ -177,6 +173,7 @@
     <h1>🎓 Free Tutorial Corner</h1>
     <p class="subtitle">Select a curriculum module to unlock class files and chapter checkouts</p>
 
+    <!-- HUB TILES -->
     <div class="hub-grid">
         <div class="hub-card" onclick="openSubjectFolder('math')">
             <span class="hub-icon">📐</span>
@@ -196,6 +193,7 @@
         </div>
     </div>
 
+    <!-- GENERAL AWARENESS LABELS CONFIG -->
     <div class="table-display-section" id="ga-table-section">
         <div class="table-container">
             <table class="studio-table">
@@ -208,16 +206,18 @@
                     </tr>
                 </thead>
                 <tbody id="studio-table-body">
-                    </tbody>
+                    <!-- Loaded dynamically from text files -->
+                </tbody>
             </table>
         </div>
     </div>
 
+    <!-- MINI TEST MODAL -->
     <div id="quiz-modal-overlay" class="modal-overlay">
         <div class="modal-window">
             <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 12px; margin-bottom: 20px; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
                 <h3 id="quiz-modal-title" style="margin:0; color:#93c5fd; font-weight: 500; font-size: 1.25rem;">Mini Chapter Random Shuffled Test (10Q)</h3>
-                <button onclick="closeQuizModal()" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 0.9rem; padding: 3px 10px; border-radius: 4px; cursor: pointer;" onclick="closeQuizModal()">✕</button>
+                <button onclick="closeQuizModal()" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 0.9rem; padding: 3px 10px; border-radius: 4px; cursor: pointer;">✕</button>
             </div>
             <div id="quiz-content-loading" style="padding: 20px; text-align: center; font-style: italic; color: #cbd5e1;">Reading source text rules...</div>
             <div id="quiz-questions-body" style="display:none; flex-direction:column; gap:20px; margin-bottom: 20px;"></div>
@@ -228,15 +228,11 @@
     </div>
 
     <script>
-        // Track indices for your automated txt content folder
-        const uploadedVideoFiles = [1, 2]; 
+        const uploadedVideoFiles = [1]; 
         let cachedLoadedData = {};
 
-        // MAIN GATEWAY NAVIGATION CONTROLLER
         function openSubjectFolder(subjectType) {
-            // Remove active style classes from all hub elements
             document.querySelectorAll('.hub-card').forEach(c => c.classList.remove('active-hub'));
-            // Hide the GA spreadsheet display box by default
             document.getElementById('ga-table-section').style.display = 'none';
 
             if (subjectType === 'ga') {
@@ -244,8 +240,7 @@
                 document.getElementById('ga-table-section').style.display = 'block';
                 generateStudioTableLayout();
             } else {
-                // Temporary alerts for folders you will pop out later
-                alert(`${subjectType.toUpperCase()} module selection registered! Sub-Topics framework will load as soon as files are mapped inside their directories.`);
+                alert(`${subjectType.toUpperCase()} module selection registered! Sub-Topics framework will load as soon as files are mapped.`);
             }
         }
 
@@ -276,7 +271,10 @@
                     }
 
                     const initialVideo = parsed.english;
-                    const initialPdf = parsed.pdf_english ? `Resource/${parsed.pdf_english}` : '#';
+                    
+                    // FIXED: Checks if either PDF field is marked empty or 'none', defaulting gracefully
+                    const hasValidEngPdf = parsed.pdf_english && parsed.pdf_english.toLowerCase() !== 'none';
+                    const initialPdf = hasValidEngPdf ? `Resource/${parsed.pdf_english}` : '#';
 
                     const trHtml = `
                         <tr id="row-${fileNum}">
@@ -293,7 +291,7 @@
                                 </a>
                             </td>
                             <td style="text-align: center;">
-                                <a id="dl-${fileNum}" href="${initialPdf}" class="btn-studio btn-download" download>
+                                <a id="dl-${fileNum}" href="${initialPdf}" class="btn-studio btn-download" ${initialPdf === '#' ? 'style="opacity:0.4; pointer-events:none;"' : ''} download>
                                     📁 Download PDF
                                 </a>
                             </td>
@@ -335,10 +333,26 @@
             if (!data) return;
 
             const videoId = chosenLang === 'english' ? data.english : data.bengali;
-            const pdfName = chosenLang === 'english' ? data.pdf_english : data.pdf_bengali;
+            
+            // DYNAMIC SINGLE VERSION FILTER OVERRIDE:
+            // Fall back to target value if choice layer is marked none
+            let pdfName = chosenLang === 'english' ? data.pdf_english : data.pdf_bengali;
+            if (!pdfName || pdfName.toLowerCase() === 'none') {
+                pdfName = data.pdf_english; // Default fallback to available set
+            }
 
             document.getElementById(`play-${fileNum}`).href = `https://www.youtube.com/watch?v=${videoId}`;
-            document.getElementById(`dl-${fileNum}`).href = pdfName ? `Resource/${pdfName}` : '#';
+            
+            const dlLink = document.getElementById(`dl-${fileNum}`);
+            if (pdfName && pdfName.toLowerCase() !== 'none') {
+                dlLink.href = `Resource/${pdfName}`;
+                dlLink.style.opacity = '1';
+                dlLink.style.pointerEvents = 'auto';
+            } else {
+                dlLink.href = '#';
+                dlLink.style.opacity = '0.4';
+                dlLink.style.pointerEvents = 'none';
+            }
 
             const engPill = document.getElementById(`pill-eng-${fileNum}`);
             const benPill = document.getElementById(`pill-ben-${fileNum}`);
@@ -352,28 +366,58 @@
             }
         }
 
-        function compileMiniTest(sourceFile) {
+        // FIXED: NOW FETCHES REAL CONTENT FROM /gaca/1.txt INSTEAD OF PLACEHOLDERS
+        async function compileMiniTest(sourceFilePath) {
+            if (!sourceFilePath || sourceFilePath === 'undefined') return;
+            
             document.getElementById('quiz-modal-overlay').style.display = 'flex';
             document.getElementById('quiz-content-loading').style.display = 'block';
-            document.getElementById('quiz-questions-body').style.display = 'none';
+            const body = document.getElementById('quiz-questions-body');
+            body.style.display = 'none';
+            body.innerHTML = '';
 
-            setTimeout(() => {
-                document.getElementById('quiz-content-loading').style.display = 'none';
-                const body = document.getElementById('quiz-questions-body');
-                body.innerHTML = '';
-                body.style.display = 'flex';
-
-                const mockQuestions = Array.from({length: 100}, (_, i) => ({
-                    text: `Exam Practice Concept Task #${i + 1} loaded from target profile string: (${sourceFile})`,
-                    options: ["Option A Matrix", "Option B Correct Value", "Option C Delta Track", "Option D Framework"]
-                }));
-
-                for (let i = mockQuestions.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [mockQuestions[i], mockQuestions[j]] = [mockQuestions[j], mockQuestions[i]];
+            try {
+                // Fetch the real text question bank file (e.g. /gaca/1.txt)
+                const response = await fetch(sourceFilePath);
+                if (!response.ok) throw new Error("Could not find quiz file source asset.");
+                
+                const rawText = await response.text();
+                
+                // Parse lines out from the text file. Assumes format: Question|Opt1|Opt2|Opt3|Opt4
+                const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                
+                if(lines.length === 0) {
+                    throw new Error("No questions found inside data text file.");
                 }
 
-                mockQuestions.slice(0, 10).forEach((q, index) => {
+                let parsedQuestions = [];
+                lines.forEach(line => {
+                    const parts = line.split('|');
+                    if (parts.length >= 5) {
+                        parsedQuestions.push({
+                            text: parts[0].trim(),
+                            options: [parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim()]
+                        });
+                    }
+                });
+
+                if(parsedQuestions.length === 0) {
+                    throw new Error("Questions layout mismatch format: Question|A|B|C|D expected.");
+                }
+
+                // Fisher-Yates shuffle sequence loop execution
+                for (let i = parsedQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [parsedQuestions[i], parsedQuestions[j]] = [parsedQuestions[j], parsedQuestions[i]];
+                }
+
+                // Slice array list filter tracking bound precisely down to 10 entries limit metrics
+                const selectedSet = parsedQuestions.slice(0, 10);
+
+                document.getElementById('quiz-content-loading').style.display = 'none';
+                body.style.display = 'flex';
+
+                selectedSet.forEach((q, index) => {
                     const html = `
                         <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:6px; border:1px solid rgba(255,255,255,0.12);">
                             <div style="font-weight:500; margin-bottom:10px; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">Q${index + 1}: ${q.text}</div>
@@ -388,7 +432,11 @@
                     `;
                     body.insertAdjacentHTML('beforeend', html);
                 });
-            }, 700);
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('quiz-content-loading').innerText = `Error: ${err.message || "Failed loading test source."}`;
+            }
         }
 
         function closeQuizModal() {
