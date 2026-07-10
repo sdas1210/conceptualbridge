@@ -140,13 +140,11 @@
 
         .option-row:hover { background-color: #f9fafb; }
         
-        /* Regular Exam State Selections */
         .option-row.selected {
             background-color: #eff6ff;
             border-color: #3b82f6;
         }
 
-        /* NEW REVIEW MODE OPTION HIGHLIGHTS */
         .option-row.review-correct {
             background-color: #f0fdf4 !important;
             border-color: #22c55e !important;
@@ -161,7 +159,6 @@
 
         .option-row input { margin-right: 12px; transform: scale(1.2); }
 
-        /* NEW STYLE: Review Mode Information Boxes */
         .review-status-box {
             margin-top: 20px;
             padding: 15px;
@@ -424,13 +421,12 @@
         .lower-declarations-box { margin-top: auto; border-top: 1px solid var(--tcs-border); padding-top: 20px; }
         .important-warning-text { color: #b91c1c; font-weight: bold; margin: 10px 0; }
 
-        /* CHANGED STYLE: White Page Report Layout Configuration */
         .report-page-container {
             flex: 1;
             display: none;
             justify-content: center;
             align-items: center;
-            background-color: #ffffff; /* Clean White Page Background */
+            background-color: #ffffff;
             padding: 40px 20px;
             overflow-y: auto;
             box-sizing: border-box;
@@ -576,7 +572,7 @@
     </div>
     
     <div class="wizard-footer" id="step-footer-1">
-        <button class="btn-tcs btn-white" onclick="window.location.href='exams.html'">← Go to Tests</button>
+        <button class="btn-tcs btn-white" onclick="window.location.href='tutorials.html'">← Go to Tutorials</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
     </div>
 
@@ -586,13 +582,13 @@
                 <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings</h2>
                 
                 <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 10px;">
-                    <span id="wizard-duration-lbl">Duration: 13 Mins</span>
-                    <span id="wizard-marks-lbl">Maximum Marks: 25</span>
+                    <span id="wizard-duration-lbl">Duration: 10 Mins</span>
+                    <span id="wizard-marks-lbl">Maximum Marks: 10</span>
                 </div>
 
                 <p style="font-weight: bold;">Read the following instructions carefully.</p>
                 <ol style="padding-left: 20px; line-height: 1.8;">
-                    <li>The test contains <span id="wizard-count-lbl" style="font-weight: bold;">25</span> total questions.</li>
+                    <li>The test contains <span id="wizard-count-lbl" style="font-weight: bold;">10</span> total questions.</li>
                     <li>Each question has 4 options out of which only one is correct.</li>
                     <li>You have to finish the test within the allocated runtime matrix window limit.</li>
                     <li>You will be awarded 1 mark for each correct answer and 0.33 will be deducted for each wrong answer.</li>
@@ -719,8 +715,8 @@
             </table>
 
             <div class="report-btn-stack">
-                <button class="btn-tcs btn-white" style="border:1px solid var(--tcs-border);" onclick="window.location.href='exams.html'">
-                    Return to Exam Corner
+                <button class="btn-tcs btn-white" style="border:1px solid var(--tcs-border);" onclick="window.location.href='tutorials.html'">
+                    Return to Tutorial Corner
                 </button>
                 <button class="btn-tcs btn-blue" onclick="activateReviewMode()">
                     View Your Performance
@@ -733,8 +729,8 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const activeTopic = urlParams.get('topic') || 'Mathematics';
-        const questionLimit = parseInt(urlParams.get('limit')) || 10;
+        const sourceFile = urlParams.get('source');
+        const questionLimit = 10; // Forcing it to 10 question mini test configurations per user specifications
 
         let examDataMatrix = [];
         let activeIndex = 0;
@@ -744,39 +740,80 @@
         let selectedAnswers = [];
         let timeRemainingSeconds = questionLimit * 60;
         let timerEngine = null;
-        
-        // NEW METRIC LAYOUT COMPILER CONTROLLERS
         let isReviewModeActive = false; 
 
+        // UPDATED STACK: Robust Multiline Block Parser for 1.txt Format Layouts
         async function initializeQuizEngine() {
+            const statusEl = document.getElementById('quiz-status');
+            if (!sourceFile) { showMissingFileScreen(); return; }
+
             try {
-                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`);
+                const response = await fetch(sourceFile);
                 if (!response.ok) { showMissingFileScreen(); return; }
 
-                const payload = await response.json();
-                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []);
+                const rawText = await response.text();
+                const lines = rawText.split('\n').map(l => l.trim());
 
-                if (targetQuestions.length > 0) {
-                    examDataMatrix = targetQuestions;
+                let parsedList = [];
+                let currentBlock = null;
+
+                lines.forEach(line => {
+                    if (!line) return;
+                    
+                    const pipeIdx = line.indexOf('|');
+                    
+                    // Appends second language or continuation lines if no pipe symbol is present
+                    if (pipeIdx === -1) {
+                        if (currentBlock && line.startsWith('/')) {
+                            currentBlock.text += ` ${line}`;
+                        }
+                        return;
+                    }
+
+                    const key = line.substring(0, pipeIdx).trim().toUpperCase();
+                    const value = line.substring(pipeIdx + 1).trim();
+
+                    if (key === 'Q') {
+                        currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Series', shift: '' };
+                    } else if (currentBlock) {
+                        if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
+                            currentBlock[key.toLowerCase()] = value;
+                        } else if (key === 'SHIFT') {
+                            currentBlock.shift = value;
+                        } else if (key === 'CORRECT') {
+                            const letter = value.toUpperCase();
+                            currentBlock.correct = letter.charCodeAt(0) - 65; // A->0, B->1, C->2, D->3
+                            
+                            // Validate block and compress into core matrix stack
+                            if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
+                                parsedList.push(currentBlock);
+                            }
+                        }
+                    }
+                });
+
+                if (parsedList.length > 0) {
+                    // Fisher-Yates Scrambling Algorithm
+                    for (let i = parsedList.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
+                    }
+
+                    // Slice exactly 10 questions limit values
+                    examDataMatrix = parsedList.slice(0, questionLimit);
+
                     selectedAnswers = new Array(examDataMatrix.length).fill(null);
                     questionStates = new Array(examDataMatrix.length).fill(0);
                     questionStates[0] = 1;
 
-                    let formattedSectionTitle = activeTopic;
-                    if (activeTopic === 'GACA' || activeTopic === 'gaca') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
-                    else if (activeTopic === 'GS' || activeTopic === 'gs') formattedSectionTitle = 'GENERAL SCIENCE';
-                    else if (activeTopic === 'GI' || activeTopic === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE';
-                    else if (activeTopic === 'Mathematics') formattedSectionTitle = 'MATHEMATICS';
-                    
-                    document.getElementById('active-section-label').innerText = formattedSectionTitle;
-
-                    document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`;
+                    document.getElementById('active-section-label').innerText = "GENERAL AWARENESS & CURRENT AFFAIRS";
+                    document.getElementById('wizard-exam-main-title').innerText = "GACA MINI ASSESSMENT TIMELINE";
                     document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`;
                     document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`;
                     document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length;
 
                 } else { showMissingFileScreen(); }
-            } catch (err) { showMissingFileScreen(); }
+            } catch (err) { console.error(err); showMissingFileScreen(); }
         }
 
         function checkInstructionScrollProgress() {
@@ -822,9 +859,9 @@
             document.getElementById('step-footer-1').style.display = 'none';
             document.getElementById('fallback-screen-holder').innerHTML = `
                 <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; font-family:sans-serif; background:#1a365d; color:white; padding:20px;">
-                    <h1>⚠️ Content Available Soon</h1>
-                    <p>The matrix question bank is undergoing engineering optimization sync routines.</p>
-                    <button onclick="window.location.href='exams.html'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Go Back</button>
+                    <h1>⚠️ Quiz Data Unavailable</h1>
+                    <p>The system was unable to parse questions from the target source folder file routing path.</p>
+                    <button onclick="window.location.href='tutorials.html'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Return to Tutorials</button>
                 </div>
             `;
         }
@@ -864,7 +901,7 @@
             }
 
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`;
-            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : '';
+            document.getElementById('shift-label-view').innerText = currentItem.shift ? `Shift: ${currentItem.shift}` : 'GACA Series';
             document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text);
             
             const container = document.getElementById('target-options-container');
@@ -881,15 +918,13 @@
                 let isCheckedAttr = '';
 
                 if (isReviewModeActive) {
-                    // Review mode styling logic
                     if (userChoice === idx && userChoice !== correctChoice) {
-                        statusClass = 'review-wrong'; // Selected option was wrong (Mark Red)
+                        statusClass = 'review-wrong';
                     } else if (idx === correctChoice) {
-                        statusClass = 'review-correct'; // Correct option path (Mark Green)
+                        statusClass = 'review-correct';
                     }
                     if (userChoice === idx) isCheckedAttr = 'checked';
                 } else {
-                    // Normal exam selection layout routing
                     if (userChoice === idx) {
                         statusClass = 'selected';
                         isCheckedAttr = 'checked';
@@ -908,7 +943,6 @@
                 container.insertAdjacentHTML('beforeend', optHtml);
             });
 
-            // NEW CONDITIONAL: Compile Feedback Text Blocks for Review Mode
             if (isReviewModeActive) {
                 if (userChoice === null) {
                     feedbackContainer.innerHTML = `
@@ -976,7 +1010,7 @@
                 activeIndex++;
                 renderExamWindow();
             } else {
-                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit.");
+                alert("You have reached the end of the question set. Feel free to review your palette configuration or submit.");
                 renderPaletteGrid();
             }
         }
@@ -1004,9 +1038,8 @@
         function triggerExamSubmission() {
             if (timerEngine) clearInterval(timerEngine);
             
-            // If already in review mode, Submit functions as direct Return route line 
             if (isReviewModeActive) {
-                window.location.href = 'exams.html';
+                window.location.href = 'tutorials.html';
                 return;
             }
             
@@ -1028,38 +1061,30 @@
 
             let finalScore = correct - (wrong * 0.33);
 
-            // Hide normal runtime items
             document.getElementById('timer-header-wrapper').style.display = 'none';
             document.getElementById('ribbon-bar-container').style.display = 'none';
             document.getElementById('quiz-workspace').style.display = 'none';
             
-            // Update Headers
             document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary";
 
-            // Inject Scores table parameters
             document.getElementById('res-total').innerText = totalQuestions;
             document.getElementById('res-attempted').innerText = attempted;
             document.getElementById('res-correct').innerText = correct;
             document.getElementById('res-wrong').innerText = wrong;
             document.getElementById('res-final-score').innerText = finalScore.toFixed(2);
 
-            // Swap out view to flat white metrics report container panel
             document.getElementById('quiz-report-workspace').style.display = 'flex';
         }
 
-        /* NEW METHOD: Transition parameters into frozen Performance Review State */
         function activateReviewMode() {
             isReviewModeActive = true;
             
-            // Hide report page and restore quiz workspace split framework
             document.getElementById('quiz-report-workspace').style.display = 'none';
             document.getElementById('ribbon-bar-container').style.display = 'flex';
             document.getElementById('quiz-workspace').style.display = 'flex';
             
-            // Modify tray labels and configurations
             document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode";
             
-            // Disable actionable mutation buttons
             document.getElementById('action-btn-review').disabled = true;
             document.getElementById('action-btn-review').style.opacity = '0.5';
             document.getElementById('action-btn-review').style.cursor = 'not-allowed';
@@ -1068,14 +1093,11 @@
             document.getElementById('action-btn-clear').style.opacity = '0.5';
             document.getElementById('action-btn-clear').style.cursor = 'not-allowed';
             
-            // Reveal Caution report mechanism button
             document.getElementById('action-btn-report').style.display = 'inline-block';
             
-            // Update save next label and change layout submission configurations
             document.getElementById('action-btn-savenext').innerText = "Next Question →";
-            document.getElementById('action-btn-submit').innerText = "Return to Exam Corner";
+            document.getElementById('action-btn-submit').innerText = "Return to Tutorial Corner";
             
-            // Snap back navigation to question 1 and refresh rendering window maps
             activeIndex = 0;
             renderExamWindow();
         }
