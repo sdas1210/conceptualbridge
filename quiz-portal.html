@@ -572,7 +572,7 @@
     </div>
     
     <div class="wizard-footer" id="step-footer-1">
-        <button class="btn-tcs btn-white" id="wizard-cancel-btn" onclick="window.location.href='exams.html'">← Go to Exam Corner</button>
+        <button class="btn-tcs btn-white" id="wizard-back-nav-btn" onclick="window.location.href='exams.html'">← Go to Tests</button>
         <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
     </div>
 
@@ -715,7 +715,7 @@
             </table>
 
             <div class="report-btn-stack">
-                <button class="btn-tcs btn-white" id="report-exit-btn" style="border:1px solid var(--tcs-border);" onclick="window.location.href='exams.html'">
+                <button class="btn-tcs btn-white" id="exit-dashboard-action-btn" style="border:1px solid var(--tcs-border);" onclick="window.location.href='exams.html'">
                     Return to Exam Corner
                 </button>
                 <button class="btn-tcs btn-blue" onclick="activateReviewMode()">
@@ -730,10 +730,8 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         
-        // Check if the user is routed from tutorials corner (?source=)
-        const sourceFile = urlParams.get('source');
-        
-        // Otherwise fallback to normal Exam Corner routes (?topic= & ?limit=)
+        // Dynamic Variable Route Identification Parameters
+        const sourceFile = urlParams.get('source'); // Active only if clicked from Tutorial section (?source=...)
         const activeTopic = urlParams.get('topic') || 'Mathematics';
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
@@ -747,19 +745,19 @@
         let timerEngine = null;
         let isReviewModeActive = false; 
 
-        // SMART SELECTION LAYER ENGINE
+        // SMART DUAL ROUTING LAYER DETECTOR
         async function initializeQuizEngine() {
             if (sourceFile) {
-                // RUN ROUTE B: Read directly from uploaded text files (Tutorial Mode)
-                await loadQuizFromTextFile(sourceFile);
+                // Tutorial 10Q Shuffled local parsing mode context
+                await parseTutorialTextFileMatrix(sourceFile);
             } else {
-                // RUN ROUTE A: Normal Exam Corner execution (No changes made)
-                await loadQuizFromExamAPI();
+                // Unchanged Exam Corner API logic mapping core functionality
+                await executeStandardExamCornerFetch();
             }
         }
 
-        // ORIGINAL EXAM ROUTINE ENGINE (UNCHANGED)
-        async function loadQuizFromExamAPI() {
+        // ORIGINAL ROUTE A: UNCHANGED EXAM CORNER WORKSPACE[cite: 6]
+        async function executeStandardExamCornerFetch() {
             try {
                 const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`);
                 if (!response.ok) { showMissingFileScreen(); return; }
@@ -769,87 +767,100 @@
 
                 if (targetQuestions.length > 0) {
                     examDataMatrix = targetQuestions;
-                    setupWorkspaceMetrics(activeTopic);
+                    setupGlobalExamMetrics(activeTopic);
                 } else { showMissingFileScreen(); }
             } catch (err) { showMissingFileScreen(); }
         }
 
-        // DYNAMIC TUTORIAL CONTEXT ENGINE (FOR MULTILINE BLOCKS LIKE 1.txt)
-        async function loadQuizFromTextFile(filePath) {
+        // NEW ROUTE B: FORGIVING BLOCK LEVEL AGGREGATOR PARSER FOR 1.TXT CHANNELS
+        async function parseTutorialTextFileMatrix(filePath) {
             try {
                 const response = await fetch(filePath);
                 if (!response.ok) { showMissingFileScreen(); return; }
 
                 const rawText = await response.text();
+                // Clean lines and isolate Windows carriage breaks safely
                 const lines = rawText.split('\n').map(l => l.trim());
 
                 let parsedList = [];
                 let currentBlock = null;
+                let activePropertyKey = null;
 
                 lines.forEach(line => {
                     if (!line) return;
-                    const pipeIdx = line.indexOf('|');
-                    
-                    if (pipeIdx === -1) {
-                        if (currentBlock && line.startsWith('/')) {
-                            currentBlock.text += ` ${line}`;
-                        }
-                        return;
-                    }
 
-                    const key = line.substring(0, pipeIdx).trim().toUpperCase();
-                    const value = line.substring(pipeIdx + 1).trim();
+                    // Automatically strip bracket formatting traces
+                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim();
+                    if (!cleanLine) return;
 
-                    if (key === 'Q') {
-                        currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'Tutorial Quiz', shift: '' };
-                    } else if (currentBlock) {
-                        if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
-                            currentBlock[key.toLowerCase()] = value;
-                        } else if (key === 'SHIFT') {
-                            currentBlock.shift = value;
-                        } else if (key === 'CORRECT') {
-                            const letter = value.toUpperCase();
-                            currentBlock.correct = letter.charCodeAt(0) - 65; // A->0, B->1...
-                            
-                            if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
-                                parsedList.push(currentBlock);
+                    const pipeIdx = cleanLine.indexOf('|');
+
+                    if (pipeIdx !== -1) {
+                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
+                        const value = cleanLine.substring(pipeIdx + 1).trim();
+
+                        if (key === 'Q') {
+                            activePropertyKey = 'text';
+                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Tutorial Series', shift: '' };
+                        } else if (currentBlock) {
+                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
+                                activePropertyKey = key.toLowerCase();
+                                currentBlock[activePropertyKey] = value;
+                            } else if (key === 'SHIFT') {
+                                activePropertyKey = null;
+                                currentBlock.shift = value;
+                            } else if (key === 'CORRECT') {
+                                activePropertyKey = null;
+                                const letter = value.toUpperCase();
+                                currentBlock.correct = letter.charCodeAt(0) - 65; // Matches A->0, B->1...
+                                
+                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
+                                    parsedList.push(currentBlock);
+                                }
                             }
+                        }
+                    } else {
+                        // Multi-line formatting fallback: Append strings to preceding active key targets
+                        if (currentBlock && activePropertyKey) {
+                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine;
                         }
                     }
                 });
 
                 if (parsedList.length > 0) {
-                    // Scramble questions and slice to 10
+                    // Randomize array matrix sequence using Fisher-Yates
                     for (let i = parsedList.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
                     }
+                    
+                    // Isolate exactly 10 questions max limit constraint parameter mappings
                     examDataMatrix = parsedList.slice(0, questionLimit);
-                    
-                    // Remap interface to Tutorial target buttons
-                    document.getElementById('wizard-cancel-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('wizard-cancel-btn').innerText = '← Go to Tutorials';
-                    document.getElementById('report-exit-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('report-exit-btn').innerText = 'Return to Tutorial Corner';
-                    
-                    setupWorkspaceMetrics('GACA Practice');
+
+                    // Re-route navigation cancel elements back to tutorials.html context seamlessly
+                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html';
+                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials';
+                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html';
+                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner';
+
+                    setupGlobalExamMetrics('GACA Short Assessment');
                 } else { showMissingFileScreen(); }
             } catch (err) { console.error(err); showMissingFileScreen(); }
         }
 
-        // COMPRESSED BOOTSTRAPPER METHOD
-        function setupWorkspaceMetrics(topicName) {
+        function setupGlobalExamMetrics(topicName) {
             selectedAnswers = new Array(examDataMatrix.length).fill(null);
             questionStates = new Array(examDataMatrix.length).fill(0);
             questionStates[0] = 1;
 
             let formattedSectionTitle = topicName;
-            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Practice') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
+            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
             else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE';
             else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE';
             else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS';
             
             document.getElementById('active-section-label').innerText = formattedSectionTitle;
+
             document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`;
             document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`;
             document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`;
