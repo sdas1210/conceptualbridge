@@ -1237,65 +1237,130 @@
             }); 
 
             if (isReviewModeActive) { 
-                if (userChoice === null) { 
+                const correctOptionText = getLocalizedText(optArray[correctChoice]);
+
+                if (userChoice === null) {
+            
                     feedbackContainer.innerHTML = `
-                        <div class="review-status-box wrong">
-                            <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
-                            <div class="databox-row">
-                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
-                            </div>
-                        </div>
-                    `; 
-                } else if (userChoice === correctChoice) { 
-                    feedbackContainer.innerHTML = `
-                        <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
-                    `; 
-                } else { 
+            
+            <div class="review-status-box">
+            
+                <div class="review-card pink">
+            
+                    <div class="review-card-title">
+                        ⚪ QUESTION NOT ATTEMPTED
+                    </div>
+            
+                    <div class="review-text">
+                        You did not attempt this question.
+                    </div>
+            
+                </div>
+            
+                <div class="review-card green">
+            
+                    <div class="review-card-title">
+                        ✅ CORRECT ANSWER
+                    </div>
+            
+                    <div class="review-option">
+                        Option ${String.fromCharCode(65 + correctChoice)}
+                    </div>
+            
+                    <div class="review-text">
+                        ${correctOptionText}
+                    </div>
+            
+                </div>
+            
+                ${renderLearnModule()}
+            
+            </div>
+            
+            `;
+            
+                }
+            
+                else if (userChoice === correctChoice) {
+            
                     const userOptionText = getLocalizedText(optArray[userChoice]);
-                    const correctOptionText = getLocalizedText(optArray[correctChoice]);
-                
+            
                     feedbackContainer.innerHTML = `
-                        <div class="review-status-box">
-                
-                            <div class="review-status-title">
-                                YOUR CHOICE WAS WRONG
-                            </div>
-                
-                            <div class="review-feedback-row">
-                
-                                <div class="review-feedback-card red">
-                
-                                    <div class="review-feedback-label">
-                                        Your Choice
-                                    </div>
-                
-                                    <div class="review-feedback-value">
-                                        <strong>Option ${String.fromCharCode(65 + userChoice)}</strong>
-                                        <br><br>
-                                        ${userOptionText}
-                                    </div>
-                
-                                </div>
-                
-                                <div class="review-feedback-card green">
-                
-                                    <div class="review-feedback-label">
-                                        Correct Choice
-                                    </div>
-                
-                                    <div class="review-feedback-value">
-                                        <strong>Option ${String.fromCharCode(65 + correctChoice)}</strong>
-                                        <br><br>
-                                        ${correctOptionText}
-                                    </div>
-                
-                                </div>
-                
-                            </div>
-                
-                        </div>
-                    `;
-                } 
+            
+            <div class="review-status-box">
+            
+                <div class="review-card blue">
+            
+                    <div class="review-card-title">
+                        ✅ YOUR SELECTED ANSWER IS CORRECT
+                    </div>
+            
+                    <div class="review-option">
+                        Option ${String.fromCharCode(65 + userChoice)}
+                    </div>
+            
+                    <div class="review-text">
+                        ${userOptionText}
+                    </div>
+            
+                </div>
+            
+                ${renderLearnModule()}
+            
+            </div>
+            
+            `;
+            
+                }
+            
+                else {
+            
+                    const userOptionText = getLocalizedText(optArray[userChoice]);
+            
+                    feedbackContainer.innerHTML = `
+            
+            <div class="review-status-box">
+            
+                <div class="review-card red">
+            
+                    <div class="review-card-title">
+                        ❌ YOUR SELECTED ANSWER
+                    </div>
+            
+                    <div class="review-option">
+                        Option ${String.fromCharCode(65 + userChoice)}
+                    </div>
+            
+                    <div class="review-text">
+                        ${userOptionText}
+                    </div>
+            
+                </div>
+            
+                <div class="review-card green">
+            
+                    <div class="review-card-title">
+                        ✅ CORRECT ANSWER
+                    </div>
+            
+                    <div class="review-option">
+                        Option ${String.fromCharCode(65 + correctChoice)}
+                    </div>
+            
+                    <div class="review-text">
+                        ${correctOptionText}
+                    </div>
+            
+                </div>
+            
+                ${renderLearnModule()}
+            
+            </div>
+            
+            `;
+            
+                }
+                //
             } 
             const questionContent = document.querySelector(".question-content");
 
@@ -1456,7 +1521,57 @@
             activeIndex = 0; 
             renderExamWindow(); 
         } 
+        function renderLearnModule(){
 
+        return `
+        
+        <div class="learn-card">
+        
+            <div class="learn-title">
+        
+                🦆 Learn this Concept
+        
+            </div>
+        
+            <button
+                class="learn-btn"
+                onclick="generateShortNote(${activeIndex})">
+        
+                Generate Short Note
+        
+            </button>
+        
+            <div
+                id="learn-output"
+                class="learn-placeholder">
+        
+                Click on <b>Generate Short Note</b> to receive
+                a concise explanation of this concept.
+        
+            </div>
+        
+        </div>
+        
+        `;
+        
+        }
+        function generateShortNote(questionIndex){
+
+            const holder=document.getElementById("learn-output");
+        
+            holder.innerHTML=`
+        
+        <b>Loading explanation...</b>
+        
+        <br><br>
+        
+        This placeholder will later be replaced with
+        DuckDuckGo AI generated notes.
+        
+        `;
+        
+        }
+        
         initializeQuizEngine(); 
     </script>
 </body>
