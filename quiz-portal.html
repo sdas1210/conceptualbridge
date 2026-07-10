@@ -171,38 +171,66 @@
 
         .option-row input { margin-right: 12px; transform: scale(1.2); }
 
-        .review-status-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        .review-status-box.right {
-            background-color: #dcfce7;
-            border: 1px solid #22c55e;
-            color: #15803d;
-        }
-        .review-status-box.wrong {
-            background-color: #fee2e2;
-            border: 1px solid #ef4444;
-            color: #b91c1c;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .databox-row {
-            display: flex;
-            gap: 20px;
-        }
-        .databox {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
+        /* ================= REVIEW FEEDBACK ================= */
 
+        .review-status-box{
+            margin-top:20px;
+            padding:18px;
+            border-radius:8px;
+            border:1px solid #ef4444;
+            background:#fff5f5;
+        }
+        
+        .review-status-title{
+            font-size:18px;
+            font-weight:700;
+            margin-bottom:18px;
+            color:#b91c1c;
+            text-transform:uppercase;
+        }
+        
+        .review-feedback-row{
+            display:flex;
+            gap:18px;
+        }
+        
+        .review-feedback-card{
+            flex:1;
+            padding:18px;
+            border-radius:8px;
+            box-sizing:border-box;
+        }
+        
+        .review-feedback-card.red{
+            background:#fef2f2;
+            border:2px solid #ef4444;
+        }
+        
+        .review-feedback-card.green{
+            background:#f0fdf4;
+            border:2px solid #22c55e;
+        }
+        
+        .review-feedback-label{
+            font-size:16px;
+            font-weight:700;
+            margin-bottom:10px;
+        }
+        
+        .review-feedback-card.red .review-feedback-label{
+            color:#b91c1c;
+        }
+        
+        .review-feedback-card.green .review-feedback-label{
+            color:#166534;
+        }
+        
+        .review-feedback-value{
+            font-size:18px;
+            color:#111827;
+            font-weight:500;
+        }
+        
         .meta-bottom-right {
             position: absolute;
             bottom: 10px;
