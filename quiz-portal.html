@@ -932,17 +932,19 @@
             const wordCount = textContent.split(/\s+/).filter(w => w.length > 0).length;
             if (wordCount > 100) { alert(`Your explanation is too long (${wordCount} words). Please restrict your response to less than 100 words.`); return; }
 
+            // Package the data exactly how the API expects it
             const reportPayload = {
                 concern: textContent,
-                activeSourceFile: sourceFile || 'Exam API Route',
+                activeSourceFile: sourceFile || 'Official Exam API Route',
                 questionIndex: activeIndex + 1,
                 rawQuestionContent: examDataMatrix[activeIndex].text
             };
 
-            // FIXED: Executes live POST pipeline to trigger Vercel logging framework arrays
+            // Force a clean network submit request to the backend script
             fetch('/api/submit-report', {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(reportPayload)
@@ -951,13 +953,13 @@
                 if (response.ok) {
                     alert("Thank you! Your concern has been submitted safely to the server.");
                 } else {
-                    alert("Report package processed internally, but sync node threw a routing mismatch response.");
+                    alert("The server received the message but could not write the log line.");
                 }
                 closeConcernReportModal();
             })
             .catch(err => {
-                console.error("Network sync route missing exception:", err);
-                alert("Connection pipeline timeout. Report captured locally on console stream matrices.");
+                console.error("Network routing error:", err);
+                alert("Connection error. Could not reach the server API.");
                 closeConcernReportModal();
             });
         }
