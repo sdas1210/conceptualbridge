@@ -972,14 +972,21 @@
             });
         }
 
-        function checkInstructionScrollProgress() {
+       function checkInstructionScrollProgress() {
             const container = document.getElementById('instruction-scroll-pane');
             const nextButton = document.getElementById('instruction-next-action-btn');
             
             const totalScrollHeight = container.scrollHeight;
             const currentPosition = container.scrollTop + container.clientHeight;
             
-            if (totalScrollHeight - currentPosition <= 10) { 
+            // 1. Calculate how close they are to the absolute mathematical bottom
+            const distanceToBottom = totalScrollHeight - currentPosition;
+            
+            // 2. Calculate percentage scrolled as a bulletproof backup fallback
+            const scrollPercentage = (currentPosition / totalScrollHeight) * 100;
+            
+            // Unlocks if they are within 25px of the end OR have scrolled past 85% of instructions text
+            if (distanceToBottom <= 25 || scrollPercentage >= 85) { 
                 nextButton.disabled = false; 
             }
         }
