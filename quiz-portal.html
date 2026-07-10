@@ -82,13 +82,12 @@
             overflow: hidden;
         }
 
-        .question-panel {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            border-right: 1px solid var(--tcs-border);
-            position: relative;
+        .question-panel{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+        min-height:0;
         }
 
         .question-header {
@@ -114,12 +113,23 @@
             outline: none;
         }
 
-        .question-content {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
-            position: relative;
-            padding-bottom: 50px;
+        .question-content{
+            flex:1;
+            overflow-y:auto;
+            overflow-x:hidden;
+        
+            position:relative;
+        
+            padding:25px;
+            padding-bottom:120px;
+        
+            min-height:0;
+        
+            z-index:1;
+        
+            scroll-behavior:smooth;
+        
+            -webkit-overflow-scrolling:touch;
         }
 
         .options-container {
@@ -207,12 +217,23 @@
             pointer-events: none;
         }
 
-        .action-tray {
-            padding: 15px 25px;
-            border-top: 1px solid var(--tcs-border);
-            background-color: #f3f4f6;
-            display: flex;
-            justify-content: space-between;
+        .action-tray{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        
+            padding:15px 25px;
+        
+            background:#f3f4f6;
+        
+            border-top:1px solid var(--tcs-border);
+        
+            position:sticky;
+            bottom:0;
+        
+            z-index:999;
+        
+            flex-shrink:0;
         }
 
         .btn-tcs {
@@ -1115,7 +1136,11 @@
                     `; 
                 } 
             } 
+            const questionContent = document.querySelector(".question-content");
 
+            if (questionContent) {
+                questionContent.scrollTop = 0;
+            }
             renderPaletteGrid(); 
         } 
 
