@@ -181,6 +181,18 @@
             flex-direction: column;
             gap: 8px;
         }
+
+        /* NEW DOUBLE CONTAINER LAYOUT CLASSES: Correct position box styling schema */
+        .review-status-box.correct-answer-display {
+            margin-top: 10px;
+            background-color: #dcfce7;
+            border: 1px solid #22c55e;
+            color: #15803d;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .databox-row {
             display: flex;
             gap: 20px;
@@ -254,7 +266,7 @@
             height: 50px;
             background: #cbd5e1;
             border-radius: 4px;
-            display: flex;
+            display: center;
             justify-content: center;
             align-items: center;
             font-size: 1.5rem;
@@ -670,7 +682,7 @@
                 <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
             </div>
             <div class="footer-col-center">
-                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
+                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamWorkspace()">I am ready to begin</button>
             </div>
             <div class="footer-col-right"></div>
         </div>
@@ -807,6 +819,12 @@
         let isReviewModeActive = false; 
 
         async function initializeQuizEngine() {
+            // BACKGROUND FORCE-UNLOCK UNBLOCK SAFEGUARD ROUTINE
+            // Instantly unlocks the navigation pane after 3 seconds to avoid sticky scroll issues
+            setTimeout(() => {
+                document.getElementById('instruction-next-action-btn').disabled = false;
+            }, 3000);
+
             if (sourceFile) {
                 await parseTutorialTextFileMatrix(sourceFile); 
             } else {
@@ -967,7 +985,11 @@
             const nextButton = document.getElementById('instruction-next-action-btn'); 
             const totalScrollHeight = container.scrollHeight; 
             const currentPosition = container.scrollTop + container.clientHeight; 
-            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
+            
+            // BULLETPROOF VIEWPORT CHECK: Activates if scrolled to bottom OR if layouts bounds fit view without a scrollbar
+            if (totalScrollHeight - currentPosition <= 15 || totalScrollHeight <= container.clientHeight) { 
+                nextButton.disabled = false; 
+            } 
         }
 
         function goToWizardStageTwo() { 
@@ -989,7 +1011,7 @@
             document.getElementById('ready-begin-action-btn').disabled = !isChecked; 
         }
 
-        function launchExamMatrixWorkspace() { 
+        function launchExamWorkspace() { 
             currentLanguage = document.getElementById('wizard-lang-dropdown').value; 
             document.getElementById('view-lang-select').value = currentLanguage; 
             document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
