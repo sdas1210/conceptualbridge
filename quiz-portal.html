@@ -915,7 +915,7 @@
             document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; //
         }
 
-        // NEW REPORT POPUP ACTIVATION ROUTINES
+        // UPDATED REPORT OVERLAY TRIGGER SYNCING DIRECTLY WITH BACKEND
         function openConcernReportModal() {
             document.getElementById('concern-text-field').value = '';
             document.getElementById('concern-modal-node').style.display = 'flex';
@@ -929,11 +929,9 @@
             const textContent = document.getElementById('concern-text-field').value.trim();
             if (!textContent) { alert("Please type your concern before submitting."); return; }
 
-            // Split content space array lengths metric filter validation
             const wordCount = textContent.split(/\s+/).filter(w => w.length > 0).length;
             if (wordCount > 100) { alert(`Your explanation is too long (${wordCount} words). Please restrict your response to less than 100 words.`); return; }
 
-            // Dynamic payload bundle setup tracking parameters for late logging
             const reportPayload = {
                 concern: textContent,
                 activeSourceFile: sourceFile || 'Exam API Route',
@@ -941,9 +939,27 @@
                 rawQuestionContent: examDataMatrix[activeIndex].text
             };
 
-            console.log("Concern Report log registered safely:", reportPayload);
-            alert("Thank you! Your concern has been captured successfully. Question line mapping metrics will load next.");
-            closeConcernReportModal();
+            // FIXED: Executes live POST pipeline to trigger Vercel logging framework arrays
+            fetch('/api/submit-report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reportPayload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Thank you! Your concern has been submitted safely to the server.");
+                } else {
+                    alert("Report package processed internally, but sync node threw a routing mismatch response.");
+                }
+                closeConcernReportModal();
+            })
+            .catch(err => {
+                console.error("Network sync route missing exception:", err);
+                alert("Connection pipeline timeout. Report captured locally on console stream matrices.");
+                closeConcernReportModal();
+            });
         }
 
         function checkInstructionScrollProgress() { //
