@@ -13,7 +13,6 @@
             --status-not-answered: #ef4444;
             --status-answered: #22c55e;
             --status-review: #a855f7;
-            /* CHANGED VALUE LAYOUT STYLE: Dedicated orange color tone indicator configuration */
             --status-wrong: #ed8936; 
         }
 
@@ -181,6 +180,18 @@
             flex-direction: column;
             gap: 8px;
         }
+        
+        /* NEW STYLING INTERFACE BLOCK FOR DUAL SEGMENT REVIEW CODES */
+        .review-status-box.correct-answer-display {
+            margin-top: 10px;
+            background-color: #dcfce7;
+            border: 1px solid #22c55e;
+            color: #15803d;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
         .databox-row {
             display: flex;
             gap: 20px;
@@ -296,7 +307,6 @@
         .state-1 { background-color: var(--status-not-answered); color: white; border-radius: 50% 50% 0 0; }
         .state-2 { background-color: var(--status-answered); color: white; border-radius: 0 0 50% 50%; }
         .state-3 { background-color: var(--status-review); color: white; border-radius: 50%; }
-        /* NEW VALUE CLASS: Wrongly answered visual cell styling configuration mapped to Orange */
         .state-wrong-review { background-color: var(--status-wrong) !important; color: white !important; border-radius: 0 0 50% 50%; }
 
         .active-cell { box-shadow: 0 0 0 3px #3b82f6; }
@@ -844,7 +854,7 @@
                 lines.forEach(line => {
                     if (!line) return; 
 
-                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim(); 
+                    let cleanLine = line.replace(/\/gi, '').trim(); 
                     if (!cleanLine) return; 
 
                     const pipeIdx = cleanLine.indexOf('|'); 
@@ -962,12 +972,16 @@
             });
         }
 
-        function checkInstructionScrollProgress() { 
-            const container = document.getElementById('instruction-scroll-pane'); 
-            const nextButton = document.getElementById('instruction-next-action-btn'); 
-            const totalScrollHeight = container.scrollHeight; 
-            const currentPosition = container.scrollTop + container.clientHeight; 
-            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
+        function checkInstructionScrollProgress() {
+            const container = document.getElementById('instruction-scroll-pane');
+            const nextButton = document.getElementById('instruction-next-action-btn');
+            
+            const totalScrollHeight = container.scrollHeight;
+            const currentPosition = container.scrollTop + container.clientHeight;
+            
+            if (totalScrollHeight - currentPosition <= 10) { 
+                nextButton.disabled = false; 
+            }
         }
 
         function goToWizardStageTwo() { 
@@ -1094,8 +1108,11 @@
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
+                        </div>
+                        <div class="review-status-box correct-answer-display">
+                            <div>The Correct Answer Will Be</div>
                             <div class="databox-row">
-                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
                             </div>
                         </div>
                     `; 
@@ -1104,12 +1121,18 @@
                         <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
                     `; 
                 } else { 
+                    /* SPLIT COMPONENT WRAPPER: Separates layout nodes precisely with explicit labels and green display databox properties */
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOUR CHOICE WAS WRONG</div>
                             <div class="databox-row">
-                                <div class="databox"><strong>Your Choice:</strong> Option ${String.fromCharCode(65 + userChoice)}</div>
-                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
+                                <div class="databox"><strong>Your Choice:</strong> Option ${String.fromCharCode(65 + userChoice)} : ${getLocalizedText(optArray[userChoice])}</div>
+                            </div>
+                        </div>
+                        <div class="review-status-box correct-answer-display">
+                            <div>The Correct Answer Will Be</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
                             </div>
                         </div>
                     `; 
@@ -1166,7 +1189,6 @@
             renderExamWindow(); 
         } 
 
-        // UPDATED METHOD: Processes orange palette cell transitions dynamically during review matrix checks
         function renderPaletteGrid() { 
             const grid = document.getElementById('palette-grid-holder'); 
             grid.innerHTML = ''; 
@@ -1180,7 +1202,7 @@
                     const officialCorrectAnswer = examDataMatrix[idx].correct;
 
                     if (userSelection !== officialCorrectAnswer) {
-                        computedStateClass = 'state-wrong-review'; // Injects orange cell background formatting parameters
+                        computedStateClass = 'state-wrong-review'; 
                     }
                 }
 
@@ -1258,14 +1280,15 @@
             
             document.getElementById('legend-lbl-answered').innerText = "Correctly Answered";
             
-            // UPDATED: Injects the dynamic legend row badge targeting the orange coloring theme profile
             const targetLegendBox = document.getElementById('legend-box-container');
-            const wrongAnswerRowHtml = `
-                <div class="legend-item" id="dynamic-wrongly-answered-row">
-                    <span class="legend-badge" style="background:var(--status-wrong);"></span> Wrongly Answered
-                </div>
-            `;
-            targetLegendBox.insertAdjacentHTML('beforeend', wrongAnswerRowHtml);
+            if(!document.getElementById('dynamic-wrongly-answered-row')) {
+                const wrongAnswerRowHtml = `
+                    <div class="legend-item" id="dynamic-wrongly-answered-row">
+                        <span class="legend-badge" style="background:var(--status-wrong);"></span> Wrongly Answered
+                    </div>
+                `;
+                targetLegendBox.insertAdjacentHTML('beforeend', wrongAnswerRowHtml);
+            }
 
             activeIndex = 0; 
             renderExamWindow(); 
