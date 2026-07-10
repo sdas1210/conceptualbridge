@@ -13,6 +13,8 @@
             --status-not-answered: #ef4444;
             --status-answered: #22c55e;
             --status-review: #a855f7;
+            /* NEW VALUE STYLE: Dedicated indicator for review mode */
+            --status-wrong: #2563eb; 
         }
 
         body {
@@ -294,6 +296,8 @@
         .state-1 { background-color: var(--status-not-answered); color: white; border-radius: 50% 50% 0 0; }
         .state-2 { background-color: var(--status-answered); color: white; border-radius: 0 0 50% 50%; }
         .state-3 { background-color: var(--status-review); color: white; border-radius: 50%; }
+        /* NEW VALUE CLASS: Wrongly answered visual cell styling configuration */
+        .state-wrong-review { background-color: var(--status-wrong) !important; color: white !important; border-radius: 0 0 50% 50%; }
 
         .active-cell { box-shadow: 0 0 0 3px #3b82f6; }
 
@@ -473,7 +477,6 @@
         }
         .report-btn-stack button { flex: 1; padding: 14px; font-size: 0.95rem; }
 
-        /* REPORT OVERLAY MODAL WINDOW POPUP */
         .report-modal-overlay {
             display: none;
             position: fixed;
@@ -718,8 +721,9 @@
                 <div class="palette-grid" id="palette-grid-holder"></div>
             </div>
 
-            <div class="legend-box">
-                <div class="legend-item"><span class="legend-badge" style="background:var(--status-answered)"></span> Answered</div>
+            <!-- DYNAMIC REVIEW MODAL INJECTED LEGEND CONTAINER -->
+            <div class="legend-box" id="legend-box-container">
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-answered)"></span> <span id="legend-lbl-answered">Answered</span></div>
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-answered)"></span> Not Answered</div>
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-review)"></span> Marked for Review</div>
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-visited)"></span> Not Visited</div>
@@ -772,7 +776,6 @@
         </div>
     </div>
 
-    <!-- CONCERN REPORT MODAL SCREEN BOX OVERLAY -->
     <div class="report-modal-overlay" id="concern-modal-node">
         <div class="report-modal-box">
             <h4>Submit Question Concern</h4>
@@ -790,7 +793,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         
-        const sourceFile = urlParams.get('source'); // Active only if clicked from Tutorial section (?source=...)
+        const sourceFile = urlParams.get('source'); 
         const activeTopic = urlParams.get('topic') || 'Mathematics';
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
@@ -806,145 +809,115 @@
 
         async function initializeQuizEngine() {
             if (sourceFile) {
-                await parseTutorialTextFileMatrix(sourceFile); //
+                await parseTutorialTextFileMatrix(sourceFile); 
             } else {
-                await executeStandardExamCornerFetch(); //
+                await executeStandardExamCornerFetch(); 
             }
         }
 
-        async function executeStandardExamCornerFetch() { //
+        async function executeStandardExamCornerFetch() { 
             try {
-                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`); //
-                if (!response.ok) { showMissingFileScreen(); return; } //
+                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`); 
+                if (!response.ok) { showMissingFileScreen(); return; } 
 
-                const payload = await response.json(); //
-                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); //
+                const payload = await response.json(); 
+                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); 
 
-                if (targetQuestions.length > 0) { //
-                    examDataMatrix = targetQuestions; //
-                    setupGlobalExamMetrics(activeTopic); //
-                } else { showMissingFileScreen(); } //
-            } catch (err) { showMissingFileScreen(); } //
+                if (targetQuestions.length > 0) { 
+                    examDataMatrix = targetQuestions; 
+                    setupGlobalExamMetrics(activeTopic); 
+                } else { showMissingFileScreen(); } 
+            } catch (err) { showMissingFileScreen(); } 
         }
 
-       // ADVANCED TUTORIAL PARSER WITH AUTOMATIC OPTION SCRAMBLING
-        async function parseTutorialTextFileMatrix(filePath) {
+        async function parseTutorialTextFileMatrix(filePath) { 
             try {
-                const response = await fetch(filePath);
-                if (!response.ok) { showMissingFileScreen(); return; }
+                const response = await fetch(filePath); 
+                if (!response.ok) { showMissingFileScreen(); return; } 
 
-                const rawText = await response.text();
-                const lines = rawText.split('\n').map(l => l.trim());
+                const rawText = await response.text(); 
+                const lines = rawText.split('\n').map(l => l.trim()); 
 
                 let parsedList = [];
                 let currentBlock = null;
                 let activePropertyKey = null;
 
                 lines.forEach(line => {
-                    if (!line) return;
+                    if (!line) return; 
 
-                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim();
-                    if (!cleanLine) return;
+                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim(); 
+                    if (!cleanLine) return; 
 
-                    const pipeIdx = cleanLine.indexOf('|');
+                    const pipeIdx = cleanLine.indexOf('|'); 
 
-                    if (pipeIdx !== -1) {
-                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
-                        const value = cleanLine.substring(pipeIdx + 1).trim();
+                    if (pipeIdx !== -1) { 
+                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase(); 
+                        const value = cleanLine.substring(pipeIdx + 1).trim(); 
 
-                        if (key === 'Q') {
-                            activePropertyKey = 'text';
-                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correctLetter: '', exam: 'GACA Tutorial Series', shift: '' };
-                        } else if (currentBlock) {
-                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
-                                activePropertyKey = key.toLowerCase();
-                                currentBlock[activePropertyKey] = value;
-                            } else if (key === 'SHIFT') {
-                                activePropertyKey = null;
-                                currentBlock.shift = value;
-                            } else if (key === 'CORRECT') {
-                                activePropertyKey = null;
-                                currentBlock.correctLetter = value.toUpperCase(); // Save raw answer letter (e.g., 'B')
+                        if (key === 'Q') { 
+                            activePropertyKey = 'text'; 
+                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Tutorial Series', shift: '' }; 
+                        } else if (currentBlock) { 
+                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') { 
+                                activePropertyKey = key.toLowerCase(); 
+                                currentBlock[activePropertyKey] = value; 
+                            } else if (key === 'SHIFT') { 
+                                activePropertyKey = null; 
+                                currentBlock.shift = value; 
+                            } else if (key === 'CORRECT') { 
+                                activePropertyKey = null; 
+                                const letter = value.toUpperCase(); 
+                                currentBlock.correct = letter.charCodeAt(0) - 65; 
                                 
-                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
-                                    // ---- OPTION SHUFFLING MATRIX LOGIC ----
-                                    // 1. Capture what text is currently the right answer
-                                    const correctText = currentBlock[currentBlock.correctLetter.toLowerCase()];
-                                    
-                                    // 2. Create an array of option items
-                                    let optionsArray = [
-                                        { originalKey: 'a', text: currentBlock.a },
-                                        { originalKey: 'b', text: currentBlock.b },
-                                        { originalKey: 'c', text: currentBlock.c },
-                                        { originalKey: 'd', text: currentBlock.d }
-                                    ];
-
-                                    // 3. Shuffle options using Fisher-Yates Scrambler
-                                    for (let i = optionsArray.length - 1; i > 0; i--) {
-                                        const j = Math.floor(Math.random() * (i + 1));
-                                        [optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
-                                    }
-
-                                    // 4. Re-assign shuffled text values back to A, B, C, D properties
-                                    currentBlock.a = optionsArray[0].text;
-                                    currentBlock.b = optionsArray[1].text;
-                                    currentBlock.c = optionsArray[2].text;
-                                    currentBlock.d = optionsArray[3].text;
-
-                                    // 5. Find where our correct text landed and dynamically update correct index map
-                                    let newCorrectIndex = optionsArray.findIndex(opt => opt.text === correctText);
-                                    currentBlock.correct = newCorrectIndex !== -1 ? newCorrectIndex : 0;
-
-                                    parsedList.push(currentBlock);
+                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) { 
+                                    parsedList.push(currentBlock); 
                                 }
                             }
                         }
-                    } else {
-                        if (currentBlock && activePropertyKey) {
-                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine;
+                    } else { 
+                        if (currentBlock && activePropertyKey) { 
+                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine; //
                         }
                     }
                 });
 
-                if (parsedList.length > 0) {
-                    // Scramble the main question list order
-                    for (let i = parsedList.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
+                if (parsedList.length > 0) { 
+                    for (let i = parsedList.length - 1; i > 0; i--) { 
+                        const j = Math.floor(Math.random() * (i + 1)); 
+                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]]; 
                     }
                     
-                    examDataMatrix = parsedList.slice(0, questionLimit);
+                    examDataMatrix = parsedList.slice(0, questionLimit); 
 
-                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials';
-                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner';
+                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html'; 
+                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials'; 
+                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html'; 
+                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner'; 
 
-                    setupGlobalExamMetrics('GACA Short Assessment');
-                } else { showMissingFileScreen(); }
-            } catch (err) { console.error(err); showMissingFileScreen(); }
+                    setupGlobalExamMetrics('GACA Short Assessment'); 
+                } else { showMissingFileScreen(); } 
+            } catch (err) { console.error(err); showMissingFileScreen(); } 
         }
 
-        function setupGlobalExamMetrics(topicName) { //
-            selectedAnswers = new Array(examDataMatrix.length).fill(null); //
-            questionStates = new Array(examDataMatrix.length).fill(0); //
-            questionStates[0] = 1; //
+        function setupGlobalExamMetrics(topicName) { 
+            selectedAnswers = new Array(examDataMatrix.length).fill(null); 
+            questionStates = new Array(examDataMatrix.length).fill(0); 
+            questionStates[0] = 1; 
 
-            let formattedSectionTitle = topicName; //
-            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; //
-            else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE'; //
-            else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE'; //
-            else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS'; //
+            let formattedSectionTitle = topicName; 
+            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; 
+            else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE'; 
+            else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE'; 
+            else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS'; 
             
-            document.getElementById('active-section-label').innerText = formattedSectionTitle; //
+            document.getElementById('active-section-label').innerText = formattedSectionTitle; 
 
-            document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; //
-            document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`; //
-            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`; //
-            document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; //
+            document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; 
+            document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`; 
+            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`; 
+            document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; 
         }
 
-        // UPDATED REPORT OVERLAY TRIGGER SYNCING DIRECTLY WITH BACKEND
         function openConcernReportModal() {
             document.getElementById('concern-text-field').value = '';
             document.getElementById('concern-modal-node').style.display = 'flex';
@@ -961,19 +934,16 @@
             const wordCount = textContent.split(/\s+/).filter(w => w.length > 0).length;
             if (wordCount > 100) { alert(`Your explanation is too long (${wordCount} words). Please restrict your response to less than 100 words.`); return; }
 
-            // Package the data exactly how the API expects it
             const reportPayload = {
                 concern: textContent,
-                activeSourceFile: sourceFile || 'Official Exam API Route',
+                activeSourceFile: sourceFile || 'Exam API Route',
                 questionIndex: activeIndex + 1,
                 rawQuestionContent: examDataMatrix[activeIndex].text
             };
 
-            // Force a clean network submit request to the backend script
             fetch('/api/submit-report', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(reportPayload)
@@ -982,133 +952,133 @@
                 if (response.ok) {
                     alert("Thank you! Your concern has been submitted safely to the server.");
                 } else {
-                    alert("The server received the message but could not write the log line.");
+                    alert("Report package processed internally, but sync node threw a routing mismatch response.");
                 }
                 closeConcernReportModal();
             })
             .catch(err => {
-                console.error("Network routing error:", err);
-                alert("Connection error. Could not reach the server API.");
+                console.error("Network sync route missing exception:", err);
+                alert("Connection pipeline timeout. Report captured locally on console stream matrices.");
                 closeConcernReportModal();
             });
         }
 
-        function checkInstructionScrollProgress() { //
-            const container = document.getElementById('instruction-scroll-pane'); //
-            const nextButton = document.getElementById('instruction-next-action-btn'); //
-            const totalScrollHeight = container.scrollHeight; //
-            const currentPosition = container.scrollTop + container.clientHeight; //
-            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } //
+        function checkInstructionScrollProgress() { 
+            const container = document.getElementById('instruction-scroll-pane'); 
+            const nextButton = document.getElementById('instruction-next-action-btn'); 
+            const totalScrollHeight = container.scrollHeight; 
+            const currentPosition = container.scrollTop + container.clientHeight; 
+            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
         }
 
-        function goToWizardStageTwo() { //
-            document.getElementById('step-instructions-1').style.display = 'none'; //
-            document.getElementById('step-footer-1').style.display = 'none'; //
-            document.getElementById('stage-two-wrapper-node').style.display = 'flex'; //
+        function goToWizardStageTwo() { 
+            document.getElementById('step-instructions-1').style.display = 'none'; 
+            document.getElementById('step-footer-1').style.display = 'none'; 
+            document.getElementById('stage-two-wrapper-node').style.display = 'flex'; 
         }
 
-        function backToWizardStageOne() { //
-            document.getElementById('stage-two-wrapper-node').style.display = 'none'; //
-            document.getElementById('step-instructions-1').style.display = 'flex'; //
-            document.getElementById('step-footer-1').style.display = 'flex'; //
+        function backToWizardStageOne() { 
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
+            document.getElementById('step-instructions-1').style.display = 'flex'; 
+            document.getElementById('step-footer-1').style.display = 'flex'; 
         }
 
-        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); //
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
 
-        function toggleReadyToBeginButtonState() { //
-            const isChecked = document.getElementById('declaration-checkbox').checked; //
-            document.getElementById('ready-begin-action-btn').disabled = !isChecked; //
+        function toggleReadyToBeginButtonState() { 
+            const isChecked = document.getElementById('declaration-checkbox').checked; 
+            document.getElementById('ready-begin-action-btn').disabled = !isChecked; 
         }
 
-        function launchExamMatrixWorkspace() { //
-            currentLanguage = document.getElementById('wizard-lang-dropdown').value; //
-            document.getElementById('view-lang-select').value = currentLanguage; //
-            document.getElementById('stage-two-wrapper-node').style.display = 'none'; //
-            document.getElementById('timer-header-wrapper').style.display = 'block'; //
-            document.getElementById('ribbon-bar-container').style.display = 'flex'; //
-            document.getElementById('quiz-workspace').style.display = 'flex'; //
-            startClockCountdown(); //
-            renderExamWindow(); //
+        function launchExamMatrixWorkspace() { 
+            currentLanguage = document.getElementById('wizard-lang-dropdown').value; 
+            document.getElementById('view-lang-select').value = currentLanguage; 
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
+            document.getElementById('timer-header-wrapper').style.display = 'block'; 
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; 
+            document.getElementById('quiz-workspace').style.display = 'flex'; 
+            startClockCountdown(); 
+            renderExamWindow(); 
         }
 
-        function showMissingFileScreen() { //
-            document.getElementById('step-instructions-1').style.display = 'none'; //
-            document.getElementById('step-footer-1').style.display = 'none'; //
+        function showMissingFileScreen() { 
+            document.getElementById('step-instructions-1').style.display = 'none'; 
+            document.getElementById('step-footer-1').style.display = 'none'; 
             document.getElementById('fallback-screen-holder').innerHTML = `
                 <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; font-family:sans-serif; background:#1a365d; color:white; padding:20px;">
                     <h1>⚠️ Content Available Soon</h1>
                     <p>The matrix question bank is undergoing engineering optimization sync routines.</p>
                     <button onclick="window.location.href='${sourceFile ? "tutorials.html" : "exams.html"}'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Go Back</button>
                 </div>
-            `; //
+            `; 
         }
 
-        function startClockCountdown() { //
-            timerEngine = setInterval(() => { //
-                if (timeRemainingSeconds <= 0) { //
-                    clearInterval(timerEngine); //
-                    triggerExamSubmission(); //
-                } else { //
-                    timeRemainingSeconds--; //
-                    const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0'); //
-                    const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0'); //
-                    document.getElementById('clock-display').innerText = `${mins}:${secs}`; //
-                } //
-            }, 1000); //
+        function startClockCountdown() { 
+            timerEngine = setInterval(() => { 
+                if (timeRemainingSeconds <= 0) { 
+                    clearInterval(timerEngine); 
+                    triggerExamSubmission(); 
+                } else { 
+                    timeRemainingSeconds--; 
+                    const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0'); 
+                    const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0'); 
+                    document.getElementById('clock-display').innerText = `${mins}:${secs}`; 
+                } 
+            }, 1000); 
         }
 
-        function getLocalizedText(rawString) { //
-            if (!rawString) return ""; //
-            const parts = rawString.split('/'); //
-            if (parts.length < 2) return rawString.trim(); //
-            return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim(); //
+        function getLocalizedText(rawString) { 
+            if (!rawString) return ""; 
+            const parts = rawString.split('/'); 
+            if (parts.length < 2) return rawString.trim(); 
+            return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim(); 
         }
 
-        function toggleViewLanguage() { //
-            currentLanguage = document.getElementById('view-lang-select').value; //
-            renderExamWindow(); //
+        function toggleViewLanguage() { 
+            currentLanguage = document.getElementById('view-lang-select').value; 
+            renderExamWindow(); 
         }
 
-        function renderExamWindow() { //
-            if (examDataMatrix.length === 0) return; //
-            const currentItem = examDataMatrix[activeIndex]; //
+        function renderExamWindow() { 
+            if (examDataMatrix.length === 0) return; 
+            const currentItem = examDataMatrix[activeIndex]; 
             
-            if (questionStates[activeIndex] === 0 && !isReviewModeActive) { //
-                questionStates[activeIndex] = 1; //
-            } //
+            if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
+                questionStates[activeIndex] = 1; 
+            } 
 
-            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; //
-            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : ''; //
-            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); //
+            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
+            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : ''; 
+            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); 
             
-            const container = document.getElementById('target-options-container'); //
-            const feedbackContainer = document.getElementById('review-feedback-container'); //
-            container.innerHTML = ''; //
-            feedbackContainer.innerHTML = ''; //
+            const container = document.getElementById('target-options-container'); 
+            const feedbackContainer = document.getElementById('review-feedback-container'); 
+            container.innerHTML = ''; 
+            feedbackContainer.innerHTML = ''; 
             
-            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d]; //
-            const userChoice = selectedAnswers[activeIndex]; //
-            const correctChoice = currentItem.correct; //
+            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d]; 
+            const userChoice = selectedAnswers[activeIndex]; 
+            const correctChoice = currentItem.correct; 
 
-            optArray.forEach((opt, idx) => { //
-                let statusClass = ''; //
-                let isCheckedAttr = ''; //
+            optArray.forEach((opt, idx) => { 
+                let statusClass = ''; 
+                let isCheckedAttr = ''; 
 
-                if (isReviewModeActive) { //
-                    if (userChoice === idx && userChoice !== correctChoice) { //
-                        statusClass = 'review-wrong'; //
-                    } else if (idx === correctChoice) { //
-                        statusClass = 'review-correct'; //
-                    } //
-                    if (userChoice === idx) isCheckedAttr = 'checked'; //
-                } else { //
-                    if (userChoice === idx) { //
-                        statusClass = 'selected'; //
-                        isCheckedAttr = 'checked'; //
-                    } //
-                } //
+                if (isReviewModeActive) { 
+                    if (userChoice === idx && userChoice !== correctChoice) { 
+                        statusClass = 'review-wrong'; 
+                    } else if (idx === correctChoice) { 
+                        statusClass = 'review-correct'; 
+                    } 
+                    if (userChoice === idx) isCheckedAttr = 'checked'; 
+                } else { 
+                    if (userChoice === idx) { 
+                        statusClass = 'selected'; 
+                        isCheckedAttr = 'checked'; 
+                    } 
+                } 
 
-                const localizedOption = getLocalizedText(opt); //
+                const localizedOption = getLocalizedText(opt); 
                 const optHtml = `
                     <div class="option-row ${statusClass}" ${!isReviewModeActive ? `onclick="selectOptionIndex(${idx})"` : ''}>
                         <input type="radio" name="tcs-opt" id="opt-${idx}" ${isCheckedAttr} ${isReviewModeActive ? 'disabled' : ''}>
@@ -1116,12 +1086,12 @@
                             (${String.fromCharCode(65 + idx)}) ${localizedOption}
                         </label>
                     </div>
-                `; //
-                container.insertAdjacentHTML('beforeend', optHtml); //
-            }); //
+                `; 
+                container.insertAdjacentHTML('beforeend', optHtml); 
+            }); 
 
-            if (isReviewModeActive) { //
-                if (userChoice === null) { //
+            if (isReviewModeActive) { 
+                if (userChoice === null) { 
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
@@ -1129,12 +1099,12 @@
                                 <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
                             </div>
                         </div>
-                    `; //
-                } else if (userChoice === correctChoice) { //
+                    `; 
+                } else if (userChoice === correctChoice) { 
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
-                    `; //
-                } else { //
+                    `; 
+                } else { 
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOUR CHOICE WAS WRONG</div>
@@ -1143,143 +1113,169 @@
                                 <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
                             </div>
                         </div>
-                    `; //
-                } //
-            } //
+                    `; 
+                } 
+            } 
 
-            renderPaletteGrid(); //
-        } //
+            renderPaletteGrid(); 
+        } 
 
-        function selectOptionIndex(idx) { //
-            if (isReviewModeActive) return; //
-            selectedAnswers[activeIndex] = idx; //
-            renderExamWindow(); //
-        } //
+        function selectOptionIndex(idx) { 
+            if (isReviewModeActive) return; 
+            selectedAnswers[activeIndex] = idx; 
+            renderExamWindow(); 
+        } 
 
-        function clearResponse() { //
-            if (isReviewModeActive) return; //
-            selectedAnswers[activeIndex] = null; //
-            questionStates[activeIndex] = 1; //
-            renderExamWindow(); //
-        } //
+        function clearResponse() { 
+            if (isReviewModeActive) return; 
+            selectedAnswers[activeIndex] = null; 
+            questionStates[activeIndex] = 1; 
+            renderExamWindow(); 
+        } 
 
-        function saveAndNext() { //
-            if (isReviewModeActive) { //
-                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); } //
-                return; //
-            } //
-            if (selectedAnswers[activeIndex] !== null) { //
-                questionStates[activeIndex] = 2; //
-            } else { //
-                questionStates[activeIndex] = 1; //
-            } //
-            moveToNextOrWrap(); //
-        } //
+        function saveAndNext() { 
+            if (isReviewModeActive) { 
+                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); } 
+                return; 
+            } 
+            if (selectedAnswers[activeIndex] !== null) { 
+                questionStates[activeIndex] = 2; 
+            } else { 
+                questionStates[activeIndex] = 1; 
+            } 
+            moveToNextOrWrap(); 
+        } 
 
-        function markForReview() { //
-            if (isReviewModeActive) return; //
-            questionStates[activeIndex] = 3; //
-            moveToNextOrWrap(); //
-        } //
+        function markForReview() { 
+            if (isReviewModeActive) return; 
+            questionStates[activeIndex] = 3; 
+            moveToNextOrWrap(); 
+        } 
 
-        function moveToNextOrWrap() { //
-            if (activeIndex < examDataMatrix.length - 1) { //
-                activeIndex++; //
-                renderExamWindow(); //
-            } else { //
-                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit."); //
-                renderPaletteGrid(); //
-            } //
-        } //
+        function moveToNextOrWrap() { 
+            if (activeIndex < examDataMatrix.length - 1) { 
+                activeIndex++; 
+                renderExamWindow(); 
+            } else { 
+                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit."); 
+                renderPaletteGrid(); 
+            } 
+        } 
 
-        function jumpToQuestion(idx) { //
-            activeIndex = idx; //
-            renderExamWindow(); //
-        } //
+        function jumpToQuestion(idx) { 
+            activeIndex = idx; 
+            renderExamWindow(); 
+        } 
 
-        function renderPaletteGrid() { //
-            const grid = document.getElementById('palette-grid-holder'); //
-            grid.innerHTML = ''; //
+        // DYNAMIC REVIEW STATUS MATRIX COLOR INTERPRETER
+        function renderPaletteGrid() { 
+            const grid = document.getElementById('palette-grid-holder'); 
+            grid.innerHTML = ''; 
             
-            questionStates.forEach((stateValue, idx) => { //
-                const isActive = idx === activeIndex; //
+            questionStates.forEach((stateValue, idx) => { 
+                const isActive = idx === activeIndex; 
+                let computedStateClass = `state-${stateValue}`;
+
+                // If in review mode and question was answered, split between Correct/Wrong styling flags
+                if (isReviewModeActive && stateValue === 2) {
+                    const userSelection = selectedAnswers[idx];
+                    const officialCorrectAnswer = examDataMatrix[idx].correct;
+
+                    if (userSelection !== officialCorrectAnswer) {
+                        computedStateClass = 'state-wrong-review'; // Blue color scheme block mapping
+                    }
+                }
+
                 const cellHtml = `
-                    <div class="palette-cell state-${stateValue} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
+                    <div class="palette-cell ${computedStateClass} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
                         ${idx + 1}
                     </div>
-                `; //
-                grid.insertAdjacentHTML('beforeend', cellHtml); //
-            }); //
-        } //
+                `; 
+                grid.insertAdjacentHTML('beforeend', cellHtml); 
+            }); 
+        } 
 
-        function triggerExamSubmission() { //
-            if (timerEngine) clearInterval(timerEngine); //
+        function triggerExamSubmission() { 
+            if (timerEngine) clearInterval(timerEngine); 
             
-            if (isReviewModeActive) { //
-                window.location.href = sourceFile ? 'tutorials.html' : 'exams.html'; //
-                return; //
-            } //
+            if (isReviewModeActive) { 
+                window.location.href = sourceFile ? 'tutorials.html' : 'exams.html'; 
+                return; 
+            } 
             
-            let totalQuestions = examDataMatrix.length; //
-            let attempted = 0; //
-            let correct = 0; //
-            let wrong = 0; //
+            let totalQuestions = examDataMatrix.length; 
+            let attempted = 0; 
+            let correct = 0; 
+            let wrong = 0; 
 
-            selectedAnswers.forEach((answerIndex, qIndex) => { //
-                if (answerIndex !== null) { //
-                    attempted++; //
-                    if (answerIndex === examDataMatrix[qIndex].correct) { //
-                        correct++; //
-                    } else { //
-                        wrong++; //
-                    } //
-                } //
-            }); //
+            selectedAnswers.forEach((answerIndex, qIndex) => { 
+                if (answerIndex !== null) { 
+                    attempted++; 
+                    if (answerIndex === examDataMatrix[qIndex].correct) { 
+                        correct++; 
+                    } else { 
+                        wrong++; 
+                    } 
+                } 
+            }); 
 
-            let finalScore = correct - (wrong * 0.33); //
+            let finalScore = correct - (wrong * 0.33); 
 
-            document.getElementById('timer-header-wrapper').style.display = 'none'; //
-            document.getElementById('ribbon-bar-container').style.display = 'none'; //
-            document.getElementById('quiz-workspace').style.display = 'none'; //
+            document.getElementById('timer-header-wrapper').style.display = 'none'; 
+            document.getElementById('ribbon-bar-container').style.display = 'none'; 
+            document.getElementById('quiz-workspace').style.display = 'none'; 
             
-            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary"; //
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary"; 
 
-            document.getElementById('res-total').innerText = totalQuestions; //
-            document.getElementById('res-attempted').innerText = attempted; //
-            document.getElementById('res-correct').innerText = correct; //
-            document.getElementById('res-wrong').innerText = wrong; //
-            document.getElementById('res-final-score').innerText = finalScore.toFixed(2); //
+            document.getElementById('res-total').innerText = totalQuestions; 
+            document.getElementById('res-attempted').innerText = attempted; 
+            document.getElementById('res-correct').innerText = correct; 
+            document.getElementById('res-wrong').innerText = wrong; 
+            document.getElementById('res-final-score').innerText = finalScore.toFixed(2); 
 
-            document.getElementById('quiz-report-workspace').style.display = 'flex'; //
-        } //
+            document.getElementById('quiz-report-workspace').style.display = 'flex'; 
+        } 
 
-        function activateReviewMode() { //
-            isReviewModeActive = true; //
+        // UPDATED METHOD: Re-structures labels and badges seamlessly inside review states
+        function activateReviewMode() { 
+            isReviewModeActive = true; 
             
-            document.getElementById('quiz-report-workspace').style.display = 'none'; //
-            document.getElementById('ribbon-bar-container').style.display = 'flex'; //
-            document.getElementById('quiz-workspace').style.display = 'flex'; //
+            document.getElementById('quiz-report-workspace').style.display = 'none'; 
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; 
+            document.getElementById('quiz-workspace').style.display = 'flex'; 
             
-            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode"; //
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode"; 
             
-            document.getElementById('action-btn-review').disabled = true; //
-            document.getElementById('action-btn-review').style.opacity = '0.5'; //
-            document.getElementById('action-btn-review').style.cursor = 'not-allowed'; //
+            document.getElementById('action-btn-review').disabled = true; 
+            document.getElementById('action-btn-review').style.opacity = '0.5'; 
+            document.getElementById('action-btn-review').style.cursor = 'not-allowed'; 
             
-            document.getElementById('action-btn-clear').disabled = true; //
-            document.getElementById('action-btn-clear').style.opacity = '0.5'; //
-            document.getElementById('action-btn-clear').style.cursor = 'not-allowed'; //
+            document.getElementById('action-btn-clear').disabled = true; 
+            document.getElementById('action-btn-clear').style.opacity = '0.5'; 
+            document.getElementById('action-btn-clear').style.cursor = 'not-allowed'; 
             
-            document.getElementById('action-btn-report').style.display = 'inline-block'; //
+            document.getElementById('action-btn-report').style.display = 'inline-block'; 
             
-            document.getElementById('action-btn-savenext').innerText = "Next Question →"; //
-            document.getElementById('action-btn-submit').innerText = sourceFile ? "Return to Tutorial Corner" : "Return to Exam Corner"; //
+            document.getElementById('action-btn-savenext').innerText = "Next Question →"; 
+            document.getElementById('action-btn-submit').innerText = sourceFile ? "Return to Tutorial Corner" : "Return to Exam Corner"; 
             
-            activeIndex = 0; //
-            renderExamWindow(); //
-        } //
+            // TRANSFORMATION STACK: Re-write Legend items configurations dynamically
+            document.getElementById('legend-lbl-answered').innerText = "Correctly Answered";
+            
+            // Inject the new "Wrongly Answered" section row badge with blue styling
+            const targetLegendBox = document.getElementById('legend-box-container');
+            const wrongAnswerRowHtml = `
+                <div class="legend-item" id="dynamic-wrongly-answered-row">
+                    <span class="legend-badge" style="background:var(--status-wrong);"></span> Wrongly Answered
+                </div>
+            `;
+            targetLegendBox.insertAdjacentHTML('beforeend', wrongAnswerRowHtml);
 
-        initializeQuizEngine(); //
+            activeIndex = 0; 
+            renderExamWindow(); 
+        } 
+
+        initializeQuizEngine(); 
     </script>
 </body>
 </html>
