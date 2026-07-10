@@ -180,10 +180,14 @@
         /* Common Card */
         
         .review-card{
+            display:inline-block;
+            width:fit-content;
+            max-width:100%;
             border-radius:10px;
-            padding:18px 22px;
-            margin-bottom:18px;
+            padding:14px 18px;
+            margin-bottom:16px;
             border:2px solid transparent;
+            box-sizing:border-box;
         }
         
         .review-card-title{
@@ -1289,15 +1293,20 @@
             
             <div class="review-status-box">
             
-                <div class="review-card blue">
-            
+                <div class="review-card blue compact">
+
                     <div class="review-card-title">
-                        ✅ YOUR SELECTED ANSWER IS CORRECT :- 
+                
+                        ✅ YOUR SELECTED ANSWER IS CORRECT :-
                         <span class="review-answer-inline">
-                            (${String.fromCharCode(65 + userChoice)}) ${userOptionText}
+                
+                            (${String.fromCharCode(65 + userChoice)})
+                            ${userOptionText}
+                
                         </span>
+                
                     </div>
-            
+                
                 </div>
             
                 ${renderLearnModule()}
@@ -1316,26 +1325,36 @@
             
             <div class="review-status-box">
             
-                <div class="review-card red">
-            
+                <div class="review-card red compact">
+
                     <div class="review-card-title">
-                        ❌ YOUR SELECTED ANSWER :- 
+                
+                        ❌ YOUR SELECTED ANSWER :-
                         <span class="review-answer-inline">
-                            (${String.fromCharCode(65 + userChoice)}) ${userOptionText}
+                
+                            (${String.fromCharCode(65 + userChoice)})
+                            ${userOptionText}
+                
                         </span>
+                
                     </div>
-            
+                
                 </div>
             
-                <div class="review-card green">
-            
+                <div class="review-card green compact">
+
                     <div class="review-card-title">
-                        ✅ CORRECT ANSWER :- 
+                
+                        ✅ CORRECT ANSWER :-
                         <span class="review-answer-inline">
-                            (${String.fromCharCode(65 + correctChoice)}) ${correctOptionText}
+                
+                            (${String.fromCharCode(65 + correctChoice)})
+                            ${correctOptionText}
+                
                         </span>
+                
                     </div>
-            
+                
                 </div>
             
                 ${renderLearnModule()}
