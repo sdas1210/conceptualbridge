@@ -181,7 +181,6 @@
             gap: 8px;
         }
         
-        /* NEW LAYOUT CLASS: Custom Green styling block for correct answer details display */
         .review-status-box.correct-answer-display {
             margin-top: 10px;
             background-color: #dcfce7;
@@ -977,10 +976,8 @@
             const nextButton = document.getElementById('instruction-next-action-btn');
             
             const totalScrollHeight = container.scrollHeight;
-            // Add container.scrollTop and clientHeight together
             const currentPosition = container.scrollTop + container.clientHeight;
             
-            // FIXED: Added a 10px buffer room threshold to account for decimal fractions on different devices
             if (totalScrollHeight - currentPosition <= 10) { 
                 nextButton.disabled = false; 
             }
@@ -1123,7 +1120,6 @@
                         <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
                     `; 
                 } else { 
-                    /* UPDATED LAYOUT ENGINE BLOCK: Separates the wrong confirmation message from correct answer details */
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOUR CHOICE WAS WRONG</div>
