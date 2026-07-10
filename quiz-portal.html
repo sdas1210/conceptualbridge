@@ -972,12 +972,18 @@
             });
         }
 
-        function checkInstructionScrollProgress() { 
-            const container = document.getElementById('instruction-scroll-pane'); 
-            const nextButton = document.getElementById('instruction-next-action-btn'); 
-            const totalScrollHeight = container.scrollHeight; 
-            const currentPosition = container.scrollTop + container.clientHeight; 
-            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
+        function checkInstructionScrollProgress() {
+            const container = document.getElementById('instruction-scroll-pane');
+            const nextButton = document.getElementById('instruction-next-action-btn');
+            
+            const totalScrollHeight = container.scrollHeight;
+            // Add container.scrollTop and clientHeight together
+            const currentPosition = container.scrollTop + container.clientHeight;
+            
+            // FIXED: Added a 10px buffer room threshold to account for decimal fractions on different devices
+            if (totalScrollHeight - currentPosition <= 10) { 
+                nextButton.disabled = false; 
+            }
         }
 
         function goToWizardStageTwo() { 
