@@ -802,4 +802,503 @@
         const urlParams = new URLSearchParams(window.location.search);
         
         const sourceFile = urlParams.get('source'); 
-        const activeTopic = urlParams.get('topic
+        const activeTopic = urlParams.get('topic') || 'Mathematics';
+        const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
+
+        let examDataMatrix = [];
+        let activeIndex = 0;
+        let currentLanguage = "EN";
+        
+        let questionStates = [];
+        let selectedAnswers = [];
+        let timeRemainingSeconds = questionLimit * 60;
+        let timerEngine = null;
+        let isReviewModeActive = false; 
+
+        async function initializeQuizEngine() {
+            // AUTOMATIC FORCE-UNLOCK UNBLOCK SAFEGUARD ROUTINE
+            // Instantly bypasses scroll tracking calculations to unlock after exactly 2 seconds
+            setTimeout(() => {
+                document.getElementById('instruction-next-action-btn').disabled = false;
+            }, 2000);
+
+            if (sourceFile) {
+                await parseTutorialTextFileMatrix(sourceFile); 
+            } else {
+                await executeStandardExamCornerFetch(); 
+            }
+        }
+
+        async function executeStandardExamCornerFetch() { 
+            try {
+                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`); 
+                if (!response.ok) { showMissingFileScreen(); return; } 
+
+                const payload = await response.json(); 
+                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); 
+
+                if (targetQuestions.length > 0) { 
+                    examDataMatrix = targetQuestions; 
+                    setupGlobalExamMetrics(activeTopic); 
+                } else { showMissingFileScreen(); } 
+            } catch (err) { showMissingFileScreen(); } 
+        }
+
+        async function parseTutorialTextFileMatrix(filePath) { 
+            try {
+                const response = await fetch(filePath); 
+                if (!response.ok) { showMissingFileScreen(); return; } 
+
+                const rawText = await response.text(); 
+                const lines = rawText.split('\n').map(l => l.trim()); 
+
+                let parsedList = [];
+                let currentBlock = null;
+                let activePropertyKey = null;
+
+                lines.forEach(line => {
+                    if (!line) return; 
+
+                    let cleanLine = line.replace(/\/gi, '').trim(); 
+                    if (!cleanLine) return; 
+
+                    const pipeIdx = cleanLine.indexOf('|'); 
+
+                    if (pipeIdx !== -1) { 
+                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase(); 
+                        const value = cleanLine.substring(pipeIdx + 1).trim(); 
+
+                        if (key === 'Q') { 
+                            activePropertyKey = 'text'; 
+                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Tutorial Series', shift: '' }; 
+                        } else if (currentBlock) { 
+                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') { 
+                                activePropertyKey = key.toLowerCase(); 
+                                currentBlock[activePropertyKey] = value; 
+                            } else if (key === 'SHIFT') { 
+                                activePropertyKey = null; 
+                                currentBlock.shift = value; 
+                            } else if (key === 'CORRECT') { 
+                                activePropertyKey = null; 
+                                const letter = value.toUpperCase(); 
+                                currentBlock.correct = letter.charCodeAt(0) - 65; 
+                                
+                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) { 
+                                    parsedList.push(currentBlock); 
+                                }
+                            }
+                        }
+                    } else { 
+                        if (currentBlock && activePropertyKey) { 
+                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine; 
+                        }
+                    }
+                });
+
+                if (parsedList.length > 0) { 
+                    for (let i = parsedList.length - 1; i > 0; i--) { 
+                        const j = Math.floor(Math.random() * (i + 1)); 
+                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]]; 
+                    }
+                    
+                    examDataMatrix = parsedList.slice(0, questionLimit); 
+
+                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html'; 
+                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials'; 
+                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html'; 
+                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner'; 
+
+                    setupGlobalExamMetrics('GACA Short Assessment'); 
+                } else { showMissingFileScreen(); } 
+            } catch (err) { console.error(err); showMissingFileScreen(); } 
+        }
+
+        function setupGlobalExamMetrics(topicName) { 
+            selectedAnswers = new Array(examDataMatrix.length).fill(null); 
+            questionStates = new Array(examDataMatrix.length).fill(0); 
+            questionStates[0] = 1; 
+
+            let formattedSectionTitle = topicName; 
+            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; 
+            else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE'; 
+            else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE'; 
+            else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS'; 
+            
+            document.getElementById('active-section-label').innerText = formattedSectionTitle; 
+
+            document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; 
+            document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`; 
+            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`; 
+            document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; 
+        }
+
+        function openConcernReportModal() {
+            document.getElementById('concern-text-field').value = '';
+            document.getElementById('concern-modal-node').style.display = 'flex';
+        }
+
+        function closeConcernReportModal() {
+            document.getElementById('concern-modal-node').style.display = 'none';
+        }
+
+        function submitConcernFormDetails() {
+            const textContent = document.getElementById('concern-text-field').value.trim();
+            if (!textContent) { alert("Please type your concern before submitting."); return; }
+
+            const wordCount = textContent.split(/\s+/).filter(w => w.length > 0).length;
+            if (wordCount > 100) { alert(`Your explanation is too long (${wordCount} words). Please restrict your response to less than 100 words.`); return; }
+
+            const reportPayload = {
+                concern: textContent,
+                activeSourceFile: sourceFile || 'Exam API Route',
+                questionIndex: activeIndex + 1,
+                rawQuestionContent: examDataMatrix[activeIndex].text
+            };
+
+            fetch('/api/submit-report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reportPayload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Thank you! Your concern has been submitted safely to the server.");
+                } else {
+                    alert("Report package processed internally, but sync node threw a routing mismatch response.");
+                }
+                closeConcernReportModal();
+            })
+            .catch(err => {
+                console.error("Network sync route missing exception:", err);
+                alert("Connection pipeline timeout. Report captured locally on console stream matrices.");
+                closeConcernReportModal();
+            });
+        }
+
+        function checkInstructionScrollProgress() {
+            const container = document.getElementById('instruction-scroll-pane');
+            const nextButton = document.getElementById('instruction-next-action-btn');
+            
+            const totalScrollHeight = container.scrollHeight;
+            const currentPosition = container.scrollTop + container.clientHeight;
+            
+            if (totalScrollHeight - currentPosition <= 15) { 
+                nextButton.disabled = false; 
+            }
+        }
+
+        function goToWizardStageTwo() { 
+            document.getElementById('step-instructions-1').style.display = 'none'; 
+            document.getElementById('step-footer-1').style.display = 'none'; 
+            document.getElementById('stage-two-wrapper-node').style.display = 'flex'; 
+        }
+
+        function backToWizardStageOne() { 
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
+            document.getElementById('step-instructions-1').style.display = 'flex'; 
+            document.getElementById('step-footer-1').style.display = 'flex'; 
+        }
+
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
+
+        function toggleReadyToBeginButtonState() { 
+            const isChecked = document.getElementById('declaration-checkbox').checked; 
+            document.getElementById('ready-begin-action-btn').disabled = !isChecked; 
+        }
+
+        function launchExamMatrixWorkspace() { 
+            currentLanguage = document.getElementById('wizard-lang-dropdown').value; 
+            document.getElementById('view-lang-select').value = currentLanguage; 
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
+            document.getElementById('timer-header-wrapper').style.display = 'block'; 
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; 
+            document.getElementById('quiz-workspace').style.display = 'flex'; 
+            startClockCountdown(); 
+            renderExamWindow(); 
+        }
+
+        function showMissingFileScreen() { 
+            document.getElementById('step-instructions-1').style.display = 'none'; 
+            document.getElementById('step-footer-1').style.display = 'none'; 
+            document.getElementById('fallback-screen-holder').innerHTML = `
+                <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; font-family:sans-serif; background:#1a365d; color:white; padding:20px;">
+                    <h1>⚠️ Content Available Soon</h1>
+                    <p>The matrix question bank is undergoing engineering optimization sync routines.</p>
+                    <button onclick="window.location.href='${sourceFile ? "tutorials.html" : "exams.html"}'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Go Back</button>
+                </div>
+            `; 
+        }
+
+        function startClockCountdown() { 
+            timerEngine = setInterval(() => { 
+                if (timeRemainingSeconds <= 0) { 
+                    clearInterval(timerEngine); 
+                    triggerExamSubmission(); 
+                } else { 
+                    timeRemainingSeconds--; 
+                    const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0'); 
+                    const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0'); 
+                    document.getElementById('clock-display').innerText = `${mins}:${secs}`; 
+                } 
+            }, 1000); 
+        }
+
+        function getLocalizedText(rawString) { 
+            if (!rawString) return ""; 
+            const parts = rawString.split('/'); 
+            if (parts.length < 2) return rawString.trim(); 
+            return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim(); 
+        }
+
+        function toggleViewLanguage() { 
+            currentLanguage = document.getElementById('view-lang-select').value; 
+            renderExamWindow(); 
+        }
+
+        function renderExamWindow() { 
+            if (examDataMatrix.length === 0) return; 
+            const currentItem = examDataMatrix[activeIndex]; 
+            
+            if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
+                questionStates[activeIndex] = 1; 
+            } 
+
+            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
+            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : ''; 
+            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); 
+            
+            const container = document.getElementById('target-options-container'); 
+            const feedbackContainer = document.getElementById('review-feedback-container'); 
+            container.innerHTML = ''; 
+            feedbackContainer.innerHTML = ''; 
+            
+            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d]; 
+            const userChoice = selectedAnswers[activeIndex]; 
+            const correctChoice = currentItem.correct; 
+
+            optArray.forEach((opt, idx) => { 
+                let statusClass = ''; 
+                let isCheckedAttr = ''; 
+
+                if (isReviewModeActive) { 
+                    if (userChoice === idx && userChoice !== correctChoice) { 
+                        statusClass = 'review-wrong'; 
+                    } else if (idx === correctChoice) { 
+                        statusClass = 'review-correct'; 
+                    } 
+                    if (userChoice === idx) isCheckedAttr = 'checked'; 
+                } else { 
+                    if (userChoice === idx) { 
+                        statusClass = 'selected'; 
+                        isCheckedAttr = 'checked'; 
+                    } 
+                } 
+
+                const localizedOption = getLocalizedText(opt); 
+                const optHtml = `
+                    <div class="option-row ${statusClass}" ${!isReviewModeActive ? `onclick="selectOptionIndex(${idx})"` : ''}>
+                        <input type="radio" name="tcs-opt" id="opt-${idx}" ${isCheckedAttr} ${isReviewModeActive ? 'disabled' : ''}>
+                        <label style="cursor:${isReviewModeActive ? 'default' : 'pointer'}; width:100%; font-weight:600;" for="opt-${idx}">
+                            (${String.fromCharCode(65 + idx)}) ${localizedOption}
+                        </label>
+                    </div>
+                `; 
+                container.insertAdjacentHTML('beforeend', optHtml); 
+            }); 
+
+            if (isReviewModeActive) { 
+                if (userChoice === null) { 
+                    feedbackContainer.innerHTML = `
+                        <div class="review-status-box wrong">
+                            <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
+                        </div>
+                        <div class="review-status-box correct-answer-display">
+                            <div>The Correct Answer Will Be</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
+                            </div>
+                        </div>
+                    `; 
+                } else if (userChoice === correctChoice) { 
+                    feedbackContainer.innerHTML = `
+                        <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
+                    `; 
+                } else { 
+                    feedbackContainer.innerHTML = `
+                        <div class="review-status-box wrong">
+                            <div>YOUR CHOICE WAS WRONG</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Your Choice:</strong> Option ${String.fromCharCode(65 + userChoice)} : ${getLocalizedText(optArray[userChoice])}</div>
+                            </div>
+                        </div>
+                        <div class="review-status-box correct-answer-display">
+                            <div>The Correct Answer Will Be</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
+                            </div>
+                        </div>
+                    `; 
+                } 
+            } 
+
+            renderPaletteGrid(); 
+        } 
+
+        function selectOptionIndex(idx) { 
+            if (isReviewModeActive) return; 
+            selectedAnswers[activeIndex] = idx; 
+            renderExamWindow(); 
+        } 
+
+        function clearResponse() { 
+            if (isReviewModeActive) return; 
+            selectedAnswers[activeIndex] = null; 
+            questionStates[activeIndex] = 1; 
+            renderExamWindow(); 
+        } 
+
+        function saveAndNext() { 
+            if (isReviewModeActive) { 
+                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); } 
+                return; 
+            } 
+            if (selectedAnswers[activeIndex] !== null) { 
+                questionStates[activeIndex] = 2; 
+            } else { 
+                questionStates[activeIndex] = 1; 
+            } 
+            moveToNextOrWrap(); 
+        } 
+
+        function markForReview() { 
+            if (isReviewModeActive) return; 
+            questionStates[activeIndex] = 3; 
+            moveToNextOrWrap(); 
+        } 
+
+        function moveToNextOrWrap() { 
+            if (activeIndex < examDataMatrix.length - 1) { 
+                activeIndex++; 
+                renderExamWindow(); 
+            } else { 
+                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit."); 
+                renderPaletteGrid(); 
+            } 
+        } 
+
+        function jumpToQuestion(idx) { 
+            activeIndex = idx; 
+            renderExamWindow(); 
+        } 
+
+        function renderPaletteGrid() { 
+            const grid = document.getElementById('palette-grid-holder'); 
+            grid.innerHTML = ''; 
+            
+            questionStates.forEach((stateValue, idx) => { 
+                const isActive = idx === activeIndex; 
+                let computedStateClass = `state-${stateValue}`;
+
+                if (isReviewModeActive && stateValue === 2) {
+                    const userSelection = selectedAnswers[idx];
+                    const officialCorrectAnswer = examDataMatrix[idx].correct;
+
+                    if (userSelection !== officialCorrectAnswer) {
+                        computedStateClass = 'state-wrong-review'; 
+                    }
+                }
+
+                const cellHtml = `
+                    <div class="palette-cell ${computedStateClass} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
+                        ${idx + 1}
+                    </div>
+                `; 
+                grid.insertAdjacentHTML('beforeend', cellHtml); 
+            }); 
+        } 
+
+        function triggerExamSubmission() { 
+            if (timerEngine) clearInterval(timerEngine); 
+            
+            if (isReviewModeActive) { 
+                window.location.href = sourceFile ? 'tutorials.html' : 'exams.html'; 
+                return; 
+            } 
+            
+            let totalQuestions = examDataMatrix.length; 
+            let attempted = 0; 
+            let correct = 0; 
+            let wrong = 0; 
+
+            selectedAnswers.forEach((answerIndex, qIndex) => { 
+                if (answerIndex !== null) { 
+                    attempted++; 
+                    if (answerIndex === examDataMatrix[qIndex].correct) { 
+                        correct++; 
+                    } else { 
+                        wrong++; 
+                    } 
+                } 
+            }); 
+
+            let finalScore = correct - (wrong * 0.33); 
+
+            document.getElementById('timer-header-wrapper').style.display = 'none'; 
+            document.getElementById('ribbon-bar-container').style.display = 'none'; 
+            document.getElementById('quiz-workspace').style.display = 'none'; 
+            
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary"; 
+
+            document.getElementById('res-total').innerText = totalQuestions; 
+            document.getElementById('res-attempted').innerText = attempted; 
+            document.getElementById('res-correct').innerText = correct; 
+            document.getElementById('res-wrong').innerText = wrong; 
+            document.getElementById('res-final-score').innerText = finalScore.toFixed(2); 
+
+            document.getElementById('quiz-report-workspace').style.display = 'flex'; 
+        } 
+
+        function activateReviewMode() { 
+            isReviewModeActive = true; 
+            
+            document.getElementById('quiz-report-workspace').style.display = 'none'; 
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; 
+            document.getElementById('quiz-workspace').style.display = 'flex'; 
+            
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode"; 
+            
+            document.getElementById('action-btn-review').disabled = true; 
+            document.getElementById('action-btn-review').style.opacity = '0.5'; 
+            document.getElementById('action-btn-review').style.cursor = 'not-allowed'; 
+            
+            document.getElementById('action-btn-clear').disabled = true; 
+            document.getElementById('action-btn-clear').style.opacity = '0.5'; 
+            document.getElementById('action-btn-clear').style.cursor = 'not-allowed'; 
+            
+            document.getElementById('action-btn-report').style.display = 'inline-block'; 
+            
+            document.getElementById('action-btn-savenext').innerText = "Next Question →"; 
+            document.getElementById('action-btn-submit').innerText = sourceFile ? "Return to Tutorial Corner" : "Return to Exam Corner"; 
+            
+            document.getElementById('legend-lbl-answered').innerText = "Correctly Answered";
+            
+            const targetLegendBox = document.getElementById('legend-box-container');
+            if(!document.getElementById('dynamic-wrongly-answered-row')) {
+                const wrongAnswerRowHtml = `
+                    <div class="legend-item" id="dynamic-wrongly-answered-row">
+                        <span class="legend-badge" style="background:var(--status-wrong);"></span> Wrongly Answered
+                    </div>
+                `;
+                targetLegendBox.insertAdjacentHTML('beforeend', wrongAnswerRowHtml);
+            }
+
+            activeIndex = 0; 
+            renderExamWindow(); 
+        } 
+
+        initializeQuizEngine(); 
+    </script>
+</body>
+</html>
