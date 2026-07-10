@@ -187,21 +187,24 @@
         }
         
         .review-card-title{
-            font-size:17px;
+
+            font-size:16px;
+        
             font-weight:700;
-            margin-bottom:12px;
-            text-transform:uppercase;
+        
+            margin-bottom:6px;
+        
         }
         
         .review-answer-inline{
 
+            font-size:16px;
+        
             font-weight:600;
         
-            font-size:17px;
+            line-height:1.5;
         
             color:#111827;
-        
-            text-transform:none;
         
         }
         
@@ -247,6 +250,18 @@
         
         .review-card.green .review-card-title{
             color:#166534;
+        }
+
+        .review-card.compact{
+
+            display:inline-block;
+        
+            width:fit-content;
+        
+            max-width:100%;
+        
+            padding:14px 18px;
+        
         }
         
         /* Learn Module */
@@ -1246,30 +1261,14 @@
             
             <div class="review-status-box">
             
-                <div class="review-card pink">
-            
+                <div class="review-card pink compact">
+
                     <div class="review-card-title">
                         ⚪ QUESTION NOT ATTEMPTED
                     </div>
             
-                    <div class="review-text">
-                        You did not attempt this question.
-                    </div>
-            
-                </div>
-            
-                <div class="review-card green">
-            
-                    <div class="review-card-title">
-                        ✅ CORRECT ANSWER
-                    </div>
-            
-                    <div class="review-option">
-                        Option ${String.fromCharCode(65 + correctChoice)}
-                    </div>
-            
-                    <div class="review-text">
-                        ${correctOptionText}
+                    <div class="review-answer-inline">
+                        ✅ CORRECT ANSWER :- (${String.fromCharCode(65 + correctChoice)}) ${correctOptionText}
                     </div>
             
                 </div>
