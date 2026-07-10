@@ -160,7 +160,7 @@
 
         .option-row input { margin-right: 12px; transform: scale(1.2); }
 
-        /* SIDE-BY-SIDE SPLIT REVIEW CONTAINER MATRIX */
+        /* SIDE-BY-SIDE SPLIT HORIZONTAL FLEX FEEDBACK BOX CLASSES */
         .split-feedback-container {
             display: flex;
             gap: 16px;
@@ -834,15 +834,21 @@
             const totalScrollHeight = container.scrollHeight; 
             const currentPosition = container.scrollTop + container.clientHeight; 
             
-            // Unlocks safely if container bounds naturally fit screens without active scroll indicators
+            // Core height tracking checkpoint
             if (totalScrollHeight - currentPosition <= 20 || totalScrollHeight <= container.clientHeight) { 
                 nextButton.disabled = false; 
             } 
         }
 
         async function initializeQuizEngine() {
-            // CRITICAL FIX: Bind listener scroll loops explicitly here
+            // Register scroll tracking handlers cleanly
             document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress);
+
+            // Fail-safe automatic timer fallback override loop
+            setTimeout(() => {
+                document.getElementById('instruction-next-action-btn').disabled = false;
+                checkInstructionScrollProgress();
+            }, 3000);
 
             if (sourceFile) {
                 await parseTutorialTextFileMatrix(sourceFile); 
@@ -850,7 +856,7 @@
                 await executeStandardExamCornerFetch(); 
             }
             
-            // Run height evaluation right after async injections complete
+            // Execute validation metrics after questions complete rendering
             checkInstructionScrollProgress();
         }
 
@@ -1056,6 +1062,8 @@
             }, 1000); 
         }
 
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
+
         function getLocalizedText(rawString) { 
             if (!rawString) return ""; 
             const parts = rawString.split('/'); 
@@ -1119,6 +1127,7 @@
                 container.insertAdjacentHTML('beforeend', optHtml); 
             }); 
 
+            /* EXPLICIT FIX FOR SPLIT RED / GREEN SIDE-BY-SIDE PANELS IN REVIEW WINDOW */
             if (isReviewModeActive) { 
                 if (userChoice === null) { 
                     feedbackContainer.innerHTML = `
