@@ -827,73 +827,102 @@
             } catch (err) { showMissingFileScreen(); } //
         }
 
-        async function parseTutorialTextFileMatrix(filePath) { //
+       // ADVANCED TUTORIAL PARSER WITH AUTOMATIC OPTION SCRAMBLING
+        async function parseTutorialTextFileMatrix(filePath) {
             try {
-                const response = await fetch(filePath); //
-                if (!response.ok) { showMissingFileScreen(); return; } //
+                const response = await fetch(filePath);
+                if (!response.ok) { showMissingFileScreen(); return; }
 
-                const rawText = await response.text(); //
-                const lines = rawText.split('\n').map(l => l.trim()); //
+                const rawText = await response.text();
+                const lines = rawText.split('\n').map(l => l.trim());
 
                 let parsedList = [];
                 let currentBlock = null;
                 let activePropertyKey = null;
 
                 lines.forEach(line => {
-                    if (!line) return; //
+                    if (!line) return;
 
-                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim(); //
-                    if (!cleanLine) return; //
+                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim();
+                    if (!cleanLine) return;
 
-                    const pipeIdx = cleanLine.indexOf('|'); //
+                    const pipeIdx = cleanLine.indexOf('|');
 
-                    if (pipeIdx !== -1) { //
-                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase(); //
-                        const value = cleanLine.substring(pipeIdx + 1).trim(); //
+                    if (pipeIdx !== -1) {
+                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
+                        const value = cleanLine.substring(pipeIdx + 1).trim();
 
-                        if (key === 'Q') { //
-                            activePropertyKey = 'text'; //
-                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Tutorial Series', shift: '' }; //
-                        } else if (currentBlock) { //
-                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') { //
-                                activePropertyKey = key.toLowerCase(); //
-                                currentBlock[activePropertyKey] = value; //
-                            } else if (key === 'SHIFT') { //
-                                activePropertyKey = null; //
-                                currentBlock.shift = value; //
-                            } else if (key === 'CORRECT') { //
-                                activePropertyKey = null; //
-                                const letter = value.toUpperCase(); //
-                                currentBlock.correct = letter.charCodeAt(0) - 65; //
+                        if (key === 'Q') {
+                            activePropertyKey = 'text';
+                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correctLetter: '', exam: 'GACA Tutorial Series', shift: '' };
+                        } else if (currentBlock) {
+                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
+                                activePropertyKey = key.toLowerCase();
+                                currentBlock[activePropertyKey] = value;
+                            } else if (key === 'SHIFT') {
+                                activePropertyKey = null;
+                                currentBlock.shift = value;
+                            } else if (key === 'CORRECT') {
+                                activePropertyKey = null;
+                                currentBlock.correctLetter = value.toUpperCase(); // Save raw answer letter (e.g., 'B')
                                 
-                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) { //
-                                    parsedList.push(currentBlock); //
+                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
+                                    // ---- OPTION SHUFFLING MATRIX LOGIC ----
+                                    // 1. Capture what text is currently the right answer
+                                    const correctText = currentBlock[currentBlock.correctLetter.toLowerCase()];
+                                    
+                                    // 2. Create an array of option items
+                                    let optionsArray = [
+                                        { originalKey: 'a', text: currentBlock.a },
+                                        { originalKey: 'b', text: currentBlock.b },
+                                        { originalKey: 'c', text: currentBlock.c },
+                                        { originalKey: 'd', text: currentBlock.d }
+                                    ];
+
+                                    // 3. Shuffle options using Fisher-Yates Scrambler
+                                    for (let i = optionsArray.length - 1; i > 0; i--) {
+                                        const j = Math.floor(Math.random() * (i + 1));
+                                        [optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
+                                    }
+
+                                    // 4. Re-assign shuffled text values back to A, B, C, D properties
+                                    currentBlock.a = optionsArray[0].text;
+                                    currentBlock.b = optionsArray[1].text;
+                                    currentBlock.c = optionsArray[2].text;
+                                    currentBlock.d = optionsArray[3].text;
+
+                                    // 5. Find where our correct text landed and dynamically update correct index map
+                                    let newCorrectIndex = optionsArray.findIndex(opt => opt.text === correctText);
+                                    currentBlock.correct = newCorrectIndex !== -1 ? newCorrectIndex : 0;
+
+                                    parsedList.push(currentBlock);
                                 }
                             }
                         }
-                    } else { //
-                        if (currentBlock && activePropertyKey) { //
-                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine; //
+                    } else {
+                        if (currentBlock && activePropertyKey) {
+                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine;
                         }
                     }
                 });
 
-                if (parsedList.length > 0) { //
-                    for (let i = parsedList.length - 1; i > 0; i--) { //
-                        const j = Math.floor(Math.random() * (i + 1)); //
-                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]]; //
+                if (parsedList.length > 0) {
+                    // Scramble the main question list order
+                    for (let i = parsedList.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
                     }
                     
-                    examDataMatrix = parsedList.slice(0, questionLimit); //
+                    examDataMatrix = parsedList.slice(0, questionLimit);
 
-                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html'; //
-                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials'; //
-                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html'; //
-                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner'; //
+                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html';
+                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials';
+                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html';
+                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner';
 
-                    setupGlobalExamMetrics('GACA Short Assessment'); //
-                } else { showMissingFileScreen(); } //
-            } catch (err) { console.error(err); showMissingFileScreen(); } //
+                    setupGlobalExamMetrics('GACA Short Assessment');
+                } else { showMissingFileScreen(); }
+            } catch (err) { console.error(err); showMissingFileScreen(); }
         }
 
         function setupGlobalExamMetrics(topicName) { //
