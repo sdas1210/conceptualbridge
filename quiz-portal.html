@@ -13,6 +13,7 @@
             --status-not-answered: #ef4444;
             --status-answered: #22c55e;
             --status-review: #a855f7;
+            /* CHANGED VALUE LAYOUT STYLE: Dedicated orange color tone indicator configuration */
             --status-wrong: #ed8936; 
         }
 
@@ -160,36 +161,6 @@
 
         .option-row input { margin-right: 12px; transform: scale(1.2); }
 
-        /* SIDE-BY-SIDE SPLIT HORIZONTAL FLEX FEEDBACK BOX CLASSES */
-        .split-feedback-container {
-            display: flex;
-            gap: 16px;
-            margin-top: 20px;
-        }
-        
-        .feedback-card {
-            flex: 1;
-            padding: 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .feedback-card.red-theme {
-            background-color: #fee2e2;
-            border: 1px solid #f87171;
-            color: #991b1b;
-        }
-        
-        .feedback-card.green-theme {
-            background-color: #dcfce7;
-            border: 1px solid #4ade80;
-            color: #166534;
-        }
-
         .review-status-box {
             margin-top: 20px;
             padding: 15px;
@@ -202,15 +173,24 @@
             border: 1px solid #22c55e;
             color: #15803d;
         }
-
-        .inner-value-box {
-            background: rgba(255, 255, 255, 0.7);
+        .review-status-box.wrong {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .databox-row {
+            display: flex;
+            gap: 20px;
+        }
+        .databox {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.6);
             padding: 10px;
             border-radius: 4px;
             border: 1px solid rgba(0, 0, 0, 0.05);
-            font-size: 0.95rem;
-            margin-top: 5px;
-            font-weight: 600;
         }
 
         .meta-bottom-right {
@@ -316,6 +296,7 @@
         .state-1 { background-color: var(--status-not-answered); color: white; border-radius: 50% 50% 0 0; }
         .state-2 { background-color: var(--status-answered); color: white; border-radius: 0 0 50% 50%; }
         .state-3 { background-color: var(--status-review); color: white; border-radius: 50%; }
+        /* NEW VALUE CLASS: Wrongly answered visual cell styling configuration mapped to Orange */
         .state-wrong-review { background-color: var(--status-wrong) !important; color: white !important; border-radius: 0 0 50% 50%; }
 
         .active-cell { box-shadow: 0 0 0 3px #3b82f6; }
@@ -549,7 +530,6 @@
             .wizard-right { max-width: 100%; height: auto; border-left: none; border-bottom: 1px solid var(--tcs-border); padding: 20px; }
             .wizard-footer-fullwidth { flex-direction: column; gap: 15px; }
             .report-btn-stack { flex-direction: column; }
-            .split-feedback-container { flex-direction: column; gap: 12px; }
         }
     </style>
 </head>
@@ -568,7 +548,7 @@
     </div>
 
     <div class="wizard-container" id="step-instructions-1">
-        <div class="wizard-left" id="instruction-scroll-pane">
+        <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
             <ol style="padding-left: 20px;">
                 <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You need not terminate the examination or submit your paper.</li>
@@ -690,7 +670,7 @@
                 <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
             </div>
             <div class="footer-col-center">
-                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamWorkspace()">I am ready to begin</button>
+                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
             </div>
             <div class="footer-col-right"></div>
         </div>
@@ -826,38 +806,12 @@
         let timerEngine = null;
         let isReviewModeActive = false; 
 
-        function checkInstructionScrollProgress() { 
-            const container = document.getElementById('instruction-scroll-pane'); 
-            const nextButton = document.getElementById('instruction-next-action-btn'); 
-            if (!container || !nextButton) return;
-            
-            const totalScrollHeight = container.scrollHeight; 
-            const currentPosition = container.scrollTop + container.clientHeight; 
-            
-            // Core height tracking checkpoint
-            if (totalScrollHeight - currentPosition <= 20 || totalScrollHeight <= container.clientHeight) { 
-                nextButton.disabled = false; 
-            } 
-        }
-
         async function initializeQuizEngine() {
-            // Register scroll tracking handlers cleanly
-            document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress);
-
-            // Fail-safe automatic timer fallback override loop
-            setTimeout(() => {
-                document.getElementById('instruction-next-action-btn').disabled = false;
-                checkInstructionScrollProgress();
-            }, 3000);
-
             if (sourceFile) {
                 await parseTutorialTextFileMatrix(sourceFile); 
             } else {
                 await executeStandardExamCornerFetch(); 
             }
-            
-            // Execute validation metrics after questions complete rendering
-            checkInstructionScrollProgress();
         }
 
         async function executeStandardExamCornerFetch() { 
@@ -890,7 +844,7 @@
                 lines.forEach(line => {
                     if (!line) return; 
 
-                    let cleanLine = line.replace(/\/gi, '').trim(); 
+                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim(); 
                     if (!cleanLine) return; 
 
                     const pipeIdx = cleanLine.indexOf('|'); 
@@ -1008,6 +962,14 @@
             });
         }
 
+        function checkInstructionScrollProgress() { 
+            const container = document.getElementById('instruction-scroll-pane'); 
+            const nextButton = document.getElementById('instruction-next-action-btn'); 
+            const totalScrollHeight = container.scrollHeight; 
+            const currentPosition = container.scrollTop + container.clientHeight; 
+            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
+        }
+
         function goToWizardStageTwo() { 
             document.getElementById('step-instructions-1').style.display = 'none'; 
             document.getElementById('step-footer-1').style.display = 'none'; 
@@ -1020,12 +982,14 @@
             document.getElementById('step-footer-1').style.display = 'flex'; 
         }
 
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
+
         function toggleReadyToBeginButtonState() { 
             const isChecked = document.getElementById('declaration-checkbox').checked; 
             document.getElementById('ready-begin-action-btn').disabled = !isChecked; 
         }
 
-        function launchExamWorkspace() { 
+        function launchExamMatrixWorkspace() { 
             currentLanguage = document.getElementById('wizard-lang-dropdown').value; 
             document.getElementById('view-lang-select').value = currentLanguage; 
             document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
@@ -1061,8 +1025,6 @@
                 } 
             }, 1000); 
         }
-
-        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
 
         function getLocalizedText(rawString) { 
             if (!rawString) return ""; 
@@ -1127,18 +1089,13 @@
                 container.insertAdjacentHTML('beforeend', optHtml); 
             }); 
 
-            /* EXPLICIT FIX FOR SPLIT RED / GREEN SIDE-BY-SIDE PANELS IN REVIEW WINDOW */
             if (isReviewModeActive) { 
                 if (userChoice === null) { 
                     feedbackContainer.innerHTML = `
-                        <div class="split-feedback-container">
-                            <div class="feedback-card red-theme">
-                                <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
-                                <div class="inner-value-box">Your Choice: None</div>
-                            </div>
-                            <div class="feedback-card green-theme">
-                                <div>THE CORRECT ANSWER WILL BE</div>
-                                <div class="inner-value-box">Correct Choice: Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
+                        <div class="review-status-box wrong">
+                            <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
                             </div>
                         </div>
                     `; 
@@ -1148,14 +1105,11 @@
                     `; 
                 } else { 
                     feedbackContainer.innerHTML = `
-                        <div class="split-feedback-container">
-                            <div class="feedback-card red-theme">
-                                <div>YOUR CHOICE WAS WRONG</div>
-                                <div class="inner-value-box">Your Choice: Option ${String.fromCharCode(65 + userChoice)} : ${getLocalizedText(optArray[userChoice])}</div>
-                            </div>
-                            <div class="feedback-card green-theme">
-                                <div>THE CORRECT ANSWER WILL BE</div>
-                                <div class="inner-value-box">Correct Choice: Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
+                        <div class="review-status-box wrong">
+                            <div>YOUR CHOICE WAS WRONG</div>
+                            <div class="databox-row">
+                                <div class="databox"><strong>Your Choice:</strong> Option ${String.fromCharCode(65 + userChoice)}</div>
+                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
                             </div>
                         </div>
                     `; 
@@ -1212,9 +1166,9 @@
             renderExamWindow(); 
         } 
 
+        // UPDATED METHOD: Processes orange palette cell transitions dynamically during review matrix checks
         function renderPaletteGrid() { 
             const grid = document.getElementById('palette-grid-holder'); 
-            if (!grid) return;
             grid.innerHTML = ''; 
             
             questionStates.forEach((stateValue, idx) => { 
@@ -1226,7 +1180,7 @@
                     const officialCorrectAnswer = examDataMatrix[idx].correct;
 
                     if (userSelection !== officialCorrectAnswer) {
-                        computedStateClass = 'state-wrong-review'; 
+                        computedStateClass = 'state-wrong-review'; // Injects orange cell background formatting parameters
                     }
                 }
 
@@ -1304,6 +1258,7 @@
             
             document.getElementById('legend-lbl-answered').innerText = "Correctly Answered";
             
+            // UPDATED: Injects the dynamic legend row badge targeting the orange coloring theme profile
             const targetLegendBox = document.getElementById('legend-box-container');
             const wrongAnswerRowHtml = `
                 <div class="legend-item" id="dynamic-wrongly-answered-row">
