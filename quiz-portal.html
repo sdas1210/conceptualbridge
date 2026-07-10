@@ -160,7 +160,7 @@
 
         .option-row input { margin-right: 12px; transform: scale(1.2); }
 
-        /* SPLIT LAYOUT STYLING HOOKS */
+        /* SIDE-BY-SIDE SPLIT REVIEW CONTAINER MATRIX */
         .split-feedback-container {
             display: flex;
             gap: 16px;
@@ -210,6 +210,7 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             font-size: 0.95rem;
             margin-top: 5px;
+            font-weight: 600;
         }
 
         .meta-bottom-right {
@@ -825,17 +826,32 @@
         let timerEngine = null;
         let isReviewModeActive = false; 
 
+        function checkInstructionScrollProgress() { 
+            const container = document.getElementById('instruction-scroll-pane'); 
+            const nextButton = document.getElementById('instruction-next-action-btn'); 
+            if (!container || !nextButton) return;
+            
+            const totalScrollHeight = container.scrollHeight; 
+            const currentPosition = container.scrollTop + container.clientHeight; 
+            
+            // Unlocks safely if container bounds naturally fit screens without active scroll indicators
+            if (totalScrollHeight - currentPosition <= 20 || totalScrollHeight <= container.clientHeight) { 
+                nextButton.disabled = false; 
+            } 
+        }
+
         async function initializeQuizEngine() {
-            setTimeout(() => {
-                document.getElementById('instruction-next-action-btn').disabled = false;
-                checkInstructionScrollProgress();
-            }, 3000);
+            // CRITICAL FIX: Bind listener scroll loops explicitly here
+            document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress);
 
             if (sourceFile) {
                 await parseTutorialTextFileMatrix(sourceFile); 
             } else {
                 await executeStandardExamCornerFetch(); 
             }
+            
+            // Run height evaluation right after async injections complete
+            checkInstructionScrollProgress();
         }
 
         async function executeStandardExamCornerFetch() { 
@@ -986,19 +1002,6 @@
             });
         }
 
-        function checkInstructionScrollProgress() { 
-            const container = document.getElementById('instruction-scroll-pane'); 
-            const nextButton = document.getElementById('instruction-next-action-btn'); 
-            if (!container || !nextButton) return;
-            
-            const totalScrollHeight = container.scrollHeight; 
-            const currentPosition = container.scrollTop + container.clientHeight; 
-            
-            if (totalScrollHeight - currentPosition <= 15 || totalScrollHeight <= container.clientHeight) { 
-                nextButton.disabled = false; 
-            } 
-        }
-
         function goToWizardStageTwo() { 
             document.getElementById('step-instructions-1').style.display = 'none'; 
             document.getElementById('step-footer-1').style.display = 'none'; 
@@ -1010,8 +1013,6 @@
             document.getElementById('step-instructions-1').style.display = 'flex'; 
             document.getElementById('step-footer-1').style.display = 'flex'; 
         }
-
-        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
 
         function toggleReadyToBeginButtonState() { 
             const isChecked = document.getElementById('declaration-checkbox').checked; 
@@ -1118,7 +1119,6 @@
                 container.insertAdjacentHTML('beforeend', optHtml); 
             }); 
 
-            /* EXPLICIT FIX FOR SPLIT RED / GREEN SIDE-BY-SIDE PANELS */
             if (isReviewModeActive) { 
                 if (userChoice === null) { 
                     feedbackContainer.innerHTML = `
@@ -1129,7 +1129,7 @@
                             </div>
                             <div class="feedback-card green-theme">
                                 <div>THE CORRECT ANSWER WILL BE</div>
-                                <div class="inner-value-box">Correct Choice: Option ${String.fromCharCode(65 + correctChoice)}</div>
+                                <div class="inner-value-box">Correct Choice: Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
                             </div>
                         </div>
                     `; 
@@ -1142,11 +1142,11 @@
                         <div class="split-feedback-container">
                             <div class="feedback-card red-theme">
                                 <div>YOUR CHOICE WAS WRONG</div>
-                                <div class="inner-value-box">Your Choice: Option ${String.fromCharCode(65 + userChoice)}</div>
+                                <div class="inner-value-box">Your Choice: Option ${String.fromCharCode(65 + userChoice)} : ${getLocalizedText(optArray[userChoice])}</div>
                             </div>
                             <div class="feedback-card green-theme">
                                 <div>THE CORRECT ANSWER WILL BE</div>
-                                <div class="inner-value-box">Correct Choice: Option ${String.fromCharCode(65 + correctChoice)}</div>
+                                <div class="inner-value-box">Correct Choice: Option ${String.fromCharCode(65 + correctChoice)} : ${getLocalizedText(optArray[correctChoice])}</div>
                             </div>
                         </div>
                     `; 
