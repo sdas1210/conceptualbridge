@@ -1182,14 +1182,42 @@
                     `; 
                 } else { 
                     feedbackContainer.innerHTML = `
-                        <div class="review-status-box wrong">
-                            <div>YOUR CHOICE WAS WRONG</div>
-                            <div class="databox-row">
-                                <div class="databox"><strong>Your Choice:</strong> Option ${String.fromCharCode(65 + userChoice)}</div>
-                                <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
-                            </div>
+                    <div class="review-status-box">
+            
+                        <div class="review-status-title">
+                            YOUR CHOICE WAS WRONG
                         </div>
-                    `; 
+            
+                        <div class="review-feedback-row">
+            
+                            <div class="review-feedback-card red">
+            
+                                <div class="review-feedback-label">
+                                    Your Choice
+                                </div>
+            
+                                <div class="review-feedback-value">
+                                    Option ${String.fromCharCode(65 + userChoice)}
+                                </div>
+            
+                            </div>
+            
+                            <div class="review-feedback-card green">
+            
+                                <div class="review-feedback-label">
+                                    Correct Choice
+                                </div>
+            
+                                <div class="review-feedback-value">
+                                    Option ${String.fromCharCode(65 + correctChoice)}
+                                </div>
+            
+                            </div>
+            
+                        </div>
+            
+                    </div>
+                `;
                 } 
             } 
             const questionContent = document.querySelector(".question-content");
