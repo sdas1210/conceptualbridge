@@ -181,6 +181,7 @@
             gap: 8px;
         }
         
+        /* CORRECT POSITION DISPLAY: Isolated styling wrapper logic */
         .review-status-box.correct-answer-display {
             margin-top: 10px;
             background-color: #dcfce7;
@@ -816,11 +817,11 @@
         let isReviewModeActive = false; 
 
         async function initializeQuizEngine() {
-            // AUTOMATIC FORCE-UNLOCK UNBLOCK SAFEGUARD ROUTINE
-            // Instantly bypasses scroll tracking calculations to unlock after exactly 2 seconds
+            // UNBLOCK UNLOCK SAFEGUARD OVERRIDE ENGINE
+            // If window view elements lock up scroll detection, this forces activation after 3 seconds
             setTimeout(() => {
                 document.getElementById('instruction-next-action-btn').disabled = false;
-            }, 2000);
+            }, 3000);
 
             if (sourceFile) {
                 await parseTutorialTextFileMatrix(sourceFile); 
@@ -984,7 +985,8 @@
             const totalScrollHeight = container.scrollHeight;
             const currentPosition = container.scrollTop + container.clientHeight;
             
-            if (totalScrollHeight - currentPosition <= 15) { 
+            // Unlocks instantly if scrolled within 15px OR if content completely fits within view frame boundary limits
+            if (totalScrollHeight - currentPosition <= 15 || totalScrollHeight <= container.clientHeight) { 
                 nextButton.disabled = false; 
             }
         }
@@ -1126,6 +1128,7 @@
                         <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
                     `; 
                 } else { 
+                    /* DOUBLE CONTAINER REVIEW SPLITTER GENERATION ENGINE */
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOUR CHOICE WAS WRONG</div>
