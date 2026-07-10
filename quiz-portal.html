@@ -1181,43 +1181,50 @@
                         <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
                     `; 
                 } else { 
+                    const userOptionText = getLocalizedText(optArray[userChoice]);
+                    const correctOptionText = getLocalizedText(optArray[correctChoice]);
+                
                     feedbackContainer.innerHTML = `
-                    <div class="review-status-box">
-            
-                        <div class="review-status-title">
-                            YOUR CHOICE WAS WRONG
-                        </div>
-            
-                        <div class="review-feedback-row">
-            
-                            <div class="review-feedback-card red">
-            
-                                <div class="review-feedback-label">
-                                    Your Choice
-                                </div>
-            
-                                <div class="review-feedback-value">
-                                    Option ${String.fromCharCode(65 + userChoice)}
-                                </div>
-            
+                        <div class="review-status-box">
+                
+                            <div class="review-status-title">
+                                YOUR CHOICE WAS WRONG
                             </div>
-            
-                            <div class="review-feedback-card green">
-            
-                                <div class="review-feedback-label">
-                                    Correct Choice
+                
+                            <div class="review-feedback-row">
+                
+                                <div class="review-feedback-card red">
+                
+                                    <div class="review-feedback-label">
+                                        Your Choice
+                                    </div>
+                
+                                    <div class="review-feedback-value">
+                                        <strong>Option ${String.fromCharCode(65 + userChoice)}</strong>
+                                        <br><br>
+                                        ${userOptionText}
+                                    </div>
+                
                                 </div>
-            
-                                <div class="review-feedback-value">
-                                    Option ${String.fromCharCode(65 + correctChoice)}
+                
+                                <div class="review-feedback-card green">
+                
+                                    <div class="review-feedback-label">
+                                        Correct Choice
+                                    </div>
+                
+                                    <div class="review-feedback-value">
+                                        <strong>Option ${String.fromCharCode(65 + correctChoice)}</strong>
+                                        <br><br>
+                                        ${correctOptionText}
+                                    </div>
+                
                                 </div>
-            
+                
                             </div>
-            
+                
                         </div>
-            
-                    </div>
-                `;
+                    `;
                 } 
             } 
             const questionContent = document.querySelector(".question-content");
