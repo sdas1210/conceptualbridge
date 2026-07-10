@@ -473,6 +473,53 @@
         }
         .report-btn-stack button { flex: 1; padding: 14px; font-size: 0.95rem; }
 
+        /* REPORT OVERLAY MODAL WINDOW POPUP */
+        .report-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .report-modal-box {
+            background: white;
+            border: 1px solid var(--tcs-border);
+            border-radius: 6px;
+            width: 90%;
+            max-width: 480px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: #333;
+        }
+
+        .report-modal-box h4 { margin: 0 0 10px 0; color: var(--tcs-blue); font-size: 1.1rem; }
+        .report-modal-box p { margin: 0 0 12px 0; font-size: 0.88rem; color: #555; }
+        
+        .report-textarea {
+            width: 100%;
+            height: 110px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid var(--tcs-border);
+            border-radius: 4px;
+            resize: none;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .report-textarea:focus { border-color: #3b82f6; }
+
+        .report-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
         @media (max-width: 768px) {
             .main-workspace { flex-direction: column; }
             .dashboard-panel { max-width: 100%; min-width: 100%; height: 250px; }
@@ -651,7 +698,7 @@
                     <button class="btn-tcs btn-white" style="margin-left:8px;" id="action-btn-clear" onclick="clearResponse()">Clear Response</button>
                 </div>
                 <div>
-                    <button class="btn-tcs btn-orange" id="action-btn-report" style="display:none; margin-right:8px;" onclick="alert('Report routine initiated.')">⚠️ REPORT</button>
+                    <button class="btn-tcs btn-orange" id="action-btn-report" style="display:none; margin-right:8px;" onclick="openConcernReportModal()">⚠️ REPORT</button>
                     <button class="btn-tcs btn-blue" id="action-btn-savenext" onclick="saveAndNext()">Save & Next</button>
                 </div>
             </div>
@@ -725,12 +772,24 @@
         </div>
     </div>
 
+    <!-- CONCERN REPORT MODAL SCREEN BOX OVERLAY -->
+    <div class="report-modal-overlay" id="concern-modal-node">
+        <div class="report-modal-box">
+            <h4>Submit Question Concern</h4>
+            <p>Enter your concern in less than 100 words:</p>
+            <textarea class="report-textarea" id="concern-text-field" placeholder="Describe the issue with this question or translation choices..."></textarea>
+            <div class="report-modal-footer">
+                <button class="btn-tcs btn-white" onclick="closeConcernReportModal()">Cancel</button>
+                <button class="btn-tcs btn-blue" onclick="submitConcernFormDetails()">Submit Report</button>
+            </div>
+        </div>
+    </div>
+
     <div id="fallback-screen-holder"></div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         
-        // Dynamic Variable Route Identification Parameters
         const sourceFile = urlParams.get('source'); // Active only if clicked from Tutorial section (?source=...)
         const activeTopic = urlParams.get('topic') || 'Mathematics';
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
@@ -745,244 +804,264 @@
         let timerEngine = null;
         let isReviewModeActive = false; 
 
-        // SMART DUAL ROUTING LAYER DETECTOR
         async function initializeQuizEngine() {
             if (sourceFile) {
-                // Tutorial 10Q Shuffled local parsing mode context
-                await parseTutorialTextFileMatrix(sourceFile);
+                await parseTutorialTextFileMatrix(sourceFile); //
             } else {
-                // Unchanged Exam Corner API logic mapping core functionality
-                await executeStandardExamCornerFetch();
+                await executeStandardExamCornerFetch(); //
             }
         }
 
-        // ORIGINAL ROUTE A: UNCHANGED EXAM CORNER WORKSPACE[cite: 6]
-        async function executeStandardExamCornerFetch() {
+        async function executeStandardExamCornerFetch() { //
             try {
-                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`);
-                if (!response.ok) { showMissingFileScreen(); return; }
+                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`); //
+                if (!response.ok) { showMissingFileScreen(); return; } //
 
-                const payload = await response.json();
-                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []);
+                const payload = await response.json(); //
+                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); //
 
-                if (targetQuestions.length > 0) {
-                    examDataMatrix = targetQuestions;
-                    setupGlobalExamMetrics(activeTopic);
-                } else { showMissingFileScreen(); }
-            } catch (err) { showMissingFileScreen(); }
+                if (targetQuestions.length > 0) { //
+                    examDataMatrix = targetQuestions; //
+                    setupGlobalExamMetrics(activeTopic); //
+                } else { showMissingFileScreen(); } //
+            } catch (err) { showMissingFileScreen(); } //
         }
 
-        // NEW ROUTE B: FORGIVING BLOCK LEVEL AGGREGATOR PARSER FOR 1.TXT CHANNELS
-        async function parseTutorialTextFileMatrix(filePath) {
+        async function parseTutorialTextFileMatrix(filePath) { //
             try {
-                const response = await fetch(filePath);
-                if (!response.ok) { showMissingFileScreen(); return; }
+                const response = await fetch(filePath); //
+                if (!response.ok) { showMissingFileScreen(); return; } //
 
-                const rawText = await response.text();
-                // Clean lines and isolate Windows carriage breaks safely
-                const lines = rawText.split('\n').map(l => l.trim());
+                const rawText = await response.text(); //
+                const lines = rawText.split('\n').map(l => l.trim()); //
 
                 let parsedList = [];
                 let currentBlock = null;
                 let activePropertyKey = null;
 
                 lines.forEach(line => {
-                    if (!line) return;
+                    if (!line) return; //
 
-                    // Automatically strip bracket formatting traces
-                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim();
-                    if (!cleanLine) return;
+                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim(); //
+                    if (!cleanLine) return; //
 
-                    const pipeIdx = cleanLine.indexOf('|');
+                    const pipeIdx = cleanLine.indexOf('|'); //
 
-                    if (pipeIdx !== -1) {
-                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
-                        const value = cleanLine.substring(pipeIdx + 1).trim();
+                    if (pipeIdx !== -1) { //
+                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase(); //
+                        const value = cleanLine.substring(pipeIdx + 1).trim(); //
 
-                        if (key === 'Q') {
-                            activePropertyKey = 'text';
-                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Tutorial Series', shift: '' };
-                        } else if (currentBlock) {
-                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
-                                activePropertyKey = key.toLowerCase();
-                                currentBlock[activePropertyKey] = value;
-                            } else if (key === 'SHIFT') {
-                                activePropertyKey = null;
-                                currentBlock.shift = value;
-                            } else if (key === 'CORRECT') {
-                                activePropertyKey = null;
-                                const letter = value.toUpperCase();
-                                currentBlock.correct = letter.charCodeAt(0) - 65; // Matches A->0, B->1...
+                        if (key === 'Q') { //
+                            activePropertyKey = 'text'; //
+                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'GACA Tutorial Series', shift: '' }; //
+                        } else if (currentBlock) { //
+                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') { //
+                                activePropertyKey = key.toLowerCase(); //
+                                currentBlock[activePropertyKey] = value; //
+                            } else if (key === 'SHIFT') { //
+                                activePropertyKey = null; //
+                                currentBlock.shift = value; //
+                            } else if (key === 'CORRECT') { //
+                                activePropertyKey = null; //
+                                const letter = value.toUpperCase(); //
+                                currentBlock.correct = letter.charCodeAt(0) - 65; //
                                 
-                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
-                                    parsedList.push(currentBlock);
+                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) { //
+                                    parsedList.push(currentBlock); //
                                 }
                             }
                         }
-                    } else {
-                        // Multi-line formatting fallback: Append strings to preceding active key targets
-                        if (currentBlock && activePropertyKey) {
-                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine;
+                    } else { //
+                        if (currentBlock && activePropertyKey) { //
+                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine; //
                         }
                     }
                 });
 
-                if (parsedList.length > 0) {
-                    // Randomize array matrix sequence using Fisher-Yates
-                    for (let i = parsedList.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
+                if (parsedList.length > 0) { //
+                    for (let i = parsedList.length - 1; i > 0; i--) { //
+                        const j = Math.floor(Math.random() * (i + 1)); //
+                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]]; //
                     }
                     
-                    // Isolate exactly 10 questions max limit constraint parameter mappings
-                    examDataMatrix = parsedList.slice(0, questionLimit);
+                    examDataMatrix = parsedList.slice(0, questionLimit); //
 
-                    // Re-route navigation cancel elements back to tutorials.html context seamlessly
-                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials';
-                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner';
+                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html'; //
+                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials'; //
+                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html'; //
+                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner'; //
 
-                    setupGlobalExamMetrics('GACA Short Assessment');
-                } else { showMissingFileScreen(); }
-            } catch (err) { console.error(err); showMissingFileScreen(); }
+                    setupGlobalExamMetrics('GACA Short Assessment'); //
+                } else { showMissingFileScreen(); } //
+            } catch (err) { console.error(err); showMissingFileScreen(); } //
         }
 
-        function setupGlobalExamMetrics(topicName) {
-            selectedAnswers = new Array(examDataMatrix.length).fill(null);
-            questionStates = new Array(examDataMatrix.length).fill(0);
-            questionStates[0] = 1;
+        function setupGlobalExamMetrics(topicName) { //
+            selectedAnswers = new Array(examDataMatrix.length).fill(null); //
+            questionStates = new Array(examDataMatrix.length).fill(0); //
+            questionStates[0] = 1; //
 
-            let formattedSectionTitle = topicName;
-            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS';
-            else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE';
-            else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE';
-            else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS';
+            let formattedSectionTitle = topicName; //
+            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; //
+            else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE'; //
+            else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE'; //
+            else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS'; //
             
-            document.getElementById('active-section-label').innerText = formattedSectionTitle;
+            document.getElementById('active-section-label').innerText = formattedSectionTitle; //
 
-            document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`;
-            document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`;
-            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`;
-            document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length;
+            document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; //
+            document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`; //
+            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`; //
+            document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; //
         }
 
-        function checkInstructionScrollProgress() {
-            const container = document.getElementById('instruction-scroll-pane');
-            const nextButton = document.getElementById('instruction-next-action-btn');
-            const totalScrollHeight = container.scrollHeight;
-            const currentPosition = container.scrollTop + container.clientHeight;
-            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; }
+        // NEW REPORT POPUP ACTIVATION ROUTINES
+        function openConcernReportModal() {
+            document.getElementById('concern-text-field').value = '';
+            document.getElementById('concern-modal-node').style.display = 'flex';
         }
 
-        function goToWizardStageTwo() {
-            document.getElementById('step-instructions-1').style.display = 'none';
-            document.getElementById('step-footer-1').style.display = 'none';
-            document.getElementById('stage-two-wrapper-node').style.display = 'flex';
+        function closeConcernReportModal() {
+            document.getElementById('concern-modal-node').style.display = 'none';
         }
 
-        function backToWizardStageOne() {
-            document.getElementById('stage-two-wrapper-node').style.display = 'none';
-            document.getElementById('step-instructions-1').style.display = 'flex';
-            document.getElementById('step-footer-1').style.display = 'flex';
+        function submitConcernFormDetails() {
+            const textContent = document.getElementById('concern-text-field').value.trim();
+            if (!textContent) { alert("Please type your concern before submitting."); return; }
+
+            // Split content space array lengths metric filter validation
+            const wordCount = textContent.split(/\s+/).filter(w => w.length > 0).length;
+            if (wordCount > 100) { alert(`Your explanation is too long (${wordCount} words). Please restrict your response to less than 100 words.`); return; }
+
+            // Dynamic payload bundle setup tracking parameters for late logging
+            const reportPayload = {
+                concern: textContent,
+                activeSourceFile: sourceFile || 'Exam API Route',
+                questionIndex: activeIndex + 1,
+                rawQuestionContent: examDataMatrix[activeIndex].text
+            };
+
+            console.log("Concern Report log registered safely:", reportPayload);
+            alert("Thank you! Your concern has been captured successfully. Question line mapping metrics will load next.");
+            closeConcernReportModal();
         }
 
-        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress);
-
-        function toggleReadyToBeginButtonState() {
-            const isChecked = document.getElementById('declaration-checkbox').checked;
-            document.getElementById('ready-begin-action-btn').disabled = !isChecked;
+        function checkInstructionScrollProgress() { //
+            const container = document.getElementById('instruction-scroll-pane'); //
+            const nextButton = document.getElementById('instruction-next-action-btn'); //
+            const totalScrollHeight = container.scrollHeight; //
+            const currentPosition = container.scrollTop + container.clientHeight; //
+            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } //
         }
 
-        function launchExamMatrixWorkspace() {
-            currentLanguage = document.getElementById('wizard-lang-dropdown').value;
-            document.getElementById('view-lang-select').value = currentLanguage;
-            document.getElementById('stage-two-wrapper-node').style.display = 'none';
-            document.getElementById('timer-header-wrapper').style.display = 'block';
-            document.getElementById('ribbon-bar-container').style.display = 'flex';
-            document.getElementById('quiz-workspace').style.display = 'flex';
-            startClockCountdown();
-            renderExamWindow();
+        function goToWizardStageTwo() { //
+            document.getElementById('step-instructions-1').style.display = 'none'; //
+            document.getElementById('step-footer-1').style.display = 'none'; //
+            document.getElementById('stage-two-wrapper-node').style.display = 'flex'; //
         }
 
-        function showMissingFileScreen() {
-            document.getElementById('step-instructions-1').style.display = 'none';
-            document.getElementById('step-footer-1').style.display = 'none';
+        function backToWizardStageOne() { //
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; //
+            document.getElementById('step-instructions-1').style.display = 'flex'; //
+            document.getElementById('step-footer-1').style.display = 'flex'; //
+        }
+
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); //
+
+        function toggleReadyToBeginButtonState() { //
+            const isChecked = document.getElementById('declaration-checkbox').checked; //
+            document.getElementById('ready-begin-action-btn').disabled = !isChecked; //
+        }
+
+        function launchExamMatrixWorkspace() { //
+            currentLanguage = document.getElementById('wizard-lang-dropdown').value; //
+            document.getElementById('view-lang-select').value = currentLanguage; //
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; //
+            document.getElementById('timer-header-wrapper').style.display = 'block'; //
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; //
+            document.getElementById('quiz-workspace').style.display = 'flex'; //
+            startClockCountdown(); //
+            renderExamWindow(); //
+        }
+
+        function showMissingFileScreen() { //
+            document.getElementById('step-instructions-1').style.display = 'none'; //
+            document.getElementById('step-footer-1').style.display = 'none'; //
             document.getElementById('fallback-screen-holder').innerHTML = `
                 <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; font-family:sans-serif; background:#1a365d; color:white; padding:20px;">
                     <h1>⚠️ Content Available Soon</h1>
                     <p>The matrix question bank is undergoing engineering optimization sync routines.</p>
                     <button onclick="window.location.href='${sourceFile ? "tutorials.html" : "exams.html"}'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Go Back</button>
                 </div>
-            `;
+            `; //
         }
 
-        function startClockCountdown() {
-            timerEngine = setInterval(() => {
-                if (timeRemainingSeconds <= 0) {
-                    clearInterval(timerEngine);
-                    triggerExamSubmission();
-                } else {
-                    timeRemainingSeconds--;
-                    const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0');
-                    const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0');
-                    document.getElementById('clock-display').innerText = `${mins}:${secs}`;
-                }
-            }, 1000);
+        function startClockCountdown() { //
+            timerEngine = setInterval(() => { //
+                if (timeRemainingSeconds <= 0) { //
+                    clearInterval(timerEngine); //
+                    triggerExamSubmission(); //
+                } else { //
+                    timeRemainingSeconds--; //
+                    const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0'); //
+                    const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0'); //
+                    document.getElementById('clock-display').innerText = `${mins}:${secs}`; //
+                } //
+            }, 1000); //
         }
 
-        function getLocalizedText(rawString) {
-            if (!rawString) return "";
-            const parts = rawString.split('/');
-            if (parts.length < 2) return rawString.trim();
-            return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim();
+        function getLocalizedText(rawString) { //
+            if (!rawString) return ""; //
+            const parts = rawString.split('/'); //
+            if (parts.length < 2) return rawString.trim(); //
+            return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim(); //
         }
 
-        function toggleViewLanguage() {
-            currentLanguage = document.getElementById('view-lang-select').value;
-            renderExamWindow();
+        function toggleViewLanguage() { //
+            currentLanguage = document.getElementById('view-lang-select').value; //
+            renderExamWindow(); //
         }
 
-        function renderExamWindow() {
-            if (examDataMatrix.length === 0) return;
-            const currentItem = examDataMatrix[activeIndex];
+        function renderExamWindow() { //
+            if (examDataMatrix.length === 0) return; //
+            const currentItem = examDataMatrix[activeIndex]; //
             
-            if (questionStates[activeIndex] === 0 && !isReviewModeActive) {
-                questionStates[activeIndex] = 1;
-            }
+            if (questionStates[activeIndex] === 0 && !isReviewModeActive) { //
+                questionStates[activeIndex] = 1; //
+            } //
 
-            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`;
-            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : '';
-            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text);
+            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; //
+            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : ''; //
+            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); //
             
-            const container = document.getElementById('target-options-container');
-            const feedbackContainer = document.getElementById('review-feedback-container');
-            container.innerHTML = '';
-            feedbackContainer.innerHTML = '';
+            const container = document.getElementById('target-options-container'); //
+            const feedbackContainer = document.getElementById('review-feedback-container'); //
+            container.innerHTML = ''; //
+            feedbackContainer.innerHTML = ''; //
             
-            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d];
-            const userChoice = selectedAnswers[activeIndex];
-            const correctChoice = currentItem.correct;
+            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d]; //
+            const userChoice = selectedAnswers[activeIndex]; //
+            const correctChoice = currentItem.correct; //
 
-            optArray.forEach((opt, idx) => {
-                let statusClass = '';
-                let isCheckedAttr = '';
+            optArray.forEach((opt, idx) => { //
+                let statusClass = ''; //
+                let isCheckedAttr = ''; //
 
-                if (isReviewModeActive) {
-                    if (userChoice === idx && userChoice !== correctChoice) {
-                        statusClass = 'review-wrong';
-                    } else if (idx === correctChoice) {
-                        statusClass = 'review-correct';
-                    }
-                    if (userChoice === idx) isCheckedAttr = 'checked';
-                } else {
-                    if (userChoice === idx) {
-                        statusClass = 'selected';
-                        isCheckedAttr = 'checked';
-                    }
-                }
+                if (isReviewModeActive) { //
+                    if (userChoice === idx && userChoice !== correctChoice) { //
+                        statusClass = 'review-wrong'; //
+                    } else if (idx === correctChoice) { //
+                        statusClass = 'review-correct'; //
+                    } //
+                    if (userChoice === idx) isCheckedAttr = 'checked'; //
+                } else { //
+                    if (userChoice === idx) { //
+                        statusClass = 'selected'; //
+                        isCheckedAttr = 'checked'; //
+                    } //
+                } //
 
-                const localizedOption = getLocalizedText(opt);
+                const localizedOption = getLocalizedText(opt); //
                 const optHtml = `
                     <div class="option-row ${statusClass}" ${!isReviewModeActive ? `onclick="selectOptionIndex(${idx})"` : ''}>
                         <input type="radio" name="tcs-opt" id="opt-${idx}" ${isCheckedAttr} ${isReviewModeActive ? 'disabled' : ''}>
@@ -990,12 +1069,12 @@
                             (${String.fromCharCode(65 + idx)}) ${localizedOption}
                         </label>
                     </div>
-                `;
-                container.insertAdjacentHTML('beforeend', optHtml);
-            });
+                `; //
+                container.insertAdjacentHTML('beforeend', optHtml); //
+            }); //
 
-            if (isReviewModeActive) {
-                if (userChoice === null) {
+            if (isReviewModeActive) { //
+                if (userChoice === null) { //
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOU DID NOT ATTEMPT THIS QUESTION</div>
@@ -1003,12 +1082,12 @@
                                 <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
                             </div>
                         </div>
-                    `;
-                } else if (userChoice === correctChoice) {
+                    `; //
+                } else if (userChoice === correctChoice) { //
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box right">YOUR CHOICE WAS RIGHT</div>
-                    `;
-                } else {
+                    `; //
+                } else { //
                     feedbackContainer.innerHTML = `
                         <div class="review-status-box wrong">
                             <div>YOUR CHOICE WAS WRONG</div>
@@ -1017,143 +1096,143 @@
                                 <div class="databox"><strong>Correct Choice:</strong> Option ${String.fromCharCode(65 + correctChoice)}</div>
                             </div>
                         </div>
-                    `;
-                }
-            }
+                    `; //
+                } //
+            } //
 
-            renderPaletteGrid();
-        }
+            renderPaletteGrid(); //
+        } //
 
-        function selectOptionIndex(idx) {
-            if (isReviewModeActive) return;
-            selectedAnswers[activeIndex] = idx;
-            renderExamWindow();
-        }
+        function selectOptionIndex(idx) { //
+            if (isReviewModeActive) return; //
+            selectedAnswers[activeIndex] = idx; //
+            renderExamWindow(); //
+        } //
 
-        function clearResponse() {
-            if (isReviewModeActive) return;
-            selectedAnswers[activeIndex] = null;
-            questionStates[activeIndex] = 1;
-            renderExamWindow();
-        }
+        function clearResponse() { //
+            if (isReviewModeActive) return; //
+            selectedAnswers[activeIndex] = null; //
+            questionStates[activeIndex] = 1; //
+            renderExamWindow(); //
+        } //
 
-        function saveAndNext() {
-            if (isReviewModeActive) {
-                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); }
-                return;
-            }
-            if (selectedAnswers[activeIndex] !== null) {
-                questionStates[activeIndex] = 2;
-            } else {
-                questionStates[activeIndex] = 1;
-            }
-            moveToNextOrWrap();
-        }
+        function saveAndNext() { //
+            if (isReviewModeActive) { //
+                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); } //
+                return; //
+            } //
+            if (selectedAnswers[activeIndex] !== null) { //
+                questionStates[activeIndex] = 2; //
+            } else { //
+                questionStates[activeIndex] = 1; //
+            } //
+            moveToNextOrWrap(); //
+        } //
 
-        function markForReview() {
-            if (isReviewModeActive) return;
-            questionStates[activeIndex] = 3;
-            moveToNextOrWrap();
-        }
+        function markForReview() { //
+            if (isReviewModeActive) return; //
+            questionStates[activeIndex] = 3; //
+            moveToNextOrWrap(); //
+        } //
 
-        function moveToNextOrWrap() {
-            if (activeIndex < examDataMatrix.length - 1) {
-                activeIndex++;
-                renderExamWindow();
-            } else {
-                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit.");
-                renderPaletteGrid();
-            }
-        }
+        function moveToNextOrWrap() { //
+            if (activeIndex < examDataMatrix.length - 1) { //
+                activeIndex++; //
+                renderExamWindow(); //
+            } else { //
+                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit."); //
+                renderPaletteGrid(); //
+            } //
+        } //
 
-        function jumpToQuestion(idx) {
-            activeIndex = idx;
-            renderExamWindow();
-        }
+        function jumpToQuestion(idx) { //
+            activeIndex = idx; //
+            renderExamWindow(); //
+        } //
 
-        function renderPaletteGrid() {
-            const grid = document.getElementById('palette-grid-holder');
-            grid.innerHTML = '';
+        function renderPaletteGrid() { //
+            const grid = document.getElementById('palette-grid-holder'); //
+            grid.innerHTML = ''; //
             
-            questionStates.forEach((stateValue, idx) => {
-                const isActive = idx === activeIndex;
+            questionStates.forEach((stateValue, idx) => { //
+                const isActive = idx === activeIndex; //
                 const cellHtml = `
                     <div class="palette-cell state-${stateValue} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
                         ${idx + 1}
                     </div>
-                `;
-                grid.insertAdjacentHTML('beforeend', cellHtml);
-            });
-        }
+                `; //
+                grid.insertAdjacentHTML('beforeend', cellHtml); //
+            }); //
+        } //
 
-        function triggerExamSubmission() {
-            if (timerEngine) clearInterval(timerEngine);
+        function triggerExamSubmission() { //
+            if (timerEngine) clearInterval(timerEngine); //
             
-            if (isReviewModeActive) {
-                window.location.href = sourceFile ? 'tutorials.html' : 'exams.html';
-                return;
-            }
+            if (isReviewModeActive) { //
+                window.location.href = sourceFile ? 'tutorials.html' : 'exams.html'; //
+                return; //
+            } //
             
-            let totalQuestions = examDataMatrix.length;
-            let attempted = 0;
-            let correct = 0;
-            let wrong = 0;
+            let totalQuestions = examDataMatrix.length; //
+            let attempted = 0; //
+            let correct = 0; //
+            let wrong = 0; //
 
-            selectedAnswers.forEach((answerIndex, qIndex) => {
-                if (answerIndex !== null) {
-                    attempted++;
-                    if (answerIndex === examDataMatrix[qIndex].correct) {
-                        correct++;
-                    } else {
-                        wrong++;
-                    }
-                }
-            });
+            selectedAnswers.forEach((answerIndex, qIndex) => { //
+                if (answerIndex !== null) { //
+                    attempted++; //
+                    if (answerIndex === examDataMatrix[qIndex].correct) { //
+                        correct++; //
+                    } else { //
+                        wrong++; //
+                    } //
+                } //
+            }); //
 
-            let finalScore = correct - (wrong * 0.33);
+            let finalScore = correct - (wrong * 0.33); //
 
-            document.getElementById('timer-header-wrapper').style.display = 'none';
-            document.getElementById('ribbon-bar-container').style.display = 'none';
-            document.getElementById('quiz-workspace').style.display = 'none';
+            document.getElementById('timer-header-wrapper').style.display = 'none'; //
+            document.getElementById('ribbon-bar-container').style.display = 'none'; //
+            document.getElementById('quiz-workspace').style.display = 'none'; //
             
-            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary";
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary"; //
 
-            document.getElementById('res-total').innerText = totalQuestions;
-            document.getElementById('res-attempted').innerText = attempted;
-            document.getElementById('res-correct').innerText = correct;
-            document.getElementById('res-wrong').innerText = wrong;
-            document.getElementById('res-final-score').innerText = finalScore.toFixed(2);
+            document.getElementById('res-total').innerText = totalQuestions; //
+            document.getElementById('res-attempted').innerText = attempted; //
+            document.getElementById('res-correct').innerText = correct; //
+            document.getElementById('res-wrong').innerText = wrong; //
+            document.getElementById('res-final-score').innerText = finalScore.toFixed(2); //
 
-            document.getElementById('quiz-report-workspace').style.display = 'flex';
-        }
+            document.getElementById('quiz-report-workspace').style.display = 'flex'; //
+        } //
 
-        function activateReviewMode() {
-            isReviewModeActive = true;
+        function activateReviewMode() { //
+            isReviewModeActive = true; //
             
-            document.getElementById('quiz-report-workspace').style.display = 'none';
-            document.getElementById('ribbon-bar-container').style.display = 'flex';
-            document.getElementById('quiz-workspace').style.display = 'flex';
+            document.getElementById('quiz-report-workspace').style.display = 'none'; //
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; //
+            document.getElementById('quiz-workspace').style.display = 'flex'; //
             
-            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode";
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode"; //
             
-            document.getElementById('action-btn-review').disabled = true;
-            document.getElementById('action-btn-review').style.opacity = '0.5';
-            document.getElementById('action-btn-review').style.cursor = 'not-allowed';
+            document.getElementById('action-btn-review').disabled = true; //
+            document.getElementById('action-btn-review').style.opacity = '0.5'; //
+            document.getElementById('action-btn-review').style.cursor = 'not-allowed'; //
             
-            document.getElementById('action-btn-clear').disabled = true;
-            document.getElementById('action-btn-clear').style.opacity = '0.5';
-            document.getElementById('action-btn-clear').style.cursor = 'not-allowed';
+            document.getElementById('action-btn-clear').disabled = true; //
+            document.getElementById('action-btn-clear').style.opacity = '0.5'; //
+            document.getElementById('action-btn-clear').style.cursor = 'not-allowed'; //
             
-            document.getElementById('action-btn-report').style.display = 'inline-block';
+            document.getElementById('action-btn-report').style.display = 'inline-block'; //
             
-            document.getElementById('action-btn-savenext').innerText = "Next Question →";
-            document.getElementById('action-btn-submit').innerText = sourceFile ? "Return to Tutorial Corner" : "Return to Exam Corner";
+            document.getElementById('action-btn-savenext').innerText = "Next Question →"; //
+            document.getElementById('action-btn-submit').innerText = sourceFile ? "Return to Tutorial Corner" : "Return to Exam Corner"; //
             
-            activeIndex = 0;
-            renderExamWindow();
-        }
+            activeIndex = 0; //
+            renderExamWindow(); //
+        } //
 
-        initializeQuizEngine();
+        initializeQuizEngine(); //
     </script>
 </body>
 </html>
