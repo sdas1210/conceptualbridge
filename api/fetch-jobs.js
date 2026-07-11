@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
     const { source } = req.query;
 
-    let rawFeedUrl = 'https://wb.indgovtjobs.net/rss.xml';
+    let rawFeedUrl = 'https://wb.indgovtjobs.net/rss.xml'; 
     if (source === 'rozgar') {
         rawFeedUrl = 'https://www.karmasandhan.com/feed'; 
     }
@@ -30,7 +30,11 @@ export default async function handler(req, res) {
                     finalLink = `https://wb.indgovtjobs.net/?s=${encodeURIComponent(searchKeyword)}`;
                 }
 
-                const rawText = (item.description || item.content || "").toLowerCase();
+                // Use whichever text body is longer/richer for extraction purposes,
+                // but keep original casing here (lowercased separately below).
+                const originalText = item.description || item.content || "";
+                const rawText = originalText.toLowerCase();
+
                 let detectedAge = "18 - 38 Years (Relaxable)";
                 if (rawText.includes("max 40") || rawText.includes("age limit 40")) detectedAge = "40 Years max";
                 
@@ -43,7 +47,7 @@ export default async function handler(req, res) {
                     link: finalLink,
                     pubDate: item.pubDate ? item.pubDate.split(' ')[0] : new Date().toISOString().split('T')[0],
                     description: item.description || item.content || "Official announcement data tables ready for inspection.",
-                    lastDate: "Refer to Source Document",
+                    lastDate: extractLastDate(originalText),
                     ageLimit: detectedAge,
                     reservation: "Applicable as per Government Norms",
                     totalVacancy: "Check Official Allocation Matrix",
@@ -89,4 +93,55 @@ export default async function handler(req, res) {
 
         return res.status(200).json({ status: "ok", items: fallbackList });
     }
+}
+
+// Scans a job's description/content text for phrases that typically precede a
+// deadline (e.g. "last date", "closes on", "apply before") and pulls out the
+// date that follows. Falls back to a clear "not found" label rather than a
+// vague "refer to source" message, so the UI can decide how to handle it.
+function extractLastDate(text) {
+    if (!text || typeof text !== 'string') return "Not specified in listing";
+
+    // Strip HTML tags so date text isn't split across markup.
+    const clean = text.replace(/<[^>]*>/g, ' ');
+    const lower = clean.toLowerCase();
+
+    // Phrases that commonly introduce a deadline in these job postings,
+    // ordered roughly by how strongly they signal an actual deadline.
+    const keywords = [
+        'last date to apply',
+        'last date for submission',
+        'last date',
+        'closing date',
+        'closes on',
+        'apply before',
+        'deadline',
+        'application window',
+        'window is open till',
+        'ends on'
+    ];
+
+    // A date can look like: 02-03-2026, 02/03/2026, 27-Jul-2026,
+    // or "16th July, 2026" / "16 July 2026".
+    const datePattern = /(\d{1,2}[\/\-.](?:\d{1,2}|[A-Za-z]{3,9})[\/\-.]\d{2,4})|(\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]{3,9},?\s+\d{4})/;
+
+    for (const keyword of keywords) {
+        const idx = lower.indexOf(keyword);
+        if (idx === -1) continue;
+
+        // Look at a window of text right after the keyword for a date.
+        const windowText = clean.substring(idx, idx + 120);
+        const match = windowText.match(datePattern);
+        if (match) {
+            return match[0].trim();
+        }
+    }
+
+    // Last resort: grab the first date-looking token anywhere in the text.
+    const anyDateMatch = clean.match(datePattern);
+    if (anyDateMatch) {
+        return anyDateMatch[0].trim();
+    }
+
+    return "Not specified in listing";
 }
