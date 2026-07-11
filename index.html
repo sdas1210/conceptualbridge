@@ -264,30 +264,6 @@
             animation: fadeIn 1.5s ease forwards 1s;
         }
 
-        /* NEW BADGE: Glassmorphic Bottom-Left Last Updated alignment parameters */
-        .last-updated-badge {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 30px;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            pointer-events: none;
-            opacity: 0;
-            animation: fadeIn 1.5s ease forwards 1s;
-        }
-
         .pulse-dot {
             width: 8px;
             height: 8px;
@@ -363,15 +339,9 @@
             h1 { font-size: 2.3rem; }
             .viewer-counter-badge {
                 position: static;
-                margin-top: 20px;
+                margin-top: 30px;
                 bottom: auto;
                 right: auto;
-            }
-            .last-updated-badge {
-                position: static;
-                margin-top: 10px;
-                bottom: auto;
-                left: auto;
             }
         }
     </style>
@@ -395,9 +365,10 @@
         <h1>Welcome to Conceptual Bridge</h1>
         <p class="subtitle">Your ultimate preparation hub for competitive examinations</p>
         
+        <!-- ENGAGING YOUTUBE PROMO REDIRECT HUB BANNER -->
         <a href="https://www.youtube.com/channel/UC6i1deP1oy1RHAx3VYL7oJw" target="_blank" class="youtube-promo-banner">
             <div class="yt-left-info">
-                <div class="yt-icon-badge">銅</div>
+                <div class="yt-icon-badge">📺</div>
                 <div class="yt-text-msg">
                     Subscribe to our <strong>YouTube Channel</strong> for free concept classes, detailed shortcuts, and the latest exam analysis updates!
                 </div>
@@ -413,26 +384,23 @@
 
     <div class="portal-grid">
         <a href="jobs.html" class="portal-card">
-            <div class="icon-box">直</div>
+            <div class="icon-box">💼</div>
             <h2>Jobs Corner</h2>
             <p>Stay updated with real-time official notifications, results announcement dates, and recruitment timelines.</p>
         </a>
 
+        <!-- UPDATED: BRAND NEW SEAMLESS GLASSMORPHIC NAVIGATION ENTRIES CARD FOR TUTORIALS -->
         <a href="tutorials.html" class="portal-card">
-            <div class="icon-box">雌</div>
+            <div class="icon-box">🎓</div>
             <h2>Free Tutorial Corner</h2>
             <p>Get our YouTube free video tutorials along with more exclusive content and downloadable study files.</p>
         </a>
 
         <a href="exams.html" class="portal-card">
-            <div class="icon-box">笨搾ｸ/div>
+            <div class="icon-box">✍️</div>
             <h2>Exam Corner</h2>
             <p>Access high-quality mock test packages. Practice with scrambled options and get instant live rankings.</p>
         </a>
-    </div>
-
-    <div class="last-updated-badge">
-        <span>Last Updated: <span id="last-updated-time">Loading...</span></span>
     </div>
 
     <div class="viewer-counter-badge">
@@ -441,48 +409,6 @@
     </div>
 
     <script>
-        // NEW METHOD: Safely reads commit histories through the public GitHub API logs
-        async function fetchGitHubLastCommitTimestamp() {
-            try {
-                // IMPORTANT DIRECTIONS: Change 'YOUR_GITHUB_USERNAME' and 'YOUR_REPO_NAME' to match your repository settings!
-                const username = "YOUR_GITHUB_USERNAME";
-                const repo = "YOUR_REPO_NAME";
-                const response = await fetch(`https://api.github.com/repos/${username}/${repo}/commits/main`);
-                
-                if (!response.ok) throw new Error();
-                const json = await response.json();
-                
-                if (json && json.commit && json.commit.committer && json.commit.committer.date) {
-                    const gitDate = new Date(json.commit.committer.date);
-                    
-                    // Formats date precisely into Indian/TCS standard patterns: "24th May, 2027 at 22:07:56"
-                    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-                    let dayValue = gitDate.getDate();
-                    
-                    // Adds numeric suffixes (st, nd, rd, th) accurately
-                    let suffix = "th";
-                    if (dayValue === 1 || dayValue === 21 || dayValue === 31) suffix = "st";
-                    else if (dayValue === 2 || dayValue === 22) suffix = "nd";
-                    else if (dayValue === 3 || dayValue === 23) suffix = "rd";
-                    
-                    const dateFormattedStr = gitDate.toLocaleDateString('en-GB', options);
-                    // Combines tokens seamlessly into your target presentation layout matrix string
-                    const finalOutput = `${dayValue}${suffix} ${dateFormattedStr.substring(dateFormattedStr.indexOf(' ') + 1)} at ${gitDate.toTimeString().split(' ')[0]}`;
-                    
-                    document.getElementById('last-updated-time').innerText = finalOutput;
-                } else {
-                    applyStaticBackupTimestamp();
-                }
-            } catch (err) {
-                applyStaticBackupTimestamp();
-            }
-        }
-
-        function applyStaticBackupTimestamp() {
-            // Backup presentation string used as standard placeholder fallback if network blocks API calls
-            document.getElementById('last-updated-time').innerText = "24th May, 2027 at 22:07:56";
-        }
-
         async function incrementCounter() {
             try {
                 const namespace = "conceptualbridge.in";
@@ -510,7 +436,6 @@
         }
 
         incrementCounter();
-        fetchGitHubLastCommitTimestamp();
     </script>
 </body>
 </html>
