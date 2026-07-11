@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-
+import { parseQuestionFile } from "../services/questionParser.js";
 export default async function handler(req, res) {
 
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -52,130 +52,17 @@ export default async function handler(req, res) {
         let combinedQuestions = [];
         let globalMetadata = {};
 
-        for (const currentFile of txtFiles) {
+       for (const currentFile of txtFiles) {
 
             const filePath = path.join(folderPath, currentFile);
-
-            const content = fs.readFileSync(filePath, 'utf8');
-
-            const standardizedContent = content.replace(/\r\n/g, '\n');
-
-            const blocks = standardizedContent
-                .split('\n\n')
-                .filter(b => b.trim().length > 0);
-
-            blocks.forEach(block => {
-
-                const lines = block.split('\n');
-
-                let isQuestionBlock = false;
-
-                let parsedBlock = {
-
-                    text: "",
-
-                    folder: targetFolder,
-
-                    sourceFile: currentFile
-
-                };
-
-                lines.forEach(l => {
-
-                    const cleanLine = l.trim();
-
-                    if (!cleanLine) return;
-
-                    if (cleanLine.startsWith('Q|')) {
-
-                        isQuestionBlock = true;
-
-                        parsedBlock.text += cleanLine.replace('Q|', '') + " ";
-
-                    }
-
-                    else if (cleanLine.startsWith('A|')) {
-
-                        parsedBlock.a = cleanLine.replace('A|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('B|')) {
-
-                        parsedBlock.b = cleanLine.replace('B|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('C|')) {
-
-                        parsedBlock.c = cleanLine.replace('C|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('D|')) {
-
-                        parsedBlock.d = cleanLine.replace('D|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('Topic|')) {
-
-                        parsedBlock.topic = cleanLine.replace('Topic|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('Correct|')) {
-
-                        const ansStr = cleanLine
-                            .replace('Correct|', '')
-                            .trim()
-                            .toUpperCase();
-
-                        parsedBlock.correct =
-                            ansStr === 'A' ? 0 :
-                            ansStr === 'B' ? 1 :
-                            ansStr === 'C' ? 2 : 3;
-
-                    }
-
-                    else if (cleanLine.startsWith('Exam|')) {
-
-                        globalMetadata.exam = cleanLine.replace('Exam|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('Shift|')) {
-
-                        parsedBlock.shift = cleanLine.replace('Shift|', '');
-
-                    }
-
-                    else if (cleanLine.startsWith('Level|')) {
-
-                        parsedBlock.level = cleanLine.replace('Level|', '');
-
-                    }
-
-                    else {
-
-                        if (isQuestionBlock && !parsedBlock.a) {
-
-                            parsedBlock.text += "<br><br>" + cleanLine;
-
-                        }
-
-                    }
-
-                });
-
-                if (isQuestionBlock) {
-
-                    combinedQuestions.push(parsedBlock);
-
-                }
-
-            });
-
+        
+            const parsedQuestions = parseQuestionFile(
+                filePath,
+                targetFolder
+            );
+        
+            combinedQuestions.push(...parsedQuestions);
+        
         }
 
         combinedQuestions = combinedQuestions.map(q => ({
