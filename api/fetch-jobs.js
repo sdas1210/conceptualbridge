@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
     const { source } = req.query;
 
-    let rawFeedUrl = 'https://wb.indgovtjobs.net/feed'; 
+    let rawFeedUrl = 'https://wb.indgovtjobs.net/rss.xml';
     if (source === 'rozgar') {
         rawFeedUrl = 'https://www.karmasandhan.com/feed'; 
     }
