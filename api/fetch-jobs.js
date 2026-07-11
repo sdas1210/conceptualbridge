@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
                 // Use whichever text body is longer/richer for extraction purposes,
                 // but keep original casing here (lowercased separately below).
-                const originalText = item.description || item.content || "";
+                const originalText = item.content || item.description || "";
                 const rawText = originalText.toLowerCase();
 
                 let detectedAge = "18 - 38 Years (Relaxable)";
