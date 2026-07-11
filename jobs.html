@@ -366,10 +366,10 @@
                         updateStatusIndicator('success', 'Live Stream Active');
                     }
 
-                    let savedStorageKey = `cached_jobs_${source}`;
+                    let savedStorageKey = `cached_jobs_v2_${source}`;
                     let historicalArchive = JSON.parse(localStorage.getItem(savedStorageKey)) || [];
                     
-                    let combinedStreams = [...data.items, ...historicalArchive];
+                    let combinedStreams = [...historicalArchive, ...data.items];
                     let uniqueMap = new Map();
                     combinedStreams.forEach(item => uniqueMap.set(item.title, item));
                     
