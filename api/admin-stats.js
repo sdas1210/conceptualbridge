@@ -1,15 +1,15 @@
 import fs from 'fs';
 import path from 'path';
+import { verifyToken } from './_adminAuth.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/json');
 
-    const { secret } = req.query;
-    const ADMIN_SECRET = 'shodas_admin_2026'; 
+    const { token } = req.query;
 
-    if (!secret || secret !== ADMIN_SECRET) {
+    if (!verifyToken(token)) {
         return res.status(404).json({ status: 'not_found' });
     }
 
