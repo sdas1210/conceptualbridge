@@ -224,19 +224,40 @@
     </div>
 
     <script>
-        const HARDCODED_PHRASE = 'shodas_admin_2026';
+        // NOTE: The password is verified server-side in /api/admin-login.
+        // Nothing here ever contains or checks the real secret - only a
+        // short-lived signed session token issued by the server.
 
         // Checks session storage so you don't have to keep re-entering the password on refresh
-        if (sessionStorage.getItem('admin_authenticated') === 'true') {
-            grantAccess(HARDCODED_PHRASE);
+        const savedToken = sessionStorage.getItem('admin_token');
+        if (savedToken) {
+            grantAccess(savedToken);
         }
 
-        function verifyAdminToken() {
-            const token = document.getElementById('admin-secret-input').value;
-            if (token === HARDCODED_PHRASE) {
-                sessionStorage.setItem('admin_authenticated', 'true');
-                grantAccess(token);
-            } else {
+        async function verifyAdminToken() {
+            const password = document.getElementById('admin-secret-input').value;
+            document.getElementById('gate-error').style.display = 'none';
+
+            try {
+                const response = await fetch('/api/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+
+                if (!response.ok) {
+                    document.getElementById('gate-error').style.display = 'block';
+                    return;
+                }
+
+                const payload = await response.json();
+                if (payload.status === 'success' && payload.token) {
+                    sessionStorage.setItem('admin_token', payload.token);
+                    grantAccess(payload.token);
+                } else {
+                    document.getElementById('gate-error').style.display = 'block';
+                }
+            } catch (error) {
                 document.getElementById('gate-error').style.display = 'block';
             }
         }
@@ -248,11 +269,17 @@
         }
 
         async function loadAdminStats(token) {
-            const API_URL = `/api/admin-stats?secret=${token}`; 
-            
+            const API_URL = `/api/admin-stats?token=${encodeURIComponent(token)}`;
+
             try {
                 const response = await fetch(API_URL);
-                if (!response.ok) return;
+                if (!response.ok) {
+                    // Token likely expired/invalid - drop back to the login gate.
+                    sessionStorage.removeItem('admin_token');
+                    document.getElementById('dashboard-contents').style.display = 'none';
+                    document.getElementById('security-gate').style.display = 'flex';
+                    return;
+                }
                 
                 const payload = await response.json();
                 if (payload.status === 'success') {
