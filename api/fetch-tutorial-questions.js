@@ -66,9 +66,24 @@ export default async function handler(req, res) {
             [parsedQuestions[i], parsedQuestions[j]] = [parsedQuestions[j], parsedQuestions[i]];
         }
 
-        // 5. Slice down to exactly 10 questions and return clean JSON
-        const testSet = parsedQuestions.slice(0, 10);
-        return res.status(200).json(testSet);
+       // 5. Slice down to exactly 10 questions
+            const testSet = parsedQuestions.slice(0, 10);
+            
+            // Random Tutorial Pass Percentage
+            // Between 80% and 95%
+            const passPercentage = Number(
+                (80 + Math.random() * 15).toFixed(2)
+            );
+            
+            return res.status(200).json({
+            
+                status: "ok",
+            
+                passPercentage,
+            
+                data: testSet
+            
+            });
 
     } catch (err) {
         console.error(err);
