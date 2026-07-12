@@ -150,8 +150,7 @@ export function parseQuestionFile(filePath, folder = "") {
         if (line.startsWith("Difficulty|")) {
 
             let diff =
-                parseInt(line.substring(11).trim());
-
+                parseFloat(line.substring(11).trim());
             if (isNaN(diff))
                 diff = 5;
 
