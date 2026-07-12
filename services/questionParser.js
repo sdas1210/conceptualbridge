@@ -16,6 +16,23 @@ export function parseQuestionFile(filePath, folder = "") {
     let questions = [];
 
     let currentQuestion = null;
+    let globalMetadata = {
+
+        exam: "",
+    
+        subject: "",
+    
+        topic: "",
+    
+        subTopic: "",
+    
+        level: "",
+    
+        notification: "",
+    
+        type: ""
+    
+    };
 
     function saveCurrentQuestion() {
 
@@ -60,7 +77,7 @@ export function parseQuestionFile(filePath, folder = "") {
             currentQuestion = {
 
                 text: line.substring(2).trim(),
-            
+
                 a: "",
                 b: "",
                 c: "",
@@ -70,15 +87,21 @@ export function parseQuestionFile(filePath, folder = "") {
             
                 difficulty: 5,
             
-                
-            
                 shift: "",
             
-                topic: "",
+                exam: globalMetadata.exam,
             
-                exam: "",
+                subject: globalMetadata.subject,
             
-                level: ""
+                topic: globalMetadata.topic,
+            
+                subTopic: globalMetadata.subTopic,
+            
+                level: globalMetadata.level,
+            
+                notification: globalMetadata.notification,
+            
+                type: globalMetadata.type
             
             };
 
@@ -146,7 +169,25 @@ export function parseQuestionFile(filePath, folder = "") {
 
         // ---------- DIFFICULTY ----------
 
-        (line.startsWith("Difficulty|")) 
+        if (line.startsWith("Difficulty|")) {
+
+            let diff = parseFloat(
+                line.substring(11).trim()
+            );
+        
+            if (isNaN(diff))
+                diff = 5;
+        
+            diff = Math.max(
+                1,
+                Math.min(10, diff)
+            );
+        
+            currentQuestion.difficulty = diff;
+        
+            continue;
+        
+        }
 
         // ---------- SHIFT ----------
 
@@ -159,37 +200,89 @@ export function parseQuestionFile(filePath, folder = "") {
 
         }
 
-        // ---------- TOPIC ----------
+        // ---------- GLOBAL METADATA ----------
 
-        if (line.startsWith("Topic|")) {
+if (line.startsWith("Exam|")) {
 
-            currentQuestion.topic =
-                line.substring(6).trim();
+    const value = line.substring(5).trim();
 
+    if (value !== "")
+        globalMetadata.exam = value;
+
+    continue;
+
+}
+
+if (line.startsWith("Subject|")) {
+
+    const value = line.substring(8).trim();
+
+    if (value !== "")
+        globalMetadata.subject = value;
+
+    continue;
+
+}
+
+if (line.startsWith("Topic|")) {
+
+            const value = line.substring(6).trim();
+        
+            if (value !== "")
+                globalMetadata.topic = value;
+        
             continue;
-
+        
         }
-
-        // ---------- EXAM ----------
-
-        if (line.startsWith("Exam|")) {
-
-            currentQuestion.exam =
-                line.substring(5).trim();
-
+        
+        if (line.startsWith("SubTopic|")) {
+        
+            const value = line.substring(9).trim();
+        
+            if (value !== "")
+                globalMetadata.subTopic = value;
+        
             continue;
-
+        
         }
-
-        // ---------- LEVEL ----------
-
+        
         if (line.startsWith("Level|")) {
-
-            currentQuestion.level =
-                line.substring(6).trim();
-
+        
+            const value = line.substring(6).trim();
+        
+            if (value !== "")
+                globalMetadata.level = value;
+        
             continue;
-
+        
+        }
+        
+        if (
+        
+            line.startsWith("Notification|") ||
+        
+            line.startsWith("Notificaiton|")
+        
+        ) {
+        
+            const value = line.substring(line.indexOf("|") + 1).trim();
+        
+            if (value !== "")
+                globalMetadata.notification = value;
+        
+            continue;
+        
+        }
+        
+        if (line.startsWith("Type|")) {
+        
+            const value = line.substring(5).trim();
+        
+            if (value !== "")
+                globalMetadata.type = value;
+        
+            continue;
+        
         }
 
     }
