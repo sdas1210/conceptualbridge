@@ -264,6 +264,31 @@
             animation: fadeIn 1.5s ease forwards 1s;
         }
 
+        /* Glassmorphic Bottom-Left "Last Updated On" badge - mirrors the
+           viewer-counter-badge styling on the opposite corner. */
+        .last-updated-badge {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards 1s;
+        }
+
         .pulse-dot {
             width: 8px;
             height: 8px;
@@ -343,6 +368,12 @@
                 bottom: auto;
                 right: auto;
             }
+            .last-updated-badge {
+                position: static;
+                margin-top: 10px;
+                bottom: auto;
+                left: auto;
+            }
         }
     </style>
 </head>
@@ -408,6 +439,10 @@
         <span>Total Visits: <span id="visit-count">...</span></span>
     </div>
 
+    <div class="last-updated-badge" id="last-updated-badge" style="display:none;">
+        <span>Last Updated On: <span id="last-updated-text">...</span></span>
+    </div>
+
     <script>
         async function incrementCounter() {
             try {
@@ -436,6 +471,64 @@
         }
 
         incrementCounter();
+
+        // Fetches the current deployment's actual commit timestamp (set
+        // automatically by Vercel/GitHub on every push) and displays it in
+        // the format: 12th July, 2026 at 19:07:26 (IST).
+        function getOrdinalSuffix(day) {
+            const remainder10 = day % 10;
+            const remainder100 = day % 100;
+            if (remainder100 >= 11 && remainder100 <= 13) return 'th';
+            if (remainder10 === 1) return 'st';
+            if (remainder10 === 2) return 'nd';
+            if (remainder10 === 3) return 'rd';
+            return 'th';
+        }
+
+        function formatLastUpdated(isoString) {
+            const date = new Date(isoString);
+            const parts = new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Asia/Kolkata',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).formatToParts(date);
+
+            const get = (type) => parts.find(p => p.type === type)?.value || '';
+            const day = parseInt(get('day'), 10);
+            const month = get('month');
+            const year = get('year');
+            let hour = get('hour');
+            const minute = get('minute');
+            const second = get('second');
+
+            // formatToParts with hour12:false can return "24" for midnight hour;
+            // normalize that to "00".
+            if (hour === '24') hour = '00';
+
+            return `${day}${getOrdinalSuffix(day)} ${month}, ${year} at ${hour}:${minute}:${second}`;
+        }
+
+        async function loadLastUpdated() {
+            try {
+                const response = await fetch('/api/deploy-info');
+                if (!response.ok) return;
+
+                const data = await response.json();
+                if (data && data.commitDate) {
+                    document.getElementById('last-updated-text').innerText = formatLastUpdated(data.commitDate);
+                    document.getElementById('last-updated-badge').style.display = 'flex';
+                }
+            } catch (err) {
+                // Silently do nothing if unavailable - badge just stays hidden.
+            }
+        }
+
+        loadLastUpdated();
     </script>
 </body>
 </html>
