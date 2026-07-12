@@ -1214,7 +1214,31 @@
             } 
 
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
-            document.getElementById('shift-label-view').innerText = currentItem.exam ? `${currentItem.exam} | ${currentItem.shift || ''}` : ''; 
+            const shiftLabel = document.getElementById('shift-label-view');
+
+            if (isReviewModeActive) {
+            
+                let text = "";
+            
+                if (currentItem.exam) {
+                    text += currentItem.exam;
+                }
+            
+                if (currentItem.shift) {
+            
+                    if (text !== "") text += " | ";
+            
+                    text += currentItem.shift;
+            
+                }
+            
+                shiftLabel.innerText = text;
+            
+            } else {
+            
+                shiftLabel.innerText = "";
+            
+            } 
             document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); 
             
             const container = document.getElementById('target-options-container'); 
