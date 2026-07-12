@@ -901,6 +901,25 @@
                     <td>Total Marks Obtained</td>
                     <td id="res-final-score">0.00</td>
                 </tr>
+                <tr>
+                    <td>📊 Paper Difficulty</td>
+                    <td id="res-difficulty">--</td>
+                </tr>
+                
+                <tr>
+                    <td>🎯 Dynamic Cut-off Marks</td>
+                    <td id="res-passmark">--</td>
+                </tr>
+                
+                <tr>
+                    <td>🏆 Result Status</td>
+                    <td id="res-result">--</td>
+                </tr>
+                
+                <tr>
+                    <td>⭐ Performance Rating</td>
+                    <td id="res-rating">--</td>
+                </tr>
             </table>
 
             <div class="report-btn-stack">
@@ -936,6 +955,8 @@
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
         let examDataMatrix = [];
+        let paperDifficulty = 5;
+        let dynamicPassMark = 0;
         let activeIndex = 0;
         let currentLanguage = "EN";
         
@@ -959,6 +980,8 @@
                 if (!response.ok) { showMissingFileScreen(); return; } 
 
                 const payload = await response.json(); 
+                paperDifficulty = payload.averageDifficulty || 5;
+                dynamicPassMark = payload.passMark || 0;
                 let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); 
 
                 if (targetQuestions.length > 0) { 
@@ -1497,6 +1520,82 @@
             }); 
 
             let finalScore = correct - (wrong * 0.33); 
+            //------------------------------------------------
+            // Difficulty Badge
+            //------------------------------------------------
+            
+            let difficultyLabel = "";
+            let difficultyEmoji = "";
+            
+            if (paperDifficulty <= 2.5) {
+            
+                difficultyEmoji = "🟢";
+                difficultyLabel = "Very Easy";
+            
+            }
+            else if (paperDifficulty <= 4) {
+            
+                difficultyEmoji = "🔵";
+                difficultyLabel = "Easy";
+            
+            }
+            else if (paperDifficulty <= 5.5) {
+            
+                difficultyEmoji = "🟡";
+                difficultyLabel = "Moderate";
+            
+            }
+            else if (paperDifficulty <= 7) {
+            
+                difficultyEmoji = "🟠";
+                difficultyLabel = "Hard";
+            
+            }
+            else if (paperDifficulty <= 8.5) {
+            
+                difficultyEmoji = "🔴";
+                difficultyLabel = "Very Hard";
+            
+            }
+            else {
+            
+                difficultyEmoji = "⚫";
+                difficultyLabel = "Expert";
+            
+            }
+            
+            //------------------------------------------------
+            // Pass / Fail
+            //------------------------------------------------
+            
+            const passed = finalScore >= dynamicPassMark;
+            
+            //------------------------------------------------
+            // Performance Percentage
+            //------------------------------------------------
+            
+            const scorePercent =
+                (Math.max(finalScore,0) / totalQuestions) * 100;
+            
+            let rating = "";
+            
+            if(scorePercent>=90)
+                rating="🥇 Outstanding";
+            
+            else if(scorePercent>=75)
+                rating="🌟 Excellent";
+            
+            else if(scorePercent>=60)
+                rating="👍 Good";
+            
+            else if(scorePercent>=45)
+                rating="🙂 Average";
+            
+            else if(scorePercent>=35)
+                rating="📘 Needs Improvement";
+            
+            else
+                rating="📚 Practice More";
 
             document.getElementById('timer-header-wrapper').style.display = 'none'; 
             document.getElementById('ribbon-bar-container').style.display = 'none'; 
