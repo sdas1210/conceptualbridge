@@ -60,31 +60,27 @@ export function parseQuestionFile(filePath, folder = "") {
 
             currentQuestion = {
 
-                question: line.substring(2).trim(),
-
-                options: {
-
-                    A: "",
-                    B: "",
-                    C: "",
-                    D: ""
-
-                },
-
+                text: line.substring(2).trim(),
+            
+                a: "",
+                b: "",
+                c: "",
+                d: "",
+            
                 correct: null,
-
+            
                 difficulty: 5,
-
+            
                 passMark: 6,
-
+            
                 shift: "",
-
+            
                 topic: "",
-
+            
                 exam: "",
-
+            
                 level: ""
-
+            
             };
 
             continue;
@@ -97,7 +93,7 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("A|")) {
 
-            currentQuestion.options.A =
+            currentQuestion.a =
                 line.substring(2).trim();
 
             continue;
@@ -106,7 +102,7 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("B|")) {
 
-            currentQuestion.options.B =
+            currentQuestion.b =
                 line.substring(2).trim();
 
             continue;
@@ -115,7 +111,7 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("C|")) {
 
-            currentQuestion.options.C =
+            currentQuestion.c =
                 line.substring(2).trim();
 
             continue;
@@ -124,7 +120,7 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("D|")) {
 
-            currentQuestion.options.D =
+            currentQuestion.d =
                 line.substring(2).trim();
 
             continue;
