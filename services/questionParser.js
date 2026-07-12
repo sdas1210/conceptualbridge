@@ -32,8 +32,7 @@ export function parseQuestionFile(filePath, folder = "") {
             currentQuestion.correct !== null
         ) {
 
-            currentQuestion.passMark =
-                11 - currentQuestion.difficulty;
+            
 
             currentQuestion.sourceFile =
                 path.basename(filePath);
@@ -71,7 +70,7 @@ export function parseQuestionFile(filePath, folder = "") {
             
                 difficulty: 5,
             
-                passMark: 6,
+                
             
                 shift: "",
             
@@ -147,24 +146,7 @@ export function parseQuestionFile(filePath, folder = "") {
 
         // ---------- DIFFICULTY ----------
 
-        if (line.startsWith("Difficulty|")) {
-
-            let diff =
-                parseFloat(line.substring(11).trim());
-            if (isNaN(diff))
-                diff = 5;
-
-            diff =
-                Math.min(
-                    10,
-                    Math.max(1, diff)
-                );
-
-            currentQuestion.difficulty = diff;
-
-            continue;
-
-        }
+        (line.startsWith("Difficulty|")) 
 
         // ---------- SHIFT ----------
 
