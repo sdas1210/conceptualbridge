@@ -955,8 +955,20 @@
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
         let examDataMatrix = [];
+
         let paperDifficulty = 5;
+        
         let dynamicPassMark = 0;
+        
+        let paperNotification = "";
+        
+        let paperType = "";
+        
+        let paperSubject = "";
+        
+        let paperLevel = "";
+
+        
         let activeIndex = 0;
         let currentLanguage = "EN";
         
@@ -982,6 +994,11 @@
                 const payload = await response.json(); 
                 paperDifficulty = payload.averageDifficulty || 5;
                 dynamicPassMark = payload.passMark || 0;
+                paperNotification = payload.notification || "";
+                paperType = payload.type || "";
+                paperSubject = payload.subject || "";
+                paperLevel = payload.level || "";
+                
                 let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); 
 
                 if (targetQuestions.length > 0) { 
@@ -1608,7 +1625,17 @@
             document.getElementById('res-correct').innerText = correct; 
             document.getElementById('res-wrong').innerText = wrong; 
             document.getElementById('res-final-score').innerText = finalScore.toFixed(2); 
-
+            document.getElementById("res-difficulty").innerText =
+            `${difficultyEmoji} ${difficultyLabel} (${paperDifficulty.toFixed(2)}/10)`;
+            
+            document.getElementById("res-passmark").innerText =
+            `${dynamicPassMark.toFixed(2)} / ${totalQuestions}`;
+            
+            document.getElementById("res-result").innerText =
+            passed ? "✅ PASS" : "❌ FAIL";
+            
+            document.getElementById("res-rating").innerText =
+            rating;
             document.getElementById('quiz-report-workspace').style.display = 'flex'; 
         } 
 
