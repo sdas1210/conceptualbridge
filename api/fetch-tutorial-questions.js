@@ -71,15 +71,15 @@ export default async function handler(req, res) {
             
             // Random Tutorial Pass Percentage
             // Between 80% and 95%
-            const passPercentage = Number(
-                (80 + Math.random() * 15).toFixed(2)
+            const passMark = Number(
+                (8 + Math.random() * 1.5).toFixed(2)
             );
-            
+                        
             return res.status(200).json({
-            
+
                 status: "ok",
             
-                passPercentage,
+                passMark,
             
                 data: testSet
             
