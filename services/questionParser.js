@@ -24,11 +24,11 @@ export function parseQuestionFile(filePath, folder = "") {
         // Validation
 
         if (
-            currentQuestion.question &&
-            currentQuestion.options.A &&
-            currentQuestion.options.B &&
-            currentQuestion.options.C &&
-            currentQuestion.options.D &&
+            currentQuestion.text &&
+            currentQuestion.a &&
+            currentQuestion.b &&
+            currentQuestion.c &&
+            currentQuestion.d &&
             currentQuestion.correct !== null
         ) {
 
