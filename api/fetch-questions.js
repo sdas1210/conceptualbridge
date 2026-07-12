@@ -90,15 +90,37 @@ export default async function handler(req, res) {
         }
 
         const finalPool = shuffleArray(combinedQuestions)
-
             .slice(0, totalNeeded);
-
+        
+        // Calculate Average Difficulty
+        const totalDifficulty = finalPool.reduce(
+            (sum, q) => sum + (q.difficulty || 5),
+            0
+        );
+        
+        const averageDifficulty =
+            finalPool.length > 0
+                ? totalDifficulty / finalPool.length
+                : 5;
+        
+        // Calculate Dynamic Pass Percentage
+        let passPercentage = (10 - averageDifficulty) * 10;
+        
+        passPercentage = Math.max(
+            35,
+            Math.min(80, passPercentage)
+        );
+        
         return res.status(200).json({
-
+        
             status: 'ok',
-
+        
+            averageDifficulty: Number(averageDifficulty.toFixed(2)),
+        
+            passPercentage: Number(passPercentage.toFixed(2)),
+        
             data: finalPool
-
+        
         });
 
     }
