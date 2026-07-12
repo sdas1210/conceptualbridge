@@ -104,20 +104,27 @@ export default async function handler(req, res) {
                 : 5;
         
         // Calculate Dynamic Pass Percentage
-        let passPercentage = (10 - averageDifficulty) * 10;
-        
+       let passPercentage = (10 - averageDifficulty) * 10;
+
         passPercentage = Math.max(
             35,
             Math.min(80, passPercentage)
         );
         
-        return res.status(200).json({
+        // Convert percentage to marks
+        const passMark = Number(
+            ((passPercentage / 100) * finalPool.length).toFixed(2)
+        );
         
+        return res.status(200).json({
+
             status: 'ok',
         
             averageDifficulty: Number(averageDifficulty.toFixed(2)),
         
-            passPercentage: Number(passPercentage.toFixed(2)),
+            passPercentage: Number(passPercentage.toFixed(2)), // optional to keep
+        
+            passMark,
         
             data: finalPool
         
