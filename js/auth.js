@@ -2,30 +2,50 @@ import { auth } from "./firebase-config.js";
 
 import {
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const provider = new GoogleAuthProvider();
 
 const loginBtn = document.getElementById("loginBtn");
 
+onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+
+        loginBtn.innerHTML = "👤 " + user.displayName;
+
+        console.log("Already Logged In");
+
+    } else {
+
+        loginBtn.innerHTML = "Log In";
+
+        console.log("Not Logged In");
+
+    }
+
+});
+
 loginBtn.addEventListener("click", async () => {
 
-    loginBtn.disabled = true;
+    if (auth.currentUser) {
+
+        await signOut(auth);
+
+        return;
+
+    }
 
     try {
 
-        const result = await signInWithPopup(auth, provider);
-
-        console.log("Logged in:", result.user);
+        await signInWithPopup(auth, provider);
 
     } catch (error) {
 
-        console.error(error.code, error.message);
-
-    } finally {
-
-        loginBtn.disabled = false;
+        console.error(error);
 
     }
 
