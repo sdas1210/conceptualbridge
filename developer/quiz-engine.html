@@ -1,1 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCS iON Digital Assessment Engine</title>
+    <style>
+        :root {
+            --tcs-blue: #1e3a8a;
+            --tcs-light-bg: #f3f4f6;
+            --tcs-border: #d1d5db;
+            --status-not-visited: #e5e7eb;
+            --status-not-answered: #ef4444;
+            --status-answered: #22c55e;
+            --status-review: #a855f7;
+            /* CHANGED VALUE LAYOUT STYLE: Dedicated orange color tone indicator configuration */
+            --status-wrong: #ed8936; 
+        }
 
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--tcs-light-bg);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .tcs-header {
+            background-color: var(--tcs-blue);
+            color: white;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .timer-box {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .section-bar {
+            background-color: #e5e7eb;
+            border-bottom: 1px solid var(--tcs-border);
+            padding: 8px 20px;
+            display: flex;
+        }
+
+        .section-tab {
+            background: white;
+            border: 1px solid var(--tcs-blue);
+            color: var(--tcs-blue);
+            padding: 6px 16px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-radius: 4px;
+        }
+
+        .main-workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .question-panel{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+        min-height:0;
+        }
+
+        .question-header {
+            padding: 12px 25px;
+            border-bottom: 1px solid var(--tcs-border);
+            font-weight: bold;
+            font-size: 1rem;
+            background-color: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lang-selector-header {
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid var(--tcs-blue);
+            background: white;
+            color: var(--tcs-blue);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .question-content{
+            flex:1;
+            overflow-y:auto;
+            overflow-x:hidden;
+        
+            position:relative;
+        
+            padding:25px;
+            padding-bottom:120px;
+        
+            min-height:0;
+        
+            z-index:1;
+        
+            scroll-behavior:smooth;
+        
+            -webkit-overflow-scrolling:touch;
+        }
+
+        .options-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid var(--tcs-border);
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background 0.2s;
+        }
+
+        .option-row:hover { background-color: #f9fafb; }
+        
+        .option-row.selected {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .option-row.review-correct {
+            background-color: #f0fdf4 !important;
+            border-color: #22c55e !important;
+            color: #15803d !important;
+        }
+
+        .option-row.review-wrong {
+            background-color: #fef2f2 !important;
+            border-color: #ef4444 !important;
+            color: #b91c1c !important;
+        }
+
+        .option-row input { margin-right: 12px; transform: scale(1.2); }
+
+       /*================ REVIEW PANEL ================*/
+
+        .review-status-box{
+            margin-top:18px;
+        }
+        
+        /* Common Card */
+        
+        .review-card{
+            display:inline-block;
+            width:fit-content;
+            max-width:100%;
+            border-radius:10px;
+            padding:14px 18px;
+            margin-bottom:16px;
+            border:2px solid transparent;
+            box-sizing:border-box;
+        }
+        
+        .review-card-title{
+
+            font-size:16px;
+        
+            font-weight:700;
+        
+            margin-bottom:6px;
+        
+        }
+        
+        .review-answer-inline{
+
+            font-size:16px;
+        
+            font-weight:600;
+        
+            line-height:1.5;
+        
+            color:#111827;
+        
+        }
+        
+        /* Wrong */
+        
+        .review-card.red{
+            background:#FEF2F2;
+            border-color:#EF4444;
+        }
+        
+        .review-card.red .review-card-title{
+            color:#B91C1C;
+        }
+        
+        /* Correct */
+        
+        .review-card.blue{
+            background:#EFF6FF;
+            border-color:#2563EB;
+        }
+        
+        .review-card.blue .review-card-title{
+            color:#1D4ED8;
+        }
+        
+        /* Not Attempted */
+        
+        .review-card.pink{
+            background:#F3E8FF;
+            border-color:#A855F7;
+        }
+        
+        .review-card.pink .review-card-title{
+            color:#7E22CE;
+        }
+        
+        /* Correct Answer Card */
+        
+        .review-card.green{
+            background:#F0FDF4;
+            border-color:#22C55E;
+        }
+        
+        .review-card.green .review-card-title{
+            color:#166534;
+        }
+
+        .review-card.compact{
+
+            display:inline-block;
+        
+            width:fit-content;
+        
+            max-width:100%;
+        
+            padding:14px 18px;
+        
+        }
+        
+        /* Learn Module */
+        
+        .learn-card{
+        
+            margin-top:25px;
+        
+            background:white;
+        
+            border:1px solid #D1D5DB;
+        
+            border-radius:10px;
+        
+            padding:20px;
+        
+        }
+        
+        .learn-title{
+        
+            font-size:18px;
+        
+            font-weight:bold;
+        
+            margin-bottom:15px;
+        
+        }
+        
+        .learn-btn{
+        
+            background:#2563EB;
+        
+            color:white;
+        
+            border:none;
+        
+            padding:12px 22px;
+        
+            border-radius:6px;
+        
+            cursor:pointer;
+        
+            font-weight:bold;
+        
+        }
+        
+        .learn-placeholder{
+        
+            margin-top:15px;
+        
+            color:#6B7280;
+        
+            line-height:1.7;
+        
+        }
+        .meta-bottom-right {
+            position: absolute;
+            bottom: 10px;
+            right: 25px;
+            font-size: 0.85rem;
+            color: #4b5563;
+            font-weight: bold;
+            background-color: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--tcs-border);
+            pointer-events: none;
+        }
+
+        .action-tray{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        
+            padding:15px 25px;
+        
+            background:#f3f4f6;
+        
+            border-top:1px solid var(--tcs-border);
+        
+            position:sticky;
+            bottom:0;
+        
+            z-index:999;
+        
+            flex-shrink:0;
+        }
+
+        .btn-tcs {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid var(--tcs-border);
+            font-size: 0.9rem;
+        }
+
+        .btn-white { background: white; color: #374151; }
+        .btn-white:hover { background: #f9fafb; }
+        .btn-blue { background: #2563eb; color: white; border: none; }
+        .btn-blue:hover { background: #1d4ed8; }
+        .btn-orange { background: #ed8936; color: white; border: none; }
+        .btn-orange:hover { background: #dd6b20; }
+
+        .dashboard-panel {
+            flex: 1;
+            min-width: 280px;
+            max-width: 340px;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-box {
+            padding: 20px;
+            border-bottom: 1px solid var(--tcs-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        .palette-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .palette-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .palette-cell {
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            border: 1px solid #d1d5db;
+            position: relative;
+        }
+
+        .state-0 { background-color: var(--status-not-visited); color: #374151; }
+        .state-1 { background-color: var(--status-not-answered); color: white; border-radius: 50% 50% 0 0; }
+        .state-2 { background-color: var(--status-answered); color: white; border-radius: 0 0 50% 50%; }
+        .state-3 { background-color: var(--status-review); color: white; border-radius: 50%; }
+        /* NEW VALUE CLASS: Wrongly answered visual cell styling configuration mapped to Orange */
+        .state-wrong-review { background-color: var(--status-wrong) !important; color: white !important; border-radius: 0 0 50% 50%; }
+
+        .active-cell { box-shadow: 0 0 0 3px #3b82f6; }
+
+        .legend-box {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid var(--tcs-border);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-badge { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #ccc; }
+
+        .wizard-container {
+            flex: 1;
+            display: flex;
+            background: white;
+            overflow: hidden;
+        }
+        .wizard-left {
+            flex: 4;
+            padding: 25px 40px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+        .wizard-right {
+            flex: 1;
+            min-width: 240px;
+            max-width: 280px;
+            background: #f9fafb;
+            border-left: 1px solid var(--tcs-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .wizard-avatar {
+            width: 90px;
+            height: 90px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            border: 2px solid var(--tcs-border);
+        }
+        .wizard-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #4b5563;
+        }
+        
+        .wizard-footer {
+            height: 60px;
+            background: #f3f4f6;
+            border-top: 1px solid var(--tcs-border);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            box-sizing: border-box;
+        }
+        
+        .wizard-footer-fullwidth {
+            padding: 12px 30px;
+            background: #f3f4f6;
+            border-top: 1px solid var(--tcs-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-col-left { flex: 1; display: flex; justify-content: flex-start; }
+        .footer-col-center { flex: 1; display: flex; justify-content: center; }
+        .footer-col-right { flex: 1; }
+
+        .symbol-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 12px 0;
+            font-weight: 500;
+        }
+        .symbol-shape {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            border: 1px solid #9ca3af;
+        }
+        
+        .btn-wizard-next {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        .btn-wizard-next:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+
+        .btn-wizard-ready {
+            background: #22d3ee;
+            color: #083344;
+            border: 1px solid #06b6d4;
+            padding: 12px 40px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-wizard-ready:disabled { background: #cbd5e1; color: #94a3b8; border-color: #cbd5e1; cursor: not-allowed; }
+
+        .lower-declarations-box { margin-top: auto; border-top: 1px solid var(--tcs-border); padding-top: 20px; }
+        .important-warning-text { color: #b91c1c; font-weight: bold; margin: 10px 0; }
+
+        .report-page-container {
+            flex: 1;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 40px 20px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .score-flat-card {
+            background: #ffffff;
+            border: 1px solid var(--tcs-border);
+            border-radius: 12px;
+            padding: 35px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            color: #333333;
+            text-align: center;
+        }
+
+        .score-flat-card h2 { margin: 0 0 5px 0; font-size: 1.8rem; color: var(--tcs-blue); }
+        .score-flat-card p { margin: 0 0 25px 0; color: #6b7280; font-size: 0.95rem; }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .metrics-table tr { border-bottom: 1px solid var(--tcs-border); }
+        .metrics-table td { padding: 14px 10px; color: #4b5563; }
+        .metrics-table td:last-child { text-align: right; font-weight: bold; color: #111827; }
+
+        .highlight-total-row {
+            background: #f0fdfa;
+            font-size: 1.2rem;
+            color: #0d9488;
+            border-bottom: 2px solid #0d9488 !important;
+        }
+        .highlight-total-row td { color: #0d9488 !important; }
+        
+        .report-btn-stack {
+            display: flex;
+            gap: 15px;
+        }
+        .report-btn-stack button { flex: 1; padding: 14px; font-size: 0.95rem; }
+
+        .report-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .report-modal-box {
+            background: white;
+            border: 1px solid var(--tcs-border);
+            border-radius: 6px;
+            width: 90%;
+            max-width: 480px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: #333;
+        }
+
+        .report-modal-box h4 { margin: 0 0 10px 0; color: var(--tcs-blue); font-size: 1.1rem; }
+        .report-modal-box p { margin: 0 0 12px 0; font-size: 0.88rem; color: #555; }
+        
+        .report-textarea {
+            width: 100%;
+            height: 110px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid var(--tcs-border);
+            border-radius: 4px;
+            resize: none;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .report-textarea:focus { border-color: #3b82f6; }
+
+        .report-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .main-workspace { flex-direction: column; }
+            .dashboard-panel { max-width: 100%; min-width: 100%; height: 250px; }
+            .wizard-container { flex-direction: column; }
+            .wizard-right { max-width: 100%; height: auto; border-left: none; border-bottom: 1px solid var(--tcs-border); padding: 20px; }
+            .wizard-footer-fullwidth { flex-direction: column; gap: 15px; }
+            .report-btn-stack { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tcs-header" id="master-global-header">
+        <div class="brand-wrapper">
+            <img src="logo.jpg" alt="Conceptual Bridge Logo" class="brand-logo">
+            <span id="exam-title-display">Conceptual Bridge - Online Assessment</span>
+        </div>
+        <div class="timer-box" id="timer-header-wrapper" style="display: none;">Time Left: <span id="clock-display">00:00</span></div>
+    </div>
+
+    <div class="section-bar" id="ribbon-bar-container" style="display: none;">
+        <div class="section-tab" id="active-section-label">General Section</div>
+    </div>
+
+    <div class="wizard-container" id="step-instructions-1">
+        <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
+            <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
+            <ol style="padding-left: 20px;">
+                <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You need not terminate the examination or submit your paper.</li>
+                <li>The Question Palette displayed on the right side of screen will show the status of each question using one of the following symbols:</li>
+            </ol>
+            
+            <div style="padding-left: 40px; margin: 15px 0;">
+                <div class="symbol-row">
+                    <div class="symbol-shape state-0">1</div> <span>You have not visited the question yet.</span>
+                </div>
+                <div class="symbol-row">
+                    <div class="symbol-shape state-1">2</div> <span>You have not answered the question.</span>
+                </div>
+                <div class="symbol-row">
+                    <div class="symbol-shape state-2">3</div> <span>You have answered the question.</span>
+                </div>
+                <div class="symbol-row">
+                    <div class="symbol-shape state-3">4</div> <span>You have NOT answered the question, but have marked the question for review.</span>
+                </div>
+                <div class="symbol-row">
+                    <div class="symbol-shape state-2" style="border-radius: 50%;">5</div> <span>You have answered the question, but marked it for review.</span>
+                </div>
+            </div>
+
+            <p class="important-warning-text" style="margin-left: 20px;">The Mark For Review status for a question simply indicates that you would like to look at that question again. If a question is answered, but marked for review, then the answer will be considered for evaluation unless the status is modified by the candidate.</p>
+            
+            <h3 style="margin-top: 25px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 4px;">Navigating to a Question :</h3>
+            <ol start="3" style="padding-left: 20px;">
+                <li>To answer a question, do the following:
+                    <ol style="padding-left: 20px; margin-top: 5px; list-style-type: decimal;">
+                        <li>Click on the question number in the Question Palette at the right of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</li>
+                        <li>Click on <strong>Save & Next</strong> to save your answer for the current question and then go to the next question.</li>
+                        <li>Click on <strong>Mark for Review & Next</strong> to save your answer for the current question and also mark it for review, and then go to the next question.</li>
+                    </ol>
+                </li>
+            </ol>
+            
+            <p class="important-warning-text" style="margin-left: 20px;">Note that your answer for the current question will not be saved, if you navigate to another question directly by clicking on a question number without saving the answer to the previous question.</p>
+            <p style="margin-left: 20px; font-weight: bold;">You can view all the questions by clicking on the Question Paper button. <span style="color: #b91c1c;">This feature is provided, so that if you want you can just see the entire question paper at a glance.</span></p>
+
+            <h3 style="margin-top: 25px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 4px;">Answering a Question :</h3>
+            <ol start="4" style="padding-left: 20px;">
+                <li>Procedure for answering a multiple choice (MCQ) type question:
+                    <ol style="padding-left: 20px; margin-top: 5px; list-style-type: decimal;">
+                        <li>Choose one answer from the 4 options (A,B,C,D) given below the question, click on the bubble placed before the chosen option.</li>
+                        <li>To deselect your chosen answer, click on the bubble of the chosen option again or click on the <strong>Clear Response</strong> button</li>
+                        <li>To change your chosen answer, click on the bubble of another option.</li>
+                        <li>To save your answer, you MUST click on the <strong>Save & Next</strong> button</li>
+                    </ol>
+                </li>
+                <li>Procedure for answering a numerical answer type question :
+                    <ol style="padding-left: 20px; margin-top: 5px; list-style-type: decimal;">
+                        <li>To enter a number as your answer, use the virtual numerical keypad.</li>
+                        <li>A fraction (e.g. -0.3 or .3) can be entered as an answer with or without "0" before the decimal point. <span style="color: #b91c1c;">As many as four decimal points, e.g. 12.5435 or 0.003 or -932.6711 or 12.82 can be entered.</span></li>
+                        <li>To clear your answer, click on the <strong>Clear Response</strong> button</li>
+                        <li>To save your answer, you MUST click on the <strong>Save & Next</strong> button</li>
+                    </ol>
+                </li>
+                <li>To mark a question for review, click on the <strong>Mark for Review & Next</strong> button. If an answer is selected (for MCQ/MCAQ) entered (for numerical answer type) for a question that is <strong>Marked for Review</strong>, that answer will be considered in the evaluation unless the status is modified by the candidate.</li>
+                <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
+                <li>Note that ONLY Questions for which answers are saved or marked for review after answering will be considered for evaluation.</li>
+                <li>Sections in this question paper are displayed on the top bar of the screen. Questions in a Section can be viewed by clicking on the name of that Section. The Section you are currently viewing will be highlighted.</li>
+                <li>After clicking the <strong>Save & Next</strong> button for the last question in a Section, you will automatically be taken to the first question of the next Section in sequence.</li>
+                <li>You can move the mouse cursor over the name of a Section to view the answering status for that Section.</li>
+            </ol>
+        </div>
+        <div class="wizard-right">
+            <div class="wizard-avatar">👨‍🎓</div>
+            <div class="wizard-name">Shovan Das</div>
+        </div>
+    </div>
+    
+    <div class="wizard-footer" id="step-footer-1">
+        <button class="btn-tcs btn-white" id="wizard-back-nav-btn" onclick="window.location.href='exams.html'">← Go to Tests</button>
+        <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
+    </div>
+
+    <div style="display: none; flex-direction: column; flex: 1; overflow: hidden;" id="stage-two-wrapper-node">
+        <div class="wizard-container">
+            <div class="wizard-left">
+                <h2 id="wizard-exam-main-title" style="text-align: center; font-weight: 500; margin-top: 10px; margin-bottom: 30px;">Exam Settings</h2>
+                
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid var(--tcs-border); padding-bottom: 10px;">
+                    <span id="wizard-duration-lbl">Duration: 13 Mins</span>
+                    <span id="wizard-marks-lbl">Maximum Marks: 25</span>
+                </div>
+
+                <p style="font-weight: bold;">Read the following instructions carefully.</p>
+                <ol style="padding-left: 20px; line-height: 1.8;">
+                    <li>The test contains <span id="wizard-count-lbl" style="font-weight: bold;">25</span> total questions.</li>
+                    <li>Each question has 4 options out of which only one is correct.</li>
+                    <li>You have to finish the test within the allocated runtime matrix window limit.</li>
+                    <li>You will be awarded 1 mark for each correct answer and 0.33 will be deducted for each wrong answer.</li>
+                    <li>There is no negative marking for the questions that you have not attempted.</li>
+                </ol>
+
+                <div class="lower-declarations-box">
+                    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <label style="font-weight: bold; font-size: 0.9rem; color: #374151;">Choose your default language:</label>
+                        <select id="wizard-lang-dropdown" style="padding: 4px 10px; font-weight: bold; border-radius: 4px; border: 1px solid #9ca3af; background: white; color: #1e3a8a; cursor: pointer;">
+                            <option value="EN">English</option>
+                            <option value="BN">Bengali</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <input type="checkbox" id="declaration-checkbox" onchange="toggleReadyToBeginButtonState()" style="transform: scale(1.2); margin-top: 3px; cursor: pointer;">
+                        <label for="declaration-checkbox" style="font-size: 0.88rem; cursor: pointer; font-weight: bold; color: #374151;">I have understood and agree to all the instructions.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-right">
+                <div class="wizard-avatar">👨‍🎓</div>
+                <div class="wizard-name">Shovan Das</div>
+            </div>
+        </div>
+        
+        <div class="wizard-footer-fullwidth">
+            <div class="footer-col-left">
+                <button class="btn-tcs btn-white" onclick="backToWizardStageOne()">Previous</button>
+            </div>
+            <div class="footer-col-center">
+                <button class="btn-wizard-ready" id="ready-begin-action-btn" disabled onclick="launchExamMatrixWorkspace()">I am ready to begin</button>
+            </div>
+            <div class="footer-col-right"></div>
+        </div>
+    </div>
+
+    <div class="main-workspace" id="quiz-workspace" style="display: none;">
+        <div class="question-panel">
+            <div class="question-header">
+                <span id="question-number-title">Question No. 1</span>
+                <select class="lang-selector-header" id="view-lang-select" onchange="toggleViewLanguage()">
+                    <option value="EN">English</option>
+                    <option value="BN">Bengali</option>
+                </select>
+            </div>
+            
+            <div class="question-content">
+                <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
+                <div class="options-container" id="target-options-container"></div>
+                
+                <div id="review-feedback-container"></div>
+                
+                <div class="meta-bottom-right" id="shift-label-view"></div>
+            </div>
+
+            <div class="action-tray">
+                <div>
+                    <button class="btn-tcs btn-white" id="action-btn-review" onclick="markForReview()">Mark for Review & Next</button>
+                    <button class="btn-tcs btn-white" style="margin-left:8px;" id="action-btn-clear" onclick="clearResponse()">Clear Response</button>
+                </div>
+                <div>
+                    <button class="btn-tcs btn-orange" id="action-btn-report" style="display:none; margin-right:8px;" onclick="openConcernReportModal()">⚠️ REPORT</button>
+                    <button class="btn-tcs btn-blue" id="action-btn-savenext" onclick="saveAndNext()">Save & Next</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-panel">
+            <div class="profile-box">
+                <div class="profile-avatar">👨‍🎓</div>
+                <div>
+                    <div style="font-weight: bold; font-size: 0.95rem;">Shovan Das</div>
+                    <div style="color: #6b7280; font-size: 0.8rem;">ID: CB-2026</div>
+                </div>
+            </div>
+
+            <div class="palette-container">
+                <div class="palette-title">Choose a Question:</div>
+                <div class="palette-grid" id="palette-grid-holder"></div>
+            </div>
+
+            <div class="legend-box" id="legend-box-container">
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-answered)"></span> <span id="legend-lbl-answered">Answered</span></div>
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-answered)"></span> Not Answered</div>
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-review)"></span> Marked for Review</div>
+                <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-visited)"></span> Not Visited</div>
+            </div>
+            
+            <button class="btn-tcs btn-blue" id="action-btn-submit" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
+        </div>
+    </div>
+
+    <div class="report-page-container" id="quiz-report-workspace">
+        <div class="score-flat-card">
+            <h2>Performance Metrics Report</h2>
+            <p>Conceptual Bridge Evaluation Analytics Matrix Engine</p>
+            
+            <table class="metrics-table">
+                <tr>
+                    <td>Total Questions</td>
+                    <td id="res-total">0</td>
+                </tr>
+                <tr>
+                    <td>Total Attempted</td>
+                    <td id="res-attempted">0</td>
+                </tr>
+                <tr>
+                    <td>Total Correct Answers</td>
+                    <td id="res-correct" style="color: #16a34a;">0</td>
+                </tr>
+                <tr>
+                    <td>Total Wrong Answers</td>
+                    <td id="res-wrong" style="color: #dc2626;">0</td>
+                </tr>
+                <tr>
+                    <td>Negative Marking Applied</td>
+                    <td>0.33 Per Mistake</td>
+                </tr>
+                <tr class="highlight-total-row">
+                    <td>Total Marks Obtained</td>
+                    <td id="res-final-score">0.00</td>
+                </tr>
+                <tr>
+                    <td>📊 Paper Difficulty</td>
+                    <td id="res-difficulty">--</td>
+                </tr>
+                
+                <tr>
+                    <td>🎯 Dynamic Cut-off Marks</td>
+                    <td id="res-passmark">--</td>
+                </tr>
+                
+                <tr>
+                    <td>🏆 Result Status</td>
+                    <td id="res-result">--</td>
+                </tr>
+                
+                <tr>
+                    <td>⭐ Performance Rating</td>
+                    <td id="res-rating">--</td>
+                </tr>
+            </table>
+
+            <div class="report-btn-stack">
+                <button class="btn-tcs btn-white" id="exit-dashboard-action-btn" style="border:1px solid var(--tcs-border);" onclick="window.location.href='exams.html'">
+                    Return to Exam Corner
+                </button>
+                <button class="btn-tcs btn-blue" onclick="activateReviewMode()">
+                    View Your Performance
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="report-modal-overlay" id="concern-modal-node">
+        <div class="report-modal-box">
+            <h4>Submit Question Concern</h4>
+            <p>Enter your concern in less than 100 words:</p>
+            <textarea class="report-textarea" id="concern-text-field" placeholder="Describe the issue with this question or translation choices..."></textarea>
+            <div class="report-modal-footer">
+                <button class="btn-tcs btn-white" onclick="closeConcernReportModal()">Cancel</button>
+                <button class="btn-tcs btn-blue" onclick="submitConcernFormDetails()">Submit Report</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fallback-screen-holder"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const sourceFile = urlParams.get('source'); 
+        const activeTopic = urlParams.get('topic') || 'Mathematics';
+        const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
+
+        let examDataMatrix = [];
+
+        let paperDifficulty = 5;
+        
+        let dynamicPassMark = 0;
+        
+        let paperNotification = "";
+        
+        let paperType = "";
+        
+        let paperSubject = "";
+        
+        let paperLevel = "";
+
+        
+        let activeIndex = 0;
+        let currentLanguage = "EN";
+        
+        let questionStates = [];
+        let selectedAnswers = [];
+        let timeRemainingSeconds = questionLimit * 60;
+        let timerEngine = null;
+        let isReviewModeActive = false; 
+
+        async function initializeQuizEngine() {
+            if (sourceFile) {
+                await parseTutorialTextFileMatrix(sourceFile); 
+            } else {
+                await executeStandardExamCornerFetch(); 
+            }
+        }
+
+        async function executeStandardExamCornerFetch() { 
+            try {
+                const response = await fetch(`/api/fetch-questions?topic=${activeTopic}&limit=${questionLimit}`); 
+                if (!response.ok) { showMissingFileScreen(); return; } 
+
+                const payload = await response.json(); 
+                paperDifficulty = payload.averageDifficulty || 5;
+                dynamicPassMark = payload.passMark || 0;
+                paperNotification = payload.notification || "";
+                paperType = payload.type || "";
+                paperSubject = payload.subject || "";
+                paperLevel = payload.level || "";
+                
+                let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); 
+
+                if (targetQuestions.length > 0) { 
+                    examDataMatrix = targetQuestions; 
+                    setupGlobalExamMetrics(activeTopic); 
+                } else { showMissingFileScreen(); } 
+            } catch (err) { showMissingFileScreen(); } 
+        }
+
+        // ADVANCED TUTORIAL PARSER WITH AUTOMATIC OPTION SCRAMBLING
+        async function parseTutorialTextFileMatrix(filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) { showMissingFileScreen(); return; }
+
+                const rawText = await response.text();
+                const lines = rawText.split('\n').map(l => l.trim());
+
+                let parsedList = [];
+                let currentBlock = null;
+                let activePropertyKey = null;
+
+                lines.forEach(line => {
+                    if (!line) return;
+
+                    let cleanLine = line.replace(/\[source:\s*\d+\]/gi, '').trim();
+                    if (!cleanLine) return;
+
+                    const pipeIdx = cleanLine.indexOf('|');
+
+                    if (pipeIdx !== -1) {
+                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
+                        const value = cleanLine.substring(pipeIdx + 1).trim();
+
+                        if (key === 'Q') {
+                            activePropertyKey = 'text';
+                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correctLetter: '', exam: 'GACA Tutorial Series', shift: '' };
+                        } else if (currentBlock) {
+                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
+                                activePropertyKey = key.toLowerCase();
+                                currentBlock[activePropertyKey] = value;
+                            } else if (key === 'SHIFT') {
+                                activePropertyKey = null;
+                                currentBlock.shift = value;
+                            } else if (key === 'CORRECT') {
+                                activePropertyKey = null;
+                                currentBlock.correctLetter = value.toUpperCase(); // Save raw answer letter (e.g., 'B')
+                                
+                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
+                                    // ---- OPTION SHUFFLING MATRIX LOGIC ----
+                                    // 1. Capture what text is currently the right answer
+                                    const correctText = currentBlock[currentBlock.correctLetter.toLowerCase()];
+                                    
+                                    // 2. Create an array of option items
+                                    let optionsArray = [
+                                        { originalKey: 'a', text: currentBlock.a },
+                                        { originalKey: 'b', text: currentBlock.b },
+                                        { originalKey: 'c', text: currentBlock.c },
+                                        { originalKey: 'd', text: currentBlock.d }
+                                    ];
+
+                                    // 3. Shuffle options using Fisher-Yates Scrambler
+                                    for (let i = optionsArray.length - 1; i > 0; i--) {
+                                        const j = Math.floor(Math.random() * (i + 1));
+                                        [optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
+                                    }
+
+                                    // 4. Re-assign shuffled text values back to A, B, C, D properties
+                                    currentBlock.a = optionsArray[0].text;
+                                    currentBlock.b = optionsArray[1].text;
+                                    currentBlock.c = optionsArray[2].text;
+                                    currentBlock.d = optionsArray[3].text;
+
+                                    // 5. Find where our correct text landed and dynamically update correct index map
+                                    let newCorrectIndex = optionsArray.findIndex(opt => opt.text === correctText);
+                                    currentBlock.correct = newCorrectIndex !== -1 ? newCorrectIndex : 0;
+
+                                    parsedList.push(currentBlock);
+                                }
+                            }
+                        }
+                    } else {
+                        if (currentBlock && activePropertyKey) {
+                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine;
+                        }
+                    }
+                });
+
+                if (parsedList.length > 0) {
+                    // Scramble the main question list order
+                    for (let i = parsedList.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
+                    }
+                    
+                    examDataMatrix = parsedList.slice(0, questionLimit);
+
+                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html';
+                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials';
+                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html';
+                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner';
+
+                    setupGlobalExamMetrics('GACA Short Assessment');
+                } else { showMissingFileScreen(); }
+            } catch (err) { console.error(err); showMissingFileScreen(); }
+        }
+        function setupGlobalExamMetrics(topicName) { 
+            selectedAnswers = new Array(examDataMatrix.length).fill(null); 
+            questionStates = new Array(examDataMatrix.length).fill(0); 
+            questionStates[0] = 1; 
+
+            let formattedSectionTitle = topicName; 
+            if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; 
+            else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE'; 
+            else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE'; 
+            else if (topicName === 'Mathematics') formattedSectionTitle = 'MATHEMATICS'; 
+            
+            document.getElementById('active-section-label').innerText = formattedSectionTitle; 
+
+            document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; 
+            document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`; 
+            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`; 
+            document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; 
+        }
+
+        function openConcernReportModal() {
+            document.getElementById('concern-text-field').value = '';
+            document.getElementById('concern-modal-node').style.display = 'flex';
+        }
+
+        function closeConcernReportModal() {
+            document.getElementById('concern-modal-node').style.display = 'none';
+        }
+
+        function submitConcernFormDetails() {
+            const textContent = document.getElementById('concern-text-field').value.trim();
+            if (!textContent) { alert("Please type your concern before submitting."); return; }
+
+            const wordCount = textContent.split(/\s+/).filter(w => w.length > 0).length;
+            if (wordCount > 100) { alert(`Your explanation is too long (${wordCount} words). Please restrict your response to less than 100 words.`); return; }
+
+            const reportPayload = {
+                concern: textContent,
+                activeSourceFile: sourceFile || 'Exam API Route',
+                questionIndex: activeIndex + 1,
+                rawQuestionContent: examDataMatrix[activeIndex].text
+            };
+
+            fetch('/api/submit-report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reportPayload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Thank you! Your concern has been submitted safely to the server.");
+                } else {
+                    alert("Report package processed internally, but sync node threw a routing mismatch response.");
+                }
+                closeConcernReportModal();
+            })
+            .catch(err => {
+                console.error("Network sync route missing exception:", err);
+                alert("Connection pipeline timeout. Report captured locally on console stream matrices.");
+                closeConcernReportModal();
+            });
+        }
+
+        function checkInstructionScrollProgress() { 
+            const container = document.getElementById('instruction-scroll-pane'); 
+            const nextButton = document.getElementById('instruction-next-action-btn'); 
+            const totalScrollHeight = container.scrollHeight; 
+            const currentPosition = container.scrollTop + container.clientHeight; 
+            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
+        }
+
+        function goToWizardStageTwo() { 
+            document.getElementById('step-instructions-1').style.display = 'none'; 
+            document.getElementById('step-footer-1').style.display = 'none'; 
+            document.getElementById('stage-two-wrapper-node').style.display = 'flex'; 
+        }
+
+        function backToWizardStageOne() { 
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
+            document.getElementById('step-instructions-1').style.display = 'flex'; 
+            document.getElementById('step-footer-1').style.display = 'flex'; 
+        }
+
+        document.getElementById('instruction-scroll-pane').addEventListener('scroll', checkInstructionScrollProgress); 
+
+        function toggleReadyToBeginButtonState() { 
+            const isChecked = document.getElementById('declaration-checkbox').checked; 
+            document.getElementById('ready-begin-action-btn').disabled = !isChecked; 
+        }
+
+        function launchExamMatrixWorkspace() { 
+            currentLanguage = document.getElementById('wizard-lang-dropdown').value; 
+            document.getElementById('view-lang-select').value = currentLanguage; 
+            document.getElementById('stage-two-wrapper-node').style.display = 'none'; 
+            document.getElementById('timer-header-wrapper').style.display = 'block'; 
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; 
+            document.getElementById('quiz-workspace').style.display = 'flex'; 
+            startClockCountdown(); 
+            renderExamWindow(); 
+        }
+
+        function showMissingFileScreen() { 
+            document.getElementById('step-instructions-1').style.display = 'none'; 
+            document.getElementById('step-footer-1').style.display = 'none'; 
+            document.getElementById('fallback-screen-holder').innerHTML = `
+                <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; font-family:sans-serif; background:#1a365d; color:white; padding:20px;">
+                    <h1>⚠️ Content Available Soon</h1>
+                    <p>The matrix question bank is undergoing engineering optimization sync routines.</p>
+                    <button onclick="window.location.href='${sourceFile ? "tutorials.html" : "exams.html"}'" style="background:#2563eb; color:white; border:none; padding:12px 30px; font-weight:bold; border-radius:4px; cursor:pointer; margin-top:20px;">← Go Back</button>
+                </div>
+            `; 
+        }
+
+        function startClockCountdown() { 
+            timerEngine = setInterval(() => { 
+                if (timeRemainingSeconds <= 0) { 
+                    clearInterval(timerEngine); 
+                    triggerExamSubmission(); 
+                } else { 
+                    timeRemainingSeconds--; 
+                    const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0'); 
+                    const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0'); 
+                    document.getElementById('clock-display').innerText = `${mins}:${secs}`; 
+                } 
+            }, 1000); 
+        }
+
+        function getLocalizedText(rawString) { 
+            if (!rawString) return ""; 
+            const parts = rawString.split('/'); 
+            if (parts.length < 2) return rawString.trim(); 
+            return currentLanguage === "EN" ? parts[0].trim() : parts[1].trim(); 
+        }
+
+        function toggleViewLanguage() { 
+            currentLanguage = document.getElementById('view-lang-select').value; 
+            renderExamWindow(); 
+        }
+
+        function renderExamWindow() { 
+            if (examDataMatrix.length === 0) return; 
+            const currentItem = examDataMatrix[activeIndex]; 
+            
+            if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
+                questionStates[activeIndex] = 1; 
+            } 
+
+            document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
+            const shiftLabel = document.getElementById('shift-label-view');
+
+            if (isReviewModeActive) {
+            
+                let text = "";
+            
+                if (currentItem.exam) {
+                    text += currentItem.exam;
+                }
+            
+                if (currentItem.shift) {
+            
+                    if (text !== "") text += " | ";
+            
+                    text += currentItem.shift;
+            
+                }
+            
+                shiftLabel.innerText = text;
+            
+            } else {
+            
+                shiftLabel.innerText = "";
+            
+            } 
+            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); 
+            
+            const container = document.getElementById('target-options-container'); 
+            const feedbackContainer = document.getElementById('review-feedback-container'); 
+            container.innerHTML = ''; 
+            feedbackContainer.innerHTML = ''; 
+            
+            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d]; 
+            const userChoice = selectedAnswers[activeIndex]; 
+            const correctChoice = currentItem.correct; 
+
+            optArray.forEach((opt, idx) => { 
+                let statusClass = ''; 
+                let isCheckedAttr = ''; 
+
+                if (isReviewModeActive) { 
+                    if (userChoice === idx && userChoice !== correctChoice) { 
+                        statusClass = 'review-wrong'; 
+                    } else if (idx === correctChoice) { 
+                        statusClass = 'review-correct'; 
+                    } 
+                    if (userChoice === idx) isCheckedAttr = 'checked'; 
+                } else { 
+                    if (userChoice === idx) { 
+                        statusClass = 'selected'; 
+                        isCheckedAttr = 'checked'; 
+                    } 
+                } 
+
+                const localizedOption = getLocalizedText(opt); 
+                const optHtml = `
+                    <div class="option-row ${statusClass}" ${!isReviewModeActive ? `onclick="selectOptionIndex(${idx})"` : ''}>
+                        <input type="radio" name="tcs-opt" id="opt-${idx}" ${isCheckedAttr} ${isReviewModeActive ? 'disabled' : ''}>
+                        <label style="cursor:${isReviewModeActive ? 'default' : 'pointer'}; width:100%; font-weight:600;" for="opt-${idx}">
+                            (${String.fromCharCode(65 + idx)}) ${localizedOption}
+                        </label>
+                    </div>
+                `; 
+                container.insertAdjacentHTML('beforeend', optHtml); 
+            }); 
+
+            if (isReviewModeActive) { 
+                const correctOptionText = getLocalizedText(optArray[correctChoice]);
+
+                if (userChoice === null) {
+            
+                    feedbackContainer.innerHTML = `
+            
+            <div class="review-status-box">
+            
+                <div class="review-card pink compact">
+
+                    <div class="review-card-title">
+                        ⚪ QUESTION NOT ATTEMPTED
+                    </div>
+            
+                    <div class="review-answer-inline">
+                        ✅ CORRECT ANSWER :- (${String.fromCharCode(65 + correctChoice)}) ${correctOptionText}
+                    </div>
+            
+                </div>
+            
+                ${renderLearnModule()}
+            
+            </div>
+            
+            `;
+            
+                }
+            
+                else if (userChoice === correctChoice) {
+            
+                    const userOptionText = getLocalizedText(optArray[userChoice]);
+            
+                    feedbackContainer.innerHTML = `
+            
+            <div class="review-status-box">
+            
+                <div class="review-card blue compact">
+
+                    <div class="review-card-title">
+                
+                        ✅ YOUR SELECTED ANSWER IS CORRECT :-
+                        <span class="review-answer-inline">
+                
+                            (${String.fromCharCode(65 + userChoice)})
+                            ${userOptionText}
+                
+                        </span>
+                
+                    </div>
+                
+                </div>
+            
+                ${renderLearnModule()}
+            
+            </div>
+            
+            `;
+            
+                }
+            
+                else {
+            
+                    const userOptionText = getLocalizedText(optArray[userChoice]);
+            
+                    feedbackContainer.innerHTML = `
+            
+            <div class="review-status-box">
+            
+                <div class="review-card red compact">
+
+                    <div class="review-card-title">
+                
+                        ❌ YOUR SELECTED ANSWER :-
+                        <span class="review-answer-inline">
+                
+                            (${String.fromCharCode(65 + userChoice)})
+                            ${userOptionText}
+                
+                        </span>
+                
+                    </div>
+                
+                </div>
+            
+                <div class="review-card green compact">
+
+                    <div class="review-card-title">
+                
+                        ✅ CORRECT ANSWER :-
+                        <span class="review-answer-inline">
+                
+                            (${String.fromCharCode(65 + correctChoice)})
+                            ${correctOptionText}
+                
+                        </span>
+                
+                    </div>
+                
+                </div>
+            
+                ${renderLearnModule()}
+            
+            </div>
+            
+            `;
+            
+                }
+                //
+            } 
+            const questionContent = document.querySelector(".question-content");
+
+            if (questionContent) {
+                questionContent.scrollTop = 0;
+            }
+            renderPaletteGrid(); 
+        } 
+
+        function selectOptionIndex(idx) { 
+            if (isReviewModeActive) return; 
+            selectedAnswers[activeIndex] = idx; 
+            renderExamWindow(); 
+        } 
+
+        function clearResponse() { 
+            if (isReviewModeActive) return; 
+            selectedAnswers[activeIndex] = null; 
+            questionStates[activeIndex] = 1; 
+            renderExamWindow(); 
+        } 
+
+        function saveAndNext() { 
+            if (isReviewModeActive) { 
+                if (activeIndex < examDataMatrix.length - 1) { activeIndex++; renderExamWindow(); } 
+                return; 
+            } 
+            if (selectedAnswers[activeIndex] !== null) { 
+                questionStates[activeIndex] = 2; 
+            } else { 
+                questionStates[activeIndex] = 1; 
+            } 
+            moveToNextOrWrap(); 
+        } 
+
+        function markForReview() { 
+            if (isReviewModeActive) return; 
+            questionStates[activeIndex] = 3; 
+            moveToNextOrWrap(); 
+        } 
+
+        function moveToNextOrWrap() { 
+            if (activeIndex < examDataMatrix.length - 1) { 
+                activeIndex++; 
+                renderExamWindow(); 
+            } else { 
+                alert("You have reached the end of the question set. Feel free to review your matrix palette dashboard or click Submit."); 
+                renderPaletteGrid(); 
+            } 
+        } 
+
+        function jumpToQuestion(idx) { 
+            activeIndex = idx; 
+            renderExamWindow(); 
+        } 
+
+        // UPDATED METHOD: Processes orange palette cell transitions dynamically during review matrix checks
+        function renderPaletteGrid() { 
+            const grid = document.getElementById('palette-grid-holder'); 
+            grid.innerHTML = ''; 
+            
+            questionStates.forEach((stateValue, idx) => { 
+                const isActive = idx === activeIndex; 
+                let computedStateClass = `state-${stateValue}`;
+
+                if (isReviewModeActive && stateValue === 2) {
+                    const userSelection = selectedAnswers[idx];
+                    const officialCorrectAnswer = examDataMatrix[idx].correct;
+
+                    if (userSelection !== officialCorrectAnswer) {
+                        computedStateClass = 'state-wrong-review'; // Injects orange cell background formatting parameters
+                    }
+                }
+
+                const cellHtml = `
+                    <div class="palette-cell ${computedStateClass} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
+                        ${idx + 1}
+                    </div>
+                `; 
+                grid.insertAdjacentHTML('beforeend', cellHtml); 
+            }); 
+        } 
+
+        function triggerExamSubmission() { 
+            if (timerEngine) clearInterval(timerEngine); 
+            
+            if (isReviewModeActive) { 
+                window.location.href = sourceFile ? 'tutorials.html' : 'exams.html'; 
+                return; 
+            } 
+            
+            let totalQuestions = examDataMatrix.length; 
+            let attempted = 0; 
+            let correct = 0; 
+            let wrong = 0; 
+
+            selectedAnswers.forEach((answerIndex, qIndex) => { 
+                if (answerIndex !== null) { 
+                    attempted++; 
+                    if (answerIndex === examDataMatrix[qIndex].correct) { 
+                        correct++; 
+                    } else { 
+                        wrong++; 
+                    } 
+                } 
+            }); 
+
+            let finalScore = correct - (wrong * 0.33); 
+            //------------------------------------------------
+            // Difficulty Badge
+            //------------------------------------------------
+            
+            let difficultyLabel = "";
+            let difficultyEmoji = "";
+            
+            if (paperDifficulty <= 2.5) {
+            
+                difficultyEmoji = "🟢";
+                difficultyLabel = "Very Easy";
+            
+            }
+            else if (paperDifficulty <= 4) {
+            
+                difficultyEmoji = "🔵";
+                difficultyLabel = "Easy";
+            
+            }
+            else if (paperDifficulty <= 5.5) {
+            
+                difficultyEmoji = "🟡";
+                difficultyLabel = "Moderate";
+            
+            }
+            else if (paperDifficulty <= 7) {
+            
+                difficultyEmoji = "🟠";
+                difficultyLabel = "Hard";
+            
+            }
+            else if (paperDifficulty <= 8.5) {
+            
+                difficultyEmoji = "🔴";
+                difficultyLabel = "Very Hard";
+            
+            }
+            else {
+            
+                difficultyEmoji = "⚫";
+                difficultyLabel = "Expert";
+            
+            }
+            
+            //------------------------------------------------
+            // Pass / Fail
+            //------------------------------------------------
+            
+            const passed = finalScore >= dynamicPassMark;
+            
+            //------------------------------------------------
+            // Performance Percentage
+            //------------------------------------------------
+            
+            const scorePercent =
+                (Math.max(finalScore,0) / totalQuestions) * 100;
+            
+            let rating = "";
+            
+            if(scorePercent>=90)
+                rating="🥇 Outstanding";
+            
+            else if(scorePercent>=75)
+                rating="🌟 Excellent";
+            
+            else if(scorePercent>=60)
+                rating="👍 Good";
+            
+            else if(scorePercent>=45)
+                rating="🙂 Average";
+            
+            else if(scorePercent>=35)
+                rating="📘 Needs Improvement";
+            
+            else
+                rating="📚 Practice More";
+
+            document.getElementById('timer-header-wrapper').style.display = 'none'; 
+            document.getElementById('ribbon-bar-container').style.display = 'none'; 
+            document.getElementById('quiz-workspace').style.display = 'none'; 
+            
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Exam Report Summary"; 
+
+            document.getElementById('res-total').innerText = totalQuestions; 
+            document.getElementById('res-attempted').innerText = attempted; 
+            document.getElementById('res-correct').innerText = correct; 
+            document.getElementById('res-wrong').innerText = wrong; 
+            document.getElementById('res-final-score').innerText = finalScore.toFixed(2); 
+            document.getElementById("res-difficulty").innerText =
+            `${difficultyEmoji} ${difficultyLabel} (${paperDifficulty.toFixed(2)}/10)`;
+            
+            document.getElementById("res-passmark").innerText =
+            `${dynamicPassMark.toFixed(2)} / ${totalQuestions}`;
+            
+            document.getElementById("res-result").innerText =
+            passed ? "✅ PASS" : "❌ FAIL";
+            
+            document.getElementById("res-rating").innerText =
+            rating;
+            document.getElementById('quiz-report-workspace').style.display = 'flex'; 
+        } 
+
+        function activateReviewMode() { 
+            isReviewModeActive = true; 
+            
+            document.getElementById('quiz-report-workspace').style.display = 'none'; 
+            document.getElementById('ribbon-bar-container').style.display = 'flex'; 
+            document.getElementById('quiz-workspace').style.display = 'flex'; 
+            
+            document.getElementById('exam-title-display').innerText = "Conceptual Bridge - Performance Review Mode"; 
+            
+            document.getElementById('action-btn-review').disabled = true; 
+            document.getElementById('action-btn-review').style.opacity = '0.5'; 
+            document.getElementById('action-btn-review').style.cursor = 'not-allowed'; 
+            
+            document.getElementById('action-btn-clear').disabled = true; 
+            document.getElementById('action-btn-clear').style.opacity = '0.5'; 
+            document.getElementById('action-btn-clear').style.cursor = 'not-allowed'; 
+            
+            document.getElementById('action-btn-report').style.display = 'inline-block'; 
+            
+            document.getElementById('action-btn-savenext').innerText = "Next Question →"; 
+            document.getElementById('action-btn-submit').innerText = sourceFile ? "Return to Tutorial Corner" : "Return to Exam Corner"; 
+            
+            document.getElementById('legend-lbl-answered').innerText = "Correctly Answered";
+            
+            // UPDATED: Injects the dynamic legend row badge targeting the orange coloring theme profile
+            const targetLegendBox = document.getElementById('legend-box-container');
+            const wrongAnswerRowHtml = `
+                <div class="legend-item" id="dynamic-wrongly-answered-row">
+                    <span class="legend-badge" style="background:var(--status-wrong);"></span> Wrongly Answered
+                </div>
+            `;
+            targetLegendBox.insertAdjacentHTML('beforeend', wrongAnswerRowHtml);
+
+            activeIndex = 0; 
+            renderExamWindow(); 
+        } 
+        function renderLearnModule(){
+
+        return `
+        
+        <div class="learn-card">
+        
+            <div class="learn-title">
+        
+                🦆 Learn this Concept
+        
+            </div>
+        
+            <button
+                class="learn-btn"
+                onclick="generateShortNote(${activeIndex})">
+        
+                Generate Short Note
+        
+            </button>
+        
+            <div
+                id="learn-output"
+                class="learn-placeholder">
+        
+                Click on <b>Generate Short Note</b> to receive
+                a concise explanation of this concept.
+        
+            </div>
+        
+        </div>
+        
+        `;
+        
+        }
+        function generateShortNote(questionIndex){
+
+            const holder=document.getElementById("learn-output");
+        
+            holder.innerHTML=`
+        
+        <b>Loading explanation...</b>
+        
+        <br><br>
+        
+        This placeholder will later be replaced with
+        DuckDuckGo AI generated notes.
+        
+        `;
+        
+        }
+        
+        initializeQuizEngine(); 
+    </script>
+</body>
+</html>
