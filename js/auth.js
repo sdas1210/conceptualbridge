@@ -15,13 +15,17 @@ onAuthStateChanged(auth, (user) => {
 
     if (user) {
 
-        loginBtn.innerHTML = "👤 " + user.displayName;
+        const firstName = user.displayName
+        ? user.displayName.split(" ")[0]
+        : "User";
+
+        loginBtn.innerHTML = `👋 Hi, ${firstName} ▼`;
 
         console.log("Already Logged In");
 
     } else {
 
-        loginBtn.innerHTML = "Log In";
+        loginBtn.innerHTML = "👤 Log In";
 
         console.log("Not Logged In");
 
