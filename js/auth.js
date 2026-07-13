@@ -7,21 +7,25 @@ import {
 
 const provider = new GoogleAuthProvider();
 
-document.getElementById("loginBtn").addEventListener("click", async () => {
+const loginBtn = document.getElementById("loginBtn");
+
+loginBtn.addEventListener("click", async () => {
+
+    loginBtn.disabled = true;
 
     try {
 
         const result = await signInWithPopup(auth, provider);
 
-        console.log(result.user);
-
-        alert("Welcome " + result.user.displayName);
+        console.log("Logged in:", result.user);
 
     } catch (error) {
 
-        console.error(error);
+        console.error(error.code, error.message);
 
-        alert(error.message);
+    } finally {
+
+        loginBtn.disabled = false;
 
     }
 
