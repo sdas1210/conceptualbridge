@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { parseQuestionFile } from "../services/questionParser.js";
+import { parseQuestionFile } from "../../services/questionParser.js";
 
 export default async function handler(req, res) {
 
