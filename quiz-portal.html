@@ -974,9 +974,13 @@
 
         async function initializeQuizEngine() {
             if (sourceFile) {
-                await parseTutorialTextFileMatrix(sourceFile); 
+
+                await executeTutorialFetch();
+            
             } else {
-                await executeStandardExamCornerFetch(); 
+            
+                await executeStandardExamCornerFetch();
+            
             }
         }
 
@@ -999,6 +1003,55 @@
                     setupGlobalExamMetrics(activeTopic); 
                 } else { showMissingFileScreen(); } 
             } catch (err) { showMissingFileScreen(); } 
+        }
+
+        async function executeTutorialFetch() {
+
+            try {
+        
+                const response = await fetch(
+                    `/api/fetch-tutorial-questions?source=${encodeURIComponent(sourceFile)}`
+                );
+        
+                if (!response.ok) {
+                    showMissingFileScreen();
+                    return;
+                }
+        
+                const payload = await response.json();
+        
+                paperDifficulty = payload.averageDifficulty || 5;
+        
+                dynamicPassMark = payload.passMark || 0;
+        
+                paperMeta = payload.paperMeta || {};
+        
+                examDataMatrix = payload.data || [];
+        
+                document.getElementById('wizard-back-nav-btn').onclick =
+                    () => window.location.href = 'tutorials.html';
+        
+                document.getElementById('wizard-back-nav-btn').innerText =
+                    '← Go to Tutorials';
+        
+                document.getElementById('exit-dashboard-action-btn').onclick =
+                    () => window.location.href = 'tutorials.html';
+        
+                document.getElementById('exit-dashboard-action-btn').innerText =
+                    'Return to Tutorial Corner';
+        
+                setupGlobalExamMetrics(
+                    paperMeta.subject || "Tutorial"
+                );
+        
+            } catch (err) {
+        
+                console.error(err);
+        
+                showMissingFileScreen();
+        
+            }
+        
         }
 
         // ADVANCED TUTORIAL PARSER WITH AUTOMATIC OPTION SCRAMBLING
