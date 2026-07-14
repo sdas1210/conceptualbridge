@@ -956,17 +956,11 @@
 
         let examDataMatrix = [];
 
+        let paperMeta = {};
+        
         let paperDifficulty = 5;
         
         let dynamicPassMark = 0;
-        
-        let paperNotification = "";
-        
-        let paperType = "";
-        
-        let paperSubject = "";
-        
-        let paperLevel = "";
 
         
         let activeIndex = 0;
@@ -993,11 +987,10 @@
 
                 const payload = await response.json(); 
                 paperDifficulty = payload.averageDifficulty || 5;
+
                 dynamicPassMark = payload.passMark || 0;
-                paperNotification = payload.notification || "";
-                paperType = payload.type || "";
-                paperSubject = payload.subject || "";
-                paperLevel = payload.level || "";
+                
+                paperMeta = payload.paperMeta || {};
                 
                 let targetQuestions = payload.data || (Array.isArray(payload) ? payload : []); 
 
