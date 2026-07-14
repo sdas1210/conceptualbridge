@@ -9,10 +9,11 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     const {
-        topic = 'math',
-        file,
-        question,
-        id
+        action = "",
+        topic = "GACA",
+        file = "",
+        id = "",
+        search = ""
     } = req.query;
 
     let targetFolder = 'math';
