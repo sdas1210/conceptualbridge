@@ -12,6 +12,15 @@ export default async function handler(req, res) {
     try {
         // 2. Locate and read the file safely on the server
         const filePath = path.join(process.cwd(), source);
+        console.log("Source:", source);
+
+        const filePath = path.join(process.cwd(), source);
+        
+        console.log("Resolved:", filePath);
+        
+        console.log("Exists:", fs.existsSync(filePath));
+
+        
         if (!fs.existsSync(filePath)) {
             return res.status(404).json({ error: 'Question asset file not found' });
         }
