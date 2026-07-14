@@ -44,6 +44,12 @@ export default async function handler(req, res) {
             
             }
 
+        const folderPath = path.join(
+                process.cwd(),
+                'questions',
+                targetFolder
+            );
+
         if (!fs.existsSync(folderPath)) {
             return res.status(404).json({
                 status: 'error',
