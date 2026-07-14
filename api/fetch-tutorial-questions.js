@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-
+import { parseQuestionFile } from "../services/questionParser.js";
 export default async function handler(req, res) {
     // 1. Get the file path sent from the frontend (e.g., questions/gaca/1.txt)
     const { source } = req.query;
@@ -16,8 +16,7 @@ export default async function handler(req, res) {
             return res.status(404).json({ error: 'Question asset file not found' });
         }
 
-        import { parseQuestionFile }
-        from "../services/questionParser.js";
+        
 
         const parsedQuestions =
             parseQuestionFile(filePath);
@@ -50,13 +49,7 @@ export default async function handler(req, res) {
         }
 
        // 5. Slice down to exactly 10 questions
-            const testSet = parsedQuestions.slice(0, 10);
             
-            // Random Tutorial Pass Percentage
-            // Between 80% and 95%
-            const passMark = Number(
-                (8 + Math.random() * 1.5).toFixed(2)
-            );
                         
             return res.status(200).json({
 
