@@ -119,7 +119,11 @@ export default async function handler(req, res) {
         });
 
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Internal server processing error' });
+        console.error("Tutorial API Error:", err);
+
+        return res.status(500).json({
+            error: err.message,
+            stack: err.stack
+        });
     }
 }
