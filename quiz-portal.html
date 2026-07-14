@@ -1251,23 +1251,24 @@
 
             if (isReviewModeActive) {
             
-                let text = "";
+                let meta = [];
+
+                if (paperMeta.exam)
+                    meta.push(paperMeta.exam);
             
-                if (currentItem.exam) {
-                    text += currentItem.exam;
-                }
+                if (paperMeta.notification)
+                    meta.push(`CEN ${paperMeta.notification}`);
             
-                if (currentItem.shift) {
+                if (paperMeta.type)
+                    meta.push(paperMeta.type);
             
-                    if (text !== "") text += " | ";
+                if (currentItem.shift)
+                    meta.push(currentItem.shift);
             
-                    text += currentItem.shift;
+                shiftLabel.innerText = meta.join(" | ");
+
             
-                }
-            
-                shiftLabel.innerText = text;
-            
-            } else {
+                } else {
             
                 shiftLabel.innerText = "";
             
