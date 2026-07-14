@@ -84,19 +84,23 @@ export default async function handler(req, res) {
             paperMeta: {
         
                 exam: testSet[0]?.exam || "",
-        
+
                 subject: testSet[0]?.subject || "",
-        
+            
                 topic: testSet[0]?.topic || "",
-        
+            
                 subTopic: testSet[0]?.subTopic || "",
-        
+            
                 notification: testSet[0]?.notification || "",
-        
+            
                 level: testSet[0]?.level || "",
-        
+            
                 type: testSet[0]?.type || "",
-        
+            
+                marks: testSet[0]?.marks || 1,
+            
+                qType: testSet[0]?.qType || "MCQ",
+            
                 totalMarks
         
             },
