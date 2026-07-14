@@ -18,8 +18,16 @@ export default async function handler(req, res) {
 
         
 
-        const parsedQuestions =
-            parseQuestionFile(filePath);
+        const folder = path.basename(
+            path.dirname(filePath)
+        );
+        
+        const parsedQuestions = parseQuestionFile(
+            filePath,
+            folder
+        );
+
+        
         for (let i = parsedQuestions.length - 1; i > 0; i--) {
 
             const j = Math.floor(
@@ -42,11 +50,7 @@ export default async function handler(req, res) {
         
         );
 
-        // 4. Randomize the array entirely on the server side
-        for (let i = parsedQuestions.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [parsedQuestions[i], parsedQuestions[j]] = [parsedQuestions[j], parsedQuestions[i]];
-        }
+        
 
        // 5. Slice down to exactly 10 questions
             
