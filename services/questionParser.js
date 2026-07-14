@@ -251,6 +251,10 @@ export function parseQuestionFile(filePath, folder = "") {
         
         }
 
+        // Ignore question-specific fields until a Q| is found
+        if (!currentQuestion)
+            continue;
+
         // ---------- OPTIONS ----------
 
         if (line.startsWith("A|")) {
@@ -367,9 +371,7 @@ export function parseQuestionFile(filePath, folder = "") {
         }
 
         
-        // Ignore question-specific fields until a Q| is found
-        if (!currentQuestion)
-            continue;
+        
 
     }
 
