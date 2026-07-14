@@ -92,6 +92,14 @@ export default async function handler(req, res) {
         const finalPool = shuffleArray(combinedQuestions)
             .slice(0, totalNeeded);
         
+        // Calculate Total Marks of this paper
+        const totalMarks = finalPool.reduce(
+        
+            (sum, q) => sum + (q.marks || 1),
+        
+            0
+        
+        );
         // Calculate Average Difficulty
         const totalDifficulty = finalPool.reduce(
             (sum, q) => sum + (q.difficulty || 5),
@@ -137,19 +145,21 @@ export default async function handler(req, res) {
         
             paperMeta: {
         
-                exam: finalPool[0]?.exam || "",
-        
+               exam: finalPool[0]?.exam || "",
+
                 subject: finalPool[0]?.subject || "",
-        
+            
                 topic: finalPool[0]?.topic || "",
-        
+            
                 subTopic: finalPool[0]?.subTopic || "",
-        
+            
                 notification: finalPool[0]?.notification || "",
-        
+            
                 level: finalPool[0]?.level || "",
-        
-                type: finalPool[0]?.type || ""
+            
+                type: finalPool[0]?.type || "",
+            
+                totalMarks
         
             },
         
