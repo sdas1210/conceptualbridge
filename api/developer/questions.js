@@ -23,27 +23,26 @@ export default async function handler(req, res) {
     if (topic === 'GACA' || topic === 'gaca') targetFolder = 'gaca';
 
     try {
-        try {
-
-   switch (action) {
-
-            case "topics":
-                return getTopics(res);
         
-            case "":
-                break;      // Old behaviour
-        
-            default:
-        
-                return res.status(400).json({
-        
-                    status: "error",
-        
-                    message: "Unknown developer action"
-        
-                });
-        
-        }
+       switch (action) {
+    
+                case "topics":
+                    return getTopics(res);
+            
+                case "":
+                    break;      // Old behaviour
+            
+                default:
+            
+                    return res.status(400).json({
+            
+                        status: "error",
+            
+                        message: "Unknown developer action"
+            
+                    });
+            
+            }
 
         if (!fs.existsSync(folderPath)) {
             return res.status(404).json({
