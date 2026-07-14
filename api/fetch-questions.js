@@ -120,10 +120,7 @@ export default async function handler(req, res) {
         );
         
         // Convert percentage to marks
-        const totalMarks = finalPool.reduce(
-            (sum, q) => sum + (q.marks || 1),
-            0
-        );
+        
         
         const passMark = Number(
             ((passPercentage / 100) * totalMarks).toFixed(2)
