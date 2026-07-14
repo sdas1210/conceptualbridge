@@ -367,10 +367,13 @@ export function parseQuestionFile(filePath, folder = "") {
             continue;
         
         }
+        // Ignore question-specific fields until a Q| is found
+        if (!currentQuestion)
+            continue;
 
     }
 
-    if (!currentQuestion) continue;
+    
 
     saveCurrentQuestion();
 
