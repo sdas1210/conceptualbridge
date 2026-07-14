@@ -15,13 +15,7 @@
     }
   ],
   "functions": {
-  "api/fetch-questions.js": {
-    "includeFiles": "questions/**"
-  },
-  "api/fetch-tutorial-questions.js": {
-    "includeFiles": "questions/**"
-  },
-  "api/admin-stats.js": {
+  "api/*.js": {
     "includeFiles": "questions/**"
   }
 }
