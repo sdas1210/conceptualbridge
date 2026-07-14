@@ -122,7 +122,7 @@ export function parseQuestionFile(filePath, folder = "") {
 
         }
 
-        if (!currentQuestion) continue;
+        
 
         // ---------- OPTIONS ----------
 
@@ -241,29 +241,29 @@ export function parseQuestionFile(filePath, folder = "") {
 
         // ---------- GLOBAL METADATA ----------
 
-if (line.startsWith("Exam|")) {
+        if (line.startsWith("Exam|")) {
+        
+            const value = line.substring(5).trim();
+        
+            if (value !== "")
+                globalMetadata.exam = value;
+        
+            continue;
+        
+        }
 
-    const value = line.substring(5).trim();
+        if (line.startsWith("Subject|")) {
+        
+            const value = line.substring(8).trim();
+        
+            if (value !== "")
+                globalMetadata.subject = value;
+        
+            continue;
+        
+        }
 
-    if (value !== "")
-        globalMetadata.exam = value;
-
-    continue;
-
-}
-
-if (line.startsWith("Subject|")) {
-
-    const value = line.substring(8).trim();
-
-    if (value !== "")
-        globalMetadata.subject = value;
-
-    continue;
-
-}
-
-if (line.startsWith("Topic|")) {
+        if (line.startsWith("Topic|")) {
 
             const value = line.substring(6).trim();
         
@@ -369,6 +369,8 @@ if (line.startsWith("Topic|")) {
         }
 
     }
+
+    if (!currentQuestion) continue;
 
     saveCurrentQuestion();
 
