@@ -122,123 +122,6 @@ export function parseQuestionFile(filePath, folder = "") {
 
         }
 
-        
-
-        // ---------- OPTIONS ----------
-
-        if (line.startsWith("A|")) {
-
-            currentQuestion.a =
-                line.substring(2).trim();
-
-            continue;
-
-        }
-
-        if (line.startsWith("B|")) {
-
-            currentQuestion.b =
-                line.substring(2).trim();
-
-            continue;
-
-        }
-
-        if (line.startsWith("C|")) {
-
-            currentQuestion.c =
-                line.substring(2).trim();
-
-            continue;
-
-        }
-
-        if (line.startsWith("D|")) {
-
-            currentQuestion.d =
-                line.substring(2).trim();
-
-            continue;
-
-        }
-
-        // ---------- CORRECT ----------
-
-        if (line.startsWith("Correct|")) {
-
-            const ans =
-                line.substring(8).trim().toUpperCase();
-
-            currentQuestion.correct =
-                ans === "A" ? 0 :
-                ans === "B" ? 1 :
-                ans === "C" ? 2 :
-                ans === "D" ? 3 :
-                null;
-
-            continue;
-
-        }
-
-        // ---------- DIFFICULTY ----------
-
-        if (line.startsWith("Difficulty|")) {
-
-            let diff = parseFloat(
-                line.substring(11).trim()
-            );
-        
-            if (isNaN(diff))
-                diff = 5;
-        
-            diff = Math.max(
-                1,
-                Math.min(10, diff)
-            );
-        
-            currentQuestion.difficulty = diff;
-        
-            continue;
-        
-        }
-
-        // ---------- SHIFT ----------
-
-        if (line.startsWith("Shift|")) {
-
-            currentQuestion.shift =
-                line.substring(6).trim();
-
-            continue;
-
-        }
-        if (line.startsWith("Image|")) {
-
-            const value = line.substring(6).trim();
-        
-            if (
-        
-                value !== "" &&
-        
-                globalMetadata.imageFolder !== ""
-        
-            ) {
-        
-                currentQuestion.image =
-                    globalMetadata.imageFolder + value;
-        
-            }
-        
-            else {
-        
-                currentQuestion.image = "";
-        
-            }
-        
-            continue;
-        
-        }
-
         // ---------- GLOBAL METADATA ----------
 
         if (line.startsWith("Exam|")) {
@@ -367,6 +250,123 @@ export function parseQuestionFile(filePath, folder = "") {
             continue;
         
         }
+
+        // ---------- OPTIONS ----------
+
+        if (line.startsWith("A|")) {
+
+            currentQuestion.a =
+                line.substring(2).trim();
+
+            continue;
+
+        }
+
+        if (line.startsWith("B|")) {
+
+            currentQuestion.b =
+                line.substring(2).trim();
+
+            continue;
+
+        }
+
+        if (line.startsWith("C|")) {
+
+            currentQuestion.c =
+                line.substring(2).trim();
+
+            continue;
+
+        }
+
+        if (line.startsWith("D|")) {
+
+            currentQuestion.d =
+                line.substring(2).trim();
+
+            continue;
+
+        }
+
+        // ---------- CORRECT ----------
+
+        if (line.startsWith("Correct|")) {
+
+            const ans =
+                line.substring(8).trim().toUpperCase();
+
+            currentQuestion.correct =
+                ans === "A" ? 0 :
+                ans === "B" ? 1 :
+                ans === "C" ? 2 :
+                ans === "D" ? 3 :
+                null;
+
+            continue;
+
+        }
+
+        // ---------- DIFFICULTY ----------
+
+        if (line.startsWith("Difficulty|")) {
+
+            let diff = parseFloat(
+                line.substring(11).trim()
+            );
+        
+            if (isNaN(diff))
+                diff = 5;
+        
+            diff = Math.max(
+                1,
+                Math.min(10, diff)
+            );
+        
+            currentQuestion.difficulty = diff;
+        
+            continue;
+        
+        }
+
+        // ---------- SHIFT ----------
+
+        if (line.startsWith("Shift|")) {
+
+            currentQuestion.shift =
+                line.substring(6).trim();
+
+            continue;
+
+        }
+        if (line.startsWith("Image|")) {
+
+            const value = line.substring(6).trim();
+        
+            if (
+        
+                value !== "" &&
+        
+                globalMetadata.imageFolder !== ""
+        
+            ) {
+        
+                currentQuestion.image =
+                    globalMetadata.imageFolder + value;
+        
+            }
+        
+            else {
+        
+                currentQuestion.image = "";
+        
+            }
+        
+            continue;
+        
+        }
+
+        
         // Ignore question-specific fields until a Q| is found
         if (!currentQuestion)
             continue;
