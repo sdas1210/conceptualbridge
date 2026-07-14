@@ -30,7 +30,8 @@ export default async function handler(req, res) {
         const folder = path.basename(
             path.dirname(filePath)
         );
-        
+        console.log("File Path:", filePath);
+        console.log("Folder:", folder);
         const parsedQuestions = parseQuestionFile(
             filePath,
             folder
