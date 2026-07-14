@@ -23,12 +23,27 @@ export default async function handler(req, res) {
     if (topic === 'GACA' || topic === 'gaca') targetFolder = 'gaca';
 
     try {
+        try {
 
-        const folderPath = path.join(
-            process.cwd(),
-            'questions',
-            targetFolder
-        );
+   switch (action) {
+
+            case "topics":
+                return getTopics(res);
+        
+            case "":
+                break;      // Old behaviour
+        
+            default:
+        
+                return res.status(400).json({
+        
+                    status: "error",
+        
+                    message: "Unknown developer action"
+        
+                });
+        
+        }
 
         if (!fs.existsSync(folderPath)) {
             return res.status(404).json({
@@ -190,5 +205,20 @@ export default async function handler(req, res) {
         });
 
     }
+
+}
+    function getTopics(res) {
+
+    return res.status(200).json({
+
+        status: "ok",
+
+        version: "0.1",
+
+        data: [
+            "GACA"
+        ]
+
+    });
 
 }
