@@ -355,8 +355,11 @@ export function parseQuestionFile(filePath, folder = "") {
         
             ) {
         
-                currentQuestion.image =
-                    globalMetadata.imageFolder + value;
+                const base = globalMetadata.imageFolder.endsWith("/")
+                    ? globalMetadata.imageFolder
+                    : globalMetadata.imageFolder + "/";
+                
+                currentQuestion.image = base + value;
         
             }
         
