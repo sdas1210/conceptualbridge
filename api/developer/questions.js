@@ -28,7 +28,10 @@ export default async function handler(req, res) {
     
                 case "topics":
                     return getTopics(res);
-            
+               
+                case "files":
+                    return getFiles(topic, res);
+               
                 case "":
                     break;      // Old behaviour
             
@@ -199,6 +202,61 @@ export default async function handler(req, res) {
         data: [
             "GACA"
         ]
+
+    });
+
+}
+// ==========================================
+// Developer Helper Functions
+// ==========================================
+
+function getFiles(topic, res) {
+
+    let targetFolder = "gaca";
+
+    if (topic === "GI") targetFolder = "gi";
+    if (topic === "GS") targetFolder = "gs";
+    if (topic === "math") targetFolder = "math";
+
+    const folderPath = path.join(
+        process.cwd(),
+        "questions",
+        targetFolder
+    );
+
+    if (!fs.existsSync(folderPath)) {
+
+        return res.status(404).json({
+
+            status: "error",
+
+            message: "Folder not found"
+
+        });
+
+    }
+
+    const txtFiles = fs.readdirSync(folderPath)
+
+        .filter(file => file.toLowerCase().endsWith(".txt"))
+
+        .sort((a, b) =>
+            a.localeCompare(
+                b,
+                undefined,
+                { numeric: true }
+            )
+        );
+
+    return res.status(200).json({
+
+        status: "ok",
+
+        version: "0.2",
+
+        totalFiles: txtFiles.length,
+
+        data: txtFiles
 
     });
 
