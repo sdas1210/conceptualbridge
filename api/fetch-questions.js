@@ -112,19 +112,46 @@ export default async function handler(req, res) {
         );
         
         // Convert percentage to marks
+        const totalMarks = finalPool.reduce(
+            (sum, q) => sum + (q.marks || 1),
+            0
+        );
+        
         const passMark = Number(
-            ((passPercentage / 100) * finalPool.length).toFixed(2)
+            ((passPercentage / 100) * totalMarks).toFixed(2)
         );
         
         return res.status(200).json({
 
             status: 'ok',
         
-            averageDifficulty: Number(averageDifficulty.toFixed(2)),
+            averageDifficulty: Number(
+                averageDifficulty.toFixed(2)
+            ),
         
-            passPercentage: Number(passPercentage.toFixed(2)), // optional to keep
+            passPercentage: Number(
+                passPercentage.toFixed(2)
+            ),
         
             passMark,
+        
+            paperMeta: {
+        
+                exam: finalPool[0]?.exam || "",
+        
+                subject: finalPool[0]?.subject || "",
+        
+                topic: finalPool[0]?.topic || "",
+        
+                subTopic: finalPool[0]?.subTopic || "",
+        
+                notification: finalPool[0]?.notification || "",
+        
+                level: finalPool[0]?.level || "",
+        
+                type: finalPool[0]?.type || ""
+        
+            },
         
             data: finalPool
         
