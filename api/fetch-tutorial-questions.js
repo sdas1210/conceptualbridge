@@ -42,6 +42,10 @@ export default async function handler(req, res) {
         const testSet =
         parsedQuestions.slice(0,10);
 
+        const totalMarks = testSet.reduce(
+            (sum, q) => sum + (q.marks || 1),
+            0
+        );
         const passMark = Number(
 
             (8 + Math.random()*1.5)
@@ -50,20 +54,56 @@ export default async function handler(req, res) {
         
         );
 
+        const passPercentage = Number(
+            ((passMark / totalMarks) * 100).toFixed(2)
+        );
+
+        const totalDifficulty = testSet.reduce(
+            (sum, q) => sum + (q.difficulty || 5),
+            0
+        );
         
+        const averageDifficulty =
+            testSet.length > 0
+                ? Number((totalDifficulty / testSet.length).toFixed(2))
+                : 5;
 
        // 5. Slice down to exactly 10 questions
             
                         
             return res.status(200).json({
 
-                status: "ok",
-            
-                passMark,
-            
-                data: testSet
-            
-            });
+            status: "ok",
+        
+            averageDifficulty,
+        
+            passPercentage,
+        
+            passMark,
+        
+            paperMeta: {
+        
+                exam: testSet[0]?.exam || "",
+        
+                subject: testSet[0]?.subject || "",
+        
+                topic: testSet[0]?.topic || "",
+        
+                subTopic: testSet[0]?.subTopic || "",
+        
+                notification: testSet[0]?.notification || "",
+        
+                level: testSet[0]?.level || "",
+        
+                type: testSet[0]?.type || "",
+        
+                totalMarks
+        
+            },
+        
+            data: testSet
+        
+        });
 
     } catch (err) {
         console.error(err);
