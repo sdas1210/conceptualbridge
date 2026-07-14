@@ -1113,7 +1113,7 @@
 
             document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; 
             document.getElementById('wizard-duration-lbl').innerText = `Duration: ${questionLimit} Mins`; 
-            document.getElementById('wizard-marks-lbl').innerText = `Maximum Marks: ${examDataMatrix.length}`; 
+            document.getElementById('wizard-marks-lbl').innerText =`Maximum Marks: ${paperMeta.totalMarks || examDataMatrix.length}`;
             document.getElementById('wizard-count-lbl').innerText = examDataMatrix.length; 
         }
 
@@ -1621,8 +1621,7 @@
             document.getElementById("res-difficulty").innerText =
             `${difficultyEmoji} ${difficultyLabel} (${paperDifficulty.toFixed(2)}/10)`;
             
-            document.getElementById("res-passmark").innerText =
-            `${dynamicPassMark.toFixed(2)} / ${totalQuestions}`;
+            document.getElementById("res-passmark").innerText =`${dynamicPassMark.toFixed(2)} / ${paperMeta.totalMarks || totalQuestions}`;
             
             document.getElementById("res-result").innerText =
             passed ? "✅ PASS" : "❌ FAIL";
