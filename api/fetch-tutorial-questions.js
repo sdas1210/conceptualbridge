@@ -16,49 +16,32 @@ export default async function handler(req, res) {
             return res.status(404).json({ error: 'Question asset file not found' });
         }
 
-        const rawText = fs.readFileSync(filePath, 'utf-8');
-        const lines = rawText.split('\n').map(l => l.trim());
+        import { parseQuestionFile }
+        from "../services/questionParser.js";
 
-        let parsedQuestions = [];
-        let currentBlock = null;
+        const parsedQuestions =
+            parseQuestionFile(filePath);
+        for (let i = parsedQuestions.length - 1; i > 0; i--) {
 
-        // 3. Process your exact multiline block format smoothly
-        lines.forEach(line => {
-            if (!line) return;
-            
-            // Clean out hidden tags if present
-            let cleanLine = line.replace(/\/gi, '').trim();
-            if (!cleanLine) return;
+            const j = Math.floor(
+                Math.random() * (i + 1)
+            );
+        
+            [parsedQuestions[i], parsedQuestions[j]] =
+            [parsedQuestions[j], parsedQuestions[i]];
+        
+        }
 
-            const pipeIdx = cleanLine.indexOf('|');
-            if (pipeIdx === -1) {
-                // Continuation line support for text extensions/translations
-                if (currentBlock && cleanLine.startsWith('/')) {
-                    currentBlock.text += ` ${cleanLine}`;
-                }
-                return;
-            }
+        const testSet =
+        parsedQuestions.slice(0,10);
 
-            const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
-            const value = cleanLine.substring(pipeIdx + 1).trim();
+        const passMark = Number(
 
-            if (key === 'Q') {
-                currentBlock = { text: value, a: '', b: '', c: '', d: '', correct: 0, exam: 'Tutorial Quiz', shift: '' };
-            } else if (currentBlock) {
-                if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
-                    currentBlock[key.toLowerCase()] = value;
-                } else if (key === 'SHIFT') {
-                    currentBlock.shift = value;
-                } else if (key === 'CORRECT') {
-                    const letter = value.toUpperCase();
-                    currentBlock.correct = letter.charCodeAt(0) - 65; // Convert A->0, B->1...
-                    
-                    if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
-                        parsedQuestions.push(currentBlock);
-                    }
-                }
-            }
-        });
+            (8 + Math.random()*1.5)
+        
+                .toFixed(2)
+        
+        );
 
         // 4. Randomize the array entirely on the server side
         for (let i = parsedQuestions.length - 1; i > 0; i--) {
