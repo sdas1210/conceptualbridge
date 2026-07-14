@@ -18,8 +18,8 @@ export function parseQuestionFile(filePath, folder = "") {
     let currentQuestion = null;
     let globalMetadata = {
 
-        exam: "",
-    
+       exam: "",
+
         subject: "",
     
         topic: "",
@@ -30,9 +30,15 @@ export function parseQuestionFile(filePath, folder = "") {
     
         notification: "",
     
-        type: ""
+        type: "",
     
-    };
+        marks: 1,
+    
+        qType: "MCQ",
+    
+        imageFolder: ""
+        
+        };
 
     function saveCurrentQuestion() {
 
@@ -89,6 +95,8 @@ export function parseQuestionFile(filePath, folder = "") {
             
                 shift: "",
             
+                image: "",
+            
                 exam: globalMetadata.exam,
             
                 subject: globalMetadata.subject,
@@ -101,7 +109,12 @@ export function parseQuestionFile(filePath, folder = "") {
             
                 notification: globalMetadata.notification,
             
-                type: globalMetadata.type
+                type: globalMetadata.type,
+            
+                marks: globalMetadata.marks,
+            
+                qType: globalMetadata.qType
+
             
             };
 
@@ -199,6 +212,32 @@ export function parseQuestionFile(filePath, folder = "") {
             continue;
 
         }
+        if (line.startsWith("Image|")) {
+
+            const value = line.substring(6).trim();
+        
+            if (
+        
+                value !== "" &&
+        
+                globalMetadata.imageFolder !== ""
+        
+            ) {
+        
+                currentQuestion.image =
+                    globalMetadata.imageFolder + value;
+        
+            }
+        
+            else {
+        
+                currentQuestion.image = "";
+        
+            }
+        
+            continue;
+        
+        }
 
         // ---------- GLOBAL METADATA ----------
 
@@ -280,6 +319,50 @@ if (line.startsWith("Topic|")) {
         
             if (value !== "")
                 globalMetadata.type = value;
+        
+            continue;
+        
+        }
+        if (line.startsWith("Marks|")) {
+
+            const value = line.substring(6).trim();
+        
+            if (value !== "") {
+        
+                const marks = parseFloat(value);
+        
+                if (!isNaN(marks))
+                    globalMetadata.marks = marks;
+        
+            }
+        
+            continue;
+        
+        }
+        
+        if (
+        
+            line.startsWith("QType|") ||
+        
+            line.startsWith("QuestionType|")
+        
+        ) {
+        
+            const value = line.substring(line.indexOf("|") + 1).trim();
+        
+            if (value !== "")
+                globalMetadata.qType = value;
+        
+            continue;
+        
+        }
+        
+        if (line.startsWith("ImageFolder|")) {
+        
+            const value = line.substring(12).trim();
+        
+            if (value !== "")
+                globalMetadata.imageFolder = value;
         
             continue;
         
