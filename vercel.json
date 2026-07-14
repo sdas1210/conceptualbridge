@@ -15,11 +15,14 @@
     }
   ],
   "functions": {
-    "api/fetch-questions.js": {
-      "includeFiles": "questions/**"
-    },
-    "api/admin-stats.js": {
-      "includeFiles": "questions/**"
-    }
+  "api/fetch-questions.js": {
+    "includeFiles": "questions/**"
+  },
+  "api/fetch-tutorial-questions.js": {
+    "includeFiles": "questions/**"
+  },
+  "api/admin-stats.js": {
+    "includeFiles": "questions/**"
   }
+}
 }
