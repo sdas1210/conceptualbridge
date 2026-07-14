@@ -125,31 +125,7 @@ export default async function handler(req, res) {
         // Find by Question Number
         // -------------------------
 
-        if (question !== undefined) {
-
-            const index = Number(question);
-
-            if (
-                index < 1 ||
-                index > allQuestions.length
-            ) {
-
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'Question index out of range'
-                });
-
-            }
-
-            return res.status(200).json({
-
-                status: 'ok',
-
-                question: allQuestions[index - 1]
-
-            });
-
-        }
+        
 
         // -------------------------
         // Find by Question ID
