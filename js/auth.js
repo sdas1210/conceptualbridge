@@ -33,7 +33,7 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
-loginBtn.addEventListener("click", async () => {
+loginBtn.addEventListener("click", () => {
 
      loginModal.classList.add("show");
 
