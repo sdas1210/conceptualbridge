@@ -339,28 +339,45 @@
         .login-modal{
         
             position:fixed;
-        
             inset:0;
+        
+            display:flex;
+            justify-content:center;
+            align-items:center;
         
             background:rgba(0,0,0,.45);
         
-            backdrop-filter:blur(8px);
+            backdrop-filter:blur(0px);
+            -webkit-backdrop-filter:blur(0px);
         
-            -webkit-backdrop-filter:blur(8px);
+            opacity:0;
         
-            display:flex;
+            visibility:hidden;
         
-            justify-content:center;
-        
-            align-items:center;
+            transition:
+                opacity .35s ease,
+                backdrop-filter .35s ease,
+                visibility .35s;
         
             z-index:9999;
         
         }
 
-        .login-card{
+        .login-modal.show{
 
-            width:380px;
+            opacity:1;
+        
+            visibility:visible;
+        
+            backdrop-filter:blur(8px);
+        
+            -webkit-backdrop-filter:blur(8px);
+        
+        }
+
+        ..login-card{
+
+            width:420px;
         
             max-width:90%;
         
@@ -383,6 +400,22 @@
             position:relative;
         
             text-align:center;
+        
+            transform:translateY(35px) scale(.96);
+        
+            opacity:0;
+        
+            transition:
+                transform .35s cubic-bezier(.175,.885,.32,1.2),
+                opacity .35s ease;
+        
+        }
+
+        .login-modal.show .login-card{
+
+            transform:translateY(0) scale(1);
+        
+            opacity:1;
         
         }
         /* ==============================
