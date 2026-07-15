@@ -87,9 +87,16 @@ togglePassword.addEventListener("click", () => {
 
 });
 
-document.addEventListener("keydown", (event) => {
+window.addEventListener("keydown", (event) => {
 
-    if (event.key === "Escape") {
+    console.log("Key Pressed:", event.key);
+
+    if (
+        event.key === "Escape" ||
+        event.key === "Esc"
+    ) {
+
+        event.preventDefault();
 
         loginModal.classList.remove("show");
 
