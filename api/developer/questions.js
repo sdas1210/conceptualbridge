@@ -270,15 +270,45 @@ function getFiles(topic, res) {
 
 function loadFile(topic, file, res) {
 
+    let targetFolder = "gaca";
+
+    if (topic === "GI") targetFolder = "gi";
+    if (topic === "GS") targetFolder = "gs";
+    if (topic === "math") targetFolder = "math";
+
+    const filePath = path.join(
+        process.cwd(),
+        "questions",
+        targetFolder,
+        file
+    );
+
+    if (!fs.existsSync(filePath)) {
+
+        return res.status(404).json({
+
+            status: "error",
+
+            message: "File not found"
+
+        });
+
+    }
+
+    const questions = parseQuestionFile(
+        filePath,
+        targetFolder
+    );
+
     return res.status(200).json({
 
         status: "ok",
 
         version: "0.3",
 
-        topic,
+        questionCount: questions.length,
 
-        file
+        data: questions
 
     });
 
