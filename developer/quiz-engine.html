@@ -1038,6 +1038,29 @@
                 topicSelect.appendChild(option);
             
             });
+            const fileResponse = await fetch(
+                `/api/developer/questions?action=files&topic=${topicSelect.value}`
+            );
+            
+            const filePayload = await fileResponse.json();
+            
+            const fileSelect = document.getElementById("fileSelect");
+            
+            fileSelect.innerHTML = "";
+            
+            filePayload.data.forEach(file => {
+            
+                const option = document.createElement("option");
+            
+                option.value = file;
+            
+                option.textContent = file;
+            
+                fileSelect.appendChild(option);
+            
+            });
+            
+            console.log("Files Loaded");
             
             console.log("Topics Loaded");
             
