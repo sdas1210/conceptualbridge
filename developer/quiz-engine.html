@@ -985,7 +985,13 @@
             if (window.location.pathname.includes("/developer/")) {
         
                 console.log("Developer Quiz Engine");
-        
+                const response = await fetch(
+                "/api/developer/questions?action=topics"
+            );
+            
+            const payload = await response.json();
+            
+            console.log(payload);
                 return;
         
             }
