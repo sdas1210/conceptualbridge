@@ -1772,7 +1772,18 @@
         
         }
         
-        initializeQuizEngine(); 
+        initializeQuizEngine();
+
+        // Enable Next button immediately on mobile devices
+        window.addEventListener("load", () => {
+        
+            if (window.innerWidth <= 768) {
+        
+                document.getElementById("instruction-next-action-btn").disabled = false;
+        
+            }
+        
+        });
     </script>
 </body>
 </html>
