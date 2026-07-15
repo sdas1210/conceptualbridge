@@ -171,6 +171,8 @@
 
         .option-row input { margin-right: 12px; transform: scale(1.2); }
 
+        
+
        /*================ REVIEW PANEL ================*/
 
         .review-status-box{
@@ -985,6 +987,15 @@
             if (window.location.pathname.includes("/developer/")) {
         
                 console.log("Developer Quiz Engine");
+                document.getElementById("step-instructions-1").style.display = "none";
+                document.getElementById("step-footer-1").style.display = "none";
+                
+                document.getElementById("stage-two-wrapper-node").style.display = "none";
+                
+                document.getElementById("timer-header-wrapper").style.display = "none";
+                document.getElementById("ribbon-bar-container").style.display = "none";
+                
+                document.getElementById("quiz-workspace").style.display = "flex";
                 const response = await fetch(
                 "/api/developer/questions?action=topics"
             );
