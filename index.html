@@ -440,6 +440,20 @@
     <div class="last-updated-badge" id="last-updated-badge" style="display:none;">
         <span>Last Updated On: <span id="last-updated-text">...</span></span>
     </div>
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal" style="display:none;">
+        
+            <div class="login-card">
+        
+                <button id="closeLogin" class="close-btn">&times;</button>
+        
+                <h2>Welcome Back</h2>
+        
+                <p>Sign in to continue your preparation.</p>
+        
+            </div>
+        
+        </div>
 
     <script>
         async function incrementCounter() {
@@ -527,20 +541,7 @@
         }
 
         loadLastUpdated();
-        <!-- Login Modal -->
-        <div id="loginModal" class="login-modal" style="display:none;">
         
-            <div class="login-card">
-        
-                <button id="closeLogin" class="close-btn">&times;</button>
-        
-                <h2>Welcome Back</h2>
-        
-                <p>Sign in to continue your preparation.</p>
-        
-            </div>
-        
-        </div>
     </script>
     <script type="module" src="js/auth.js"></script>
 </body>
