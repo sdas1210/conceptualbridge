@@ -1836,6 +1836,20 @@
             console.log("File  :", file);
         
         }
+        async function loadDeveloperFile() {
+
+            const topic = document.getElementById("topicSelect").value;
+            const file = document.getElementById("fileSelect").value;
+        
+            const response = await fetch(
+                `/api/developer/questions?action=load&topic=${topic}&file=${file}`
+            );
+        
+            const payload = await response.json();
+        
+            console.log(payload);
+        
+        }
                 
         initializeQuizEngine(); 
     </script>
