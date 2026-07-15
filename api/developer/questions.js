@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         id = "",
         search = ""
     } = req.query;
-
+f
     let targetFolder = 'math';
 
     if (topic === 'GI') targetFolder = 'gi';
@@ -266,17 +266,7 @@ function getFiles(topic, res) {
 
 }
 
-function getTopics(res) {
 
-    // existing implementation
-
-}
-
-function getFiles(topic, res) {
-
-    // existing implementation
-
-}
 
 function loadFile(topic, file, res) {
 
