@@ -35,13 +35,13 @@ onAuthStateChanged(auth, (user) => {
 
 loginBtn.addEventListener("click", async () => {
 
-     loginModal.style.display = "flex";
+     loginModal.classList.add("show");
 
 });
 
 closeLogin.addEventListener("click", () => {
 
-    loginModal.style.display = "none";
+    loginModal.classList.remove("show");
 
 });
 
