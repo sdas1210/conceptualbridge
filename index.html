@@ -385,6 +385,73 @@
             text-align:center;
         
         }
+        /* ==============================
+           INPUT GROUP
+        ============================== */
+        
+        .input-group{
+        
+            margin-bottom:18px;
+        
+            text-align:left;
+        
+        }
+        
+        .input-group label{
+        
+            display:block;
+        
+            color:#f2f2f2;
+        
+            font-size:14px;
+        
+            margin-bottom:8px;
+        
+            font-weight:600;
+        
+        }
+        
+        .input-group input{
+        
+            width:100%;
+        
+            box-sizing:border-box;
+        
+            padding:14px 16px;
+        
+            border-radius:12px;
+        
+            border:1px solid rgba(255,255,255,.18);
+        
+            background:rgba(255,255,255,.08);
+        
+            color:white;
+        
+            font-size:15px;
+        
+            outline:none;
+        
+            transition:.25s;
+        
+            backdrop-filter:blur(10px);
+        
+        }
+        
+        .input-group input::placeholder{
+        
+            color:rgba(255,255,255,.55);
+        
+        }
+        
+        .input-group input:focus{
+        
+            border-color:#63b3ed;
+        
+            background:rgba(255,255,255,.12);
+        
+            box-shadow:0 0 15px rgba(99,179,237,.25);
+        
+        }
 
         .login-logo{
 
@@ -403,6 +470,40 @@
             box-shadow:0 8px 20px rgba(0,0,0,.25);
         
         }
+
+        .login-action{
+
+        width:100%;
+    
+        margin-top:10px;
+    
+        padding:14px;
+    
+        border:none;
+    
+        border-radius:14px;
+    
+        background:linear-gradient(135deg,#3182ce,#2b6cb0);
+    
+        color:white;
+    
+        font-size:16px;
+    
+        font-weight:700;
+    
+        cursor:pointer;
+    
+        transition:.3s;
+    
+    }
+    
+    .login-action:hover{
+    
+        transform:translateY(-2px);
+    
+        box-shadow:0 8px 20px rgba(49,130,206,.35);
+    
+    }
 
         .close-btn{
 
@@ -561,6 +662,34 @@
                 <h2>Welcome Back</h2>
                 
                 <p>Sign in to continue your preparation.</p>
+                
+                <div class="input-group">
+                
+                    <label>Email Address</label>
+                
+                    <input
+                        type="email"
+                        id="emailInput"
+                        placeholder="Enter your email">
+                
+                </div>
+                
+                <div class="input-group">
+                
+                    <label>Password</label>
+                
+                    <input
+                        type="password"
+                        id="passwordInput"
+                        placeholder="Enter your password">
+                
+                </div>
+                
+                <button class="login-action">
+                
+                    Log In
+                
+                </button>
         
             </div>
         
