@@ -45,6 +45,16 @@ closeLogin.addEventListener("click", () => {
 
 });
 
+loginModal.addEventListener("click", (event) => {
+
+    if (event.target === loginModal) {
+
+        loginModal.classList.remove("show");
+
+    }
+
+});
+
 const passwordInput = document.getElementById("passwordInput");
 const togglePassword = document.getElementById("togglePassword");
 const eyeIcon = document.getElementById("eyeIcon");
@@ -72,6 +82,16 @@ togglePassword.addEventListener("click", () => {
 
         <circle cx="12" cy="12" r="3"></circle>
         `;
+
+    }
+
+});
+
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "Escape") {
+
+        loginModal.classList.remove("show");
 
     }
 
