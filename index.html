@@ -453,6 +453,42 @@
         
         }
 
+        .password-box{
+
+            position:relative;
+        
+        }
+        
+        .password-toggle{
+        
+            position:absolute;
+        
+            right:12px;
+        
+            top:50%;
+        
+            transform:translateY(-50%);
+        
+            background:none;
+        
+            border:none;
+        
+            cursor:pointer;
+        
+            font-size:18px;
+        
+            color:rgba(255,255,255,.75);
+        
+            transition:.25s;
+        
+        }
+        
+        .password-toggle:hover{
+        
+            color:white;
+        
+        }
+
         .login-logo{
 
             width:80px;
@@ -675,15 +711,29 @@
                 </div>
                 
                 <div class="input-group">
-                
-                    <label for="passwordInput">Password</label>
-                
+
+                <label for="passwordInput">Password</label>
+            
+                <div class="password-box">
+            
                     <input
                         type="password"
                         id="passwordInput"
-                        placeholder="Enter your password">
-                
+                        placeholder="Enter your password"
+                        autocomplete="current-password">
+            
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="password-toggle">
+            
+                        👁
+            
+                    </button>
+            
                 </div>
+            
+            </div>
                 
                 <button id="emailLoginBtn" class="login-action">
                 
