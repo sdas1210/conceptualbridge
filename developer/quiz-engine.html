@@ -1023,8 +1023,25 @@
             
             const payload = await response.json();
             
-            console.log(payload);
-                return;
+            onst topicSelect = document.getElementById("topicSelect");
+
+            topicSelect.innerHTML = "";
+            
+            payload.data.forEach(topic => {
+            
+                const option = document.createElement("option");
+            
+                option.value = topic;
+            
+                option.textContent = topic;
+            
+                topicSelect.appendChild(option);
+            
+            });
+            
+            console.log("Topics Loaded");
+            
+            return;
         
             }
         
