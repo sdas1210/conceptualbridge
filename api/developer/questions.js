@@ -32,6 +32,10 @@ export default async function handler(req, res) {
                 case "files":
                     return getFiles(topic, res);
                
+           case "load":
+                return loadFile(topic, file, res);
+               
+               
                 case "":
                     break;      // Old behaviour
             
@@ -257,6 +261,35 @@ function getFiles(topic, res) {
         totalFiles: txtFiles.length,
 
         data: txtFiles
+
+    });
+
+}
+
+function getTopics(res) {
+
+    ...
+
+}
+
+function getFiles(topic, res) {
+
+    ...
+
+}   // <-- getFiles ends here
+
+
+function loadFile(topic, file, res) {
+
+    return res.status(200).json({
+
+        status: "ok",
+
+        version: "0.3",
+
+        topic,
+
+        file
 
     });
 
