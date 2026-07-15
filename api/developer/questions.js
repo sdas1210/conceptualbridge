@@ -268,13 +268,13 @@ function getFiles(topic, res) {
 
 function getTopics(res) {
 
-    ...
+   // ...
 
 }
 
 function getFiles(topic, res) {
 
-    ...
+    //...
 
 }   // <-- getFiles ends here
 
