@@ -1835,10 +1835,28 @@
             );
         
             const payload = await response.json();
+                
+                    if (payload.status !== "ok") {
         
-            console.log(payload);
-        
-        }
+                alert("Unable to load question file.");
+            
+                return;
+            
+            }
+            
+            examDataMatrix = payload.data;
+            
+            selectedAnswers = new Array(examDataMatrix.length).fill(null);
+            
+            questionStates = new Array(examDataMatrix.length).fill(0);
+            
+            activeIndex = 0;
+            
+            questionStates[0] = 1;
+            
+            renderExamWindow();
+            
+            }
                 
         initializeQuizEngine(); 
     </script>
