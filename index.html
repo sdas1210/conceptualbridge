@@ -408,6 +408,47 @@
             transition:
                 transform .35s cubic-bezier(.175,.885,.32,1.2),
                 opacity .35s ease;
+            overflow:hidden;
+
+            isolation:isolate;
+            
+            position:relative;
+                    
+        }
+
+        .glass-shine{
+
+            position:absolute;
+        
+            top:-40%;
+        
+            left:-120%;
+        
+            width:70%;
+        
+            height:180%;
+        
+            background:linear-gradient(
+        
+                110deg,
+        
+                transparent,
+        
+                rgba(255,255,255,.12),
+        
+                rgba(255,255,255,.28),
+        
+                rgba(255,255,255,.12),
+        
+                transparent
+        
+            );
+        
+            transform:rotate(20deg);
+        
+            animation:glassShine 5s ease-in-out infinite;
+        
+            pointer-events:none;
         
         }
 
@@ -631,6 +672,28 @@
             margin-bottom:30px;
         
         }
+        @keyframes glassShine{
+        
+            0%{
+        
+                left:-150%;
+        
+            }
+        
+            20%{
+        
+                left:140%;
+        
+            }
+        
+            100%{
+        
+                left:140%;
+        
+            }
+        
+        }
+        
         @media (max-width: 900px) {
             .portal-grid {
                 flex-direction: column;
@@ -742,7 +805,9 @@
     <!-- Login Modal -->
     <div id="loginModal" class="login-modal">
         
-            <div class="login-card">
+           <div class="login-card">
+
+                <div class="glass-shine"></div>
         
                 <button id="closeLogin" class="close-btn">&times;</button>
         
