@@ -6,9 +6,9 @@ import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
+const loginModal = document.getElementById("loginModal");
+const closeLogin = document.getElementById("closeLogin");
 const provider = new GoogleAuthProvider();
-
 const loginBtn = document.getElementById("loginBtn");
 
 onAuthStateChanged(auth, (user) => {
@@ -35,22 +35,12 @@ onAuthStateChanged(auth, (user) => {
 
 loginBtn.addEventListener("click", async () => {
 
-    if (auth.currentUser) {
+     loginModal.style.display = "flex";
 
-        await signOut(auth);
+});
 
-        return;
+closeLogin.addEventListener("click", () => {
 
-    }
-
-    try {
-
-        await signInWithPopup(auth, provider);
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
+    loginModal.style.display = "none";
 
 });
