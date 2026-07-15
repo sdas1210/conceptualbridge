@@ -979,11 +979,31 @@
         let isReviewModeActive = false; 
 
         async function initializeQuizEngine() {
-            if (sourceFile) {
-                await parseTutorialTextFileMatrix(sourceFile); 
-            } else {
-                await executeStandardExamCornerFetch(); 
+
+            // Developer Mode
+        
+            if (window.location.pathname.includes("/developer/")) {
+        
+                console.log("Developer Quiz Engine");
+        
+                return;
+        
             }
+        
+            // Existing Student Mode
+        
+            if (sourceFile) {
+        
+                await parseTutorialTextFileMatrix(sourceFile);
+        
+            }
+        
+            else {
+        
+                await executeStandardExamCornerFetch();
+        
+            }
+        
         }
 
         async function executeStandardExamCornerFetch() { 
