@@ -1779,7 +1779,12 @@
         
             if (window.innerWidth <= 768) {
         
-                document.getElementById("instruction-next-action-btn").disabled = false;
+                const nextBtn = document.getElementById("instruction-next-action-btn");
+
+                    if (nextBtn) {
+                        nextBtn.disabled = false;
+                    }
+
         
             }
         
