@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         id = "",
         search = ""
     } = req.query;
-f
+
     let targetFolder = 'math';
 
     if (topic === 'GI') targetFolder = 'gi';
