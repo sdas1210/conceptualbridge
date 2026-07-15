@@ -460,33 +460,53 @@
         }
         
         .password-toggle{
-        
+
             position:absolute;
-        
-            right:12px;
         
             top:50%;
         
+            right:14px;
+        
             transform:translateY(-50%);
         
-            background:none;
+            width:36px;
+        
+            height:36px;
         
             border:none;
         
-            cursor:pointer;
-        
-            font-size:18px;
+            background:transparent;
         
             color:rgba(255,255,255,.75);
         
-            transition:.25s;
+            border-radius:50%;
+        
+            display:flex;
+        
+            align-items:center;
+        
+            justify-content:center;
+        
+            cursor:pointer;
+        
+            transition:all .25s ease;
         
         }
         
         .password-toggle:hover{
         
-            color:white;
+            background:rgba(255,255,255,.08);
         
+            color:#ffffff;
+        
+            transform:translateY(-50%) scale(1.08);
+        
+        }
+        
+        .password-toggle svg{
+        
+            transition:all .2s ease;
+
         }
 
         .login-logo{
@@ -725,10 +745,25 @@
                     <button
                         type="button"
                         id="togglePassword"
-                        class="password-toggle">
-            
-                        👁
-            
+                        class="password-toggle"
+                        aria-label="Show Password">
+                    
+                        <svg id="eyeIcon"
+                             width="20"
+                             height="20"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                    
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                    
+                            <circle cx="12" cy="12" r="3"></circle>
+                    
+                        </svg>
+                    
                     </button>
             
                 </div>
