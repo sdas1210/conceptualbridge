@@ -835,7 +835,7 @@
             
                 <select id="fileSelect"></select>
             
-                <button id="loadBtn">
+                <button id="loadBtn" onclick="loadDeveloperFile()">
                     Load
                 </button>
             
@@ -1823,7 +1823,20 @@
         `;
         
         }
+
+        async function loadDeveloperFile() {
+
+            const topic =
+                document.getElementById("topicSelect").value;
         
+            const file =
+                document.getElementById("fileSelect").value;
+        
+            console.log("Topic :", topic);
+            console.log("File  :", file);
+        
+        }
+                
         initializeQuizEngine(); 
     </script>
 </body>
