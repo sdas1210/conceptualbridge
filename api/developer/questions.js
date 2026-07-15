@@ -268,16 +268,15 @@ function getFiles(topic, res) {
 
 function getTopics(res) {
 
-   // ...
+    // existing implementation
 
 }
 
 function getFiles(topic, res) {
 
-    //...
+    // existing implementation
 
-}   // <-- getFiles ends here
-
+}
 
 function loadFile(topic, file, res) {
 
