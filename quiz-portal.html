@@ -669,6 +669,34 @@
                 overflow-y:auto;
                 overflow-x:hidden;
             }
+
+            /* ---------- Phase 1.1 : Full Width Layout ---------- */
+
+            *{
+                box-sizing:border-box;
+            }
+            
+            .main-workspace,
+            .question-panel,
+            .question-content,
+            .wizard-container,
+            .wizard-left,
+            .wizard-right{
+                width:100%;
+                max-width:100%;
+                min-width:0;
+            }
+            
+            .question-header,
+            .action-tray,
+            .profile-box,
+            .palette-container,
+            .legend-box,
+            .score-flat-card,
+            .report-modal-box{
+                width:100%;
+                box-sizing:border-box;
+            }
         
             .main-workspace{
                 flex-direction:column;
