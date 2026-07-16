@@ -1702,6 +1702,58 @@
             renderExamWindow(); 
         } 
 
+        function updateQuestionStatistics() {
+
+            let answered = 0;
+            let marked = 0;
+            let notVisited = 0;
+            let markedAnswered = 0;
+            let notAnswered = 0;
+        
+            questionStates.forEach((state, index) => {
+        
+                const hasAnswer = selectedAnswers[index] !== null;
+        
+                switch (state) {
+        
+                    case 0:
+                        notVisited++;
+                        break;
+        
+                    case 1:
+                        notAnswered++;
+                        break;
+        
+                    case 2:
+                        answered++;
+                        break;
+        
+                    case 3:
+        
+                        if (hasAnswer) {
+                            markedAnswered++;
+                        } else {
+                            marked++;
+                        }
+        
+                        break;
+                }
+        
+            });
+
+            
+        
+            document.getElementById("count-answered").innerText = answered;
+            document.getElementById("count-marked").innerText = marked;
+            document.getElementById("count-not-visited").innerText = notVisited;
+            document.getElementById("count-marked-answered").innerText = markedAnswered;
+            document.getElementById("count-not-answered").innerText = notAnswered;
+
+            
+        
+        }
+
+        
         // UPDATED METHOD: Processes orange palette cell transitions dynamically during review matrix checks
         function renderPaletteGrid() { 
             const grid = document.getElementById('palette-grid-holder'); 
@@ -1727,6 +1779,7 @@
                 `; 
                 grid.insertAdjacentHTML('beforeend', cellHtml); 
             }); 
+            updateQuestionStatistics();
         } 
 
         function triggerExamSubmission() { 
