@@ -670,9 +670,11 @@
             }
 
             body{
+                height:auto;
                 min-height:100vh;
-                overflow-y:auto;
+            
                 overflow-x:hidden;
+                overflow-y:auto;
             }
 
             /* ---------- Phase 1.1 : Full Width Layout ---------- */
@@ -715,8 +717,6 @@
         
             .wizard-container{
                 flex-direction:column;
-                height:calc(100vh - 60px);
-                overflow:hidden;
             }
         
             .wizard-left{
