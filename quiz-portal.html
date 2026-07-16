@@ -710,10 +710,15 @@
         
             .wizard-container{
                 flex-direction:column;
+                height:calc(100vh - 60px);
+                overflow:hidden;
             }
         
             .wizard-left{
-                overflow-y:visible;
+                flex:1;
+                overflow-y:auto;
+                -webkit-overflow-scrolling:touch;
+                min-height:0;
             }
         
             .wizard-right{
@@ -727,6 +732,12 @@
             .wizard-footer-fullwidth{
                 flex-direction:column;
                 gap:15px;
+
+                position:sticky;
+                bottom:0;
+            
+                background:#f3f4f6;
+                z-index:1000;
             }
         
             .report-btn-stack{
