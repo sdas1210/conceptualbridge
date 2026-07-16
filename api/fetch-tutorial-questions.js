@@ -57,7 +57,6 @@ export default async function handler(req, res) {
 
             (Math.random() * (7.99 - 6.01) + 6.01).toFixed(2)
         
-                .toFixed(2)
         
         );
 
