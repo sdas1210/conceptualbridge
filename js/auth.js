@@ -10,6 +10,11 @@ const loginModal = document.getElementById("loginModal");
 const closeLogin = document.getElementById("closeLogin");
 const provider = new GoogleAuthProvider();
 const loginBtn = document.getElementById("loginBtn");
+const loginFormPanel = document.getElementById("loginFormPanel");
+const resetPasswordPanel = document.getElementById("resetPasswordPanel");
+
+const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+const backToLogin = document.getElementById("backToLogin");
 
 onAuthStateChanged(auth, (user) => {
 
@@ -103,3 +108,23 @@ window.addEventListener("keydown", (event) => {
     }
 
 });
+forgotPasswordLink.addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    loginFormPanel.style.display = "none";
+
+    resetPasswordPanel.style.display = "block";
+
+});
+backToLogin.addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    resetPasswordPanel.style.display = "none";
+
+    loginFormPanel.style.display = "block";
+
+});
+
+
