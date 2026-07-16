@@ -836,7 +836,7 @@
         </div>
         <div class="wizard-right">
             <div class="wizard-avatar">👨‍🎓</div>
-            <div class="wizard-name">Shovan Das</div>
+            <div class="wizard-name student-name">Guest Student</div>
         </div>
     </div>
     
@@ -881,7 +881,7 @@
             </div>
             <div class="wizard-right">
                 <div class="wizard-avatar">👨‍🎓</div>
-                <div class="wizard-name">Shovan Das</div>
+                <div class="wizard-name student-name">Guest Student</div>
             </div>
         </div>
         
@@ -931,7 +931,9 @@
             <div class="profile-box">
                 <div class="profile-avatar">👨‍🎓</div>
                 <div>
-                    <div style="font-weight: bold; font-size: 0.95rem;">Shovan Das</div>
+                    <div class="student-name"
+                        style="font-weight:bold;font-size:0.95rem;">
+                        Guest Student</div>
                     <div style="color: #6b7280; font-size: 0.8rem;">ID: CB-2026</div>
                 </div>
             </div>
@@ -1038,6 +1040,18 @@
         let examDataMatrix = [];
 
         let paperMeta = {};
+
+        //----------------------------------------------------
+        // Current Student Profile
+        //----------------------------------------------------
+        
+        const currentStudent = {
+            uid: null,
+            name: "Guest Student",
+            email: "",
+            photo: "",
+            membership: "Free"
+        };
         
         let paperDifficulty = 5;
         
@@ -1852,7 +1866,16 @@
         `;
         
         }
+
+        function refreshStudentProfile() {
+
+            document.querySelectorAll(".student-name").forEach(node => {
+                node.innerText = currentStudent.name;
+            });
         
+        }
+        
+        refreshStudentProfile();
         initializeQuizEngine();
 
         // Enable Next button immediately on mobile devices
