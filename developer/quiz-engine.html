@@ -829,15 +829,23 @@
                     align-items:center;
                  ">
             
-                <strong>Developer Mode</strong>
-            
-                <select id="topicSelect"></select>
-            
-                <select id="fileSelect"></select>
-            
-                <button id="loadBtn" onclick="loadDeveloperFile()">
-                    Load
-                </button>
+                <div id="developer-toolbar">
+                    <strong>Developer Mode</strong>
+                
+                    <select id="topicSelect"></select>
+                
+                    <select id="fileSelect"></select>
+                
+                    <button id="loadBtn" onclick="loadDeveloperFile()">
+                        Load
+                    </button>
+                
+                    <span id="developerCounter"
+                          style="font-weight:bold;margin-left:20px;">
+                        0 / 0
+                    </span>
+                </div>
+                                
             
             </div>
             <div class="question-header">
@@ -1845,6 +1853,8 @@
             }
         
             examDataMatrix = payload.data;
+            document.getElementById("developerCounter").textContent =
+                `1 / ${examDataMatrix.length}`;
         
             selectedAnswers = new Array(examDataMatrix.length).fill(null);
         
