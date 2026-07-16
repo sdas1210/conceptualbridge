@@ -844,6 +844,15 @@
                           style="font-weight:bold;margin-left:20px;">
                         0 / 0
                     </span>
+                    <button id="prevDeveloperBtn"
+                            onclick="developerPreviousQuestion()">
+                        ◀ Prev
+                    </button>
+                    
+                    <button id="nextDeveloperBtn"
+                            onclick="developerNextQuestion()">
+                        Next ▶
+                    </button>
                 </div>
                                 
             
@@ -1865,6 +1874,44 @@
             setupGlobalExamMetrics(topic);
         
             renderExamWindow();
+        
+        }
+
+        function developerPreviousQuestion() {
+
+            if (examDataMatrix.length === 0) return;
+        
+            if (activeIndex > 0) {
+        
+                activeIndex--;
+        
+                updateDeveloperCounter();
+        
+                renderExamWindow();
+        
+            }
+        
+        }
+        
+        function developerNextQuestion() {
+        
+            if (examDataMatrix.length === 0) return;
+        
+            if (activeIndex < examDataMatrix.length - 1) {
+        
+                activeIndex++;
+        
+                updateDeveloperCounter();
+        
+                renderExamWindow();
+        
+            }
+        
+        }
+        
+        function updateDeveloperCounter() {
+        
+            updateDeveloperCounter();
         
         }
                 
