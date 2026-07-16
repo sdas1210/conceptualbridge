@@ -836,6 +836,27 @@
             }
         
         }
+        /* ==========================================
+           Premium Glass Autofill
+        ========================================== */
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus{
+        
+            -webkit-text-fill-color:#ffffff !important;
+        
+            -webkit-box-shadow:
+                0 0 0 1000px rgba(255,255,255,.08) inset !important;
+        
+            border:1px solid rgba(255,255,255,.18) !important;
+        
+            transition:background-color 99999s ease-in-out;
+        
+            caret-color:white;
+        
+        }
+        
         
         /* Mobile Media End OF CSS */
         @media (max-width: 900px) {
