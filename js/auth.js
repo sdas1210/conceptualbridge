@@ -40,7 +40,7 @@ onAuthStateChanged(auth, (user) => {
 
 loginBtn.addEventListener("click", () => {
 
-     / Always start from the Login screen
+     // Always start from the Login screen
     loginFormPanel.style.display = "block";
     resetPasswordPanel.style.display = "none";
 
