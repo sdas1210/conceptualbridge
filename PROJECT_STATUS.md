@@ -463,3 +463,35 @@ Authentication, Branding, Premium System, Analytics, etc.) must update
 this document by preserving all previous content and appending new
 modules and milestones instead of replacing or creating isolated status
 files.
+
+------------------------------------------------------------------------
+
+# Quiz Portal Progress Update (Added: 2026-07-17)
+
+## Current Status
+
+**Version:** Quiz Portal v0.5 (UI & Tutorial Enhancements)
+
+### Completed
+
+-   ✅ Tutorial API stabilized and loading correctly.
+-   ✅ Vercel file path issue resolved.
+-   ✅ Tutorial pass mark range updated to 6.01--7.99.
+-   ✅ Mobile instruction page scrolling fixed.
+-   ✅ Mobile Next button fixed.
+-   ✅ Dashboard legend moved below Student Profile.
+-   ✅ Five live status counters added.
+-   ✅ Dynamic counter updates implemented.
+-   ✅ Custom PNG icons integrated.
+
+## Deferred Tasks
+
+1.  Dynamic User ID after authentication.
+2.  Initialize Not Visited counter with total questions.
+3.  Update Developer Quiz Portal with the same UI improvements.
+4.  Secure the Developer Portal.
+
+## Documentation
+
+This remains the master project document. Preserve all existing content
+and append future milestones.
