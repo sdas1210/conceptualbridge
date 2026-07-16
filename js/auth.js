@@ -40,13 +40,20 @@ onAuthStateChanged(auth, (user) => {
 
 loginBtn.addEventListener("click", () => {
 
-     loginModal.classList.add("show");
+     / Always start from the Login screen
+    loginFormPanel.style.display = "block";
+    resetPasswordPanel.style.display = "none";
+
+    loginModal.classList.add("show");
 
 });
 
 closeLogin.addEventListener("click", () => {
 
     loginModal.classList.remove("show");
+
+    loginFormPanel.style.display = "block";
+    resetPasswordPanel.style.display = "none";
 
 });
 
@@ -55,6 +62,9 @@ loginModal.addEventListener("click", (event) => {
     if (event.target === loginModal) {
 
         loginModal.classList.remove("show");
+
+        loginFormPanel.style.display = "block";
+        resetPasswordPanel.style.display = "none";
 
     }
 
