@@ -1020,73 +1020,74 @@
 
         async function initializeDeveloperMode() {
 
-            // We will move all Developer Mode code here
-        }
+                console.log("Developer Quiz Engine");
+            
+                document.getElementById("step-instructions-1").style.display = "none";
+                document.getElementById("step-footer-1").style.display = "none";
+            
+                document.getElementById("stage-two-wrapper-node").style.display = "none";
+            
+                document.getElementById("timer-header-wrapper").style.display = "none";
+                document.getElementById("ribbon-bar-container").style.display = "none";
+            
+                document.getElementById("quiz-workspace").style.display = "flex";
+            
+                const response = await fetch(
+                    "/api/developer/questions?action=topics"
+                );
+            
+                const payload = await response.json();
+            
+                const topicSelect = document.getElementById("topicSelect");
+            
+                topicSelect.innerHTML = "";
+            
+                payload.data.forEach(topic => {
+            
+                    const option = document.createElement("option");
+            
+                    option.value = topic;
+            
+                    option.textContent = topic;
+            
+                    topicSelect.appendChild(option);
+            
+                });
+            
+                const fileResponse = await fetch(
+                    `/api/developer/questions?action=files&topic=${topicSelect.value}`
+                );
+            
+                const filePayload = await fileResponse.json();
+            
+                const fileSelect = document.getElementById("fileSelect");
+            
+                fileSelect.innerHTML = "";
+            
+                filePayload.data.forEach(file => {
+            
+                    const option = document.createElement("option");
+            
+                    option.value = file;
+            
+                    option.textContent = file;
+            
+                    fileSelect.appendChild(option);
+            
+                });
+            
+                console.log("Files Loaded");
+                console.log("Topics Loaded");
+            
+            }
 
         async function initializeQuizEngine() {
 
-            // Developer Mode
-        
             if (window.location.pathname.includes("/developer/")) {
         
-                console.log("Developer Quiz Engine");
-                document.getElementById("step-instructions-1").style.display = "none";
-                document.getElementById("step-footer-1").style.display = "none";
-                
-                document.getElementById("stage-two-wrapper-node").style.display = "none";
-                
-                document.getElementById("timer-header-wrapper").style.display = "none";
-                document.getElementById("ribbon-bar-container").style.display = "none";
-                
-                document.getElementById("quiz-workspace").style.display = "flex";
-                const response = await fetch(
-                "/api/developer/questions?action=topics"
-            );
-            
-            const payload = await response.json();
-            
-            const topicSelect = document.getElementById("topicSelect");
-
-            topicSelect.innerHTML = "";
-            
-            payload.data.forEach(topic => {
-            
-                const option = document.createElement("option");
-            
-                option.value = topic;
-            
-                option.textContent = topic;
-            
-                topicSelect.appendChild(option);
-            
-            });
-            const fileResponse = await fetch(
-                `/api/developer/questions?action=files&topic=${topicSelect.value}`
-            );
-            
-            const filePayload = await fileResponse.json();
-            
-            const fileSelect = document.getElementById("fileSelect");
-            
-            fileSelect.innerHTML = "";
-            
-            filePayload.data.forEach(file => {
-            
-                const option = document.createElement("option");
-            
-                option.value = file;
-            
-                option.textContent = file;
-            
-                fileSelect.appendChild(option);
-            
-            });
-            
-            console.log("Files Loaded");
-            
-            console.log("Topics Loaded");
-            
-            return;
+                await initializeDeveloperMode();
+        
+                return;
         
             }
         
