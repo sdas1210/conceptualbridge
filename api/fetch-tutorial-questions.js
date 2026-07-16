@@ -55,7 +55,7 @@ export default async function handler(req, res) {
         );
         const passMark = Number(
 
-            (8 + Math.random()*1.5)
+            (Math.random() * (7.99 - 6.01) + 6.01).toFixed(2)
         
                 .toFixed(2)
         
