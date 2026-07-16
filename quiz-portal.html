@@ -937,17 +937,20 @@
                     <div style="color: #6b7280; font-size: 0.8rem;">ID: CB-2026</div>
                 </div>
             </div>
-
-            <div class="palette-container">
-                <div class="palette-title">Choose a Question:</div>
-                <div class="palette-grid" id="palette-grid-holder"></div>
-            </div>
-
             <div class="legend-box" id="legend-box-container">
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-answered)"></span> <span id="legend-lbl-answered">Answered</span></div>
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-answered)"></span> Not Answered</div>
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-review)"></span> Marked for Review</div>
                 <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-visited)"></span> Not Visited</div>
+            </div>
+            <hr style="
+                border:none;
+                border-top:1px solid var(--tcs-border);
+                margin:0 0 15px 0;
+            ">
+            <div class="palette-container">
+                <div class="palette-title">Choose a Question:</div>
+                <div class="palette-grid" id="palette-grid-holder"></div>
             </div>
             
             <button class="btn-tcs btn-blue" id="action-btn-submit" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
