@@ -1893,13 +1893,15 @@
         
         }
         
-        function developerNextQuestion() {
-        
+       function developerNextQuestion() {
+
             if (examDataMatrix.length === 0) return;
         
             if (activeIndex < examDataMatrix.length - 1) {
         
                 activeIndex++;
+        
+                console.log("Active Index:", activeIndex);
         
                 updateDeveloperCounter();
         
