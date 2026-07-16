@@ -720,6 +720,7 @@
             text-decoration:underline;
         
         }
+        
         .reset-password-panel{
 
             display:none;
@@ -727,6 +728,44 @@
             animation:fadeSlide .30s ease;
         
         }
+        .login-divider{
+
+            display:flex;
+        
+            align-items:center;
+        
+            margin:24px 0;
+        
+        }
+        
+        .login-divider::before,
+        .login-divider::after{
+        
+            content:"";
+        
+            flex:1;
+        
+            height:1px;
+        
+            background:rgba(255,255,255,.18);
+        
+        }
+        
+        .login-divider span{
+        
+            margin:0 14px;
+        
+            color:rgba(255,255,255,.75);
+        
+            font-size:13px;
+        
+            font-weight:600;
+        
+            letter-spacing:1px;
+        
+        }
+
+        
         @keyframes fadeSlide{
 
             from{
@@ -936,6 +975,11 @@
                         Forgot Password?
                 
                     </a>
+                
+                </div>
+                <div class="login-divider">
+
+                    <span>OR</span>
                 
                 </div>
             </div>
