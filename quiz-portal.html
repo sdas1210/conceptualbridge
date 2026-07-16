@@ -938,10 +938,32 @@
                 </div>
             </div>
             <div class="legend-box" id="legend-box-container">
-                <div class="legend-item"><span class="legend-badge" style="background:var(--status-answered)"></span> <span id="legend-lbl-answered">Answered</span></div>
-                <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-answered)"></span> Not Answered</div>
-                <div class="legend-item"><span class="legend-badge" style="background:var(--status-review)"></span> Marked for Review</div>
-                <div class="legend-item"><span class="legend-badge" style="background:var(--status-not-visited)"></span> Not Visited</div>
+
+                <div class="legend-item">
+                    <span class="legend answered" id="count-answered">0</span>
+                    <span>Answered</span>
+                </div>
+            
+                <div class="legend-item">
+                    <span class="legend review" id="count-marked">0</span>
+                    <span>Marked</span>
+                </div>
+            
+                <div class="legend-item">
+                    <span class="legend not-visited" id="count-not-visited">0</span>
+                    <span>Not Visited</span>
+                </div>
+            
+                <div class="legend-item">
+                    <span class="legend answered-review" id="count-marked-answered">0</span>
+                    <span>Marked &amp; Answered</span>
+                </div>
+            
+                <div class="legend-item">
+                    <span class="legend not-answered" id="count-not-answered">0</span>
+                    <span>Not Answered</span>
+                </div>
+            
             </div>
             <hr style="
                 border:none;
