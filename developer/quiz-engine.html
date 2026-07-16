@@ -829,7 +829,7 @@
                     align-items:center;
                  ">
             
-                <div id="developer-toolbar">
+                
                     <strong>Developer Mode</strong>
                 
                     <select id="topicSelect"></select>
@@ -1862,8 +1862,7 @@
             }
         
             examDataMatrix = payload.data;
-            document.getElementById("developerCounter").textContent =
-                `1 / ${examDataMatrix.length}`;
+            updateDeveloperCounter();
         
             selectedAnswers = new Array(examDataMatrix.length).fill(null);
         
@@ -1912,8 +1911,9 @@
         }
         
         function updateDeveloperCounter() {
-        
-            updateDeveloperCounter();
+
+            document.getElementById("developerCounter").textContent =
+                `${activeIndex + 1} / ${examDataMatrix.length}`;
         
         }
                 
