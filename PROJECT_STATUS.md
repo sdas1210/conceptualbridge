@@ -1,125 +1,278 @@
-# Conceptual Bridge - Development Status
+# Conceptual Bridge Quiz Portal
 
-**Date:** 2026-07-16
+## Project Information
 
-------------------------------------------------------------------------
+**Project Name:** Conceptual Bridge Quiz Portal
 
-# Session Summary
+**Current Version:** 0.4 (Planning)
 
-Today's work focused on building a premium authentication interface
-while keeping the implementation modular and easy to maintain.
+**Status:** Mobile UI Refactoring
 
-## Completed
+---
 
-### Firebase
+# Current Status
 
--   Firebase project configured.
--   Google Authentication configured.
--   Authentication state updates the navigation button after login.
+## Desktop Version
 
-### Login Modal UI
+✔ Stable
 
--   Custom glassmorphism login modal.
--   Smooth open animation.
--   Glass shine animation.
--   SVG password show/hide toggle.
--   Forgot Password panel.
--   Login and Reset Password separated into independent panels.
--   OR divider.
--   Premium custom Google button.
--   Browser autofill styling reviewed.
--   Modal resets to the Login panel whenever reopened.
+✔ Exam Flow Complete
 
-### Code Structure
+✔ Review Mode Complete
 
--   Separate Login and Reset panels.
--   Clean DOM references.
--   Ready for Email/Password authentication.
+✔ Performance Report Complete
 
-------------------------------------------------------------------------
+✔ Parser Integrated
 
-# Pending Authentication
+✔ API Stable
 
-## High Priority
+No further desktop UI modifications planned for now.
 
--   Connect custom Google button to Firebase.
--   Email & Password login.
--   Create Account.
--   Password Reset email.
--   Email verification.
+---
 
-## UI Polish
+# Mobile Version
 
--   Premium glass close button with SVG.
--   Fixed modal height.
--   Slide animation between Login and Reset panels.
--   Loading states and spinners.
--   Final autofill polish.
+## Current Status
 
-## User System
+Basic responsive CSS exists.
 
--   Profile dropdown.
--   Logout.
--   Firestore user profile.
--   Premium membership integration.
--   Progress synchronization.
+Several earlier scrolling issues have been resolved.
 
-------------------------------------------------------------------------
+The current mobile layout is functional but is still using the desktop architecture.
 
-# NEW TASK - Website Branding (Favicon)
+Instead of continuing to patch CSS, the mobile version will be redesigned with a dedicated responsive layout while keeping the desktop version completely untouched.
 
-Instead of shrinking the existing logo into a tiny browser icon, create
-a dedicated favicon for the Conceptual Bridge brand.
+---
 
-## Design Direction
+# Mobile Refactoring Philosophy
 
--   Minimal and instantly recognizable.
--   Works clearly at 16×16 pixels.
--   Consistent with the site's premium glassmorphism style.
+Desktop Layout
+↓
 
-### Candidate Concepts
+Remain exactly as it is.
 
-1.  Stylized **CB** monogram.
-2.  Minimal bridge symbol.
-3.  Simplified combination of bridge + CB.
+↓
 
-Avoid using the full homepage logo because it loses detail at small
-sizes.
+Mobile Layout
 
-## Assets to Generate
+Will use dedicated responsive CSS.
 
-Resources/Favicon/
+No desktop logic will be modified.
 
--   favicon.ico
--   favicon-16x16.png
--   favicon-32x32.png
--   apple-touch-icon.png (180×180)
--   android-chrome-192x192.png
--   android-chrome-512x512.png
--   site.webmanifest
+No duplicate HTML pages.
 
-## HTML Integration
+No duplicate JavaScript.
 
-Add to every page:
+Responsive CSS will completely rearrange the interface only for screens ≤768px.
 
-``` html
-<link rel="icon" href="Resources/Favicon/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="Resources/Favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="Resources/Favicon/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="Resources/Favicon/apple-touch-icon.png">
-<link rel="manifest" href="Resources/Favicon/site.webmanifest">
-```
+---
 
-------------------------------------------------------------------------
+# Mobile Refactoring Roadmap
 
-# Next Development Session
+## Phase 1 — Core Layout
 
-1.  Design the dedicated favicon.
-2.  Generate the complete favicon package.
-3.  Integrate favicon into all pages.
-4.  Connect Google Sign-In button.
-5.  Implement Email & Password authentication.
-6.  Implement Password Reset using Firebase.
+Status:
+Pending
 
-Current project status: **Login UI is feature-complete and ready for
-Firebase integration.**
+Tasks:
+
+- Full-width responsive containers
+- Comfortable spacing
+- Eliminate horizontal scrolling
+- Sticky mobile header
+- Sticky bottom navigation
+- Minimum 44px touch targets
+- Responsive typography
+
+---
+
+## Phase 2 — Instruction Pages
+
+Status:
+Pending
+
+Current desktop flow
+
+Instruction Page 1
+
+↓
+
+Instruction Page 2
+
+↓
+
+Exam
+
+Mobile redesign
+
+Header
+
+↓
+
+Scrollable Instructions
+
+↓
+
+Avatar
+
+↓
+
+Bottom Navigation
+
+No nested flex scrolling.
+
+Natural mobile scrolling.
+
+---
+
+## Phase 3 — Question Screen
+
+Status:
+Pending
+
+Tasks
+
+- Single-column layout
+- Responsive question card
+- Larger answer options
+- Improved spacing
+- Responsive images
+- Sticky action buttons
+- Better language selector placement
+
+---
+
+## Phase 4 — Question Palette
+
+Status:
+Pending
+
+Desktop
+
+Right sidebar palette
+
+Mobile
+
+Floating Palette Button
+
+↓
+
+Bottom Sheet
+
+↓
+
+Question Grid
+
+This will maximize question reading space.
+
+---
+
+## Phase 5 — Review Mode
+
+Status:
+Pending
+
+Current review mode will be redesigned for mobile.
+
+Question
+
+↓
+
+Selected Answer
+
+↓
+
+Correct Answer
+
+↓
+
+Learn Module
+
+↓
+
+Next Question
+
+Vertical stacking only.
+
+---
+
+## Phase 6 — Performance Report
+
+Status:
+Pending
+
+Responsive metrics
+
+Improved cards
+
+Better button layout
+
+Cleaner spacing
+
+---
+
+## Phase 7 — Animations
+
+Status:
+Pending
+
+Smooth transitions
+
+Bottom sheet animation
+
+Modal animation
+
+Touch feedback
+
+Native mobile feel
+
+---
+
+# Technical Goals
+
+✔ Desktop UI remains untouched
+
+✔ No duplicated HTML
+
+✔ No duplicated JavaScript
+
+✔ Responsive CSS only
+
+✔ Maintainable architecture
+
+✔ Future-proof design
+
+---
+
+# Long-Term Goals
+
+Future features after mobile completion
+
+- Image rendering
+- Explanation module
+- AI short notes
+- Bookmark questions
+- Question paper mode
+- Performance analytics
+- Offline mode
+- Dark theme
+
+---
+
+# Tomorrow's Starting Point
+
+Begin Mobile Refactoring
+
+Start with
+
+Phase 1
+
+Core Mobile Layout
+
+Goal:
+
+Create a clean mobile foundation before redesigning any individual screen.
+
+Desktop must remain pixel-perfect.
+
+Only mobile layout will evolve.
