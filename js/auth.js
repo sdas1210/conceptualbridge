@@ -57,7 +57,13 @@ onAuthStateChanged(auth, (user) => {
 
     } else {
 
-        loginBtn.innerHTML = "👤 Log In";
+        loginBtn.innerHTML = `
+        <img
+            src="/Resources/Icons/user.svg"
+            class="nav-icon"
+            alt="">
+        Log In
+        `;
 
         console.log("Not Logged In");
 
