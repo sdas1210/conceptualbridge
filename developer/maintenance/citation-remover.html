@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation Removal Engine</title>
+
+    <link rel="stylesheet" href="citation-remover.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Citation Removal Engine</h1>
+    <p class="subtitle">Developer Maintenance Suite v1.0</p>
+
+    <div class="card">
+
+        <h2>Upload Question File</h2>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".txt"
+        >
+
+    </div>
+
+    <div class="card">
+
+        <h2>File Information</h2>
+
+        <table>
+
+            <tr>
+                <td>File Name</td>
+                <td id="fileName">--</td>
+            </tr>
+
+            <tr>
+                <td>File Size</td>
+                <td id="fileSize">--</td>
+            </tr>
+
+            <tr>
+                <td>Total Lines</td>
+                <td id="totalLines">--</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Processing Console</h2>
+
+        <div id="console">
+
+Ready...
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Statistics</h2>
+
+        <table>
+
+            <tr>
+                <td>Lines Scanned</td>
+                <td id="scanCount">0</td>
+            </tr>
+
+            <tr>
+                <td>Citations Removed</td>
+                <td id="removedCount">0</td>
+            </tr>
+
+            <tr>
+                <td>Output File</td>
+                <td id="outputFile">--</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="buttons">
+
+        <button
+            id="processBtn"
+            disabled
+        >
+            Start Processing
+        </button>
+
+        <button
+            id="downloadBtn"
+            disabled
+        >
+            Download Output
+        </button>
+
+    </div>
+
+</div>
+
+<script src="citation-remover.js"></script>
+
+</body>
+</html>
