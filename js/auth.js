@@ -97,7 +97,7 @@ loginModal.addEventListener("click", (event) => {
 
 });
 
-const passwordInput = document.getElementById("passwordInput");
+
 const togglePassword = document.getElementById("togglePassword");
 const eyeIcon = document.getElementById("eyeIcon");
 
