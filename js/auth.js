@@ -29,6 +29,8 @@ const emailLoginBtn =
 document.getElementById("emailLoginBtn");
 const profileDropdown =
 document.getElementById("profileDropdown");
+const logoutBtn =
+document.getElementById("logoutBtn");
 onAuthStateChanged(auth, (user) => {
 
     if (user) {
@@ -241,5 +243,19 @@ emailLoginBtn.addEventListener("click", async () => {
     }
 
 });
+logoutBtn.addEventListener("click", async () => {
 
+    try {
+
+        await signOut(auth);
+
+        profileDropdown.style.display = "none";
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+});
 
