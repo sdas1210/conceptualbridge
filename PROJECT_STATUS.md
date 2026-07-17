@@ -561,3 +561,85 @@ files.
 
 This remains the master project document. Preserve all existing content
 and append future milestones.
+
+------------------------------------------------------------------------
+
+# Authentication Progress Update (Added: 2026-07-17)
+
+## Current Status
+
+**Version:** Authentication Module v0.2 (Core Authentication Flow)
+
+### Completed This Session
+
+#### Authentication UI
+
+-   ✅ Navigation icon sizing refined.
+-   ✅ SVG navigation icon styling aligned.
+-   ✅ Profile dropdown container integrated.
+-   ✅ Premium glassmorphism dropdown menu added.
+-   ✅ Dropdown contains:
+    -   My Profile
+    -   Settings
+    -   Log Out
+
+#### Authentication Logic
+
+-   ✅ Login button now behaves contextually:
+    -   Logged out → Opens login modal.
+    -   Logged in → Opens profile dropdown.
+-   ✅ Profile dropdown toggle implemented.
+-   ✅ Click-outside detection added to automatically close the
+    dropdown.
+-   ✅ Logout workflow prepared using Firebase `signOut()`.
+-   ✅ Authentication flow continues to rely on `onAuthStateChanged()`
+    for UI updates instead of manual DOM replacement.
+
+### Architecture Decisions
+
+-   Desktop-first architecture preserved.
+-   Authentication remains modular inside `auth.js`.
+-   Navbar is now ready for future:
+    -   User Profile
+    -   Settings
+    -   Premium Membership
+    -   Admin Tools
+    -   User Dashboard
+
+### Remaining Authentication Tasks
+
+#### High Priority
+
+1.  Complete Firebase Logout integration testing.
+2.  Create Account (Sign Up).
+3.  Email Verification.
+4.  Password Reset email.
+5.  Firestore User Profile document.
+6.  Premium Membership integration.
+7.  Role-based Authentication.
+8.  Session management improvements.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated)
+
+  Date         Milestone
+  ------------ ---------------------------------------------
+  2026-07-10   Mobile Refactoring Roadmap
+  2026-07-14   Developer Workspace Foundation
+  2026-07-16   Authentication Workspace Foundation
+  2026-07-17   Quiz Portal UI Enhancements
+  2026-07-17   Authentication Dropdown & Logout Foundation
+  Next         Create Account (Sign Up)
+  Next         Email Verification
+  Next         Firestore User Profile
+
+------------------------------------------------------------------------
+
+# Documentation Note
+
+This document continues to serve as the single source of truth for the
+Conceptual Bridge project.
+
+All future work must preserve existing sections and append new
+milestones without removing previous project history.
