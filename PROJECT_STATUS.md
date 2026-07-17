@@ -642,42 +642,43 @@ and append future milestones.
 
 **Version:** Developer Engine v0.2 (Metadata Inspector Foundation)
 
-This session focused on extending the Developer Workspace into a dedicated
-question inspection tool while keeping the Student Portal completely
-untouched.
+This session focused on extending the Developer Workspace into a
+dedicated question inspection tool while keeping the Student Portal
+completely untouched.
 
 ### Completed
 
 #### Developer Inspector UI
 
-- ✅ Added dedicated **Developer Inspector** sidebar.
-- ✅ Added permanent read-only metadata panel.
-- ✅ Inspector integrated as a third workspace panel.
-- ✅ Layout prepared for future validation and editing tools.
+-   ✅ Added dedicated **Developer Inspector** sidebar.
+-   ✅ Added permanent read-only metadata panel.
+-   ✅ Inspector integrated as a third workspace panel.
+-   ✅ Layout prepared for future validation and editing tools.
 
 #### Inspector Fields
 
 The following metadata fields were introduced:
 
-- Question ID
-- Difficulty
-- Level
-- Marks
-- Question Type
-- Correct Answer
-- Image
-- Notification
-- Exam
-- Topic
-- Sub Topic
+-   Question ID
+-   Difficulty
+-   Level
+-   Marks
+-   Question Type
+-   Correct Answer
+-   Image
+-   Notification
+-   Exam
+-   Topic
+-   Sub Topic
 
 #### Developer Quiz Engine
 
-- ✅ `renderExamWindow()` selected as the single rendering entry point for
-  future inspector updates.
-- ✅ Inspector designed to refresh whenever the active question changes.
-- ✅ Foundation prepared for centralized metadata rendering through
-  `updateDeveloperInspector()`.
+-   ✅ `renderExamWindow()` selected as the single rendering entry point
+    for future inspector updates.
+-   ✅ Inspector designed to refresh whenever the active question
+    changes.
+-   ✅ Foundation prepared for centralized metadata rendering through
+    `updateDeveloperInspector()`.
 
 #### Parser Review
 
@@ -685,17 +686,17 @@ The shared parser (`services/questionParser.js`) was reviewed.
 
 Verified available metadata:
 
-- ✅ Difficulty
-- ✅ Level
-- ✅ Marks
-- ✅ Question Type
-- ✅ Exam
-- ✅ Subject
-- ✅ Topic
-- ✅ Sub Topic
-- ✅ Notification
-- ✅ Shift
-- ✅ Image Path
+-   ✅ Difficulty
+-   ✅ Level
+-   ✅ Marks
+-   ✅ Question Type
+-   ✅ Exam
+-   ✅ Subject
+-   ✅ Topic
+-   ✅ Sub Topic
+-   ✅ Notification
+-   ✅ Shift
+-   ✅ Image Path
 
 #### Developer API Review
 
@@ -703,25 +704,26 @@ The Developer API (`api/developer/questions.js`) was reviewed.
 
 Confirmed:
 
-- ✅ Shared parser integration.
-- ✅ Topic API.
-- ✅ File API.
-- ✅ Load API.
-- ✅ Metadata is forwarded directly from the parser.
-- ✅ Architecture remains shared between Student and Developer portals.
+-   ✅ Shared parser integration.
+-   ✅ Topic API.
+-   ✅ File API.
+-   ✅ Load API.
+-   ✅ Metadata is forwarded directly from the parser.
+-   ✅ Architecture remains shared between Student and Developer
+    portals.
 
 ### Remaining Developer Tasks
 
 #### High Priority
 
-1. Add permanent Question ID support inside the parser.
-2. Store both `correct` index and `correctLetter`.
-3. Connect `updateDeveloperInspector()` with live question rendering.
-4. Add validation console below the metadata panel.
-5. Add duplicate Question ID detection.
-6. Add missing image validation.
-7. Add metadata editing tools.
-8. Add Save / Undo workflow.
+1.  Add permanent Question ID support inside the parser.
+2.  Store both `correct` index and `correctLetter`.
+3.  Connect `updateDeveloperInspector()` with live question rendering.
+4.  Add validation console below the metadata panel.
+5.  Add duplicate Question ID detection.
+6.  Add missing image validation.
+7.  Add metadata editing tools.
+8.  Add Save / Undo workflow.
 
 ### Engineering Decision
 
@@ -758,17 +760,17 @@ Workspace features.
 
 # Development Timeline (Updated)
 
-Date         Milestone
------------- ----------------------------------------------------
-2026-07-10   Mobile Refactoring Roadmap
-2026-07-14   Developer Workspace Foundation
-2026-07-16   Authentication Workspace Foundation
-2026-07-17   Quiz Portal UI Enhancements
-2026-07-17   Authentication Dropdown & Logout Foundation
-2026-07-18   Developer Metadata Inspector Foundation
-Next         Developer Validation Console
-Next         Question ID System
-Next         Metadata Editing Tools
+  Date         Milestone
+  ------------ ---------------------------------------------
+  2026-07-10   Mobile Refactoring Roadmap
+  2026-07-14   Developer Workspace Foundation
+  2026-07-16   Authentication Workspace Foundation
+  2026-07-17   Quiz Portal UI Enhancements
+  2026-07-17   Authentication Dropdown & Logout Foundation
+  2026-07-18   Developer Metadata Inspector Foundation
+  Next         Developer Validation Console
+  Next         Question ID System
+  Next         Metadata Editing Tools
 
 ------------------------------------------------------------------------
 
@@ -779,3 +781,50 @@ Conceptual Bridge project.
 
 All future work must preserve existing sections and append new
 milestones without removing previous project history.
+
+------------------------------------------------------------------------
+
+# Developer Maintenance Suite (Planned) (Added: 2026-07-18)
+
+## Current Status
+
+**Version:** Developer Maintenance Suite v0.1 (Planning)
+
+A dedicated maintenance workspace will be integrated into the existing
+Developer Portal for long-term question bank management.
+
+### Planned Modules
+
+#### Question ID System
+
+-   Generate permanent IDs only for questions without IDs.
+-   Never modify existing Question IDs.
+-   ID format:
+    -   `QuestionID|Q00000001`
+    -   `QuestionID|Q00000002`
+
+#### Validation Tools
+
+-   Missing Question IDs
+-   Duplicate Question IDs
+-   Missing Images
+-   Metadata Validation
+-   Question Structure Validation
+
+#### Future Modules
+
+-   Maintenance Dashboard
+-   Bulk Metadata Editor
+-   Duplicate Question Detector
+-   Image Validator
+-   Export Validation Report
+-   Search by Question ID
+-   Question Usage Analytics
+
+### Engineering Decision
+
+The Maintenance Suite will be integrated into the existing Developer
+Workspace:
+
+Developer Toolbar ↓ Question Viewer ↓ Developer Inspector ↓ Validation
+Console ↓ Maintenance Suite
