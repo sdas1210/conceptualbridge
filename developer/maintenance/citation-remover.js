@@ -3,6 +3,14 @@ const fileInput = document.getElementById("fileInput");
 const processBtn = document.getElementById("processBtn");
 
 const consoleBox = document.getElementById("console");
+let originalText = "";
+let cleanedText = "";
+
+let totalLines = 0;
+
+let removedCount = 0;
+let scannedCount = 0;
+
 
 fileInput.addEventListener("change", loadFile);
 
@@ -14,6 +22,8 @@ function log(message){
 
     consoleBox.scrollTop = consoleBox.scrollHeight;
 }
+
+
 
 function loadFile(e){
 
@@ -29,32 +39,49 @@ function loadFile(e){
 
     const reader=new FileReader();
 
-    reader.onload=function(event){
+   reader.onload = function(event){
 
-        const text=event.target.result;
+    originalText = event.target.result;
 
-        const totalLines=text.split(/\r?\n/).length;
+    totalLines = originalText.split(/\r?\n/).length;
 
-        document.getElementById("totalLines").textContent=totalLines;
+    document.getElementById("totalLines").textContent = totalLines;
 
-        consoleBox.textContent="";
+    consoleBox.textContent="";
 
-        log("Developer Maintenance Suite Ready");
+    log("Developer Maintenance Suite Ready");
 
-        log("File Loaded");
+    log("File Loaded");
 
-        log(file.name);
+    log(file.name);
 
-        log("Reading metadata...");
+    log("Reading metadata...");
 
-        log("Completed");
+    log("Completed");
 
-        log("Waiting for processing command");
+    log("Waiting for processing command");
 
-        processBtn.disabled=false;
+    processBtn.disabled = false;
 
-    };
+}
 
     reader.readAsText(file);
 
 }
+
+processBtn.addEventListener("click", processFile);
+
+
+function processFile(){
+
+    log("Starting Processing...");
+    removedCount = 0;
+    scannedCount = 0;
+
+    const lines = originalText.split(/\r?\n/);
+
+    console.log(lines);
+
+}
+
+
