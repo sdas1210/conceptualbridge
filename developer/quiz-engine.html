@@ -664,6 +664,67 @@
             margin-top: 15px;
         }
 
+        .developer-panel{
+
+            width:300px;
+        
+            background:#ffffff;
+        
+            border-left:1px solid #d1d5db;
+        
+            display:flex;
+        
+            flex-direction:column;
+        
+        }
+        
+        .developer-title{
+        
+            padding:14px;
+        
+            background:#1e3a8a;
+        
+            color:white;
+        
+            font-weight:bold;
+        
+        }
+        
+        #developerMetaContainer{
+        
+            padding:16px;
+        
+            overflow-y:auto;
+        
+        }
+        
+        .meta-row{
+        
+            display:flex;
+        
+            justify-content:space-between;
+        
+            align-items:center;
+        
+            padding:10px 0;
+        
+            border-bottom:1px solid #ececec;
+        
+        }
+        
+        .meta-row span{
+        
+            color:#555;
+        
+        }
+        
+        .meta-row strong{
+        
+            color:#111;
+        
+        }
+        /* Mobile Media*/
+        
         @media (max-width: 768px) {
             .main-workspace { flex-direction: column; }
             .dashboard-panel { max-width: 100%; min-width: 100%; height: 250px; }
@@ -909,6 +970,72 @@
             
             <button class="btn-tcs btn-blue" id="action-btn-submit" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
         </div>
+
+        
+        <div class="developer-panel">
+
+            <div class="developer-title">
+                Developer Inspector
+            </div>
+        
+            <div id="developerMetaContainer">
+                <div class="meta-row">
+                    <span>Question ID</span>
+                    <strong id="metaQuestionId">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Difficulty</span>
+                    <strong id="metaDifficulty">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Level</span>
+                    <strong id="metaLevel">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Marks</span>
+                    <strong id="metaMarks">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Question Type</span>
+                    <strong id="metaType">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Answer</span>
+                    <strong id="metaAnswer">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Image</span>
+                    <strong id="metaImage">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Notification</span>
+                    <strong id="metaNotification">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Exam</span>
+                    <strong id="metaExam">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Topic</span>
+                    <strong id="metaTopic">-</strong>
+                </div>
+        
+                <div class="meta-row">
+                    <span>Sub Topic</span>
+                    <strong id="metaSubTopic">-</strong>
+                </div>
+            </div>
+
+</div>
     </div>
 
     <div class="report-page-container" id="quiz-report-workspace">
