@@ -939,12 +939,20 @@
         }
         
         .wave-hand{
-            display:inline-block;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
             transform-origin:70% 70%;
         }
         
         .wave-hand.wave{
             animation:waveHand .9s ease;
+        }
+        
+        .wave-svg{
+            width:18px;
+            height:18px;
+            display:block;
         }
         
         @keyframes waveHand{
