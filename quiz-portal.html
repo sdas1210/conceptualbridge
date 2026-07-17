@@ -766,6 +766,49 @@
 
         @media (max-width:768px){
 
+            /* =========================================================
+               MOBILE FOUNDATION
+               ========================================================= */
+            
+            :root{
+                --mobile-gap:16px;
+                --mobile-radius:12px;
+                --mobile-padding:16px;
+                --mobile-header-height:60px;
+                --mobile-footer-height:70px;
+                --mobile-button-height:48px;
+            }
+
+            *,
+            *::before,
+            *::after{
+                box-sizing:border-box;
+            }
+
+            html,
+            body{
+                width:100%;
+                max-width:100%;
+                overflow-x:hidden;
+                -webkit-text-size-adjust:100%;
+            }
+
+            img{
+                max-width:100%;
+                height:auto;
+            }
+
+            button,
+            .btn,
+            select,
+            input[type="button"],
+            input[type="submit"]{
+            
+                min-height:var(--mobile-button-height);
+            
+                touch-action:manipulation;
+            }
+            
             #stage-two-wrapper-node{
                 height:100vh;
                 overflow:auto;
