@@ -9,6 +9,7 @@ import {
 const loginModal = document.getElementById("loginModal");
 const closeLogin = document.getElementById("closeLogin");
 const provider = new GoogleAuthProvider();
+const googleLoginBtn = document.getElementById("googleLoginBtn");
 const loginBtn = document.getElementById("loginBtn");
 const loginFormPanel = document.getElementById("loginFormPanel");
 const resetPasswordPanel = document.getElementById("resetPasswordPanel");
@@ -134,6 +135,25 @@ backToLogin.addEventListener("click", (e) => {
     resetPasswordPanel.style.display = "none";
 
     loginFormPanel.style.display = "block";
+
+});
+googleLoginBtn.addEventListener("click", async () => {
+
+    try {
+
+        await signInWithPopup(auth, provider);
+
+        loginModal.classList.remove("show");
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert(error.message);
+
+    }
 
 });
 
