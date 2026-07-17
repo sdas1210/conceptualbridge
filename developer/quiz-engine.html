@@ -1499,6 +1499,7 @@
             if (examDataMatrix.length === 0) return; 
             const currentItem = examDataMatrix[activeIndex]; 
             
+            
             if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
                 questionStates[activeIndex] = 1; 
             } 
@@ -1686,6 +1687,7 @@
                 questionContent.scrollTop = 0;
             }
             renderPaletteGrid(); 
+            updateDeveloperInspector(currentItem);
         } 
 
         function selectOptionIndex(idx) { 
@@ -1976,6 +1978,53 @@
         
         }
 
+        /*=========================================================
+            Developer Inspector
+        =========================================================*/
+        
+        function updateDeveloperInspector(question){
+        
+            if(!question) return;
+        
+            document.getElementById("metaQuestionId").textContent =
+                question.id || "-";
+        
+            document.getElementById("metaDifficulty").textContent =
+                question.difficulty ?? "-";
+        
+            document.getElementById("metaLevel").textContent =
+                question.level || "-";
+        
+            document.getElementById("metaMarks").textContent =
+                question.marks || "-";
+        
+            document.getElementById("metaType").textContent =
+                question.qType || "-";
+        
+            document.getElementById("metaAnswer").textContent =
+                question.correctLetter ??
+                (question.correct !== undefined
+                    ? String.fromCharCode(65 + question.correct)
+                    : "-");
+        
+            document.getElementById("metaImage").textContent =
+                question.image ? "Available" : "None";
+        
+            document.getElementById("metaNotification").textContent =
+                question.notification || "-";
+        
+            document.getElementById("metaExam").textContent =
+                question.exam || "-";
+        
+            document.getElementById("metaTopic").textContent =
+                question.topic || "-";
+        
+            document.getElementById("metaSubTopic").textContent =
+                question.subTopic || "-";
+        }
+
+        
+        
        
         async function loadDeveloperFile() {
 
