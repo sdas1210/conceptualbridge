@@ -454,7 +454,73 @@ Priority Order:
 
 ------------------------------------------------------------------------
 
-## Documentation Rule
+# 
+
+------------------------------------------------------------------------
+
+# Mobile Refactoring Progress (Added: 2026-07-17)
+
+## Session Summary
+
+**Status:** Phase 1 Foundation In Progress
+
+This session focused on creating a maintainable mobile CSS foundation
+without affecting the desktop experience.
+
+### Completed
+
+#### Mobile Foundation
+
+-   ✅ Dedicated Mobile Foundation section introduced.
+-   ✅ Mobile CSS variables added.
+-   ✅ Universal `box-sizing` rule standardized.
+-   ✅ Horizontal scrolling prevention implemented.
+-   ✅ Responsive image sizing enabled.
+-   ✅ Touch-friendly minimum button height added.
+-   ✅ Mobile body scrolling refined.
+-   ✅ Stage Two mobile scrolling improved.
+
+#### Phase 1.1 -- Core Layout
+
+-   ✅ Full-width mobile containers introduced.
+-   ✅ Mobile dashboard converted to stacked layout.
+-   ✅ Wizard container converted to column layout.
+-   ✅ Responsive report button stack added.
+-   ✅ Sticky mobile footer retained.
+
+#### Phase 1.2 -- Header
+
+-   ✅ Dedicated mobile header styling added.
+-   ✅ Responsive logo sizing.
+-   ✅ Single-line exam title with ellipsis.
+-   ✅ Mobile timer sizing refined.
+
+### Review Outcome
+
+During implementation it was observed that a broad typography override
+for the instruction page conflicted with the existing layout and inline
+HTML styling.
+
+Therefore:
+
+-   ❌ Phase 1.3 Instruction Screen redesign was **not adopted**.
+-   ✅ Existing instruction page preserved.
+-   ✅ Future mobile instruction redesign will be performed
+    section-by-section instead of applying large CSS overrides.
+
+### Engineering Decision
+
+Future mobile work will follow an incremental approach:
+
+1.  Foundation
+2.  Header
+3.  Individual screen redesign
+4.  Testing
+5.  Next screen
+
+This minimizes regressions while keeping the desktop UI unchanged.
+
+# Documentation Rule
 
 This file is the **master project document** for Conceptual Bridge.
 
