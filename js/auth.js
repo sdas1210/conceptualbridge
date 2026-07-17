@@ -3,9 +3,12 @@ import { auth } from "./firebase-config.js";
 import {
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 const loginModal = document.getElementById("loginModal");
 const closeLogin = document.getElementById("closeLogin");
 const provider = new GoogleAuthProvider();
@@ -16,6 +19,14 @@ const resetPasswordPanel = document.getElementById("resetPasswordPanel");
 
 const forgotPasswordLink = document.getElementById("forgotPasswordLink");
 const backToLogin = document.getElementById("backToLogin");
+const emailInput =
+document.getElementById("emailInput");
+
+const passwordInput =
+document.getElementById("passwordInput");
+
+const emailLoginBtn =
+document.getElementById("emailLoginBtn");
 
 onAuthStateChanged(auth, (user) => {
 
@@ -167,6 +178,40 @@ googleLoginBtn.addEventListener("click", async () => {
         console.error(error);
 
         alert(error.message);
+
+    }
+
+});
+emailLoginBtn.addEventListener("click", async () => {
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+
+        alert("Please enter your email and password.");
+
+        return;
+
+    }
+
+    try {
+
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        loginModal.classList.remove("show");
+
+    }
+
+    catch(error){
+
+        alert(error.message);
+
+        console.error(error);
 
     }
 
