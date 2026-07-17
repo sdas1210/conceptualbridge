@@ -58,7 +58,7 @@ onAuthStateChanged(auth, (user) => {
     } else {
 
         loginBtn.innerHTML = `
-        <img src="/Resources/Icons/user.svg" class="icon" alt="">
+        <img src="/Resources/Icons/user.svg" class="nav-icon" alt="">
         Log In
         `;
 
