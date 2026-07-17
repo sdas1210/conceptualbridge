@@ -88,6 +88,17 @@ loginBtn.addEventListener("click", () => {
 
 });
 
+document.addEventListener("click", (event) => {
+
+    if (!profileDropdown.contains(event.target) &&
+        !loginBtn.contains(event.target)) {
+
+        profileDropdown.style.display = "none";
+
+    }
+
+});
+
 
 closeLogin.addEventListener("click", () => {
 
