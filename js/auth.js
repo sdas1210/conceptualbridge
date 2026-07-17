@@ -26,7 +26,11 @@ onAuthStateChanged(auth, (user) => {
         : "User";
 
         loginBtn.innerHTML = `
-        <span class="wave-hand wave">👋</span>
+        <span class="wave-hand wave">
+            <img src="/Resources/Icons/hand-wave.svg"
+                 class="wave-svg"
+                 alt="">
+        </span>
         Hi, ${firstName} ▼
         `;
         
