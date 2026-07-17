@@ -71,13 +71,23 @@ onAuthStateChanged(auth, (user) => {
 
 loginBtn.addEventListener("click", () => {
 
-     // Always start from the Login screen
+    console.log(auth.currentUser);
+
+    if (auth.currentUser) {
+
+        console.log("Opening dropdown");
+
+        profileDropdown.style.display = "flex";
+
+        return;
+    }
+
     loginFormPanel.style.display = "block";
     resetPasswordPanel.style.display = "none";
-
     loginModal.classList.add("show");
 
 });
+
 
 closeLogin.addEventListener("click", () => {
 
@@ -221,22 +231,4 @@ emailLoginBtn.addEventListener("click", async () => {
 
 });
 
-loginBtn.addEventListener("click", () => {
-
-    console.log(auth.currentUser);
-
-    if (auth.currentUser) {
-
-        console.log("Opening dropdown");
-
-        profileDropdown.style.display = "flex";
-
-        return;
-    }
-
-    loginFormPanel.style.display = "block";
-    resetPasswordPanel.style.display = "none";
-    loginModal.classList.add("show");
-
-});
 
