@@ -27,7 +27,8 @@ document.getElementById("passwordInput");
 
 const emailLoginBtn =
 document.getElementById("emailLoginBtn");
-
+const profileDropdown =
+document.getElementById("profileDropdown");
 onAuthStateChanged(auth, (user) => {
 
     if (user) {
@@ -220,4 +221,22 @@ emailLoginBtn.addEventListener("click", async () => {
 
 });
 
+loginBtn.addEventListener("click", () => {
+
+    console.log(auth.currentUser);
+
+    if (auth.currentUser) {
+
+        console.log("Opening dropdown");
+
+        profileDropdown.style.display = "flex";
+
+        return;
+    }
+
+    loginFormPanel.style.display = "block";
+    resetPasswordPanel.style.display = "none";
+    loginModal.classList.add("show");
+
+});
 
