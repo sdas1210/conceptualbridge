@@ -25,7 +25,18 @@ onAuthStateChanged(auth, (user) => {
         ? user.displayName.split(" ")[0]
         : "User";
 
-        loginBtn.innerHTML = `👋 Hi, ${firstName} ▼`;
+        loginBtn.innerHTML = `
+        <span class="wave-hand wave">👋</span>
+        Hi, ${firstName} ▼
+        `;
+        
+        const hand = loginBtn.querySelector(".wave-hand");
+        
+        hand.addEventListener("animationend", () => {
+        
+            hand.classList.remove("wave");
+        
+        });
 
         console.log("Already Logged In");
 
