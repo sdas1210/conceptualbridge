@@ -88,12 +88,29 @@ function processFile(){
         const line = lines[i];
     
         // Detect possible citation lines
-        if (line.trim().endsWith("]")) {
-    
-            console.log(
-                `Candidate Citation Line ${i + 1}:`,
-                line
-            );
+               
+        const trimmedLine = line.trim();
+        
+        if (trimmedLine.endsWith("]")) {
+        
+            // Find the last opening bracket
+            const lastOpenBracket = trimmedLine.lastIndexOf("[");
+        
+            if (lastOpenBracket !== -1) {
+        
+                // Extract only the final [...] block
+                const finalBracketBlock =
+                    trimmedLine.substring(lastOpenBracket);
+        
+                // Check whether that block starts with [cite:
+                if (finalBracketBlock.toLowerCase().startsWith("[cite:")) {
+        
+                    console.log(
+                        `Confirmed Citation Line ${i + 1}:`,
+                        finalBracketBlock
+                    );
+                }
+            }
         }
     
         // Show progress every 100 lines
