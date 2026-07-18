@@ -204,16 +204,13 @@ if (structurePassed) {
     log("Structure Check: FAILED");
 }
 
-
 // DOWNLOAD SAFETY GATE
-// IMPORTANT: Keep this INSIDE processFile()
 
 if (remainingCitations === 0 && structurePassed) {
 
     downloadBtn.disabled = false;
 
-    document.getElementById("outputFile").textContent =
-        "Ready";
+    document.getElementById("outputFile").textContent = "Ready";
 
     log("Output File Ready for Download");
 
@@ -227,18 +224,17 @@ if (remainingCitations === 0 && structurePassed) {
     log("Output blocked due to validation failure");
 }
 
-} // <-- processFile() ends HERE
 
+// Update statistics
+document.getElementById("scanCount").textContent = scannedCount;
+document.getElementById("removedCount").textContent = removedCount;
 
-    
-    // Update statistics
-    document.getElementById("scanCount").textContent = scannedCount;
-    document.getElementById("removedCount").textContent = removedCount;
-    
-    log("Scan Completed");
-    log(`Total Lines Scanned: ${scannedCount}`);
-    log(`Citations Removed: ${removedCount}`);
-}
+log("Scan Completed");
+log(`Total Lines Scanned: ${scannedCount}`);
+log(`Citations Removed: ${removedCount}`);
+
+} // processFile() ends here
+
 
 
 
