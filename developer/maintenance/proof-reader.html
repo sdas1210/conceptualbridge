@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Proof Reader - Character Validation Engine</title>
+
+    <link
+        rel="stylesheet"
+        href="proof-reader.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Proof Reader</h1>
+
+    <p class="subtitle">
+        Character Validation Engine | Developer Maintenance Suite v1.0
+    </p>
+
+
+    <!-- FILE UPLOAD -->
+
+    <div class="card">
+
+        <h2>Upload Question File</h2>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".txt"
+        >
+
+    </div>
+
+
+    <!-- FILE INFORMATION -->
+
+    <div class="card">
+
+        <h2>File Information</h2>
+
+        <table>
+
+            <tr>
+                <td>File Name</td>
+                <td id="fileName">--</td>
+            </tr>
+
+            <tr>
+                <td>File Size</td>
+                <td id="fileSize">--</td>
+            </tr>
+
+            <tr>
+                <td>Total Lines</td>
+                <td id="totalLines">--</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- PROCESSING CONSOLE -->
+
+    <div class="card">
+
+        <h2>Processing Console</h2>
+
+        <div id="console">Ready...</div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="card">
+
+        <h2>Validation Statistics</h2>
+
+        <table>
+
+            <tr>
+                <td>Lines Scanned</td>
+                <td id="scanCount">0</td>
+            </tr>
+
+            <tr>
+                <td>Invalid Characters Found</td>
+                <td id="invalidCount">0</td>
+            </tr>
+
+            <tr>
+                <td>Affected Lines</td>
+                <td id="affectedLines">0</td>
+            </tr>
+
+            <tr>
+                <td>Validation Status</td>
+                <td id="validationStatus">Waiting</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- ERROR REPORT -->
+
+    <div
+        class="card"
+        id="errorReportCard"
+    >
+
+        <h2>Character Validation Report</h2>
+
+        <div id="errorReport">
+
+            No scan performed yet.
+
+        </div>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+        <button
+            id="processBtn"
+            disabled
+        >
+            Start Validation
+        </button>
+
+        <button
+            id="downloadReportBtn"
+            disabled
+        >
+            Download Error Report
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="proof-reader.js"></script>
+
+</body>
+
+</html>
