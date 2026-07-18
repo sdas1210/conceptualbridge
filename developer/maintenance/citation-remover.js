@@ -75,13 +75,28 @@ processBtn.addEventListener("click", processFile);
 function processFile(){
 
     log("Starting Processing...");
+
     removedCount = 0;
     scannedCount = 0;
 
     const lines = originalText.split(/\r?\n/);
 
-    console.log(lines);
+    for (let i = 0; i < lines.length; i++) {
 
+        scannedCount++;
+
+        const line = lines[i];
+
+        // Show progress every 100 lines
+        if (i % 100 === 0) {
+            log(`Scanning Line ${i + 1}`);
+        }
+    }
+
+    document.getElementById("scannedLines").textContent = scannedCount;
+
+    log(`Scan Completed`);
+    log(`Total Lines Scanned: ${scannedCount}`);
 }
 
 
