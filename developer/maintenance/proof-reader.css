@@ -164,3 +164,55 @@ button:disabled {
 
     word-break: break-word;
 }
+
+.editor-table td:first-child {
+    width: 130px;
+    font-weight: bold;
+    color: #9fa8b5;
+}
+
+#editorLineText {
+    width: 100%;
+    min-height: 90px;
+
+    padding: 12px;
+
+    background: #0b1118;
+    color: white;
+
+    border: 1px solid #2d394a;
+    border-radius: 6px;
+
+    font-family: Consolas, monospace;
+    font-size: 16px;
+
+    resize: vertical;
+}
+
+#editorLineText:not([readonly]) {
+    border-color: #67b7ff;
+}
+
+.editor-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.editor-spacer {
+    flex: 1;
+}
+
+#editorStatus {
+    margin-top: 15px;
+
+    padding: 10px;
+
+    background: #101820;
+
+    border-radius: 6px;
+
+    color: #9fa8b5;
+}
