@@ -1,480 +1,271 @@
-/* =========================================
-   CITATION REMOVAL ENGINE
-   Glassmorphic Maintenance Theme
-========================================= */
+const fileInput = document.getElementById("fileInput");
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+const processBtn = document.getElementById("processBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const consoleBox = document.getElementById("console");
+let originalText = "";
+let cleanedText = "";
+
+let totalLines = 0;
+
+let removedCount = 0;
+let scannedCount = 0;
+
+
+fileInput.addEventListener("change", loadFile);
+
+function log(message){
+
+    const time = new Date().toLocaleTimeString();
+
+    consoleBox.textContent += `\n[${time}] ${message}`;
+
+    consoleBox.scrollTop = consoleBox.scrollHeight;
 }
 
-body {
 
-    min-height: 100vh;
 
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
+function loadFile(e){
 
-    color: #ffffff;
+    const file = e.target.files[0];
 
-    background:
-        linear-gradient(
-            -45deg,
-            #1a365d,
-            #2a4365,
-            #2b6cb0,
-            #3182ce
+    if(!file)
+        return;
+    cleanedText = "";
+    removedCount = 0;
+    scannedCount = 0;
+    
+    downloadBtn.disabled = true;
+    
+    document.getElementById("scanCount").textContent = "0";
+    document.getElementById("removedCount").textContent = "0";
+    document.getElementById("outputFile").textContent = "--";
+
+    document.getElementById("fileName").textContent=file.name;
+
+    document.getElementById("fileSize").textContent=
+        (file.size/1024).toFixed(2)+" KB";
+
+    const reader=new FileReader();
+
+   reader.onload = function(event){
+
+    originalText = event.target.result;
+
+    totalLines = originalText.split(/\r?\n/).length;
+
+    document.getElementById("totalLines").textContent = totalLines;
+
+    consoleBox.textContent="";
+
+    log("Developer Maintenance Suite Ready");
+
+    log("File Loaded");
+
+    log(file.name);
+
+    log("Reading metadata...");
+
+    log("Completed");
+
+    log("Waiting for processing command");
+
+    processBtn.disabled = false;
+
+}
+
+    reader.readAsText(file);
+
+}
+
+processBtn.addEventListener("click", processFile);
+downloadBtn.addEventListener("click", downloadOutput);
+
+function processFile(){
+
+    log("Starting Processing...");
+
+    removedCount = 0;
+    scannedCount = 0;
+
+    const lines = originalText.split(/\r?\n/);
+
+    for (let i = 0; i < lines.length; i++) {
+
+        scannedCount++;
+    
+        const line = lines[i];
+    
+        // Detect possible citation lines
+               
+        const trimmedLine = line.trim();
+        
+       if (trimmedLine.endsWith("]")) {
+
+            console.log(
+                `ENDS WITH ] — Line ${i + 1}:`,
+                trimmedLine
+            );
+        
+            const lastOpenBracket = trimmedLine.lastIndexOf("[");
+        
+            if (lastOpenBracket !== -1) {
+
+                const finalBracketBlock =
+                    trimmedLine.substring(lastOpenBracket);
+            
+                console.log(
+                    `FINAL BLOCK — Line ${i + 1}:`,
+                    finalBracketBlock
+                );
+            
+                if (finalBracketBlock.toLowerCase().startsWith("[cite:")) {
+
+                    console.log(
+                        `CONFIRMED CITATION — Line ${i + 1}:`,
+                        finalBracketBlock
+                    );
+                
+                    // Remove only the trailing citation
+                    lines[i] = trimmedLine
+                        .substring(0, lastOpenBracket)
+                        .trimEnd();
+                
+                    removedCount++;
+                }
+            }
+        }
+    
+        // Show progress every 100 lines
+        if (i % 100 === 0) {
+            log(`Scanning Line ${i + 1}`);
+        }
+    }
+    
+
+    // Rebuild the complete text after citation removal
+    cleanedText = lines.join("\n");
+
+    // Integrity checks
+    const remainingCitations =
+        (cleanedText.match(/\[cite:/gi) || []).length;
+    
+    log(`Citations Remaining: ${remainingCitations}`);
+    
+    if (remainingCitations === 0) {
+        log("Integrity Check: PASSED");
+    } else {
+        log("Integrity Check: WARNING - Citations still remain");
+    }
+
+   // Structural integrity check
+function countTag(text, tag) {
+
+    return text
+        .split(/\r?\n/)
+        .filter(line => line.trim().startsWith(tag))
+        .length;
+}
+
+const structureTags = [
+    "Q|",
+    "A|",
+    "B|",
+    "C|",
+    "D|",
+    "Shift|"
+];
+
+let structurePassed = true;
+
+for (const tag of structureTags) {
+
+    const originalCount = countTag(originalText, tag);
+    const cleanedCount = countTag(cleanedText, tag);
+
+    console.log(
+        `${tag} Original: ${originalCount}, Cleaned: ${cleanedCount}`
+    );
+
+    if (originalCount !== cleanedCount) {
+
+        structurePassed = false;
+
+        log(
+            `Structure Mismatch: ${tag} ` +
+            `${originalCount} → ${cleanedCount}`
         );
-
-    background-size: 400% 400%;
-
-    animation:
-        gradientBG 15s ease infinite;
-
-    padding: 35px 20px;
-}
-
-
-/* =========================================
-   MAIN CONTAINER
-========================================= */
-
-.container {
-
-    width: 100%;
-    max-width: 850px;
-
-    margin: 0 auto;
-
-    opacity: 0;
-    transform: translateY(18px);
-
-    animation:
-        fadeInUp .8s ease forwards;
-}
-
-
-/* =========================================
-   PAGE HEADER
-========================================= */
-
-h1 {
-
-    margin-bottom: 6px;
-
-    text-align: center;
-
-    font-size: 2rem;
-
-    font-weight: 700;
-
-    text-shadow:
-        0 4px 12px rgba(0, 0, 0, .25);
-}
-
-.subtitle {
-
-    margin-bottom: 25px;
-
-    text-align: center;
-
-    color: #dbeafe;
-
-    font-size: .95rem;
-}
-
-
-/* =========================================
-   GLASS CARDS
-========================================= */
-
-.card {
-
-    margin-bottom: 16px;
-
-    padding: 20px;
-
-    background:
-        rgba(255, 255, 255, .10);
-
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-
-    border:
-        1px solid rgba(255, 255, 255, .20);
-
-    border-radius: 16px;
-
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, .18);
-
-    transition:
-        background .3s ease,
-        border-color .3s ease,
-        transform .3s ease;
-}
-
-.card:hover {
-
-    background:
-        rgba(255, 255, 255, .13);
-
-    border-color:
-        rgba(255, 255, 255, .32);
-}
-
-.card h2 {
-
-    margin-bottom: 15px;
-
-    font-size: 1.05rem;
-
-    font-weight: 600;
-
-    color: #ffffff;
-}
-
-
-/* =========================================
-   FILE INPUT
-========================================= */
-
-input[type="file"] {
-
-    width: 100%;
-
-    padding: 10px;
-
-    color: #eaf4ff;
-
-    background:
-        rgba(255, 255, 255, .08);
-
-    border:
-        1px solid rgba(255, 255, 255, .18);
-
-    border-radius: 10px;
-
-    font-family: inherit;
-}
-
-input[type="file"]::file-selector-button {
-
-    margin-right: 12px;
-
-    padding: 9px 15px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background:
-        rgba(255, 255, 255, .18);
-
-    color: white;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        background .25s ease,
-        transform .25s ease;
-}
-
-input[type="file"]::file-selector-button:hover {
-
-    background:
-        rgba(255, 255, 255, .28);
-}
-
-
-/* =========================================
-   TABLES
-========================================= */
-
-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-}
-
-td {
-
-    padding: 10px 12px;
-
-    border-bottom:
-        1px solid rgba(255, 255, 255, .12);
-
-    font-size: .92rem;
-}
-
-tr:last-child td {
-
-    border-bottom: none;
-}
-
-td:first-child {
-
-    width: 45%;
-
-    color: #d7e5f3;
-
-    font-weight: 500;
-}
-
-td:last-child {
-
-    color: #ffffff;
-
-    font-weight: 600;
-}
-
-
-/* =========================================
-   PROCESSING CONSOLE
-========================================= */
-
-#console {
-
-    min-height: 180px;
-    max-height: 260px;
-
-    overflow-y: auto;
-
-    padding: 15px;
-
-    background:
-        rgba(5, 15, 28, .72);
-
-    border:
-        1px solid rgba(255, 255, 255, .12);
-
-    border-radius: 10px;
-
-    box-shadow:
-        inset 0 3px 12px
-        rgba(0, 0, 0, .25);
-
-    color: #8dffb3;
-
-    font-family:
-        Consolas,
-        "Courier New",
-        monospace;
-
-    font-size: .85rem;
-
-    line-height: 1.6;
-
-    white-space: pre-wrap;
-}
-
-
-/* CUSTOM SCROLLBAR */
-
-#console::-webkit-scrollbar {
-
-    width: 7px;
-}
-
-#console::-webkit-scrollbar-track {
-
-    background:
-        rgba(255, 255, 255, .04);
-}
-
-#console::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(255, 255, 255, .25);
-
-    border-radius: 10px;
-}
-
-
-/* =========================================
-   BUTTON AREA
-========================================= */
-
-.buttons {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 14px;
-
-    margin-top: 20px;
-}
-
-
-/* =========================================
-   BUTTONS
-========================================= */
-
-button {
-
-    min-width: 170px;
-
-    padding: 12px 20px;
-
-    border:
-        1px solid rgba(255, 255, 255, .25);
-
-    border-radius: 12px;
-
-    background:
-        rgba(255, 255, 255, .14);
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    color: #ffffff;
-
-    font-family: inherit;
-
-    font-size: .9rem;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 6px 18px rgba(0, 0, 0, .15);
-
-    transition:
-        transform .25s ease,
-        background .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
-}
-
-button:not(:disabled):hover {
-
-    transform: translateY(-2px);
-
-    background:
-        rgba(255, 255, 255, .23);
-
-    border-color:
-        rgba(255, 255, 255, .45);
-
-    box-shadow:
-        0 9px 25px rgba(0, 0, 0, .22);
-}
-
-button:active:not(:disabled) {
-
-    transform: translateY(0);
-}
-
-button:disabled {
-
-    opacity: .42;
-
-    cursor: not-allowed;
-
-    box-shadow: none;
-}
-
-
-/* START PROCESSING BUTTON */
-
-#processBtn:not(:disabled) {
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(49, 130, 206, .95),
-            rgba(43, 108, 176, .95)
-        );
-}
-
-
-/* DOWNLOAD BUTTON */
-
-#downloadBtn:not(:disabled) {
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(56, 161, 105, .95),
-            rgba(47, 133, 90, .95)
-        );
-}
-
-
-/* =========================================
-   ANIMATIONS
-========================================= */
-
-@keyframes gradientBG {
-
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
     }
 }
 
-@keyframes fadeInUp {
+if (structurePassed) {
+    log("Structure Check: PASSED");
+} else {
+    log("Structure Check: FAILED");
+}
 
-    to {
+// DOWNLOAD SAFETY GATE
 
-        opacity: 1;
+if (remainingCitations === 0 && structurePassed) {
 
-        transform: translateY(0);
-    }
+    downloadBtn.disabled = false;
+
+    document.getElementById("outputFile").textContent = "Ready";
+
+    log("Output File Ready for Download");
+
+} else {
+
+    downloadBtn.disabled = true;
+
+    document.getElementById("outputFile").textContent =
+        "Validation Failed";
+
+    log("Output blocked due to validation failure");
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+// Update statistics
+document.getElementById("scanCount").textContent = scannedCount;
+document.getElementById("removedCount").textContent = removedCount;
 
-@media (max-width: 650px) {
+log("Scan Completed");
+log(`Total Lines Scanned: ${scannedCount}`);
+log(`Citations Removed: ${removedCount}`);
 
-    body {
+} // processFile() ends here
 
-        padding: 22px 14px;
+
+
+
+
+function downloadOutput() {
+
+    if (!cleanedText) {
+        log("No processed output available");
+        return;
     }
 
-    h1 {
+    const blob = new Blob(
+        [cleanedText],
+        { type: "text/plain;charset=utf-8" }
+    );
 
-        font-size: 1.65rem;
-    }
+    const url = URL.createObjectURL(blob);
 
-    .card {
+    const link = document.createElement("a");
 
-        padding: 17px;
-    }
+    link.href = url;
 
-    td {
+    link.download = "citation-cleaned-output.txt";
 
-        padding:
-            9px 6px;
+    document.body.appendChild(link);
 
-        font-size: .85rem;
-    }
+    link.click();
 
-    .buttons {
+    document.body.removeChild(link);
 
-        flex-direction: column;
-    }
+    URL.revokeObjectURL(url);
 
-    button {
-
-        width: 100%;
-    }
+    log("Output File Downloaded");
 }
