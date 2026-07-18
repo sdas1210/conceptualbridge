@@ -148,6 +148,53 @@ function processFile(){
     } else {
         log("Integrity Check: WARNING - Citations still remain");
     }
+
+    // Structural integrity check
+    function countTag(text, tag) {
+    
+        return text
+            .split(/\r?\n/)
+            .filter(line => line.trim().startsWith(tag))
+            .length;
+    }
+    
+    const structureTags = [
+        "Q|",
+        "A|",
+        "B|",
+        "C|",
+        "D|",
+        "Shift|"
+    ];
+    
+    let structurePassed = true;
+    
+    for (const tag of structureTags) {
+    
+        const originalCount = countTag(originalText, tag);
+        const cleanedCount = countTag(cleanedText, tag);
+    
+        console.log(
+            `${tag} Original: ${originalCount}, Cleaned: ${cleanedCount}`
+        );
+    
+        if (originalCount !== cleanedCount) {
+            structurePassed = false;
+    
+            log(
+                `Structure Mismatch: ${tag} ` +
+                `${originalCount} → ${cleanedCount}`
+            );
+        }
+    }
+    
+    if (structurePassed) {
+        log("Structure Check: PASSED");
+    } else {
+        log("Structure Check: FAILED");
+    }
+
+
     
     // Update statistics
     document.getElementById("scanCount").textContent = scannedCount;
