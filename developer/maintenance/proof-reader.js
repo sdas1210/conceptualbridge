@@ -89,8 +89,15 @@ nextLineBtn.addEventListener(
     }
 );
 
+editLineBtn.addEventListener(
+    "click",
+    startEditing
+);
 
-
+saveLineBtn.addEventListener(
+    "click",
+    saveCurrentLine
+);
 /* Event Listener Section Ended*/
 function log(message) {
 
@@ -534,3 +541,103 @@ function resetEditor() {
         "No validation error selected.";
 }
 
+function startEditing() {
+
+    if (currentLineIndex < 0) {
+        return;
+    }
+
+    isEditing = true;
+
+    // Make textarea editable
+    editorLineText.readOnly = false;
+
+    editorLineText.focus();
+
+
+    // Lock navigation while editing
+    previousLineBtn.disabled = true;
+    nextLineBtn.disabled = true;
+
+    editLineBtn.disabled = true;
+
+    passErrorBtn.disabled = true;
+    revalidateBtn.disabled = true;
+
+
+    // Only Save is available
+    saveLineBtn.disabled = false;
+
+
+    editorStatus.textContent =
+        `Editing Line ${currentLineIndex + 1} — Save before leaving this line.`;
+}
+
+function saveCurrentLine() {
+
+    if (
+        !isEditing ||
+        currentLineIndex < 0
+    ) {
+        return;
+    }
+
+
+    // Save edited text into working copy
+    workingLines[currentLineIndex] =
+        editorLineText.value;
+
+
+    isEditing = false;
+
+    editorLineText.readOnly = true;
+
+
+    // Lock Save again
+    saveLineBtn.disabled = true;
+
+
+    editorStatus.textContent =
+        `Line ${currentLineIndex + 1} saved to working copy. Re-Validate to verify changes.`;
+
+
+    // Restore navigation
+    previousLineBtn.disabled =
+        currentLineIndex === 0;
+
+    nextLineBtn.disabled =
+        currentLineIndex ===
+        workingLines.length - 1;
+
+
+    editLineBtn.disabled = false;
+
+    revalidateBtn.disabled = false;
+
+
+    /*
+        IMPORTANT:
+
+        Do NOT recalculate the error here.
+
+        The displayed Character still represents
+        the result of the LAST validation scan.
+
+        Re-Validate will determine whether the
+        correction actually fixed the problem.
+    */
+
+
+    const currentLineNumber =
+        currentLineIndex + 1;
+
+    const oldErrors =
+        validationErrors.filter(
+            error =>
+                error.lineNumber ===
+                currentLineNumber
+        );
+
+    passErrorBtn.disabled =
+        oldErrors.length === 0;
+}
