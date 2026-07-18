@@ -482,28 +482,23 @@ button:disabled {
 .back-home {
 
     display: inline-flex;
-
     align-items: center;
 
     margin-bottom: 18px;
-
     padding: 8px 14px;
 
     color: #ffffff;
-
     text-decoration: none;
 
     font-size: .85rem;
     font-weight: 600;
 
-    background:
-        rgba(255, 255, 255, .10);
+    background: rgba(255, 255, 255, .10);
 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    border:
-        1px solid rgba(255, 255, 255, .20);
+    border: 1px solid rgba(255, 255, 255, .20);
 
     border-radius: 20px;
 
@@ -514,9 +509,7 @@ button:disabled {
 
 .back-home:hover {
 
-    background:
-        rgba(255, 255, 255, .20);
+    background: rgba(255, 255, 255, .20);
 
-    transform:
-        translateX(-3px);
+    transform: translateX(-3px);
 }
