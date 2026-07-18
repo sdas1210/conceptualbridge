@@ -600,12 +600,28 @@ function saveCurrentLine() {
         return;
     }
 
-
+    // Any edit to this line invalidates previous Pass decisions
+    const editedLineNumber = currentLineIndex + 1;
+    
+    for (const passKey of [...passedErrors]) {
+    
+        if (passKey.startsWith(`${editedLineNumber}|`)) {
+    
+            passedErrors.delete(passKey);
+        }
+    }
+    
+    
     // Save edited text into working copy
     workingLines[currentLineIndex] =
         editorLineText.value;
 
+    // Log the save action
+    log(
+        `Line ${editedLineNumber} saved — previous Pass decisions for this line cleared`
+    ); 
 
+    
     isEditing = false;
 
     editorLineText.readOnly = true;
