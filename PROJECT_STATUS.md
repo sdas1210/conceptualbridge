@@ -828,3 +828,157 @@ Workspace:
 
 Developer Toolbar ↓ Question Viewer ↓ Developer Inspector ↓ Validation
 Console ↓ Maintenance Suite
+
+------------------------------------------------------------------------
+
+# Developer Maintenance Suite Progress Update (Added: 2026-07-18)
+
+## Current Status
+
+**Version:** Developer Maintenance Suite v0.2 (Isolated Tool Foundation
+/ Citation Remover Phase 2 In Progress)
+
+This session established the maintenance-tool development approach and
+began converting an existing Python Citation Removal Engine into an
+isolated browser-based JavaScript tool.
+
+### Architecture Decisions
+
+-   Develop and test maintenance utilities in an isolated environment
+    before integrating them into the main Developer Portal.
+-   Preserve the core working principles of existing Python utilities
+    when converting them to JavaScript.
+-   Prefer browser-local file processing where possible, avoiding
+    unnecessary server/Vercel execution.
+-   Existing `services/` can serve as shared reusable logic; a literal
+    `shared/` folder is not required now.
+-   Keep maintenance tools modular, preferably with a dedicated HTML
+    interface and corresponding JS file for each major tool.
+-   Later unify stable tools under a common Developer Maintenance
+    Dashboard.
+
+Examples: - `citation-remover.html` + `citation-remover.js` -
+`id-generator.html` + `id-generator.js` - `validator.html` +
+`validator.js` - `duplicate-checker.html` + `duplicate-checker.js` -
+`image-validator.html` + `image-validator.js`
+
+### Citation Removal Engine
+
+The existing Python Citation Removal Engine was selected as the first
+proof-of-concept.
+
+Core workflow preserved:
+
+Upload/select TXT → Read file → Scan lines → Detect trailing citation
+block containing `cite:` → Remove matching block → Generate cleaned
+output.
+
+### Phase 1 --- UI Foundation
+
+**Status:** ✅ Implemented and tested
+
+Implemented: - ✅ TXT file upload. - ✅ File name display. - ✅ File
+size display. - ✅ Total line count. - ✅ Processing Console. - ✅
+Statistics panel. - ✅ Lines Scanned counter. - ✅ Citations Removed
+counter. - ✅ Output File field. - ✅ Start Processing disabled until a
+file is loaded. - ✅ Download Output reserved for generated output. - ✅
+Developer-style dark interface.
+
+Verified: - ✅ Uploaded TXT loads successfully. - ✅ Metadata reads
+successfully. - ✅ Console logging works. - ✅ Start Processing invokes
+`processFile()`. - ✅ Console displays `Starting Processing...`.
+
+### Phase 2 --- Processing Engine
+
+**Status:** 🟡 In Progress
+
+Global processing state introduced:
+
+``` javascript
+let originalText = "";
+let cleanedText = "";
+let totalLines = 0;
+let removedCount = 0;
+let scannedCount = 0;
+```
+
+Uploaded content is stored in `originalText` for later processing.
+
+Current workflow:
+
+Upload TXT → Store original text → Split into lines → Reset counters →
+Scan lines → Apply citation-removal rules → Build cleaned output →
+Update statistics → Prepare downloadable `citeremoved.txt`.
+
+### Current Tested Point
+
+The tool currently reaches:
+
+1.  Upload file.
+2.  Read metadata.
+3.  Store file content.
+4.  Enable processing.
+5.  Invoke `processFile()`.
+6.  Log `Starting Processing...`.
+
+### Immediate Next Implementation
+
+Complete and test the line-scanning loop:
+
+``` javascript
+for (let i = 0; i < lines.length; i++) {
+    scannedCount++;
+    const line = lines[i];
+}
+```
+
+Periodic console updates can show: - `Scanning Line 1` -
+`Scanning Line 101` - `Scanning Line 201`
+
+First test target: - `Lines Scanned` reaches the total uploaded line
+count. - Console periodically displays scan progress. - Do not add
+citation-removal logic until this scan loop is confirmed working.
+
+### Remaining Citation Remover Tasks
+
+1.  Complete sequential line scan.
+2.  Port Python `endsWith("]")` rule.
+3.  Find final `[` block using JavaScript equivalent of `rfind`.
+4.  Detect `cite:` case-insensitively.
+5.  Remove only matching trailing citation block.
+6.  Preserve non-matching lines.
+7.  Update statistics.
+8.  Build `cleanedText`.
+9.  Enable Download Output.
+10. Generate downloadable `citeremoved.txt`.
+11. Add completion/error states.
+12. Later consider asynchronous batch processing/progress bar for very
+    large files.
+
+### Cost / Deployment Decision
+
+-   Prefer browser-local processing where server access is unnecessary.
+-   Browser-local file processing has no Vercel function execution cost.
+-   Server-side maintenance tools can be considered later when required.
+
+### Future Integration Strategy
+
+Isolated Maintenance Tool → Test Core Logic → Stabilize UI/Output →
+Reuse Shared Services → Integrate into Developer Maintenance Dashboard →
+Secure Behind Developer Authentication.
+
+The Student Portal must remain unaffected during maintenance-tool
+development.
+
+------------------------------------------------------------------------
+
+# Immediate Next Starting Point
+
+Continue **Citation Removal Engine --- Phase 2** from the existing
+working `processFile()` foundation.
+
+**Next task:** Implement and test the line-scanning loop first. After
+that, port the citation-removal algorithm from Python to JavaScript and
+enable output download.
+
+------------------------------------------------------------------------
