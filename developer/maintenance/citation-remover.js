@@ -136,6 +136,18 @@ function processFile(){
 
     // Rebuild the complete text after citation removal
     cleanedText = lines.join("\n");
+
+    // Integrity checks
+    const remainingCitations =
+        (cleanedText.match(/\[cite:/gi) || []).length;
+    
+    log(`Citations Remaining: ${remainingCitations}`);
+    
+    if (remainingCitations === 0) {
+        log("Integrity Check: PASSED");
+    } else {
+        log("Integrity Check: WARNING - Citations still remain");
+    }
     
     // Update statistics
     document.getElementById("scanCount").textContent = scannedCount;
