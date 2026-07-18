@@ -91,25 +91,24 @@ function processFile(){
                
         const trimmedLine = line.trim();
         
-        if (trimmedLine.endsWith("]")) {
+       if (trimmedLine.endsWith("]")) {
+
+            console.log(
+                `ENDS WITH ] — Line ${i + 1}:`,
+                trimmedLine
+            );
         
-            // Find the last opening bracket
             const lastOpenBracket = trimmedLine.lastIndexOf("[");
         
             if (lastOpenBracket !== -1) {
         
-                // Extract only the final [...] block
                 const finalBracketBlock =
                     trimmedLine.substring(lastOpenBracket);
         
-                // Check whether that block starts with [cite:
-                if (finalBracketBlock.toLowerCase().startsWith("[cite:")) {
-        
-                    console.log(
-                        `Confirmed Citation Line ${i + 1}:`,
-                        finalBracketBlock
-                    );
-                }
+                console.log(
+                    `FINAL BLOCK — Line ${i + 1}:`,
+                    finalBracketBlock
+                );
             }
         }
     
