@@ -116,6 +116,63 @@
 
     </div>
 
+    <div class="card">
+
+        <h2>Text Editing Window</h2>
+    
+        <table class="editor-table">
+    
+            <tr>
+                <td>Line No:</td>
+                <td id="editorLineNo">--</td>
+            </tr>
+    
+            <tr>
+                <td>Character:</td>
+                <td id="editorCharacter">--</td>
+            </tr>
+    
+            <tr>
+                <td>Line:</td>
+                <td>
+                    <textarea
+                        id="editorLineText"
+                        rows="4"
+                        readonly
+                    ></textarea>
+                </td>
+            </tr>
+    
+        </table>
+    
+        <div class="editor-buttons">
+    
+            <button id="previousLineBtn" disabled>⬆️</button>
+    
+            <button id="nextLineBtn" disabled>⬇️</button>
+    
+            <span class="editor-spacer"></span>
+    
+            <button id="editLineBtn" disabled>Edit</button>
+    
+            <button id="saveLineBtn" disabled>Save</button>
+    
+            <span class="editor-spacer"></span>
+    
+            <button id="passErrorBtn" disabled>Pass</button>
+    
+            <button id="revalidateBtn" disabled>
+                Re-Validate
+            </button>
+    
+        </div>
+    
+        <div id="editorStatus">
+            No validation error selected.
+        </div>
+    
+    </div>
+
 
     <!-- ERROR REPORT -->
 
