@@ -1,3 +1,8 @@
+/* =========================================
+   PROOF READER
+   Glassmorphic Maintenance Theme
+========================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,52 +11,229 @@
 
 body {
 
-    background: #101820;
-    color: white;
+    min-height: 100vh;
 
-    font-family: Segoe UI, Arial, sans-serif;
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-    padding: 40px;
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            -45deg,
+            #1a365d,
+            #2a4365,
+            #2b6cb0,
+            #3182ce
+        );
+
+    background-size: 400% 400%;
+
+    animation:
+        gradientBG 15s ease infinite;
+
+    padding: 35px 20px;
 }
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
 
 .container {
 
-    max-width: 1000px;
+    width: 100%;
+    max-width: 900px;
 
-    margin: auto;
+    margin: 0 auto;
+
+    opacity: 0;
+    transform: translateY(18px);
+
+    animation:
+        fadeInUp .8s ease forwards;
 }
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-home {
+
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 18px;
+    padding: 8px 14px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: .85rem;
+    font-weight: 600;
+
+    background:
+        rgba(255, 255, 255, .10);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    border:
+        1px solid rgba(255, 255, 255, .20);
+
+    border-radius: 20px;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.back-home:hover {
+
+    background:
+        rgba(255, 255, 255, .20);
+
+    transform: translateX(-3px);
+}
+
+
+/* =========================================
+   PAGE HEADER
+========================================= */
 
 h1 {
 
-    font-size: 32px;
+    margin-bottom: 6px;
 
-    margin-bottom: 10px;
+    text-align: center;
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 4px 12px rgba(0, 0, 0, .25);
 }
 
 .subtitle {
 
-    color: #9fa8b5;
+    margin-bottom: 25px;
 
-    margin-bottom: 30px;
+    text-align: center;
+
+    color: #dbeafe;
+
+    font-size: .95rem;
 }
+
+
+/* =========================================
+   GLASS CARDS
+========================================= */
 
 .card {
 
-    background: #1a2432;
+    margin-bottom: 16px;
 
     padding: 20px;
 
-    border-radius: 12px;
+    background:
+        rgba(255, 255, 255, .10);
 
-    margin-bottom: 20px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border:
+        1px solid rgba(255, 255, 255, .20);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, .18);
+
+    transition:
+        background .3s ease,
+        border-color .3s ease;
+}
+
+.card:hover {
+
+    background:
+        rgba(255, 255, 255, .13);
+
+    border-color:
+        rgba(255, 255, 255, .32);
 }
 
 .card h2 {
 
     margin-bottom: 15px;
 
-    color: #67b7ff;
+    color: #ffffff;
+
+    font-size: 1.05rem;
+    font-weight: 600;
 }
+
+
+/* =========================================
+   FILE INPUT
+========================================= */
+
+input[type="file"] {
+
+    width: 100%;
+
+    padding: 10px;
+
+    color: #eaf4ff;
+
+    background:
+        rgba(255, 255, 255, .08);
+
+    border:
+        1px solid rgba(255, 255, 255, .18);
+
+    border-radius: 10px;
+
+    font-family: inherit;
+}
+
+input[type="file"]::file-selector-button {
+
+    margin-right: 12px;
+
+    padding: 9px 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, .18);
+
+    color: #ffffff;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+
+    background:
+        rgba(255, 255, 255, .28);
+}
+
+
+/* =========================================
+   TABLES
+========================================= */
 
 table {
 
@@ -62,10 +244,39 @@ table {
 
 td {
 
-    padding: 10px;
+    padding: 10px 12px;
 
-    border-bottom: 1px solid #2d394a;
+    border-bottom:
+        1px solid rgba(255, 255, 255, .12);
+
+    font-size: .92rem;
 }
+
+tr:last-child td {
+
+    border-bottom: none;
+}
+
+td:first-child {
+
+    width: 45%;
+
+    color: #d7e5f3;
+
+    font-weight: 500;
+}
+
+td:last-child {
+
+    color: #ffffff;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   PROCESSING CONSOLE
+========================================= */
 
 #console {
 
@@ -73,146 +284,497 @@ td {
 
     overflow: auto;
 
-    background: black;
-
-    color: #39ff14;
-
-    font-family: Consolas, monospace;
-
     padding: 15px;
+
+    background:
+        rgba(5, 15, 28, .72);
+
+    border:
+        1px solid rgba(255, 255, 255, .12);
+
+    border-radius: 10px;
+
+    box-shadow:
+        inset 0 3px 12px
+        rgba(0, 0, 0, .25);
+
+    color: #8dffb3;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: .85rem;
+
+    line-height: 1.6;
 
     white-space: pre-wrap;
 }
+
+
+/* =========================================
+   TEXT EDITING WINDOW
+========================================= */
+
+.editor-table td:first-child {
+
+    width: 130px;
+
+    color: #d7e5f3;
+
+    font-weight: 600;
+}
+
+#editorLineText {
+
+    width: 100%;
+    min-height: 95px;
+
+    padding: 12px;
+
+    background:
+        rgba(5, 15, 28, .65);
+
+    color: #ffffff;
+
+    border:
+        1px solid rgba(255, 255, 255, .16);
+
+    border-radius: 9px;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    resize: vertical;
+
+    outline: none;
+
+    transition:
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+}
+
+#editorLineText:not([readonly]) {
+
+    background:
+        rgba(5, 15, 28, .82);
+
+    border-color:
+        rgba(99, 179, 237, .85);
+
+    box-shadow:
+        0 0 15px
+        rgba(99, 179, 237, .20);
+}
+
+
+/* =========================================
+   EDITOR BUTTON ROW
+========================================= */
+
+.editor-buttons {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 15px;
+}
+
+.editor-spacer {
+
+    flex: 1;
+}
+
+
+/* Smaller editor controls */
+
+.editor-buttons button {
+
+    min-width: auto;
+
+    padding: 10px 15px;
+}
+
+
+/* Navigation buttons */
+
+#previousLineBtn,
+#nextLineBtn {
+
+    min-width: 48px;
+
+    font-size: 17px;
+}
+
+
+/* =========================================
+   EDITOR STATUS
+========================================= */
+
+#editorStatus {
+
+    margin-top: 15px;
+
+    padding: 11px 13px;
+
+    background:
+        rgba(5, 15, 28, .42);
+
+    border:
+        1px solid rgba(255, 255, 255, .10);
+
+    border-radius: 9px;
+
+    color: #d7e5f3;
+
+    font-size: .86rem;
+}
+
+
+/* =========================================
+   ERROR REPORT
+========================================= */
 
 #errorReport {
 
     min-height: 100px;
-
     max-height: 400px;
 
     overflow: auto;
 
-    background: #101820;
-
     padding: 15px;
 
-    border-radius: 8px;
+    background:
+        rgba(5, 15, 28, .62);
 
-    font-family: Consolas, monospace;
+    border:
+        1px solid rgba(255, 255, 255, .10);
+
+    border-radius: 10px;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: .86rem;
 
     white-space: pre-wrap;
 }
 
-.buttons {
 
-    display: flex;
-
-    gap: 20px;
-}
-
-button {
-
-    padding: 14px 30px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-}
-
-button:disabled {
-
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
+/* Individual validation error */
 
 .error-item {
 
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 
     padding: 12px;
 
-    background: #151d28;
+    background:
+        rgba(255, 255, 255, .06);
 
-    border-left: 4px solid #ff5c5c;
+    border-left:
+        4px solid #ff7b7b;
 
-    border-radius: 6px;
+    border-radius: 7px;
+}
+
+.error-item:last-child {
+
+    margin-bottom: 0;
 }
 
 .error-header {
 
-    font-weight: bold;
-
     margin-bottom: 8px;
 
-    color: #ff8a8a;
+    color: #ffb0b0;
+
+    font-weight: 700;
 }
 
 .error-context {
 
     padding: 10px;
 
-    background: #0b1118;
+    background:
+        rgba(0, 0, 0, .20);
 
-    border-radius: 5px;
+    border-radius: 6px;
+
+    color: #ffffff;
 
     white-space: pre-wrap;
 
     word-break: break-word;
 }
 
-.editor-table td:first-child {
-    width: 130px;
-    font-weight: bold;
-    color: #9fa8b5;
+
+/* =========================================
+   GENERAL BUTTONS
+========================================= */
+
+button {
+
+    min-width: 150px;
+
+    padding: 12px 18px;
+
+    border:
+        1px solid rgba(255, 255, 255, .25);
+
+    border-radius: 11px;
+
+    background:
+        rgba(255, 255, 255, .14);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, .15);
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
 }
 
-#editorLineText {
-    width: 100%;
-    min-height: 90px;
+button:not(:disabled):hover {
 
-    padding: 12px;
+    transform: translateY(-2px);
 
-    background: #0b1118;
-    color: white;
+    background:
+        rgba(255, 255, 255, .23);
 
-    border: 1px solid #2d394a;
-    border-radius: 6px;
+    border-color:
+        rgba(255, 255, 255, .45);
 
-    font-family: Consolas, monospace;
-    font-size: 16px;
-
-    resize: vertical;
+    box-shadow:
+        0 9px 25px rgba(0, 0, 0, .22);
 }
 
-#editorLineText:not([readonly]) {
-    border-color: #67b7ff;
+button:active:not(:disabled) {
+
+    transform: translateY(0);
 }
 
-.editor-buttons {
+button:disabled {
+
+    opacity: .40;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.buttons {
+
     display: flex;
-    align-items: center;
-    gap: 10px;
 
-    margin-top: 15px;
+    justify-content: center;
+
+    gap: 14px;
+
+    margin-top: 20px;
 }
 
-.editor-spacer {
-    flex: 1;
+#processBtn:not(:disabled) {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(49, 130, 206, .95),
+            rgba(43, 108, 176, .95)
+        );
 }
 
-#editorStatus {
-    margin-top: 15px;
+#downloadCorrectedBtn:not(:disabled) {
 
-    padding: 10px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(56, 161, 105, .95),
+            rgba(47, 133, 90, .95)
+        );
+}
 
-    background: #101820;
 
-    border-radius: 6px;
+/* =========================================
+   EDITOR-SPECIFIC ACTIVE BUTTONS
+========================================= */
 
-    color: #9fa8b5;
+#editLineBtn:not(:disabled) {
+
+    background:
+        rgba(49, 130, 206, .75);
+}
+
+#saveLineBtn:not(:disabled) {
+
+    background:
+        rgba(56, 161, 105, .80);
+}
+
+#passErrorBtn:not(:disabled) {
+
+    background:
+        rgba(221, 107, 32, .80);
+}
+
+#revalidateBtn:not(:disabled) {
+
+    background:
+        rgba(128, 90, 213, .80);
+}
+
+
+/* =========================================
+   SCROLLBARS
+========================================= */
+
+#console::-webkit-scrollbar,
+#errorReport::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+#console::-webkit-scrollbar-track,
+#errorReport::-webkit-scrollbar-track {
+
+    background:
+        rgba(255, 255, 255, .04);
+}
+
+#console::-webkit-scrollbar-thumb,
+#errorReport::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 255, 255, .25);
+
+    border-radius: 10px;
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes gradientBG {
+
+    0% {
+        background-position:
+            0% 50%;
+    }
+
+    50% {
+        background-position:
+            100% 50%;
+    }
+
+    100% {
+        background-position:
+            0% 50%;
+    }
+}
+
+@keyframes fadeInUp {
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    body {
+
+        padding: 22px 14px;
+    }
+
+    h1 {
+
+        font-size: 1.65rem;
+    }
+
+    .card {
+
+        padding: 17px;
+    }
+
+    td {
+
+        padding: 9px 6px;
+
+        font-size: .85rem;
+    }
+
+    .editor-table td:first-child {
+
+        width: 90px;
+    }
+
+    .editor-buttons {
+
+        flex-wrap: wrap;
+    }
+
+    .editor-spacer {
+
+        display: none;
+    }
+
+    .editor-buttons button {
+
+        flex: 1;
+
+        min-width: 80px;
+    }
+
+    .buttons {
+
+        flex-direction: column;
+    }
+
+    .buttons button {
+
+        width: 100%;
+    }
 }
