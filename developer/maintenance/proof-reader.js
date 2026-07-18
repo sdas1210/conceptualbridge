@@ -174,7 +174,7 @@ function validateFile() {
     let invalidCount = 0;
 
     const affectedLineNumbers = new Set();
-
+    const errors = [];
     const lines = originalText.split(/\r?\n/);
 
     for (let i = 0; i < lines.length; i++) {
@@ -187,20 +187,31 @@ function validateFile() {
 
             if (!isValidChar(char)) {
 
-                invalidCount++;
+    invalidCount++;
 
-                affectedLineNumbers.add(i + 1);
+    affectedLineNumbers.add(i + 1);
 
-                console.log(
-                    `Invalid Character — Line ${i + 1}:`,
-                    char,
-                    `Unicode: U+${char
-                        .codePointAt(0)
-                        .toString(16)
-                        .toUpperCase()
-                        .padStart(4, "0")}`
-                );
-            }
+    const unicode =
+        "U+" +
+        char
+            .codePointAt(0)
+            .toString(16)
+            .toUpperCase()
+            .padStart(4, "0");
+
+    errors.push({
+        lineNumber: i + 1,
+        character: char,
+        unicode: unicode,
+        lineText: line
+    });
+
+    console.log(
+        `Invalid Character — Line ${i + 1}:`,
+        char,
+        unicode
+    );
+}
         }
 
         // Progress every 100 lines
@@ -250,5 +261,56 @@ function validateFile() {
         );
 
         log("Validation Status: FAILED");
+    }
+    generateErrorReport(errors);
+}
+function generateErrorReport(errors) {
+
+    const reportBox =
+        document.getElementById("errorReport");
+
+    reportBox.innerHTML = "";
+
+    if (errors.length === 0) {
+
+        reportBox.textContent =
+            "Validation Passed — No invalid characters detected.";
+
+        return;
+    }
+
+
+    for (const error of errors) {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "error-item";
+
+
+        const header =
+            document.createElement("div");
+
+        header.className = "error-header";
+
+        header.textContent =
+            `Line ${error.lineNumber} | ` +
+            `Character: "${error.character}" | ` +
+            `${error.unicode}`;
+
+
+        const context =
+            document.createElement("div");
+
+        context.className = "error-context";
+
+        context.textContent =
+            error.lineText;
+
+
+        item.appendChild(header);
+        item.appendChild(context);
+
+        reportBox.appendChild(item);
     }
 }
