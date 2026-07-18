@@ -98,6 +98,16 @@ saveLineBtn.addEventListener(
     "click",
     saveCurrentLine
 );
+
+revalidateBtn.addEventListener(
+    "click",
+    revalidateFile
+);
+
+passErrorBtn.addEventListener(
+    "click",
+    passCurrentError
+);
 /* Event Listener Section Ended*/
 function log(message) {
 
@@ -272,9 +282,18 @@ function validateFile() {
 
             if (!isValidChar(char)) {
 
-    invalidCount++;
-
-    affectedLineNumbers.add(i + 1);
+        const passKey =
+            `${i + 1}|${char}`;
+    
+        // Ignore errors explicitly passed
+        // during this file session
+        if (passedErrors.has(passKey)) {
+            continue;
+        }
+    
+        invalidCount++;
+    
+        affectedLineNumbers.add(i + 1);
 
     const unicode =
         "U+" +
@@ -639,4 +658,93 @@ function saveCurrentLine() {
 
     passErrorBtn.disabled =
         oldErrors.length === 0;
+}
+function revalidateFile() {
+
+    if (isEditing) {
+        return;
+    }
+
+    log("Re-Validation Started...");
+
+    validateFile();
+}
+
+function passCurrentError() {
+
+    if (
+        isEditing ||
+        currentLineIndex < 0
+    ) {
+        return;
+    }
+
+    const lineNumber =
+        currentLineIndex + 1;
+
+    const currentErrors =
+        validationErrors.filter(
+            error =>
+                error.lineNumber === lineNumber
+        );
+
+    if (currentErrors.length === 0) {
+        return;
+    }
+
+
+    // Pass each invalid character on this line
+    // for this browser/file session only
+
+    for (const error of currentErrors) {
+
+        const passKey =
+            `${lineNumber}|${error.character}`;
+
+        passedErrors.add(passKey);
+    }
+
+
+    log(
+        `Line ${lineNumber} passed for current session`
+    );
+
+
+    // Find next unresolved error after current line
+
+    const nextError =
+        validationErrors.find(
+            error => {
+
+                if (
+                    error.lineNumber <= lineNumber
+                ) {
+                    return false;
+                }
+
+                const key =
+                    `${error.lineNumber}|${error.character}`;
+
+                return !passedErrors.has(key);
+            }
+        );
+
+
+    if (nextError) {
+
+        showLine(
+            nextError.lineNumber - 1
+        );
+
+    } else {
+
+        resetEditor();
+
+        editorStatus.textContent =
+            "No further unresolved validation errors.";
+
+        log(
+            "No further unresolved errors found"
+        );
+    }
 }
