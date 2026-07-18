@@ -158,62 +158,55 @@ function processFile(){
         log("Integrity Check: WARNING - Citations still remain");
     }
 
-    // Structural integrity check
-    function countTag(text, tag) {
-    
-        return text
-            .split(/\r?\n/)
-            .filter(line => line.trim().startsWith(tag))
-            .length;
-    }
-    
-    const structureTags = [
-        "Q|",
-        "A|",
-        "B|",
-        "C|",
-        "D|",
-        "Shift|"
-    ];
-    
-    let structurePassed = true;
-    
-    for (const tag of structureTags) {
-    
-        const originalCount = countTag(originalText, tag);
-        const cleanedCount = countTag(cleanedText, tag);
-    
-        console.log(
-            `${tag} Original: ${originalCount}, Cleaned: ${cleanedCount}`
-        );
-    
-        if (originalCount !== cleanedCount) {
-            structurePassed = false;
-    
-            log(
-                `Structure Mismatch: ${tag} ` +
-                `${originalCount} → ${cleanedCount}`
-            );
-        }
-    }
-    
-    if (structurePassed) {
-        log("Structure Check: PASSED");
-    } else {
-        log("Structure Check: FAILED");
-    }
+   // Structural integrity check
+function countTag(text, tag) {
 
-
-    
-    // Update statistics
-    document.getElementById("scanCount").textContent = scannedCount;
-    document.getElementById("removedCount").textContent = removedCount;
-    
-    log("Scan Completed");
-    log(`Total Lines Scanned: ${scannedCount}`);
-    log(`Citations Removed: ${removedCount}`);
+    return text
+        .split(/\r?\n/)
+        .filter(line => line.trim().startsWith(tag))
+        .length;
 }
 
+const structureTags = [
+    "Q|",
+    "A|",
+    "B|",
+    "C|",
+    "D|",
+    "Shift|"
+];
+
+let structurePassed = true;
+
+for (const tag of structureTags) {
+
+    const originalCount = countTag(originalText, tag);
+    const cleanedCount = countTag(cleanedText, tag);
+
+    console.log(
+        `${tag} Original: ${originalCount}, Cleaned: ${cleanedCount}`
+    );
+
+    if (originalCount !== cleanedCount) {
+
+        structurePassed = false;
+
+        log(
+            `Structure Mismatch: ${tag} ` +
+            `${originalCount} → ${cleanedCount}`
+        );
+    }
+}
+
+if (structurePassed) {
+    log("Structure Check: PASSED");
+} else {
+    log("Structure Check: FAILED");
+}
+
+
+// DOWNLOAD SAFETY GATE
+// IMPORTANT: Keep this INSIDE processFile()
 
 if (remainingCitations === 0 && structurePassed) {
 
@@ -233,6 +226,22 @@ if (remainingCitations === 0 && structurePassed) {
 
     log("Output blocked due to validation failure");
 }
+
+} // <-- processFile() ends HERE
+
+
+    
+    // Update statistics
+    document.getElementById("scanCount").textContent = scannedCount;
+    document.getElementById("removedCount").textContent = removedCount;
+    
+    log("Scan Completed");
+    log(`Total Lines Scanned: ${scannedCount}`);
+    log(`Citations Removed: ${removedCount}`);
+}
+
+
+
 
 function downloadOutput() {
 
