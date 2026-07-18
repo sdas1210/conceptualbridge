@@ -160,3 +160,95 @@ function isValidChar(char) {
 
     return false;
 }
+
+function validateFile() {
+
+    if (!originalText) {
+        log("No file loaded");
+        return;
+    }
+
+    log("Starting Character Validation...");
+
+    let scannedCount = 0;
+    let invalidCount = 0;
+
+    const affectedLineNumbers = new Set();
+
+    const lines = originalText.split(/\r?\n/);
+
+    for (let i = 0; i < lines.length; i++) {
+
+        scannedCount++;
+
+        const line = lines[i];
+
+        for (const char of line) {
+
+            if (!isValidChar(char)) {
+
+                invalidCount++;
+
+                affectedLineNumbers.add(i + 1);
+
+                console.log(
+                    `Invalid Character — Line ${i + 1}:`,
+                    char,
+                    `Unicode: U+${char
+                        .codePointAt(0)
+                        .toString(16)
+                        .toUpperCase()
+                        .padStart(4, "0")}`
+                );
+            }
+        }
+
+        // Progress every 100 lines
+        if (i % 100 === 0) {
+
+            log(
+                `Scanning Line ${i + 1}`
+            );
+        }
+    }
+
+
+    // Update statistics
+
+    document.getElementById("scanCount")
+        .textContent = scannedCount;
+
+    document.getElementById("invalidCount")
+        .textContent = invalidCount;
+
+    document.getElementById("affectedLines")
+        .textContent = affectedLineNumbers.size;
+
+
+    if (invalidCount === 0) {
+
+        document.getElementById("validationStatus")
+            .textContent = "PASSED";
+
+        log("Validation Completed");
+        log("No invalid characters detected");
+        log("Validation Status: PASSED");
+
+    } else {
+
+        document.getElementById("validationStatus")
+            .textContent = "FAILED";
+
+        log("Validation Completed");
+
+        log(
+            `Invalid Characters Found: ${invalidCount}`
+        );
+
+        log(
+            `Affected Lines: ${affectedLineNumbers.size}`
+        );
+
+        log("Validation Status: FAILED");
+    }
+}
