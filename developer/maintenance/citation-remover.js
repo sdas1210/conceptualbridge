@@ -1,7 +1,7 @@
 const fileInput = document.getElementById("fileInput");
 
 const processBtn = document.getElementById("processBtn");
-
+const downloadBtn = document.getElementById("downloadBtn");
 const consoleBox = document.getElementById("console");
 let originalText = "";
 let cleanedText = "";
@@ -31,6 +31,15 @@ function loadFile(e){
 
     if(!file)
         return;
+    cleanedText = "";
+    removedCount = 0;
+    scannedCount = 0;
+    
+    downloadBtn.disabled = true;
+    
+    document.getElementById("scanCount").textContent = "0";
+    document.getElementById("removedCount").textContent = "0";
+    document.getElementById("outputFile").textContent = "--";
 
     document.getElementById("fileName").textContent=file.name;
 
@@ -70,7 +79,7 @@ function loadFile(e){
 }
 
 processBtn.addEventListener("click", processFile);
-
+downloadBtn.addEventListener("click", downloadOutput);
 
 function processFile(){
 
@@ -206,3 +215,52 @@ function processFile(){
 }
 
 
+if (remainingCitations === 0 && structurePassed) {
+
+    downloadBtn.disabled = false;
+
+    document.getElementById("outputFile").textContent =
+        "Ready";
+
+    log("Output File Ready for Download");
+
+} else {
+
+    downloadBtn.disabled = true;
+
+    document.getElementById("outputFile").textContent =
+        "Validation Failed";
+
+    log("Output blocked due to validation failure");
+}
+
+function downloadOutput() {
+
+    if (!cleanedText) {
+        log("No processed output available");
+        return;
+    }
+
+    const blob = new Blob(
+        [cleanedText],
+        { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = "citation-cleaned-output.txt";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+    log("Output File Downloaded");
+}
