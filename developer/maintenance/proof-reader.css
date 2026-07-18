@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+
+    background: #101820;
+    color: white;
+
+    font-family: Segoe UI, Arial, sans-serif;
+
+    padding: 40px;
+}
+
+.container {
+
+    max-width: 1000px;
+
+    margin: auto;
+}
+
+h1 {
+
+    font-size: 32px;
+
+    margin-bottom: 10px;
+}
+
+.subtitle {
+
+    color: #9fa8b5;
+
+    margin-bottom: 30px;
+}
+
+.card {
+
+    background: #1a2432;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    margin-bottom: 20px;
+}
+
+.card h2 {
+
+    margin-bottom: 15px;
+
+    color: #67b7ff;
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+td {
+
+    padding: 10px;
+
+    border-bottom: 1px solid #2d394a;
+}
+
+#console {
+
+    height: 220px;
+
+    overflow: auto;
+
+    background: black;
+
+    color: #39ff14;
+
+    font-family: Consolas, monospace;
+
+    padding: 15px;
+
+    white-space: pre-wrap;
+}
+
+#errorReport {
+
+    min-height: 100px;
+
+    max-height: 400px;
+
+    overflow: auto;
+
+    background: #101820;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    font-family: Consolas, monospace;
+
+    white-space: pre-wrap;
+}
+
+.buttons {
+
+    display: flex;
+
+    gap: 20px;
+}
+
+button {
+
+    padding: 14px 30px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+button:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
