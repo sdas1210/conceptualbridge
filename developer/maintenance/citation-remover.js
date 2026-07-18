@@ -102,11 +102,7 @@ function processFile(){
         }
     }
 
-    const scannedLinesElement = document.getElementById("scannedLines");
-
-    if (scannedLinesElement) {
-        scannedLinesElement.textContent = scannedCount;
-    }
+    document.getElementById("scanCount").textContent = scannedCount;
 
     log(`Scan Completed`);
     log(`Total Lines Scanned: ${scannedCount}`);
