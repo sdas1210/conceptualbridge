@@ -84,9 +84,18 @@ function processFile(){
     for (let i = 0; i < lines.length; i++) {
 
         scannedCount++;
-
+    
         const line = lines[i];
-
+    
+        // Detect possible citation lines
+        if (line.trim().endsWith("]")) {
+    
+            console.log(
+                `Candidate Citation Line ${i + 1}:`,
+                line
+            );
+        }
+    
         // Show progress every 100 lines
         if (i % 100 === 0) {
             log(`Scanning Line ${i + 1}`);
