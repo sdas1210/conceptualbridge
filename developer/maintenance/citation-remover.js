@@ -111,11 +111,18 @@ function processFile(){
                 );
             
                 if (finalBracketBlock.toLowerCase().startsWith("[cite:")) {
-            
+
                     console.log(
                         `CONFIRMED CITATION — Line ${i + 1}:`,
                         finalBracketBlock
                     );
+                
+                    // Remove only the trailing citation
+                    lines[i] = trimmedLine
+                        .substring(0, lastOpenBracket)
+                        .trimEnd();
+                
+                    removedCount++;
                 }
             }
         }
@@ -125,11 +132,18 @@ function processFile(){
             log(`Scanning Line ${i + 1}`);
         }
     }
+    
 
+    // Rebuild the complete text after citation removal
+    cleanedText = lines.join("\n");
+    
+    // Update statistics
     document.getElementById("scanCount").textContent = scannedCount;
-
-    log(`Scan Completed`);
+    document.getElementById("removedCount").textContent = removedCount;
+    
+    log("Scan Completed");
     log(`Total Lines Scanned: ${scannedCount}`);
+    log(`Citations Removed: ${removedCount}`);
 }
 
 
