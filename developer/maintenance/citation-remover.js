@@ -101,14 +101,22 @@ function processFile(){
             const lastOpenBracket = trimmedLine.lastIndexOf("[");
         
             if (lastOpenBracket !== -1) {
-        
+
                 const finalBracketBlock =
                     trimmedLine.substring(lastOpenBracket);
-        
+            
                 console.log(
                     `FINAL BLOCK — Line ${i + 1}:`,
                     finalBracketBlock
                 );
+            
+                if (finalBracketBlock.toLowerCase().startsWith("[cite:")) {
+            
+                    console.log(
+                        `CONFIRMED CITATION — Line ${i + 1}:`,
+                        finalBracketBlock
+                    );
+                }
             }
         }
     
