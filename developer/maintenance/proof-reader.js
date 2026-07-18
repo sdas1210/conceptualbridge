@@ -5,7 +5,7 @@ const processBtn =
     document.getElementById("processBtn");
 
 const downloadReportBtn =
-    document.getElementById("downloadReportBtn");
+    document.getElementById("downloadCorrectedBtn");
 
 const consoleBox =
     document.getElementById("console");
@@ -48,6 +48,8 @@ let validationErrors = [];
 let currentLineIndex = -1;
 
 let isEditing = false;
+
+let originalFileName = "";
 
 // Session-only ignored errors
 const passedErrors = new Set();
@@ -108,6 +110,12 @@ passErrorBtn.addEventListener(
     "click",
     passCurrentError
 );
+
+downloadCorrectedBtn.addEventListener(
+    "click",
+    downloadCorrectedFile
+);
+
 /* Event Listener Section Ended*/
 function log(message) {
 
@@ -129,7 +137,9 @@ function loadFile(event) {
 
     if (!file) {
         return;
+        
     }
+    originalFileName = file.name;
 
 
     // Reset previous state
@@ -137,7 +147,7 @@ function loadFile(event) {
     originalText = "";
 
     processBtn.disabled = true;
-    downloadReportBtn.disabled = true;
+    downloadCorrectedBtn.disabled = true;
 
     document.getElementById("scanCount")
         .textContent = "0";
@@ -616,6 +626,9 @@ function saveCurrentLine() {
     workingLines[currentLineIndex] =
         editorLineText.value;
 
+    // Corrected working copy is now available
+    downloadCorrectedBtn.disabled = false;
+    
     // Log the save action
     log(
         `Line ${editedLineNumber} saved — previous Pass decisions for this line cleared`
@@ -763,4 +776,68 @@ function passCurrentError() {
             "No further unresolved errors found"
         );
     }
+}
+
+
+function downloadCorrectedFile() {
+
+    if (workingLines.length === 0) {
+
+        log("No corrected file available for download");
+
+        return;
+    }
+
+
+    // Rebuild the complete TXT file
+    const correctedText =
+        workingLines.join("\n");
+
+
+    // Create downloadable TXT
+    const blob =
+        new Blob(
+            [correctedText],
+            {
+                type: "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+
+    // Preserve original filename
+    const correctedFileName =
+        originalFileName.replace(
+            /\.txt$/i,
+            ""
+        ) + "_corrected.txt";
+
+
+    link.download =
+        correctedFileName;
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
+
+
+    log(
+        `Corrected file downloaded: ${correctedFileName}`
+    );
 }
