@@ -176,8 +176,7 @@ function loadFile(event) {
         passedErrors.clear();
         
         resetEditor();
-        totalLines =
-            totalLines =
+        totalLines = workingLines.length;
 
         document.getElementById("totalLines")
             .textContent = totalLines;
