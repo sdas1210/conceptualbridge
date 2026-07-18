@@ -10,245 +10,505 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Developer Maintenance Suite</title>
+    <title>Maintenance Suite | Conceptual Bridge</title>
 
-    <link
-        rel="stylesheet"
-        href="maintenance.css"
-    >
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon"
+          href="/Resources/Favicon/favicon.ico">
+
+    <meta name="theme-color" content="#0D1B2A">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 25px;
+
+            font-family: 'Segoe UI', Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    -45deg,
+                    #1a365d,
+                    #2a4365,
+                    #2b6cb0,
+                    #3182ce
+                );
+
+            background-size: 400% 400%;
+
+            animation:
+                gradientBG 15s ease infinite;
+
+            color: white;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .maintenance-container {
+
+            width: 100%;
+            max-width: 760px;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            margin-bottom: 25px;
+
+            opacity: 0;
+            transform: translateY(15px);
+
+            animation:
+                fadeInUp .8s ease forwards;
+        }
+
+        .header-icon {
+
+            width: 62px;
+            height: 62px;
+
+            margin: 0 auto 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+
+            background:
+                rgba(255,255,255,.12);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            border:
+                1px solid rgba(255,255,255,.25);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.18);
+        }
+
+        h1 {
+
+            margin: 0 0 7px;
+
+            font-size: 2rem;
+
+            text-shadow:
+                0 4px 10px rgba(0,0,0,.25);
+        }
+
+        .subtitle {
+
+            margin: 0;
+
+            color: #dbeafe;
+
+            font-size: .95rem;
+        }
+
+
+        /* =========================
+           TOOL CARDS
+        ========================= */
+
+        .tool-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        .tool-card {
+
+            min-height: 225px;
+
+            padding: 25px 20px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            text-decoration: none;
+
+            color: white;
+
+            background:
+                rgba(255,255,255,.10);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            border:
+                1px solid rgba(255,255,255,.20);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 30px rgba(0,0,0,.20);
+
+            transition:
+                transform .3s ease,
+                background .3s ease,
+                border-color .3s ease,
+                box-shadow .3s ease;
+
+            opacity: 0;
+
+            transform: translateY(20px);
+        }
+
+        .tool-card:nth-child(1) {
+
+            animation:
+                fadeInUp .8s ease .15s forwards;
+        }
+
+        .tool-card:nth-child(2) {
+
+            animation:
+                fadeInUp .8s ease .30s forwards;
+        }
+
+        .tool-card:hover {
+
+            transform: translateY(-7px);
+
+            background:
+                rgba(255,255,255,.16);
+
+            border-color:
+                rgba(255,255,255,.42);
+
+            box-shadow:
+                0 14px 38px rgba(0,0,0,.28);
+        }
+
+
+        /* =========================
+           CARD ICON
+        ========================= */
+
+        .tool-icon {
+
+            width: 58px;
+            height: 58px;
+
+            margin-bottom: 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+
+            background:
+                rgba(255,255,255,.10);
+
+            border:
+                1px solid rgba(255,255,255,.18);
+
+            border-radius: 15px;
+
+            transition:
+                transform .3s ease;
+        }
+
+        .tool-card:hover .tool-icon {
+
+            transform:
+                scale(1.08);
+        }
+
+
+        /* =========================
+           CARD TEXT
+        ========================= */
+
+        .tool-card h2 {
+
+            margin:
+                0 0 10px;
+
+            font-size: 1.3rem;
+
+            font-weight: 600;
+        }
+
+        .tool-card p {
+
+            margin: 0;
+
+            max-width: 270px;
+
+            color: #d5e2ef;
+
+            font-size: .88rem;
+
+            line-height: 1.55;
+        }
+
+
+        /* =========================
+           OPEN LABEL
+        ========================= */
+
+        .open-tool {
+
+            margin-top: auto;
+
+            padding-top: 18px;
+
+            color: #ffffff;
+
+            font-size: .82rem;
+
+            font-weight: 600;
+
+            opacity: .75;
+
+            transition:
+                opacity .3s ease,
+                transform .3s ease;
+        }
+
+        .tool-card:hover .open-tool {
+
+            opacity: 1;
+
+            transform:
+                translateX(3px);
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            margin-top: 22px;
+
+            color:
+                rgba(255,255,255,.65);
+
+            font-size: .78rem;
+
+            opacity: 0;
+
+            animation:
+                fadeIn .8s ease .7s forwards;
+        }
+
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes gradientBG {
+
+            0% {
+                background-position:
+                    0% 50%;
+            }
+
+            50% {
+                background-position:
+                    100% 50%;
+            }
+
+            100% {
+                background-position:
+                    0% 50%;
+            }
+        }
+
+        @keyframes fadeInUp {
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            body {
+
+                padding: 20px;
+            }
+
+            .maintenance-container {
+
+                max-width: 400px;
+            }
+
+            .tool-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            h1 {
+
+                font-size: 1.7rem;
+            }
+
+            .tool-card {
+
+                min-height: 205px;
+            }
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<div class="container">
+
+<div class="maintenance-container">
+
 
     <!-- HEADER -->
 
-    <header class="page-header">
+    <div class="header">
 
-        <div>
-
-            <h1>Developer Maintenance Suite</h1>
-
-            <p class="subtitle">
-                Internal tools for validating, cleaning and maintaining
-                Conceptual Bridge question assets.
-            </p>
-
+        <div class="header-icon">
+            🛠️
         </div>
 
-        <div class="version">
-            v1.0
-        </div>
+        <h1>
+            Maintenance Suite
+        </h1>
 
-    </header>
-
-
-    <!-- INFORMATION -->
-
-    <div class="info-card">
-
-        <h2>Maintenance Tools</h2>
-
-        <p>
-            Select a maintenance utility below. These tools are designed
-            to inspect and process question TXT assets before they are
-            used by the quiz system.
+        <p class="subtitle">
+            Developer tools for question file maintenance
         </p>
 
     </div>
 
 
-    <!-- TOOL GRID -->
+
+    <!-- MAINTENANCE TOOLS -->
 
     <div class="tool-grid">
 
 
         <!-- CITATION REMOVER -->
 
-        <div class="tool-card">
+        <a
+            href="citation-remover.html"
+            class="tool-card"
+        >
 
             <div class="tool-icon">
                 🧹
             </div>
 
-            <div class="tool-content">
+            <h2>
+                Citation Remover
+            </h2>
 
-                <div class="tool-title-row">
+            <p>
+                Detect and remove unwanted trailing
+                citations from question TXT files while
+                preserving the original question structure.
+            </p>
 
-                    <h2>Citation Removal Engine</h2>
-
-                    <span class="status-badge">
-                        ACTIVE
-                    </span>
-
-                </div>
-
-                <p class="tool-description">
-
-                    Scans uploaded TXT question files and detects
-                    unwanted trailing citation blocks. Confirmed
-                    citations are removed while preserving the
-                    question structure and original content.
-
-                </p>
-
-
-                <div class="feature-title">
-                    Main Functions
-                </div>
-
-                <ul class="feature-list">
-
-                    <li>
-                        Upload and scan TXT question assets
-                    </li>
-
-                    <li>
-                        Detect trailing citation blocks
-                    </li>
-
-                    <li>
-                        Remove confirmed citations
-                    </li>
-
-                    <li>
-                        Validate remaining citation count
-                    </li>
-
-                    <li>
-                        Check question structure before output
-                    </li>
-
-                    <li>
-                        Download cleaned TXT output
-                    </li>
-
-                </ul>
-
-
-                <a
-                    href="citation-remover.html"
-                    class="launch-button"
-                >
-                    Open Citation Remover →
-                </a>
-
+            <div class="open-tool">
+                Open Tool →
             </div>
 
-        </div>
+        </a>
+
 
 
         <!-- PROOF READER -->
 
-        <div class="tool-card">
+        <a
+            href="proof-reader.html"
+            class="tool-card"
+        >
 
             <div class="tool-icon">
                 🔍
             </div>
 
-            <div class="tool-content">
+            <h2>
+                Proof Reader
+            </h2>
 
-                <div class="tool-title-row">
+            <p>
+                Detect unexpected characters, inspect
+                affected lines, edit corrections and
+                re-validate question TXT files.
+            </p>
 
-                    <h2>Proof Reader</h2>
-
-                    <span class="status-badge">
-                        ACTIVE
-                    </span>
-
-                </div>
-
-                <p class="tool-description">
-
-                    Character-validation and proofreading utility for
-                    identifying unexpected foreign-script characters
-                    inside English and Bengali question files.
-
-                </p>
-
-
-                <div class="feature-title">
-                    Main Functions
-                </div>
-
-                <ul class="feature-list">
-
-                    <li>
-                        Validate English and Bengali text
-                    </li>
-
-                    <li>
-                        Detect unexpected Unicode characters
-                    </li>
-
-                    <li>
-                        Show affected line and character
-                    </li>
-
-                    <li>
-                        Navigate TXT files line by line
-                    </li>
-
-                    <li>
-                        Edit and save corrected lines
-                    </li>
-
-                    <li>
-                        Pass selected errors for the current session
-                    </li>
-
-                    <li>
-                        Re-validate after corrections
-                    </li>
-
-                    <li>
-                        Download the corrected TXT file
-                    </li>
-
-                </ul>
-
-
-                <a
-                    href="proof-reader.html"
-                    class="launch-button"
-                >
-                    Open Proof Reader →
-                </a>
-
+            <div class="open-tool">
+                Open Tool →
             </div>
 
-        </div>
+        </a>
 
-
-    </div>
-
-
-    <!-- FUTURE TOOLS -->
-
-    <div class="future-section">
-
-        <h2>Future Maintenance Utilities</h2>
-
-        <p>
-            Additional developer tools can be added to this dashboard
-            as separate maintenance modules without affecting the
-            existing utilities.
-        </p>
 
     </div>
 
 
     <!-- FOOTER -->
 
-    <footer>
+    <div class="footer">
 
-        Conceptual Bridge • Developer Maintenance Suite
+        Conceptual Bridge • Developer Maintenance
 
-    </footer>
+    </div>
+
 
 </div>
+
 
 </body>
 
