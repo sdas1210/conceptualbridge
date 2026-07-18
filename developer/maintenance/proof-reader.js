@@ -19,6 +19,10 @@ fileInput.addEventListener(
     "change",
     loadFile
 );
+processBtn.addEventListener(
+    "click",
+    validateFile
+);
 
 
 function log(message) {
@@ -107,4 +111,52 @@ function loadFile(event) {
 
 
     reader.readAsText(file);
+}
+
+function isValidChar(char) {
+
+    // Allow whitespace
+    if (/\s/.test(char)) {
+        return true;
+    }
+
+    // Allow English letters
+    if (/[A-Za-z]/.test(char)) {
+        return true;
+    }
+
+    // Allow numbers
+    if (/[0-9]/.test(char)) {
+        return true;
+    }
+
+    // Allow standard ASCII punctuation
+    if (/[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]/.test(char)) {
+        return true;
+    }
+
+    // Allow Bengali Unicode block
+    const code = char.codePointAt(0);
+
+    if (code >= 0x0980 && code <= 0x09FF) {
+        return true;
+    }
+
+    // Additional permitted punctuation
+    const extraPunctuation = [
+        "।",
+        "’",
+        "‘",
+        "”",
+        "“",
+        "…",
+        "—",
+        "–"
+    ];
+
+    if (extraPunctuation.includes(char)) {
+        return true;
+    }
+
+    return false;
 }
