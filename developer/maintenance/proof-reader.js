@@ -9,12 +9,48 @@ const downloadReportBtn =
 
 const consoleBox =
     document.getElementById("console");
+const editorLineNo =
+    document.getElementById("editorLineNo");
 
+const editorCharacter =
+    document.getElementById("editorCharacter");
+
+const editorLineText =
+    document.getElementById("editorLineText");
+
+const previousLineBtn =
+    document.getElementById("previousLineBtn");
+
+const nextLineBtn =
+    document.getElementById("nextLineBtn");
+
+const editLineBtn =
+    document.getElementById("editLineBtn");
+
+const saveLineBtn =
+    document.getElementById("saveLineBtn");
+
+const passErrorBtn =
+    document.getElementById("passErrorBtn");
+
+const revalidateBtn =
+    document.getElementById("revalidateBtn");
+
+const editorStatus =
+    document.getElementById("editorStatus");
 
 let originalText = "";
 let totalLines = 0;
+let workingLines = [];
 
+let validationErrors = [];
 
+let currentLineIndex = -1;
+
+let isEditing = false;
+
+// Session-only ignored errors
+const passedErrors = new Set();
 fileInput.addEventListener(
     "change",
     loadFile
@@ -24,7 +60,38 @@ processBtn.addEventListener(
     validateFile
 );
 
+previousLineBtn.addEventListener(
+    "click",
+    function() {
 
+        if (isEditing) {
+            return;
+        }
+
+        showLine(
+            currentLineIndex - 1
+        );
+    }
+);
+
+
+nextLineBtn.addEventListener(
+    "click",
+    function() {
+
+        if (isEditing) {
+            return;
+        }
+
+        showLine(
+            currentLineIndex + 1
+        );
+    }
+);
+
+
+
+/* Event Listener Section Ended*/
 function log(message) {
 
     const time =
@@ -90,8 +157,20 @@ function loadFile(event) {
         originalText =
             event.target.result;
 
+        workingLines =
+            originalText.split(/\r?\n/);
+        
+        validationErrors = [];
+        
+        currentLineIndex = -1;
+        
+        isEditing = false;
+        
+        passedErrors.clear();
+        
+        resetEditor();
         totalLines =
-            originalText.split(/\r?\n/).length;
+            totalLines =
 
         document.getElementById("totalLines")
             .textContent = totalLines;
@@ -174,8 +253,8 @@ function validateFile() {
     let invalidCount = 0;
 
     const affectedLineNumbers = new Set();
-    const errors = [];
-    const lines = originalText.split(/\r?\n/);
+    validationErrors = [];
+    const lines = workingLines;
 
     for (let i = 0; i < lines.length; i++) {
 
@@ -199,19 +278,19 @@ function validateFile() {
             .toUpperCase()
             .padStart(4, "0");
 
-    errors.push({
-        lineNumber: i + 1,
-        character: char,
-        unicode: unicode,
-        lineText: line
-    });
-
-    console.log(
-        `Invalid Character — Line ${i + 1}:`,
-        char,
-        unicode
-    );
-}
+            validationErrors.push({
+                lineNumber: i + 1,
+                character: char,
+                unicode: unicode,
+                lineText: line
+            });
+        
+            console.log(
+                `Invalid Character — Line ${i + 1}:`,
+                char,
+                unicode
+            );
+        }
         }
 
         // Progress every 100 lines
@@ -262,7 +341,23 @@ function validateFile() {
 
         log("Validation Status: FAILED");
     }
-    generateErrorReport(errors);
+    generateErrorReport(validationErrors);
+        if (validationErrors.length > 0) {
+    
+        const firstError =
+            validationErrors[0];
+    
+        showLine(
+            firstError.lineNumber - 1
+        );
+    
+    } else {
+    
+        resetEditor();
+    
+        editorStatus.textContent =
+            "Validation Passed — No errors found.";
+    }
 }
 function generateErrorReport(errors) {
 
@@ -314,3 +409,128 @@ function generateErrorReport(errors) {
         reportBox.appendChild(item);
     }
 }
+
+function showLine(lineIndex) {
+
+    if (
+        lineIndex < 0 ||
+        lineIndex >= workingLines.length
+    ) {
+        return;
+    }
+
+    currentLineIndex = lineIndex;
+
+    const lineNumber =
+        lineIndex + 1;
+
+    const lineText =
+        workingLines[lineIndex];
+
+
+    // Find errors belonging to this line
+
+    const lineErrors =
+        validationErrors.filter(
+            error =>
+                error.lineNumber === lineNumber
+        );
+
+
+    editorLineNo.textContent =
+        lineNumber;
+
+
+    if (lineErrors.length > 0) {
+
+        const characters =
+            [...new Set(
+                lineErrors.map(
+                    error => error.character
+                )
+            )];
+
+        editorCharacter.textContent =
+            characters
+                .map(char => `"${char}"`)
+                .join(", ");
+
+        editorStatus.textContent =
+            `Validation error detected on Line ${lineNumber}`;
+
+    } else {
+
+        editorCharacter.textContent =
+            "--";
+
+        editorStatus.textContent =
+            `No validation error detected on Line ${lineNumber}`;
+    }
+
+
+    editorLineText.value =
+        lineText;
+
+
+    // Navigation availability
+
+    previousLineBtn.disabled =
+        lineIndex === 0;
+
+    nextLineBtn.disabled =
+        lineIndex ===
+        workingLines.length - 1;
+
+
+    // Editing will be implemented next
+
+    editLineBtn.disabled = false;
+
+    saveLineBtn.disabled = true;
+
+
+    // Pass only makes sense if this line has an error
+
+    passErrorBtn.disabled =
+        lineErrors.length === 0;
+
+    revalidateBtn.disabled = false;
+}
+function resetEditor() {
+
+    currentLineIndex = -1;
+
+    editorLineNo.textContent =
+        "--";
+
+    editorCharacter.textContent =
+        "--";
+
+    editorLineText.value =
+        "";
+
+    editorLineText.readOnly =
+        true;
+
+    previousLineBtn.disabled =
+        true;
+
+    nextLineBtn.disabled =
+        true;
+
+    editLineBtn.disabled =
+        true;
+
+    saveLineBtn.disabled =
+        true;
+
+    passErrorBtn.disabled =
+        true;
+
+    revalidateBtn.disabled =
+        true;
+
+    editorStatus.textContent =
+        "No validation error selected.";
+}
+
