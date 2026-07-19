@@ -1,5 +1,5 @@
 // =========================================
-// DIFFICULTY PROCESSOR / FUTURE MERGER
+// FINAL MERGER
 // Conceptual Bridge Maintenance Suite
 // =========================================
 
