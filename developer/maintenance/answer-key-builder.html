@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Answer Key Builder | Conceptual Bridge
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="answer-key-builder.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- BACK -->
+
+    <a
+        href="maintenance.html"
+        class="back-home"
+    >
+        ← Maintenance Home
+    </a>
+
+
+    <!-- HEADER -->
+
+    <h1>
+        🔑 Answer Key Builder
+    </h1>
+
+    <p class="subtitle">
+        Create Standard and Development answer-key TXT files
+    </p>
+
+
+    <!-- =====================================
+         SESSION CONFIGURATION
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            1. Session Configuration
+        </h2>
+
+
+        <div class="config-grid">
+
+
+            <!-- TOTAL QUESTIONS -->
+
+            <div class="input-group">
+
+                <label for="totalQuestionsInput">
+                    Total Questions
+                </label>
+
+                <input
+                    type="number"
+                    id="totalQuestionsInput"
+                    value="100"
+                    min="1"
+                    step="1"
+                >
+
+                <span class="input-help">
+                    Default: 100
+                </span>
+
+            </div>
+
+
+            <!-- INITIAL QUESTION -->
+
+            <div class="input-group">
+
+                <label for="initialQuestionInput">
+                    Initial Question No.
+                </label>
+
+                <input
+                    type="number"
+                    id="initialQuestionInput"
+                    value="1"
+                    min="1"
+                    step="1"
+                >
+
+                <span class="input-help">
+                    Default: 1
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- SESSION RANGE -->
+
+        <div class="session-preview">
+
+            <span>
+                Question Range:
+            </span>
+
+            <strong id="questionRange">
+                1 – 100
+            </strong>
+
+        </div>
+
+
+        <div class="config-button-row">
+
+            <button id="startSessionBtn">
+
+                Start Answer Session
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         ANSWER SELECTION
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            2. Answer Selection
+        </h2>
+
+
+        <div
+            id="answerWorkspace"
+            class="answer-workspace disabled-workspace"
+        >
+
+
+            <!-- CURRENT QUESTION -->
+
+            <div class="question-display">
+
+                <div class="question-label">
+
+                    Question
+
+                </div>
+
+                <div
+                    id="currentQuestionNumber"
+                    class="question-number"
+                >
+                    --
+                </div>
+
+                <div
+                    id="questionPosition"
+                    class="question-position"
+                >
+                    -- of --
+                </div>
+
+            </div>
+
+
+            <!-- ANSWER BUTTONS -->
+
+            <div class="answer-options">
+
+                <button
+                    class="answer-btn"
+                    data-answer="A"
+                    disabled
+                >
+                    A
+                </button>
+
+                <button
+                    class="answer-btn"
+                    data-answer="B"
+                    disabled
+                >
+                    B
+                </button>
+
+                <button
+                    class="answer-btn"
+                    data-answer="C"
+                    disabled
+                >
+                    C
+                </button>
+
+                <button
+                    class="answer-btn"
+                    data-answer="D"
+                    disabled
+                >
+                    D
+                </button>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <div class="navigation-row">
+
+                <button
+                    id="previousBtn"
+                    disabled
+                >
+                    ← Previous
+                </button>
+
+
+                <button
+                    id="nextBtn"
+                    disabled
+                >
+                    Next →
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         ANSWER PROGRESS
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            3. Answer Progress
+        </h2>
+
+
+        <table>
+
+            <tr>
+
+                <td>
+                    Current Q No.
+                </td>
+
+                <td id="progressCurrentQuestion">
+                    --
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Total Questions
+                </td>
+
+                <td id="progressTotalQuestions">
+                    100
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Answered
+                </td>
+
+                <td id="answeredCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Remaining
+                </td>
+
+                <td id="remainingCount">
+                    100
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Status
+                </td>
+
+                <td id="progressStatus">
+                    0% — NOT STARTED
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <!-- PROGRESS BAR -->
+
+        <div class="progress-container">
+
+            <div class="progress-track">
+
+                <div
+                    id="progressBar"
+                    class="progress-bar"
+                ></div>
+
+            </div>
+
+            <div
+                id="progressPercent"
+                class="progress-percent"
+            >
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         ANSWER GRID
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            4. Answer Grid
+        </h2>
+
+
+        <div
+            id="answerGrid"
+            class="answer-grid"
+        >
+
+            <div class="empty-grid-message">
+
+                Start an answer session to display
+                the question grid.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         OUTPUT VALIDATION
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            5. Output Validation
+        </h2>
+
+
+        <table>
+
+            <tr>
+
+                <td>
+                    Required Answers
+                </td>
+
+                <td id="requiredAnswers">
+                    100
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Answers Selected
+                </td>
+
+                <td id="selectedAnswers">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Missing Answers
+                </td>
+
+                <td id="missingAnswers">
+                    100
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Ansopt Entries
+                </td>
+
+                <td id="ansoptEntries">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    AnsDev Characters
+                </td>
+
+                <td id="ansdevCharacters">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Validation Status
+                </td>
+
+                <td id="validationStatus">
+                    NOT READY
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- =====================================
+         PROCESSING CONSOLE
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            6. Processing Console
+        </h2>
+
+        <pre id="console">Waiting for answer session...</pre>
+
+    </div>
+
+
+
+    <!-- =====================================
+         DOWNLOAD BUTTONS
+    ====================================== -->
+
+    <div class="buttons">
+
+        <button
+            id="newSessionBtn"
+            disabled
+        >
+            New Session
+        </button>
+
+
+        <button
+            id="downloadStandardBtn"
+            disabled
+        >
+            Download Ansopt.txt
+        </button>
+
+
+        <button
+            id="downloadDevelopmentBtn"
+            disabled
+        >
+            Download AnsDev.txt
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script src="answer-key-builder.js"></script>
+
+</body>
+
+</html>
