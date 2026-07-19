@@ -338,84 +338,238 @@ function isShiftLine(line) {
         line.trim()
     );
 }
-
-
 // =========================================
-// EXTRACT SHIFT DATA
+// SHIFT DATE/TIME NORMALIZER
+// Ported from AMPM Modifier.py
 // =========================================
 
-function extractShiftData() {
+function normalizeShiftTime(line) {
 
-    if (
-        !originalText ||
-        detectedShiftCount === 0
-    ) {
+    const trimmedLine =
+        line.trim();
 
-        log(
-            "Extraction blocked: No SHIFT| data available."
-        );
-
-        return;
+    if (!trimmedLine) {
+        return line;
     }
 
 
-    extractBtn.disabled = true;
+    /*
+        STEP 1
+        Shift must begin with:
 
-    downloadShiftBtn.disabled = true;
+        DD/MM/YYYY
 
-    downloadCleanedBtn.disabled = true;
+        Accepted examples:
 
+        8/1/2026
+        08/01/2026
+    */
 
-    log(
-        "Starting SHIFT| extraction..."
-    );
-
-
-    const lines =
-        originalText.split(
-            /\r?\n/
+    const dateMatch =
+        trimmedLine.match(
+            /^(\d{1,2}\/\d{1,2}\/\d{4})/
         );
 
 
-    const shiftValues = [];
+    if (!dateMatch) {
 
-    const cleanedLines = [];
+        // No valid starting date.
+        // Preserve original data.
 
-
-    for (
-        let i = 0;
-        i < lines.length;
-        i++
-    ) {
-
-        const line =
-            lines[i];
+        return line;
+    }
 
 
+    const datePart =
+        dateMatch[1];
+
+
+    const timePart =
+        trimmedLine
+            .slice(
+                dateMatch[0].length
+            )
+            .trim();
+
+
+    /*
+        STEP 2
+
+        Find:
+
+        Time 1
+        AM / PM
+        separator
+        Time 2
+        AM / PM
+
+        Examples accepted:
+
+        09:00AM-10:30AM
+
+        09:00 AM - 10:30 AM
+
+        09:00 AM TO 10:30 AM
+
+        9:00am -- 10:30am
+    */
+
+    const timeMatch =
+        timePart.match(
+            /(\d{1,2}:\d{2})\s*(AM|PM).+?(\d{1,2}:\d{2})\s*(AM|PM)/i
+        );
+
+
+    if (!timeMatch) {
+
+        // Could not safely understand
+        // the time structure.
+
+        // Do NOT modify the original value.
+
+        return line;
+    }
+
+
+    const time1 =
+        timeMatch[1];
+
+    const ampm1 =
+        timeMatch[2]
+            .toUpperCase();
+
+    const time2 =
+        timeMatch[3];
+
+    const ampm2 =
+        timeMatch[4]
+            .toUpperCase();
+
+
+    /*
+        STEP 3
+
+        Standard output:
+
+        DD/MM/YYYY HH:MM AM - HH:MM PM
+    */
+
+    return (
+        `${datePart} ` +
+        `${time1} ${ampm1} - ` +
+        `${time2} ${ampm2}`
+    );
+}
+
+
+
+
+    // =========================================
+    // EXTRACT SHIFT DATA
+    // =========================================
+    
+    function extractShiftData() {
+    
         if (
-            isShiftLine(line)
+            !originalText ||
+            detectedShiftCount === 0
         ) {
-
-            // Remove only the SHIFT| prefix
-
-            const shiftValue =
-                line
-                    .trim()
-                    .replace(
-                        /^SHIFT\|/i,
-                        ""
-                    )
-                    .trim();
-
-
-            shiftValues.push(
-                shiftValue
-            );
-
-
+    
             log(
-                `Extracted SHIFT| from Line ${i + 1}`
+                "Extraction blocked: No SHIFT| data available."
             );
+    
+            return;
+        }
+    
+    
+        extractBtn.disabled = true;
+    
+        downloadShiftBtn.disabled = true;
+    
+        downloadCleanedBtn.disabled = true;
+    
+    
+        log(
+            "Starting SHIFT| extraction..."
+        );
+    
+    
+        const lines =
+            originalText.split(
+                /\r?\n/
+            );
+    
+    
+        const shiftValues = [];
+    
+        const cleanedLines = [];
+    
+    
+        for (
+            let i = 0;
+            i < lines.length;
+            i++
+        ) {
+    
+            const line =
+                lines[i];
+    
+    
+            if (
+                isShiftLine(line)
+            ) {
+    
+                // Remove only the SHIFT| prefix
+                // Extract raw SHIFT| value
+        
+        const rawShiftValue =
+            line
+                .trim()
+                .replace(
+                    /^SHIFT\|/i,
+                    ""
+                )
+                .trim();
+        
+        
+        // Automatically apply
+        // AM/PM normalization
+        
+        const normalizedShiftValue =
+            normalizeShiftTime(
+                rawShiftValue
+            );
+        
+        
+        // Store normalized value
+        
+        shiftValues.push(
+            normalizedShiftValue
+        );
+        
+        
+        // Report normalization
+        
+        if (
+            normalizedShiftValue !==
+            rawShiftValue
+        ) {
+        
+            log(
+                `Line ${i + 1}: SHIFT extracted and time normalized`
+            );
+        
+        } else {
+        
+            log(
+                `Line ${i + 1}: SHIFT extracted`
+            );
+        }
+           
+
+
+            
 
 
             // Do NOT copy SHIFT line
