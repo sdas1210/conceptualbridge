@@ -642,12 +642,18 @@ td:last-child {
 
 .answer-grid-item.current {
 
+   background:
+        rgba(49, 130, 206, .90);
+
     border-color:
-        rgba(99, 179, 237, .95);
+        rgba(144, 205, 244, 1);
 
     box-shadow:
-        0 0 12px
-        rgba(99, 179, 237, .18);
+        0 0 18px
+        rgba(49, 130, 206, .45);
+
+    transform:
+        translateY(-2px);
 }
 
 
@@ -660,6 +666,64 @@ td:last-child {
         rgba(104, 211, 145, .55);
 }
 
+/* ANSWERED QUESTION */
+
+.answer-grid-item.answered {
+
+    background:
+        rgba(56, 161, 105, .35);
+
+    border-color:
+        rgba(104, 211, 145, .55);
+}
+
+
+/* CURRENT / CLICKED QUESTION
+   Must remain AFTER .answered
+   so current selection takes priority */
+
+.answer-grid-item.current {
+
+    background:
+        rgba(49, 130, 206, .90);
+
+    border-color:
+        rgba(144, 205, 244, 1);
+
+    box-shadow:
+        0 0 18px
+        rgba(49, 130, 206, .45);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.answer-grid-item.current .grid-question {
+
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+
+.answer-grid-item.current .grid-answer {
+
+    color: #ffffff;
+}
+
+.answer-grid-item.current .grid-question {
+
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+
+.answer-grid-item.current .grid-answer {
+
+    color: #ffffff;
+}
 
 .grid-question {
 
