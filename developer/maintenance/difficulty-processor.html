@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -18,16 +17,11 @@
         rel="stylesheet"
         href="difficulty-processor.css"
     >
-
 </head>
-
 
 <body>
 
 <div class="container">
-
-
-    <!-- BACK -->
 
     <a
         href="maintenance.html"
@@ -37,89 +31,113 @@
     </a>
 
 
-    <!-- HEADER -->
-
     <h1>
-        📊 Difficulty Processor
+        🔗 Difficulty Processor
     </h1>
 
     <p class="subtitle">
-        Validate question alignment and extract difficulty ratings
+        Validate, normalize and merge bilingual question data
     </p>
 
 
     <!-- =====================================
-         FILE SELECTION
+         1. FILE SELECTION
     ====================================== -->
 
     <div class="card">
 
         <h2>
-            1. Select Files
+            1. Select Four TXT Files
         </h2>
-
 
         <div class="file-grid">
 
-
-            <!-- ORIGINAL -->
-
             <div class="file-group">
 
-                <label for="originalFileInput">
-
-                    Original Question TXT
-
+                <label for="englishFileInput">
+                    English Question File
                 </label>
 
                 <p class="file-description">
-
-                    Question blocks beginning with Q|
-
+                    Filename should end with E, such as 100E.txt.
+                    Must contain Q|, A|, B|, C|, D| and Shift|.
                 </p>
 
                 <input
                     type="file"
-                    id="originalFileInput"
+                    id="englishFileInput"
                     accept=".txt"
                 >
 
             </div>
 
 
-            <!-- RATING -->
-
             <div class="file-group">
 
-                <label for="ratingFileInput">
-
-                    Difficulty Rating TXT
-
+                <label for="bengaliFileInput">
+                    Bengali Question File
                 </label>
 
                 <p class="file-description">
-
-                    Questions beginning with Question 1:, Question 2:, etc.
-
+                    Filename should end with B, such as 100B.txt.
+                    Must contain corresponding bilingual question blocks.
                 </p>
 
                 <input
                     type="file"
-                    id="ratingFileInput"
+                    id="bengaliFileInput"
                     accept=".txt"
                 >
 
             </div>
 
+
+            <div class="file-group">
+
+                <label for="answerFileInput">
+                    Answer File
+                </label>
+
+                <p class="file-description">
+                    Standard Ansopt.txt format containing one
+                    A, B, C or D answer for each question.
+                </p>
+
+                <input
+                    type="file"
+                    id="answerFileInput"
+                    accept=".txt"
+                >
+
+            </div>
+
+
+            <div class="file-group">
+
+                <label for="difficultyFileInput">
+                    Difficulty Rating File
+                </label>
+
+                <p class="file-description">
+                    Contains Question N: entries and their
+                    corresponding Difficulty Rating values.
+                </p>
+
+                <input
+                    type="file"
+                    id="difficultyFileInput"
+                    accept=".txt"
+                >
+
+            </div>
 
         </div>
 
     </div>
 
 
-
     <!-- =====================================
-         FILE INFORMATION
+         2. FILE INFORMATION
     ====================================== -->
 
     <div class="card">
@@ -128,58 +146,51 @@
             2. File Information
         </h2>
 
-
         <table>
 
             <tr>
-
-                <td>
-                    Original File
-                </td>
-
-                <td id="originalFileName">
-                    --
-                </td>
-
+                <td>English File</td>
+                <td id="englishFileName">--</td>
             </tr>
 
-
             <tr>
-
-                <td>
-                    Rating File
-                </td>
-
-                <td id="ratingFileName">
-                    --
-                </td>
-
+                <td>English Question Blocks</td>
+                <td id="englishBlockCount">0</td>
             </tr>
 
-
             <tr>
-
-                <td>
-                    Original Questions Found
-                </td>
-
-                <td id="originalQuestionCount">
-                    0
-                </td>
-
+                <td>Bengali File</td>
+                <td id="bengaliFileName">--</td>
             </tr>
 
+            <tr>
+                <td>Bengali Question Blocks</td>
+                <td id="bengaliBlockCount">0</td>
+            </tr>
 
             <tr>
+                <td>Answer File</td>
+                <td id="answerFileName">--</td>
+            </tr>
 
-                <td>
-                    Rating Questions Found
-                </td>
+            <tr>
+                <td>Answers Found</td>
+                <td id="answerCount">0</td>
+            </tr>
 
-                <td id="ratingQuestionCount">
-                    0
-                </td>
+            <tr>
+                <td>Difficulty File</td>
+                <td id="difficultyFileName">--</td>
+            </tr>
 
+            <tr>
+                <td>Difficulty Questions</td>
+                <td id="difficultyQuestionCount">0</td>
+            </tr>
+
+            <tr>
+                <td>Difficulty Values</td>
+                <td id="difficultyValueCount">0</td>
             </tr>
 
         </table>
@@ -187,69 +198,56 @@
     </div>
 
 
-
     <!-- =====================================
-         STEP 1
+         3. VALIDATION
     ====================================== -->
 
     <div class="card">
 
         <h2>
-            3. Step 1 — Question Alignment Comparison
+            3. Structural & Alignment Validation
         </h2>
-
 
         <table>
 
             <tr>
-
-                <td>
-                    Questions Compared
-                </td>
-
-                <td id="questionsCompared">
-                    0
-                </td>
-
+                <td>English Complete Blocks</td>
+                <td id="englishCompleteCount">0</td>
             </tr>
 
-
             <tr>
-
-                <td>
-                    Matches
-                </td>
-
-                <td id="matchCount">
-                    0
-                </td>
-
+                <td>Bengali Complete Blocks</td>
+                <td id="bengaliCompleteCount">0</td>
             </tr>
 
-
             <tr>
-
-                <td>
-                    Mismatches
-                </td>
-
-                <td id="mismatchCount">
-                    0
-                </td>
-
+                <td>Shift Entries</td>
+                <td id="shiftCount">0</td>
             </tr>
 
+            <tr>
+                <td>Shift Values Normalized</td>
+                <td id="normalizedShiftCount">0</td>
+            </tr>
 
             <tr>
+                <td>Valid Answers</td>
+                <td id="validAnswerCount">0</td>
+            </tr>
 
-                <td>
-                    Comparison Status
-                </td>
+            <tr>
+                <td>Difficulty Alignments</td>
+                <td id="difficultyAlignmentCount">0</td>
+            </tr>
 
-                <td id="comparisonStatus">
-                    WAITING
-                </td>
+            <tr>
+                <td>Validation Issues</td>
+                <td id="validationIssueCount">0</td>
+            </tr>
 
+            <tr>
+                <td>Validation Status</td>
+                <td id="validationStatus">WAITING</td>
             </tr>
 
         </table>
@@ -258,10 +256,10 @@
         <div class="action-row">
 
             <button
-                id="compareBtn"
+                id="validateBtn"
                 disabled
             >
-                Compare Files
+                Validate Four Files
             </button>
 
         </div>
@@ -269,93 +267,59 @@
     </div>
 
 
-
     <!-- =====================================
-         MISMATCH REPORT
+         ISSUE REPORT
     ====================================== -->
 
     <div
-        id="mismatchCard"
+        id="issueCard"
         class="card hidden"
     >
 
         <h2>
-            ❌ Mismatch Report
+            ❌ Validation Report
         </h2>
 
-
-        <div id="mismatchReport">
-
-            No mismatches detected.
-
-        </div>
+        <div id="issueReport"></div>
 
     </div>
 
 
-
     <!-- =====================================
-         STEP 2
+         4. MERGE
     ====================================== -->
 
     <div class="card">
 
         <h2>
-            4. Step 2 — Difficulty Extraction
+            4. Final Question Merger
         </h2>
-
 
         <table>
 
             <tr>
-
-                <td>
-                    Difficulty Lines Found
-                </td>
-
-                <td id="difficultyLinesFound">
-                    0
-                </td>
-
+                <td>Expected Output Blocks</td>
+                <td id="expectedOutputCount">0</td>
             </tr>
 
-
             <tr>
-
-                <td>
-                    Valid Numeric Values
-                </td>
-
-                <td id="validDifficultyCount">
-                    0
-                </td>
-
+                <td>Generated Blocks</td>
+                <td id="generatedBlockCount">0</td>
             </tr>
 
-
             <tr>
-
-                <td>
-                    Invalid / Ignored Values
-                </td>
-
-                <td id="invalidDifficultyCount">
-                    0
-                </td>
-
+                <td>Correct| Entries</td>
+                <td id="finalCorrectCount">0</td>
             </tr>
 
+            <tr>
+                <td>Difficulty| Entries</td>
+                <td id="finalDifficultyCount">0</td>
+            </tr>
 
             <tr>
-
-                <td>
-                    Extraction Status
-                </td>
-
-                <td id="extractionStatus">
-                    LOCKED
-                </td>
-
+                <td>Final Status</td>
+                <td id="finalStatus">LOCKED</td>
             </tr>
 
         </table>
@@ -364,16 +328,15 @@
         <div class="action-row">
 
             <button
-                id="extractBtn"
+                id="mergeBtn"
                 disabled
             >
-                Extract Difficulty
+                Generate Final TXT
             </button>
 
         </div>
 
     </div>
-
 
 
     <!-- =====================================
@@ -386,15 +349,12 @@
             5. Processing Console
         </h2>
 
-        <pre id="console">Waiting for two TXT files...</pre>
+        <pre id="console">Waiting for four TXT files...</pre>
 
     </div>
 
 
-
-    <!-- =====================================
-         DOWNLOAD
-    ====================================== -->
+    <!-- DOWNLOAD -->
 
     <div class="buttons">
 
@@ -402,11 +362,10 @@
             id="downloadBtn"
             disabled
         >
-            Download difficulty.txt
+            Download Final.txt
         </button>
 
     </div>
-
 
 </div>
 
