@@ -101,13 +101,16 @@ function loadFile() {
 
     originalFileName =
         file.name;
+    
+    originalLineEnding = "\n";
 
     extractedShiftText = "";
 
     cleanedQuestionText = "";
 
     detectedShiftCount = 0;
-
+    
+    normalizedShiftCount = 0;
 
     extractBtn.disabled = true;
 
@@ -627,6 +630,11 @@ function normalizeShiftTime(line) {
     ).textContent =
         shiftValues.length;
 
+        
+    document.getElementById(
+        "normalizedCount"
+    ).textContent =
+        normalizedShiftCount;
 
     // Integrity check
 
