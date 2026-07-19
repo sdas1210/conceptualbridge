@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Difficulty Processor | Conceptual Bridge
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="difficulty-processor.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- BACK -->
+
+    <a
+        href="maintenance.html"
+        class="back-home"
+    >
+        ← Maintenance Home
+    </a>
+
+
+    <!-- HEADER -->
+
+    <h1>
+        📊 Difficulty Processor
+    </h1>
+
+    <p class="subtitle">
+        Validate question alignment and extract difficulty ratings
+    </p>
+
+
+    <!-- =====================================
+         FILE SELECTION
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            1. Select Files
+        </h2>
+
+
+        <div class="file-grid">
+
+
+            <!-- ORIGINAL -->
+
+            <div class="file-group">
+
+                <label for="originalFileInput">
+
+                    Original Question TXT
+
+                </label>
+
+                <p class="file-description">
+
+                    Question blocks beginning with Q|
+
+                </p>
+
+                <input
+                    type="file"
+                    id="originalFileInput"
+                    accept=".txt"
+                >
+
+            </div>
+
+
+            <!-- RATING -->
+
+            <div class="file-group">
+
+                <label for="ratingFileInput">
+
+                    Difficulty Rating TXT
+
+                </label>
+
+                <p class="file-description">
+
+                    Questions beginning with Question 1:, Question 2:, etc.
+
+                </p>
+
+                <input
+                    type="file"
+                    id="ratingFileInput"
+                    accept=".txt"
+                >
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         FILE INFORMATION
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            2. File Information
+        </h2>
+
+
+        <table>
+
+            <tr>
+
+                <td>
+                    Original File
+                </td>
+
+                <td id="originalFileName">
+                    --
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Rating File
+                </td>
+
+                <td id="ratingFileName">
+                    --
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Original Questions Found
+                </td>
+
+                <td id="originalQuestionCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Rating Questions Found
+                </td>
+
+                <td id="ratingQuestionCount">
+                    0
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- =====================================
+         STEP 1
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            3. Step 1 — Question Alignment Comparison
+        </h2>
+
+
+        <table>
+
+            <tr>
+
+                <td>
+                    Questions Compared
+                </td>
+
+                <td id="questionsCompared">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Matches
+                </td>
+
+                <td id="matchCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Mismatches
+                </td>
+
+                <td id="mismatchCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Comparison Status
+                </td>
+
+                <td id="comparisonStatus">
+                    WAITING
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <div class="action-row">
+
+            <button
+                id="compareBtn"
+                disabled
+            >
+                Compare Files
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         MISMATCH REPORT
+    ====================================== -->
+
+    <div
+        id="mismatchCard"
+        class="card hidden"
+    >
+
+        <h2>
+            ❌ Mismatch Report
+        </h2>
+
+
+        <div id="mismatchReport">
+
+            No mismatches detected.
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         STEP 2
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            4. Step 2 — Difficulty Extraction
+        </h2>
+
+
+        <table>
+
+            <tr>
+
+                <td>
+                    Difficulty Lines Found
+                </td>
+
+                <td id="difficultyLinesFound">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Valid Numeric Values
+                </td>
+
+                <td id="validDifficultyCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Invalid / Ignored Values
+                </td>
+
+                <td id="invalidDifficultyCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Extraction Status
+                </td>
+
+                <td id="extractionStatus">
+                    LOCKED
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <div class="action-row">
+
+            <button
+                id="extractBtn"
+                disabled
+            >
+                Extract Difficulty
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         CONSOLE
+    ====================================== -->
+
+    <div class="card">
+
+        <h2>
+            5. Processing Console
+        </h2>
+
+        <pre id="console">Waiting for two TXT files...</pre>
+
+    </div>
+
+
+
+    <!-- =====================================
+         DOWNLOAD
+    ====================================== -->
+
+    <div class="buttons">
+
+        <button
+            id="downloadBtn"
+            disabled
+        >
+            Download difficulty.txt
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script src="difficulty-processor.js"></script>
+
+</body>
+
+</html>
