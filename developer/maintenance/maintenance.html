@@ -186,20 +186,23 @@
         }
 
         .tool-card:nth-child(1) {
-
-            animation:
-                fadeInUp .8s ease .15s forwards;
+    animation: fadeInUp .8s ease .15s forwards;
         }
-
+        
         .tool-card:nth-child(2) {
-
-            animation:
-                fadeInUp .8s ease .30s forwards;
+            animation: fadeInUp .8s ease .25s forwards;
         }
+        
         .tool-card:nth-child(3) {
-
-            animation:
-                fadeInUp .8s ease .45s forwards;
+            animation: fadeInUp .8s ease .35s forwards;
+        }
+        
+        .tool-card:nth-child(4) {
+            animation: fadeInUp .8s ease .45s forwards;
+        }
+        
+        .tool-card:nth-child(5) {
+            animation: fadeInUp .8s ease .55s forwards;
         }
         
 
@@ -378,7 +381,7 @@
         /* =========================
            MOBILE
         ========================= */
-        @media (max-width: 950px) {
+       @media (max-width: 950px) {
 
             .maintenance-container {
         
@@ -390,54 +393,38 @@
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
             }
-        
-            .tool-card:last-child {
-        
-                grid-column:
-                    1 / -1;
-        
-                width: calc(50% - 9px);
-        
-                justify-self: center;
-            }
         }
-
+        
+        
         @media (max-width: 650px) {
-
+        
             body {
-
+        
                 padding: 20px;
             }
-
+        
             .maintenance-container {
-
+        
                 max-width: 400px;
             }
-
+        
             .tool-grid {
-
+        
                 grid-template-columns:
                     1fr;
             }
-
+        
             h1 {
-
+        
                 font-size: 1.7rem;
             }
-
+        
             .tool-card {
-
+        
                 min-height: 205px;
             }
-
-            
-            .tool-card:last-child {
-
-                grid-column: auto;
-            
-                width: 100%;
-            }
         }
+
 
     </style>
 
@@ -530,6 +517,8 @@
             </div>
 
         </a>
+
+        
         
         <!-- SHIFT EXTRACTOR -->
 
@@ -550,6 +539,61 @@
                 Extract SHIFT| metadata from question TXT files,
                 automatically normalize date and AM/PM time formatting,
                 and generate cleaned question and Shift.txt outputs.
+            </p>
+        
+            <div class="open-tool">
+                Open Tool →
+            </div>
+        
+        </a>
+
+        <!-- ANSWER KEY BUILDER -->
+
+        <a
+            href="answer-key-builder.html"
+            class="tool-card"
+        >
+        
+            <div class="tool-icon">
+                🔑
+            </div>
+        
+            <h2>
+                Answer Key Builder
+            </h2>
+        
+            <p>
+                Build answer keys question by question,
+                track completion progress, validate all
+                answers and generate the final Ansopt.txt file.
+            </p>
+        
+            <div class="open-tool">
+                Open Tool →
+            </div>
+        
+        </a>
+        
+        
+        <!-- FINAL MERGER -->
+        
+        <a
+            href="final-merger.html"
+            class="tool-card"
+        >
+        
+            <div class="tool-icon">
+                🔗
+            </div>
+        
+            <h2>
+                Final Merger
+            </h2>
+        
+            <p>
+                Validate, normalize and merge English and
+                Bengali questions, Shift data, answers and
+                difficulty ratings into final question blocks.
             </p>
         
             <div class="open-tool">
