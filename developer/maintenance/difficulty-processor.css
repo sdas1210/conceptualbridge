@@ -337,12 +337,7 @@ td:last-child {
     padding-right: 5px;
 }
 
-#mismatchReport {
 
-    max-height: 450px;
-
-    overflow-y: auto;
-}
 
 
 .mismatch-item {
@@ -530,18 +525,7 @@ button:disabled {
 }
 
 
-#compareBtn:not(:disabled) {
 
-    background:
-        rgba(49, 130, 206, .90);
-}
-
-
-#extractBtn:not(:disabled) {
-
-    background:
-        rgba(128, 90, 213, .90);
-}
 
 
 #downloadBtn:not(:disabled) {
