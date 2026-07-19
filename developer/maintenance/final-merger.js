@@ -691,15 +691,25 @@ function parseDifficultyFile(text) {
                 rawLine.trim();
 
 
-            // Question N:
+            /*
+                =====================================
+                FORMAT 1 — OLD FORMAT
+                =====================================
 
-            const questionMatch =
+                Question 1: What is the capital...
+                Difficulty Rating: 7.25
+
+                Question 2: Who invented...
+                Difficulty Rating: 5.80
+            */
+
+            const numberedQuestionMatch =
                 trimmed.match(
                     /^Question\s+(\d+):(.*)$/i
                 );
 
 
-            if (questionMatch) {
+            if (numberedQuestionMatch) {
 
                 if (currentRecord) {
 
@@ -713,11 +723,11 @@ function parseDifficultyFile(text) {
 
                     questionNumber:
                         Number(
-                            questionMatch[1]
+                            numberedQuestionMatch[1]
                         ),
 
                     questionText:
-                        questionMatch[2]
+                        numberedQuestionMatch[2]
                             .trimStart(),
 
                     questionLine:
@@ -727,7 +737,10 @@ function parseDifficultyFile(text) {
                         null,
 
                     difficultyLine:
-                        null
+                        null,
+
+                    sourceFormat:
+                        "NUMBERED"
 
                 };
 
@@ -736,13 +749,88 @@ function parseDifficultyFile(text) {
             }
 
 
+            /*
+                =====================================
+                FORMAT 2 — NEW Q| FORMAT
+                =====================================
+
+                Q| What is the capital...
+                Difficulty Rating: 7.25
+
+                Q| Who invented...
+                Difficulty Rating: 5.80
+
+                Question number is assigned
+                sequentially according to Q| order.
+            */
+
+            if (
+                trimmed
+                    .toUpperCase()
+                    .startsWith("Q|")
+            ) {
+
+                if (currentRecord) {
+
+                    records.push(
+                        currentRecord
+                    );
+                }
+
+
+                currentRecord = {
+
+                    questionNumber:
+                        records.length + 1,
+
+                    questionText:
+                        trimmed
+                            .substring(2)
+                            .trimStart(),
+
+                    questionLine:
+                        index + 1,
+
+                    difficulty:
+                        null,
+
+                    difficultyLine:
+                        null,
+
+                    sourceFormat:
+                        "Q_PIPE"
+
+                };
+
+
+                return;
+            }
+
+
+            /*
+                Ignore everything until
+                a valid question entry exists.
+            */
+
             if (!currentRecord) {
 
                 return;
             }
 
 
-            // Difficulty...
+            /*
+                =====================================
+                DIFFICULTY VALUE
+                =====================================
+
+                Supports:
+
+                Difficulty Rating: 7.88
+                Difficulty: 7.88
+
+                Any line beginning with
+                "Difficulty" followed by ":"
+            */
 
             if (
                 /^Difficulty/i.test(
@@ -787,6 +875,10 @@ function parseDifficultyFile(text) {
         }
     );
 
+
+    /*
+        Push final record
+    */
 
     if (currentRecord) {
 
