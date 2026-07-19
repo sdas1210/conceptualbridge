@@ -56,8 +56,7 @@ const consoleBox =
 const downloadStandardBtn =
     document.getElementById("downloadStandardBtn");
 
-const downloadDevelopmentBtn =
-    document.getElementById("downloadDevelopmentBtn");
+
 
 
 // =========================================
@@ -147,10 +146,7 @@ downloadStandardBtn.addEventListener(
     downloadStandardFile
 );
 
-downloadDevelopmentBtn.addEventListener(
-    "click",
-    downloadDevelopmentFile
-);
+
 
 
 // =========================================
@@ -914,10 +910,7 @@ function validateOutput() {
         One character per answer
     */
 
-    const developmentCharacters =
-        selectedAnswers
-            .join("")
-            .length;
+    
 
 
     document.getElementById(
@@ -943,28 +936,21 @@ function validateOutput() {
     ).textContent =
         standardEntries;
 
-
-    document.getElementById(
-        "ansdevCharacters"
-    ).textContent =
-        developmentCharacters;
-
-
     const valid =
-        selectedCount ===
-            totalQuestions &&
+    selectedCount ===
+        totalQuestions &&
 
-        standardEntries ===
-            totalQuestions &&
+    standardEntries ===
+        totalQuestions &&
 
-        developmentCharacters ===
-            totalQuestions &&
+    answers.every(
+        answer =>
+            ["A", "B", "C", "D"]
+                .includes(answer)
+    );
+    
 
-        answers.every(
-            answer =>
-                ["A", "B", "C", "D"]
-                    .includes(answer)
-        );
+    
 
 
     if (valid) {
@@ -978,10 +964,7 @@ function validateOutput() {
         downloadStandardBtn.disabled =
             false;
 
-        downloadDevelopmentBtn.disabled =
-            false;
-
-
+        
         logCompletionOnce();
 
     } else {
@@ -995,8 +978,7 @@ function validateOutput() {
         downloadStandardBtn.disabled =
             true;
 
-        downloadDevelopmentBtn.disabled =
-            true;
+        
     }
 }
 
@@ -1009,16 +991,11 @@ let completionLogged = false;
 
 
 function logCompletionOnce() {
-
     if (completionLogged) {
-
         return;
     }
 
-
-    completionLogged =
-        true;
-
+    completionLogged = true;
 
     log(
         "All required answers completed."
@@ -1033,12 +1010,9 @@ function logCompletionOnce() {
     );
 
     log(
-        `AnsDev Characters: ${totalQuestions}`
+        "Ansopt.txt is ready for download."
     );
-
-    log(
-        "Both answer files are ready for download."
-    );
+    
 }
 
 
@@ -1080,21 +1054,7 @@ function createStandardOutput() {
 // AnsDev.txt
 // =========================================
 
-function createDevelopmentOutput() {
 
-    /*
-        Original Python format:
-
-        ACBDA...
-
-        No:
-        - spaces
-        - commas
-        - line breaks
-    */
-
-    return answers.join("");
-}
 
 
 // =========================================
@@ -1134,35 +1094,6 @@ function downloadStandardFile() {
 // =========================================
 // DOWNLOAD DEVELOPMENT FILE
 // =========================================
-
-function downloadDevelopmentFile() {
-
-    if (
-        !isOutputReady()
-    ) {
-
-        log(
-            "Download blocked: Answer key is incomplete."
-        );
-
-        return;
-    }
-
-
-    const content =
-        createDevelopmentOutput();
-
-
-    downloadTextFile(
-        content,
-        "AnsDev.txt"
-    );
-
-
-    log(
-        "Downloaded Development Answer Key: AnsDev.txt"
-    );
-}
 
 
 // =========================================
@@ -1392,10 +1323,7 @@ function startNewSession() {
     ).textContent =
         "0";
 
-    document.getElementById(
-        "ansdevCharacters"
-    ).textContent =
-        "0";
+   
 
     document.getElementById(
         "validationStatus"
@@ -1406,9 +1334,7 @@ function startNewSession() {
     downloadStandardBtn.disabled =
         true;
 
-    downloadDevelopmentBtn.disabled =
-        true;
-
+    
 
     consoleBox.textContent =
         "Waiting for answer session...";
