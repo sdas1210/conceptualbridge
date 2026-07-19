@@ -1,0 +1,549 @@
+/* =========================================
+   DIFFICULTY PROCESSOR
+   Glassmorphic Maintenance Theme
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            -45deg,
+            #1a365d,
+            #2a4365,
+            #2b6cb0,
+            #3182ce
+        );
+
+    background-size: 400% 400%;
+
+    animation:
+        gradientBG 15s ease infinite;
+
+    padding: 35px 20px;
+}
+
+
+.container {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    opacity: 0;
+
+    transform:
+        translateY(18px);
+
+    animation:
+        fadeInUp .8s ease forwards;
+}
+
+
+/* BACK */
+
+.back-home {
+
+    display: inline-flex;
+
+    margin-bottom: 18px;
+
+    padding: 8px 14px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: .85rem;
+
+    font-weight: 600;
+
+    background:
+        rgba(255, 255, 255, .10);
+
+    backdrop-filter:
+        blur(10px);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .20);
+
+    border-radius: 20px;
+
+    transition:
+        .25s ease;
+}
+
+
+.back-home:hover {
+
+    background:
+        rgba(255, 255, 255, .20);
+
+    transform:
+        translateX(-3px);
+}
+
+
+/* HEADER */
+
+h1 {
+
+    margin-bottom: 6px;
+
+    text-align: center;
+
+    font-size: 2rem;
+
+    text-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, .25);
+}
+
+
+.subtitle {
+
+    margin-bottom: 25px;
+
+    text-align: center;
+
+    color: #dbeafe;
+
+    font-size: .95rem;
+}
+
+
+/* CARDS */
+
+.card {
+
+    margin-bottom: 16px;
+
+    padding: 20px;
+
+    background:
+        rgba(255, 255, 255, .10);
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .20);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, .18);
+}
+
+
+.card h2 {
+
+    margin-bottom: 15px;
+
+    font-size: 1.05rem;
+}
+
+
+/* FILE AREA */
+
+.file-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+.file-group {
+
+    padding: 15px;
+
+    background:
+        rgba(5, 15, 28, .28);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .10);
+
+    border-radius: 11px;
+}
+
+
+.file-group label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: .92rem;
+
+    font-weight: 700;
+}
+
+
+.file-description {
+
+    min-height: 38px;
+
+    margin-bottom: 10px;
+
+    color: #c2d2e2;
+
+    font-size: .78rem;
+
+    line-height: 1.4;
+}
+
+
+input[type="file"] {
+
+    width: 100%;
+
+    padding: 9px;
+
+    color: #ffffff;
+
+    background:
+        rgba(255, 255, 255, .08);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius: 9px;
+}
+
+
+input[type="file"]::file-selector-button {
+
+    margin-right: 10px;
+
+    padding: 8px 12px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, .18);
+
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+
+/* TABLE */
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+
+td {
+
+    padding: 10px 12px;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, .12);
+
+    font-size: .92rem;
+}
+
+
+tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+td:first-child {
+
+    width: 50%;
+
+    color: #d7e5f3;
+}
+
+
+td:last-child {
+
+    font-weight: 600;
+}
+
+
+/* MISMATCH REPORT */
+
+.hidden {
+
+    display: none;
+}
+
+
+#mismatchReport {
+
+    max-height: 450px;
+
+    overflow-y: auto;
+}
+
+
+.mismatch-item {
+
+    margin-bottom: 14px;
+
+    padding: 15px;
+
+    background:
+        rgba(180, 40, 40, .18);
+
+    border:
+        1px solid
+        rgba(255, 120, 120, .30);
+
+    border-radius: 10px;
+}
+
+
+.mismatch-title {
+
+    margin-bottom: 10px;
+
+    color: #ffd2d2;
+
+    font-weight: 700;
+}
+
+
+.mismatch-line {
+
+    margin-top: 6px;
+
+    color: #eef6ff;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size: .82rem;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+
+.line-number {
+
+    color: #ffd27a;
+
+    font-weight: 700;
+}
+
+
+/* CONSOLE */
+
+#console {
+
+    min-height: 170px;
+
+    max-height: 300px;
+
+    overflow-y: auto;
+
+    padding: 15px;
+
+    background:
+        rgba(5, 15, 28, .72);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .12);
+
+    border-radius: 10px;
+
+    color: #8dffb3;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size: .85rem;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+}
+
+
+/* BUTTONS */
+
+.action-row {
+
+    margin-top: 18px;
+
+    text-align: center;
+}
+
+
+.buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin: 20px 0 30px;
+}
+
+
+button {
+
+    min-width: 190px;
+
+    padding: 12px 18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .25);
+
+    border-radius: 11px;
+
+    background:
+        rgba(255, 255, 255, .14);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        .25s ease;
+}
+
+
+button:not(:disabled):hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(255, 255, 255, .23);
+}
+
+
+button:disabled {
+
+    opacity: .38;
+
+    cursor: not-allowed;
+}
+
+
+#compareBtn:not(:disabled) {
+
+    background:
+        rgba(49, 130, 206, .90);
+}
+
+
+#extractBtn:not(:disabled) {
+
+    background:
+        rgba(128, 90, 213, .90);
+}
+
+
+#downloadBtn:not(:disabled) {
+
+    background:
+        rgba(56, 161, 105, .95);
+}
+
+
+/* ANIMATIONS */
+
+@keyframes gradientBG {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+@keyframes fadeInUp {
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    body {
+
+        padding:
+            22px 14px;
+    }
+
+
+    .file-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    h1 {
+
+        font-size:
+            1.65rem;
+    }
+
+}
