@@ -1,24 +1,30 @@
 // =========================================
-// DIFFICULTY PROCESSOR
+// DIFFICULTY PROCESSOR / FUTURE MERGER
 // Conceptual Bridge Maintenance Suite
 // =========================================
 
 
 // =========================================
-// ELEMENTS
+// ELEMENT REFERENCES
 // =========================================
 
-const originalFileInput =
-    document.getElementById("originalFileInput");
+const englishFileInput =
+    document.getElementById("englishFileInput");
 
-const ratingFileInput =
-    document.getElementById("ratingFileInput");
+const bengaliFileInput =
+    document.getElementById("bengaliFileInput");
 
-const compareBtn =
-    document.getElementById("compareBtn");
+const answerFileInput =
+    document.getElementById("answerFileInput");
 
-const extractBtn =
-    document.getElementById("extractBtn");
+const difficultyFileInput =
+    document.getElementById("difficultyFileInput");
+
+const validateBtn =
+    document.getElementById("validateBtn");
+
+const mergeBtn =
+    document.getElementById("mergeBtn");
 
 const downloadBtn =
     document.getElementById("downloadBtn");
@@ -26,111 +32,142 @@ const downloadBtn =
 const consoleBox =
     document.getElementById("console");
 
-const mismatchCard =
-    document.getElementById("mismatchCard");
+const issueCard =
+    document.getElementById("issueCard");
 
-const mismatchReport =
-    document.getElementById("mismatchReport");
+const issueReport =
+    document.getElementById("issueReport");
 
 
 // =========================================
 // STATE
 // =========================================
 
-let originalText = "";
+let englishText = "";
+let bengaliText = "";
+let answerText = "";
+let difficultyText = "";
 
-let ratingText = "";
+let englishBlocks = [];
+let bengaliBlocks = [];
+let answers = [];
+let difficultyRecords = [];
 
-let originalFileName = "";
+let validationPassed = false;
 
-let ratingFileName = "";
+let finalOutput = "";
 
-let originalQuestions = [];
-
-let ratingQuestions = [];
-
-let difficultyOutput = "";
-
-let comparisonPassed = false;
+let normalizedShiftCountValue = 0;
 
 
 // =========================================
-// EVENTS
+// FILE EVENTS
 // =========================================
 
-originalFileInput.addEventListener(
+englishFileInput.addEventListener(
     "change",
-    loadFiles
+    loadAllFiles
 );
 
-ratingFileInput.addEventListener(
+bengaliFileInput.addEventListener(
     "change",
-    loadFiles
+    loadAllFiles
 );
 
-compareBtn.addEventListener(
-    "click",
-    compareFiles
+answerFileInput.addEventListener(
+    "change",
+    loadAllFiles
 );
 
-extractBtn.addEventListener(
+difficultyFileInput.addEventListener(
+    "change",
+    loadAllFiles
+);
+
+
+validateBtn.addEventListener(
     "click",
-    extractDifficulty
+    validateAllData
+);
+
+mergeBtn.addEventListener(
+    "click",
+    generateFinalOutput
 );
 
 downloadBtn.addEventListener(
     "click",
-    downloadDifficulty
+    downloadFinalFile
 );
 
 
 // =========================================
-// LOAD BOTH FILES
+// LOAD FOUR FILES
 // =========================================
 
-async function loadFiles() {
+async function loadAllFiles() {
 
     resetProcessingState();
 
 
-    const originalFile =
-        originalFileInput.files[0];
+    const englishFile =
+        englishFileInput.files[0];
 
-    const ratingFile =
-        ratingFileInput.files[0];
+    const bengaliFile =
+        bengaliFileInput.files[0];
 
+    const answerFile =
+        answerFileInput.files[0];
 
-    if (originalFile) {
-
-        originalFileName =
-            originalFile.name;
-
-        document.getElementById(
-            "originalFileName"
-        ).textContent =
-            originalFile.name;
-    }
+    const difficultyFile =
+        difficultyFileInput.files[0];
 
 
-    if (ratingFile) {
+    // Display selected filenames
 
-        ratingFileName =
-            ratingFile.name;
+    document.getElementById(
+        "englishFileName"
+    ).textContent =
+        englishFile
+            ? englishFile.name
+            : "--";
 
-        document.getElementById(
-            "ratingFileName"
-        ).textContent =
-            ratingFile.name;
-    }
 
+    document.getElementById(
+        "bengaliFileName"
+    ).textContent =
+        bengaliFile
+            ? bengaliFile.name
+            : "--";
+
+
+    document.getElementById(
+        "answerFileName"
+    ).textContent =
+        answerFile
+            ? answerFile.name
+            : "--";
+
+
+    document.getElementById(
+        "difficultyFileName"
+    ).textContent =
+        difficultyFile
+            ? difficultyFile.name
+            : "--";
+
+
+    // Wait until all 4 exist
 
     if (
-        !originalFile ||
-        !ratingFile
+        !englishFile ||
+        !bengaliFile ||
+        !answerFile ||
+        !difficultyFile
     ) {
 
         consoleBox.textContent =
-            "Waiting for two TXT files...";
+            "Waiting for four TXT files...";
 
         return;
     }
@@ -138,122 +175,269 @@ async function loadFiles() {
 
     try {
 
-        originalText =
-            await originalFile.text();
+        // Validate E/B filenames
 
-        ratingText =
-            await ratingFile.text();
+        const englishInfo =
+            parseLanguageFileName(
+                englishFile.name,
+                "E"
+            );
 
-
-        originalQuestions =
-            extractOriginalQuestions(
-                originalText
+        const bengaliInfo =
+            parseLanguageFileName(
+                bengaliFile.name,
+                "B"
             );
 
 
-        ratingQuestions =
-            extractRatingQuestions(
-                ratingText
+        if (!englishInfo.valid) {
+
+            consoleBox.textContent =
+                "ERROR: English filename must end with E before .txt.\nExample: 100E.txt";
+
+            return;
+        }
+
+
+        if (!bengaliInfo.valid) {
+
+            consoleBox.textContent =
+                "ERROR: Bengali filename must end with B before .txt.\nExample: 100B.txt";
+
+            return;
+        }
+
+
+        if (
+            englishInfo.baseName !==
+            bengaliInfo.baseName
+        ) {
+
+            consoleBox.textContent =
+                "ERROR: English and Bengali filenames do not share the same base ID.\n" +
+                `English: ${englishFile.name}\n` +
+                `Bengali: ${bengaliFile.name}`;
+
+            return;
+        }
+
+
+        // Read all files
+
+        englishText =
+            await englishFile.text();
+
+        bengaliText =
+            await bengaliFile.text();
+
+        answerText =
+            await answerFile.text();
+
+        difficultyText =
+            await difficultyFile.text();
+
+
+        // Parse
+
+        englishBlocks =
+            parseQuestionBlocks(
+                englishText,
+                true
+            );
+
+        bengaliBlocks =
+            parseQuestionBlocks(
+                bengaliText,
+                false
+            );
+
+        answers =
+            parseAnswers(
+                answerText
+            );
+
+        difficultyRecords =
+            parseDifficultyFile(
+                difficultyText
             );
 
 
+        // File information
+
         document.getElementById(
-            "originalQuestionCount"
+            "englishBlockCount"
         ).textContent =
-            originalQuestions.length;
+            englishBlocks.length;
 
 
         document.getElementById(
-            "ratingQuestionCount"
+            "bengaliBlockCount"
         ).textContent =
-            ratingQuestions.length;
+            bengaliBlocks.length;
+
+
+        document.getElementById(
+            "answerCount"
+        ).textContent =
+            answers.length;
+
+
+        document.getElementById(
+            "difficultyQuestionCount"
+        ).textContent =
+            difficultyRecords.length;
+
+
+        document.getElementById(
+            "difficultyValueCount"
+        ).textContent =
+            difficultyRecords.filter(
+                item =>
+                    item.difficulty !== null
+            ).length;
+
+
+        document.getElementById(
+            "expectedOutputCount"
+        ).textContent =
+            englishBlocks.length;
 
 
         consoleBox.textContent = "";
 
 
         log(
-            `Original File: ${originalFileName}`
+            "All four files loaded."
         );
 
         log(
-            `Original Q| questions: ${originalQuestions.length}`
+            `English: ${englishFile.name}`
         );
 
         log(
-            `Rating File: ${ratingFileName}`
+            `Bengali: ${bengaliFile.name}`
         );
 
         log(
-            `Question N: entries: ${ratingQuestions.length}`
+            `Base ID matched: ${englishInfo.baseName}`
+        );
+
+        log(
+            `English Blocks: ${englishBlocks.length}`
+        );
+
+        log(
+            `Bengali Blocks: ${bengaliBlocks.length}`
+        );
+
+        log(
+            `Answers: ${answers.length}`
+        );
+
+        log(
+            `Difficulty Questions: ${difficultyRecords.length}`
         );
 
 
-        if (
-            originalQuestions.length === 0
-        ) {
-
-            log(
-                "ERROR: No Q| questions found in Original file."
-            );
-
-            return;
-        }
-
-
-        if (
-            ratingQuestions.length === 0
-        ) {
-
-            log(
-                "ERROR: No Question N: entries found in Rating file."
-            );
-
-            return;
-        }
-
-
-        compareBtn.disabled =
+        validateBtn.disabled =
             false;
 
 
         log(
-            "Both files loaded."
-        );
-
-        log(
-            "Ready for Step 1 comparison."
+            "Ready for structural and alignment validation."
         );
 
     } catch (error) {
 
-        consoleBox.textContent =
-            "ERROR: Unable to read one or both TXT files.";
+        console.error(error);
 
-        compareBtn.disabled =
-            true;
+        consoleBox.textContent =
+            "ERROR: Unable to process one or more TXT files.\n" +
+            error.message;
     }
 }
 
 
 // =========================================
-// ORIGINAL QUESTION EXTRACTOR
+// E / B FILENAME VALIDATION
 // =========================================
 
-function extractOriginalQuestions(text) {
+function parseLanguageFileName(
+    fileName,
+    suffix
+) {
+
+    const escapedSuffix =
+        suffix.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+
+
+    const regex =
+        new RegExp(
+            `^(.*)${escapedSuffix}\\.txt$`,
+            "i"
+        );
+
+
+    const match =
+        fileName.match(regex);
+
+
+    if (!match) {
+
+        return {
+            valid: false,
+            baseName: ""
+        };
+    }
+
+
+    return {
+        valid: true,
+        baseName:
+            match[1]
+                .trim()
+                .toLowerCase()
+    };
+}
+
+
+// =========================================
+// QUESTION BLOCK PARSER
+// =========================================
+
+function parseQuestionBlocks(
+    text,
+    includeShift
+) {
+
+    const normalized =
+        text.replace(
+            /\r\n/g,
+            "\n"
+        );
+
 
     const lines =
-        text.split(/\r?\n/);
+        normalized.split("\n");
 
-    const questions = [];
+
+    const blocks = [];
+
+    let currentBlock =
+        null;
 
 
     lines.forEach(
-        (line, index) => {
+        (rawLine, index) => {
 
             const trimmed =
-                line.trim();
+                rawLine.trim();
 
+
+            // New Q| begins a new block
 
             if (
                 trimmed
@@ -261,154 +445,407 @@ function extractOriginalQuestions(text) {
                     .startsWith("Q|")
             ) {
 
-                questions.push({
+                if (currentBlock) {
 
-                    questionNumber:
-                        questions.length + 1,
+                    blocks.push(
+                        currentBlock
+                    );
+                }
 
-                    lineNumber:
+
+                currentBlock = {
+
+                    blockNumber:
+                        blocks.length + 1,
+
+                    startLine:
                         index + 1,
 
-                    fullLine:
-                        trimmed,
+                    Q:
+                        getTagValue(
+                            trimmed,
+                            "Q|"
+                        ),
 
-                    content:
-                        trimmed
-                            .substring(2)
-                            .trimStart()
-                            
+                    A: null,
+                    B: null,
+                    C: null,
+                    D: null,
 
-                });
-            }
-        }
-    );
+                    Shift: null,
 
+                    lineNumbers: {
 
-    return questions;
-}
+                        Q:
+                            index + 1,
 
+                        A: null,
+                        B: null,
+                        C: null,
+                        D: null,
 
-// =========================================
-// RATING QUESTION EXTRACTOR
-// =========================================
+                        Shift: null
 
-function extractRatingQuestions(text) {
+                    }
 
-    const lines =
-        text.split(/\r?\n/);
+                };
 
-    const questions = [];
-
-
-    lines.forEach(
-        (line, index) => {
-
-            const trimmed =
-                line.trim();
-
-
-            /*
-                Detect:
-
-                Question 1:
-                Question 27:
-                Question 100:
-            */
-
-            const match =
-                trimmed.match(
-                    /^Question\s+(\d+):(.*)$/i
-                );
-
-
-            if (!match) {
 
                 return;
             }
 
 
-            questions.push({
+            // Ignore content before first Q|
 
-                questionNumber:
-                    Number(match[1]),
+            if (!currentBlock) {
 
-                lineNumber:
-                    index + 1,
+                return;
+            }
 
-                fullLine:
-                    trimmed,
 
-                content:
-                    match[2]
-                       .trimStart()
+            const upper =
+                trimmed.toUpperCase();
 
-            });
+
+            if (
+                upper.startsWith("A|")
+            ) {
+
+                currentBlock.A =
+                    getTagValue(
+                        trimmed,
+                        "A|"
+                    );
+
+                currentBlock
+                    .lineNumbers
+                    .A =
+                    index + 1;
+
+            } else if (
+                upper.startsWith("B|")
+            ) {
+
+                currentBlock.B =
+                    getTagValue(
+                        trimmed,
+                        "B|"
+                    );
+
+                currentBlock
+                    .lineNumbers
+                    .B =
+                    index + 1;
+
+            } else if (
+                upper.startsWith("C|")
+            ) {
+
+                currentBlock.C =
+                    getTagValue(
+                        trimmed,
+                        "C|"
+                    );
+
+                currentBlock
+                    .lineNumbers
+                    .C =
+                    index + 1;
+
+            } else if (
+                upper.startsWith("D|")
+            ) {
+
+                currentBlock.D =
+                    getTagValue(
+                        trimmed,
+                        "D|"
+                    );
+
+                currentBlock
+                    .lineNumbers
+                    .D =
+                    index + 1;
+
+            } else if (
+                includeShift &&
+                upper.startsWith(
+                    "SHIFT|"
+                )
+            ) {
+
+                currentBlock.Shift =
+                    getTagValue(
+                        trimmed,
+                        "Shift|"
+                    );
+
+                currentBlock
+                    .lineNumbers
+                    .Shift =
+                    index + 1;
+            }
         }
     );
 
 
-    return questions;
+    // Push final block
+
+    if (currentBlock) {
+
+        blocks.push(
+            currentBlock
+        );
+    }
+
+
+    return blocks;
 }
 
 
 // =========================================
-// PYTHON COMPARISON RULE
+// TAG VALUE
 // =========================================
 
-function getCompareString(content) {
+function getTagValue(
+    line,
+    tag
+) {
+
+    return line
+        .substring(
+            tag.length
+        )
+        .trimStart();
+}
+
+
+// =========================================
+// ANSWER PARSER
+// =========================================
+
+function parseAnswers(text) {
 
     /*
-        Normalize leading whitespace before comparison.
+        Supports standard Ansopt format:
 
-        These are treated identically:
+        A
 
-        Q|Which of the following...
-        Q| Which of the following...
-        Q|   Which of the following...
+        C
 
-        Rating:
-        Question 1: Which of the following...
+        B
 
-        Only leading whitespace is ignored.
-        Internal question text is NOT modified.
+        D
+
+        Also tolerates ordinary line-based
+        A/B/C/D files.
     */
 
-    return content
-        .trimStart()
-        .substring(0, 10);
+    const normalized =
+        text.replace(
+            /\r\n/g,
+            "\n"
+        );
+
+
+    return normalized
+        .split(/\s+/)
+        .map(
+            item =>
+                item
+                    .trim()
+                    .toUpperCase()
+        )
+        .filter(
+            item =>
+                item !== ""
+        );
 }
 
 
 // =========================================
-// STEP 1 — COMPARE
+// DIFFICULTY FILE PARSER
 // =========================================
 
-function compareFiles() {
+function parseDifficultyFile(text) {
 
-    comparisonPassed =
+    const lines =
+        text
+            .replace(
+                /\r\n/g,
+                "\n"
+            )
+            .split("\n");
+
+
+    const records = [];
+
+    let currentRecord =
+        null;
+
+
+    lines.forEach(
+        (rawLine, index) => {
+
+            const trimmed =
+                rawLine.trim();
+
+
+            // Question N:
+
+            const questionMatch =
+                trimmed.match(
+                    /^Question\s+(\d+):(.*)$/i
+                );
+
+
+            if (questionMatch) {
+
+                if (currentRecord) {
+
+                    records.push(
+                        currentRecord
+                    );
+                }
+
+
+                currentRecord = {
+
+                    questionNumber:
+                        Number(
+                            questionMatch[1]
+                        ),
+
+                    questionText:
+                        questionMatch[2]
+                            .trimStart(),
+
+                    questionLine:
+                        index + 1,
+
+                    difficulty:
+                        null,
+
+                    difficultyLine:
+                        null
+
+                };
+
+
+                return;
+            }
+
+
+            if (!currentRecord) {
+
+                return;
+            }
+
+
+            // Difficulty...
+
+            if (
+                /^Difficulty/i.test(
+                    trimmed
+                )
+            ) {
+
+                const colonIndex =
+                    trimmed.indexOf(":");
+
+
+                if (
+                    colonIndex === -1
+                ) {
+
+                    return;
+                }
+
+
+                const value =
+                    trimmed
+                        .substring(
+                            colonIndex + 1
+                        )
+                        .trim();
+
+
+                if (
+                    value !== "" &&
+                    Number.isFinite(
+                        Number(value)
+                    )
+                ) {
+
+                    currentRecord.difficulty =
+                        value;
+
+                    currentRecord.difficultyLine =
+                        index + 1;
+                }
+            }
+        }
+    );
+
+
+    if (currentRecord) {
+
+        records.push(
+            currentRecord
+        );
+    }
+
+
+    return records;
+}
+
+
+// =========================================
+// MAIN VALIDATION
+// =========================================
+
+function validateAllData() {
+
+    validationPassed =
         false;
 
-    extractBtn.disabled =
+    finalOutput =
+        "";
+
+    mergeBtn.disabled =
         true;
 
     downloadBtn.disabled =
         true;
 
-    difficultyOutput =
-        "";
 
-
-    mismatchCard.classList.add(
+    issueCard.classList.add(
         "hidden"
     );
 
-    mismatchReport.innerHTML =
+    issueReport.innerHTML =
         "";
 
 
-    let matches = 0;
+    const issues = [];
 
-    const mismatches = [];
+    let englishComplete =
+        0;
+
+    let bengaliComplete =
+        0;
+
+    let shiftCount =
+        0;
+
+    let validAnswers =
+        0;
+
+    let difficultyAlignments =
+        0;
+
+    normalizedShiftCountValue =
+        0;
 
 
     log(
@@ -416,195 +853,421 @@ function compareFiles() {
     );
 
     log(
-        "STEP 1: Starting question alignment comparison..."
+        "Starting complete validation..."
     );
 
 
-    /*
-        Compare every original Q|
-        against matching Question N:
-    */
+    // =====================================
+    // GLOBAL COUNT CHECKS
+    // =====================================
 
-    originalQuestions.forEach(
-        originalQuestion => {
-
-            const questionNumber =
-                originalQuestion.questionNumber;
+    const expected =
+        englishBlocks.length;
 
 
-            const ratingQuestion =
-                ratingQuestions.find(
-                    item =>
-                        item.questionNumber ===
-                        questionNumber
-                );
+    if (
+        bengaliBlocks.length !==
+        expected
+    ) {
+
+        issues.push({
+
+            title:
+                "Question Block Count Mismatch",
+
+            details:
+                `English blocks: ${expected}\n` +
+                `Bengali blocks: ${bengaliBlocks.length}`
+
+        });
+    }
 
 
-            // Missing Question N:
+    if (
+        answers.length !==
+        expected
+    ) {
 
-            if (!ratingQuestion) {
+        issues.push({
 
-                mismatches.push({
+            title:
+                "Answer Count Mismatch",
 
-                    questionNumber,
+            details:
+                `English blocks: ${expected}\n` +
+                `Answers found: ${answers.length}`
 
-                    type:
-                        "MISSING_RATING",
-
-                    original:
-                        originalQuestion,
-
-                    rating:
-                        null
-
-                });
-
-                return;
-            }
+        });
+    }
 
 
-            const originalCompare =
-                getCompareString(
-                    originalQuestion.content
-                );
+    if (
+        difficultyRecords.length !==
+        expected
+    ) {
+
+        issues.push({
+
+            title:
+                "Difficulty Question Count Mismatch",
+
+            details:
+                `English blocks: ${expected}\n` +
+                `Difficulty questions: ${difficultyRecords.length}`
+
+        });
+    }
 
 
-            const ratingCompare =
-                getCompareString(
-                    ratingQuestion.content
+    // =====================================
+    // QUESTION-BY-QUESTION VALIDATION
+    // =====================================
+
+    for (
+        let i = 0;
+        i < expected;
+        i++
+    ) {
+
+        const questionNumber =
+            i + 1;
+
+
+        const english =
+            englishBlocks[i];
+
+        const bengali =
+            bengaliBlocks[i];
+
+        const answer =
+            answers[i];
+
+        const difficulty =
+            difficultyRecords.find(
+                record =>
+                    record.questionNumber ===
+                    questionNumber
+            );
+
+
+        // -----------------------------
+        // ENGLISH STRUCTURE
+        // -----------------------------
+
+        const missingEnglish =
+            getMissingFields(
+                english,
+                true
+            );
+
+
+        if (
+            missingEnglish.length === 0
+        ) {
+
+            englishComplete++;
+
+        } else {
+
+            issues.push({
+
+                title:
+                    `Question ${questionNumber} — English Block Incomplete`,
+
+                details:
+                    `English block starts at line ${english.startLine}\n` +
+                    `Missing: ${missingEnglish.join(", ")}`
+
+            });
+        }
+
+
+        // -----------------------------
+        // BENGALI STRUCTURE
+        // -----------------------------
+
+        if (!bengali) {
+
+            issues.push({
+
+                title:
+                    `Question ${questionNumber} — Bengali Block Missing`,
+
+                details:
+                    "No corresponding Bengali question block was found."
+
+            });
+
+        } else {
+
+            const missingBengali =
+                getMissingFields(
+                    bengali,
+                    false
                 );
 
 
             if (
-                originalCompare !==
-                ratingCompare
+                missingBengali.length === 0
             ) {
 
-                mismatches.push({
+                bengaliComplete++;
 
-                    questionNumber,
+            } else {
 
-                    type:
-                        "TEXT_MISMATCH",
+                issues.push({
 
-                    original:
-                        originalQuestion,
+                    title:
+                        `Question ${questionNumber} — Bengali Block Incomplete`,
 
-                    rating:
-                        ratingQuestion,
-
-                    originalCompare,
-
-                    ratingCompare
+                    details:
+                        `Bengali block starts at line ${bengali.startLine}\n` +
+                        `Missing: ${missingBengali.join(", ")}`
 
                 });
-
-                return;
             }
-
-
-            matches++;
         }
-    );
 
 
-    /*
-        Detect extra Question N:
-        entries beyond original count.
-    */
+        // -----------------------------
+        // SHIFT
+        // -----------------------------
 
-    ratingQuestions.forEach(
-        ratingQuestion => {
+        if (
+            english.Shift !== null &&
+            english.Shift.trim() !== ""
+        ) {
 
-            const exists =
-                originalQuestions.some(
-                    item =>
-                        item.questionNumber ===
-                        ratingQuestion.questionNumber
+            shiftCount++;
+
+
+            const shiftResult =
+                normalizeShiftValue(
+                    english.Shift
                 );
 
 
-            if (!exists) {
+            if (
+                shiftResult.recognized
+            ) {
 
-                mismatches.push({
+                english.normalizedShift =
+                    shiftResult.value;
 
-                    questionNumber:
-                        ratingQuestion.questionNumber,
 
-                    type:
-                        "EXTRA_RATING",
+                if (
+                    shiftResult.changed
+                ) {
 
-                    original:
-                        null,
+                    normalizedShiftCountValue++;
+                }
 
-                    rating:
-                        ratingQuestion
+            } else {
+
+                issues.push({
+
+                    title:
+                        `Question ${questionNumber} — Shift Format Not Recognized`,
+
+                    details:
+                        `English line ${english.lineNumbers.Shift}\n` +
+                        `Shift| ${english.Shift}`
 
                 });
             }
         }
-    );
 
 
-    const compared =
-        originalQuestions.length;
+        // -----------------------------
+        // ANSWER
+        // -----------------------------
+
+        if (
+            ["A", "B", "C", "D"]
+                .includes(answer)
+        ) {
+
+            validAnswers++;
+
+        } else {
+
+            issues.push({
+
+                title:
+                    `Question ${questionNumber} — Invalid or Missing Answer`,
+
+                details:
+                    answer === undefined
+
+                        ? "No answer entry found."
+
+                        : `Answer value: "${answer}"`
+
+            });
+        }
+
+
+        // -----------------------------
+        // DIFFICULTY
+        // -----------------------------
+
+        if (!difficulty) {
+
+            issues.push({
+
+                title:
+                    `Question ${questionNumber} — Difficulty Record Missing`,
+
+                details:
+                    `No Question ${questionNumber}: entry found in difficulty file.`
+
+            });
+
+            continue;
+        }
+
+
+        if (
+            difficulty.difficulty ===
+            null
+        ) {
+
+            issues.push({
+
+                title:
+                    `Question ${questionNumber} — Difficulty Value Missing`,
+
+                details:
+                    `Difficulty question line: ${difficulty.questionLine}`
+
+            });
+
+            continue;
+        }
+
+
+        // English ↔ Difficulty question alignment
+
+        const englishCompare =
+            getCompareString(
+                english.Q
+            );
+
+
+        const difficultyCompare =
+            getCompareString(
+                difficulty.questionText
+            );
+
+
+        if (
+            englishCompare !==
+            difficultyCompare
+        ) {
+
+            issues.push({
+
+                title:
+                    `Question ${questionNumber} — Difficulty Alignment Failed`,
+
+                details:
+                    `English File — Line ${english.lineNumbers.Q}\n` +
+                    `"${englishCompare}"\n\n` +
+                    `Difficulty File — Line ${difficulty.questionLine}\n` +
+                    `"${difficultyCompare}"\n\n` +
+                    `English Full:\nQ|${english.Q}\n\n` +
+                    `Difficulty Full:\nQuestion ${difficulty.questionNumber}: ${difficulty.questionText}`
+
+            });
+
+        } else {
+
+            difficultyAlignments++;
+        }
+    }
+
+
+    // =====================================
+    // UPDATE STATISTICS
+    // =====================================
+
+    document.getElementById(
+        "englishCompleteCount"
+    ).textContent =
+        `${englishComplete}/${expected}`;
 
 
     document.getElementById(
-        "questionsCompared"
+        "bengaliCompleteCount"
     ).textContent =
-        compared;
+        `${bengaliComplete}/${expected}`;
 
 
     document.getElementById(
-        "matchCount"
+        "shiftCount"
     ).textContent =
-        matches;
+        `${shiftCount}/${expected}`;
 
 
     document.getElementById(
-        "mismatchCount"
+        "normalizedShiftCount"
     ).textContent =
-        mismatches.length;
+        normalizedShiftCountValue;
 
 
-    // FAILED
+    document.getElementById(
+        "validAnswerCount"
+    ).textContent =
+        `${validAnswers}/${expected}`;
+
+
+    document.getElementById(
+        "difficultyAlignmentCount"
+    ).textContent =
+        `${difficultyAlignments}/${expected}`;
+
+
+    document.getElementById(
+        "validationIssueCount"
+    ).textContent =
+        issues.length;
+
+
+    // =====================================
+    // RESULT
+    // =====================================
 
     if (
-        mismatches.length > 0
+        issues.length > 0
     ) {
 
         document.getElementById(
-            "comparisonStatus"
+            "validationStatus"
         ).textContent =
             "FAILED";
 
 
         document.getElementById(
-            "extractionStatus"
+            "finalStatus"
         ).textContent =
             "BLOCKED";
 
 
-        log(
-            `Comparison FAILED.`
-        );
-
-        log(
-            `Matches: ${matches}`
-        );
-
-        log(
-            `Mismatches: ${mismatches.length}`
-        );
-
-        log(
-            "Step 2 blocked until files match."
+        showIssues(
+            issues
         );
 
 
-        showMismatchReport(
-            mismatches
+        log(
+            "VALIDATION FAILED."
+        );
+
+        log(
+            `Issues found: ${issues.length}`
+        );
+
+        log(
+            "Final merge has been blocked."
         );
 
 
@@ -612,65 +1275,448 @@ function compareFiles() {
     }
 
 
-    // PASSED
-
-    comparisonPassed =
+    validationPassed =
         true;
 
 
     document.getElementById(
-        "comparisonStatus"
+        "validationStatus"
     ).textContent =
         "PASSED";
 
 
     document.getElementById(
-        "extractionStatus"
+        "finalStatus"
     ).textContent =
         "READY";
 
 
-    extractBtn.disabled =
+    mergeBtn.disabled =
         false;
 
 
     log(
-        `Comparison PASSED.`
+        "VALIDATION PASSED."
     );
 
     log(
-        `All ${matches} questions matched.`
+        `All ${expected} question blocks are complete.`
     );
 
     log(
-        "Step 2 unlocked."
+        `Shift entries: ${shiftCount}/${expected}`
     );
 
     log(
-        "Ready to extract difficulty values."
+        `Shift values modified: ${normalizedShiftCountValue}`
+    );
+
+    log(
+        `Answers validated: ${validAnswers}/${expected}`
+    );
+
+    log(
+        `Difficulty alignments: ${difficultyAlignments}/${expected}`
+    );
+
+    log(
+        "Final merger is ready."
     );
 }
 
 
 // =========================================
-// MISMATCH REPORT
+// REQUIRED FIELD CHECK
 // =========================================
 
-function showMismatchReport(
-    mismatches
+function getMissingFields(
+    block,
+    requireShift
 ) {
 
-    mismatchCard.classList.remove(
+    if (!block) {
+
+        return [
+            "Q|",
+            "A|",
+            "B|",
+            "C|",
+            "D|"
+        ];
+    }
+
+
+    const fields =
+        ["Q", "A", "B", "C", "D"];
+
+
+    if (requireShift) {
+
+        fields.push(
+            "Shift"
+        );
+    }
+
+
+    return fields
+        .filter(
+            field =>
+                block[field] === null ||
+                block[field] === undefined ||
+                block[field].trim() === ""
+        )
+        .map(
+            field =>
+                field === "Shift"
+                    ? "Shift|"
+                    : `${field}|`
+        );
+}
+
+
+// =========================================
+// DIFFICULTY COMPARISON
+// =========================================
+
+function getCompareString(content) {
+
+    /*
+        Preserve existing comparer logic:
+
+        - Ignore leading whitespace
+        - Compare first 10 characters
+
+        Q| Which...
+        Q|Which...
+
+        are treated identically.
+    */
+
+    return String(
+        content || ""
+    )
+        .trimStart()
+        .substring(0, 10);
+}
+
+
+// =========================================
+// SHIFT NORMALIZATION
+// =========================================
+
+function normalizeShiftValue(value) {
+
+    const original =
+        String(value)
+            .trim();
+
+
+    /*
+        Examples accepted:
+
+        27/11/2025 9:00 AM 10:30 AM
+
+        27/11/2025 9:00 AM - 10:30 AM
+
+        27/11/2025 09:00AM--10:30am
+
+        Output:
+
+        27/11/2025 9:00 AM - 10:30 AM
+    */
+
+
+    const match =
+        original.match(
+
+            /^(.+?)\s+(\d{1,2}:\d{2})\s*(AM|PM)\s*(?:-+\s*)?(\d{1,2}:\d{2})\s*(AM|PM)$/i
+
+        );
+
+
+    if (!match) {
+
+        return {
+
+            recognized:
+                false,
+
+            changed:
+                false,
+
+            value:
+                original
+
+        };
+    }
+
+
+    const datePart =
+        match[1]
+            .trim();
+
+
+    const startTime =
+        match[2];
+
+
+    const startModifier =
+        match[3]
+            .toUpperCase();
+
+
+    const endTime =
+        match[4];
+
+
+    const endModifier =
+        match[5]
+            .toUpperCase();
+
+
+    const normalized =
+        `${datePart} ${startTime} ${startModifier} - ${endTime} ${endModifier}`;
+
+
+    return {
+
+        recognized:
+            true,
+
+        changed:
+            normalized !== original,
+
+        value:
+            normalized
+
+    };
+}
+
+
+// =========================================
+// GENERATE FINAL OUTPUT
+// =========================================
+
+function generateFinalOutput() {
+
+    if (!validationPassed) {
+
+        log(
+            "Merge blocked: Validation has not passed."
+        );
+
+        return;
+    }
+
+
+    const outputBlocks = [];
+
+
+    for (
+        let i = 0;
+        i < englishBlocks.length;
+        i++
+    ) {
+
+        const questionNumber =
+            i + 1;
+
+
+        const english =
+            englishBlocks[i];
+
+        const bengali =
+            bengaliBlocks[i];
+
+        const answer =
+            answers[i];
+
+
+        const difficulty =
+            difficultyRecords.find(
+                item =>
+                    item.questionNumber ===
+                    questionNumber
+            );
+
+
+        const shift =
+            english.normalizedShift ||
+            normalizeShiftValue(
+                english.Shift
+            ).value;
+
+
+        /*
+            Preserve GA Writer merge format:
+
+            English / Bengali
+
+            Then:
+
+            Shift|
+            Correct|
+            Difficulty|
+        */
+
+        const block = [
+
+            `Q|${english.Q} / ${bengali.Q}`,
+
+            `A|${english.A} / ${bengali.A}`,
+
+            `B|${english.B} / ${bengali.B}`,
+
+            `C|${english.C} / ${bengali.C}`,
+
+            `D|${english.D} / ${bengali.D}`,
+
+            `Shift| ${shift}`,
+
+            `Correct|${answer}`,
+
+            `Difficulty|${difficulty.difficulty}`
+
+        ].join("\n");
+
+
+        outputBlocks.push(
+            block
+        );
+    }
+
+
+    finalOutput =
+        outputBlocks.join(
+            "\n\n"
+        );
+
+
+    // Final integrity checks
+
+    const generatedCount =
+        outputBlocks.length;
+
+
+    const correctCount =
+        (
+            finalOutput.match(
+                /^Correct\|/gm
+            ) || []
+        ).length;
+
+
+    const difficultyCount =
+        (
+            finalOutput.match(
+                /^Difficulty\|/gm
+            ) || []
+        ).length;
+
+
+    document.getElementById(
+        "generatedBlockCount"
+    ).textContent =
+        generatedCount;
+
+
+    document.getElementById(
+        "finalCorrectCount"
+    ).textContent =
+        correctCount;
+
+
+    document.getElementById(
+        "finalDifficultyCount"
+    ).textContent =
+        difficultyCount;
+
+
+    const finalPassed =
+
+        generatedCount ===
+            englishBlocks.length &&
+
+        correctCount ===
+            englishBlocks.length &&
+
+        difficultyCount ===
+            englishBlocks.length;
+
+
+    if (!finalPassed) {
+
+        document.getElementById(
+            "finalStatus"
+        ).textContent =
+            "FAILED";
+
+
+        downloadBtn.disabled =
+            true;
+
+
+        log(
+            "FINAL VALIDATION FAILED."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "finalStatus"
+    ).textContent =
+        "PASSED";
+
+
+    downloadBtn.disabled =
+        false;
+
+
+    log(
+        "--------------------------------"
+    );
+
+    log(
+        "FINAL MERGE COMPLETED."
+    );
+
+    log(
+        `Generated Blocks: ${generatedCount}`
+    );
+
+    log(
+        `Correct| Entries: ${correctCount}`
+    );
+
+    log(
+        `Difficulty| Entries: ${difficultyCount}`
+    );
+
+    log(
+        "Final.txt is ready for download."
+    );
+}
+
+
+// =========================================
+// ISSUE REPORT
+// =========================================
+
+function showIssues(issues) {
+
+    issueCard.classList.remove(
         "hidden"
     );
 
 
-    mismatchReport.innerHTML =
+    issueReport.innerHTML =
         "";
 
 
-    mismatches.forEach(
-        mismatch => {
+    issues.forEach(
+        issue => {
 
             const item =
                 document.createElement(
@@ -682,168 +1728,44 @@ function showMismatchReport(
                 "mismatch-item";
 
 
-            // TEXT MISMATCH
+            const title =
+                document.createElement(
+                    "div"
+                );
 
-            if (
-                mismatch.type ===
-                "TEXT_MISMATCH"
-            ) {
 
-                item.innerHTML = `
+            title.className =
+                "mismatch-title";
 
-                    <div class="mismatch-title">
 
-                        ❌ Mismatch at Question
-                        ${mismatch.questionNumber}
+            title.textContent =
+                `❌ ${issue.title}`;
 
-                    </div>
 
-                    <div class="mismatch-line">
+            const details =
+                document.createElement(
+                    "pre"
+                );
 
-                        Original File —
-                        <span class="line-number">
-                            Line ${mismatch.original.lineNumber}
-                        </span>
 
-                        <br>
+            details.className =
+                "mismatch-line";
 
-                        "${escapeHtml(
-                            mismatch.originalCompare
-                        )}"
 
-                    </div>
+            details.textContent =
+                issue.details;
 
-                    <div class="mismatch-line">
 
-                        Rating File —
-                        <span class="line-number">
-                            Line ${mismatch.rating.lineNumber}
-                        </span>
+            item.appendChild(
+                title
+            );
 
-                        <br>
+            item.appendChild(
+                details
+            );
 
-                        "${escapeHtml(
-                            mismatch.ratingCompare
-                        )}"
 
-                    </div>
-
-                    <div class="mismatch-line">
-
-                        Original Full:
-
-                        ${escapeHtml(
-                            mismatch.original.fullLine
-                        )}
-
-                    </div>
-
-                    <div class="mismatch-line">
-
-                        Rating Full:
-
-                        ${escapeHtml(
-                            mismatch.rating.fullLine
-                        )}
-
-                    </div>
-
-                `;
-            }
-
-
-            // MISSING RATING QUESTION
-
-            else if (
-                mismatch.type ===
-                "MISSING_RATING"
-            ) {
-
-                item.innerHTML = `
-
-                    <div class="mismatch-title">
-
-                        ❌ Missing Rating Entry —
-                        Question ${mismatch.questionNumber}
-
-                    </div>
-
-                    <div class="mismatch-line">
-
-                        Original File —
-                        <span class="line-number">
-
-                            Line
-                            ${mismatch.original.lineNumber}
-
-                        </span>
-
-                        <br>
-
-                        ${escapeHtml(
-                            mismatch.original.fullLine
-                        )}
-
-                    </div>
-
-                    <div class="mismatch-line">
-
-                        Rating File:
-
-                        Question
-                        ${mismatch.questionNumber}:
-                        not found
-
-                    </div>
-
-                `;
-            }
-
-
-            // EXTRA RATING QUESTION
-
-            else {
-
-                item.innerHTML = `
-
-                    <div class="mismatch-title">
-
-                        ❌ Extra Rating Entry —
-                        Question ${mismatch.questionNumber}
-
-                    </div>
-
-                    <div class="mismatch-line">
-
-                        Original File:
-
-                        No corresponding Q| question
-
-                    </div>
-
-                    <div class="mismatch-line">
-
-                        Rating File —
-                        <span class="line-number">
-
-                            Line
-                            ${mismatch.rating.lineNumber}
-
-                        </span>
-
-                        <br>
-
-                        ${escapeHtml(
-                            mismatch.rating.fullLine
-                        )}
-
-                    </div>
-
-                `;
-            }
-
-
-            mismatchReport.appendChild(
+            issueReport.appendChild(
                 item
             );
         }
@@ -852,237 +1774,14 @@ function showMismatchReport(
 
 
 // =========================================
-// STEP 2 — DIFFICULTY EXTRACTION
-// =========================================
-
-function extractDifficulty() {
-
-    if (!comparisonPassed) {
-
-        log(
-            "Extraction blocked: Comparison has not passed."
-        );
-
-        return;
-    }
-
-
-    const lines =
-        ratingText.split(/\r?\n/);
-
-
-    const values = [];
-
-    let difficultyLines =
-        0;
-
-    let invalidValues =
-        0;
-
-
-    log(
-        "--------------------------------"
-    );
-
-    log(
-        "STEP 2: Extracting difficulty values..."
-    );
-
-
-    lines.forEach(
-        (line, index) => {
-
-            const stripped =
-                line.trim();
-
-
-            /*
-                Match original Python behavior:
-
-                Any line beginning with:
-
-                Difficulty
-
-                Then take content after first :
-            */
-
-            if (
-                !stripped.startsWith(
-                    "Difficulty"
-                )
-            ) {
-
-                return;
-            }
-
-
-            difficultyLines++;
-
-
-            if (
-                !stripped.includes(":")
-            ) {
-
-                invalidValues++;
-
-                log(
-                    `Ignored invalid Difficulty line ${index + 1}: Missing ":"`
-                );
-
-                return;
-            }
-
-
-            const value =
-                stripped
-                    .split(":", 2)[1]
-                    .trim();
-
-
-            if (
-                isValidNumber(value)
-            ) {
-
-                values.push(
-                    value
-                );
-
-            } else {
-
-                invalidValues++;
-
-                log(
-                    `Ignored non-numeric Difficulty value at line ${index + 1}: ${value}`
-                );
-            }
-        }
-    );
-
-
-    document.getElementById(
-        "difficultyLinesFound"
-    ).textContent =
-        difficultyLines;
-
-
-    document.getElementById(
-        "validDifficultyCount"
-    ).textContent =
-        values.length;
-
-
-    document.getElementById(
-        "invalidDifficultyCount"
-    ).textContent =
-        invalidValues;
-
-
-    if (
-        values.length === 0
-    ) {
-
-        document.getElementById(
-            "extractionStatus"
-        ).textContent =
-            "FAILED";
-
-
-        downloadBtn.disabled =
-            true;
-
-
-        log(
-            "Extraction FAILED: No valid difficulty values found."
-        );
-
-
-        return;
-    }
-
-
-    /*
-        Exact difficulty.txt style:
-
-        9.03,9.14,6.08
-    */
-
-    difficultyOutput =
-        values.join(",");
-
-
-    document.getElementById(
-        "extractionStatus"
-    ).textContent =
-        "COMPLETED";
-
-
-    downloadBtn.disabled =
-        false;
-
-
-    log(
-        `Difficulty lines found: ${difficultyLines}`
-    );
-
-    log(
-        `Valid numeric values: ${values.length}`
-    );
-
-    log(
-        `Invalid / ignored: ${invalidValues}`
-    );
-
-    log(
-        "difficulty.txt is ready for download."
-    );
-}
-
-
-// =========================================
-// NUMBER VALIDATOR
-// =========================================
-
-function isValidNumber(text) {
-
-    /*
-        Equivalent intention to
-        Python float(text).
-
-        Supports:
-
-        9
-        9.03
-        0.25
-        -1.5
-    */
-
-    if (
-        text === ""
-    ) {
-
-        return false;
-    }
-
-
-    const number =
-        Number(text);
-
-
-    return Number.isFinite(
-        number
-    );
-}
-
-
-// =========================================
 // DOWNLOAD
 // =========================================
 
-function downloadDifficulty() {
+function downloadFinalFile() {
 
     if (
-        !comparisonPassed ||
-        !difficultyOutput
+        !validationPassed ||
+        !finalOutput
     ) {
 
         log(
@@ -1095,7 +1794,7 @@ function downloadDifficulty() {
 
     const blob =
         new Blob(
-            [difficultyOutput],
+            [finalOutput],
             {
                 type:
                     "text/plain;charset=utf-8"
@@ -1119,7 +1818,7 @@ function downloadDifficulty() {
         url;
 
     link.download =
-        "difficulty.txt";
+        "Final.txt";
 
 
     document.body.appendChild(
@@ -1141,82 +1840,115 @@ function downloadDifficulty() {
 
 
     log(
-        "Downloaded: difficulty.txt"
+        "Downloaded: Final.txt"
     );
 }
 
 
 // =========================================
-// RESET WHEN FILE CHANGES
+// RESET PROCESSING STATE
 // =========================================
 
 function resetProcessingState() {
 
-    comparisonPassed =
+    validationPassed =
         false;
 
-    difficultyOutput =
+    finalOutput =
         "";
 
+    normalizedShiftCountValue =
+        0;
 
-    compareBtn.disabled =
+
+    validateBtn.disabled =
         true;
 
-    extractBtn.disabled =
+    mergeBtn.disabled =
         true;
 
     downloadBtn.disabled =
         true;
 
 
+    issueCard.classList.add(
+        "hidden"
+    );
+
+    issueReport.innerHTML =
+        "";
+
+
     document.getElementById(
-        "questionsCompared"
+        "englishCompleteCount"
     ).textContent =
         "0";
 
+
     document.getElementById(
-        "matchCount"
+        "bengaliCompleteCount"
     ).textContent =
         "0";
 
+
     document.getElementById(
-        "mismatchCount"
+        "shiftCount"
     ).textContent =
         "0";
 
+
     document.getElementById(
-        "comparisonStatus"
+        "normalizedShiftCount"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "validAnswerCount"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "difficultyAlignmentCount"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "validationIssueCount"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "validationStatus"
     ).textContent =
         "WAITING";
 
 
     document.getElementById(
-        "difficultyLinesFound"
+        "generatedBlockCount"
     ).textContent =
         "0";
 
+
     document.getElementById(
-        "validDifficultyCount"
+        "finalCorrectCount"
     ).textContent =
         "0";
 
+
     document.getElementById(
-        "invalidDifficultyCount"
+        "finalDifficultyCount"
     ).textContent =
         "0";
 
+
     document.getElementById(
-        "extractionStatus"
+        "finalStatus"
     ).textContent =
         "LOCKED";
-
-
-    mismatchCard.classList.add(
-        "hidden"
-    );
-
-    mismatchReport.innerHTML =
-        "";
 }
 
 
@@ -1228,7 +1960,7 @@ function log(message) {
 
     if (
         consoleBox.textContent.trim() ===
-        "Waiting for two TXT files..."
+        "Waiting for four TXT files..."
     ) {
 
         consoleBox.textContent =
@@ -1242,22 +1974,4 @@ function log(message) {
 
     consoleBox.scrollTop =
         consoleBox.scrollHeight;
-}
-
-
-// =========================================
-// HTML ESCAPE
-// =========================================
-
-function escapeHtml(text) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        text;
-
-    return div.innerHTML;
 }
