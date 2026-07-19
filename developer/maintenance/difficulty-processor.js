@@ -273,7 +273,10 @@ function extractOriginalQuestions(text) {
                         trimmed,
 
                     content:
-                        trimmed.substring(2)
+                        content:
+                            trimmed
+                                .substring(2)
+                                .trimStart()
 
                 });
             }
@@ -337,7 +340,7 @@ function extractRatingQuestions(text) {
 
                 content:
                     match[2]
-                        .replace(/^ /, "")
+                       .trimStart()
 
             });
         }
@@ -355,15 +358,24 @@ function extractRatingQuestions(text) {
 function getCompareString(content) {
 
     /*
-        Same basic rule as:
+        Normalize leading whitespace before comparison.
 
-        Pre Difficulty Comparer.py
+        These are treated identically:
 
-        Compare first 10 characters
-        after removing the prefix.
+        Q|Which of the following...
+        Q| Which of the following...
+        Q|   Which of the following...
+
+        Rating:
+        Question 1: Which of the following...
+
+        Only leading whitespace is ignored.
+        Internal question text is NOT modified.
     */
 
-    return content.substring(0, 10);
+    return content
+        .trimStart()
+        .substring(0, 10);
 }
 
 
