@@ -982,3 +982,242 @@ that, port the citation-removal algorithm from Python to JavaScript and
 enable output download.
 
 ------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+
+# Developer Maintenance Suite Progress Update (Added: 2026-07-19)
+
+## Current Status
+
+**Version:** Developer Maintenance Suite v0.4 (Citation Remover Complete / Proof Reader Core Complete / Maintenance Dashboard Added)
+
+This session substantially advanced the isolated browser-based maintenance workspace. The earlier Citation Removal Engine foundation was completed, a new Proof Reader / Character Validation Engine was created, and a common Maintenance Suite landing page was introduced.
+
+## Maintenance Architecture
+
+Current structure:
+
+```text
+Maintenance Dashboard
+├── Citation Removal Engine
+└── Proof Reader / Character Validation Engine
+```
+
+Each utility remains modular with its own HTML, CSS and JavaScript. Browser-local TXT processing remains preferred so the Student Portal and shared quiz runtime are unaffected.
+
+### UI Design Direction
+
+- ✅ Maintenance landing page introduced.
+- ✅ Compact tool cards with icons and short descriptions.
+- ✅ Visual language aligned with the main Conceptual Bridge `index.html`.
+- ✅ Animated blue gradient and glassmorphic cards/controls adopted.
+- ✅ Subscribe/promotional elements excluded from Developer Maintenance.
+- ✅ Individual tools use `← Maintenance Home` navigation.
+- ✅ Citation Remover converted to glassmorphic theme.
+- 🟡 Proof Reader glassmorphic conversion prepared / being applied.
+
+Implementation rule: HTML, CSS and JavaScript must remain in their correct files. CSS must not be pasted after `</html>` or into JavaScript, as this can cause syntax errors such as `Unexpected token '*'`.
+
+## Citation Removal Engine
+
+**Status:** ✅ Core Workflow Complete and Tested
+
+### Completed
+
+- ✅ TXT upload and local file reading.
+- ✅ File name, size and total-line metadata.
+- ✅ Sequential line scanning and Processing Console progress.
+- ✅ Citation detection/removal logic implemented.
+- ✅ `cleanedText` generated.
+- ✅ Lines Scanned and Citations Removed counters.
+- ✅ Tested example successfully removed 600 citations.
+- ✅ Remaining-citation integrity check.
+- ✅ Question-structure integrity check.
+- ✅ Download safety gate.
+- ✅ Download Output activates only after successful validation.
+- ✅ Cleaned TXT browser download.
+- ✅ New file upload resets previous processing/download state.
+- ✅ Glassmorphic UI and Maintenance Home navigation.
+
+### Validation Safety Flow
+
+```text
+Upload TXT
+↓
+Scan and remove matching citations
+↓
+Check remaining citations
+↓
+Integrity Check
+↓
+Structure Check
+↓
+Validation passes
+↓
+Enable Download Output
+```
+
+### Future Refinements
+
+- Preserve original filename automatically.
+- Preserve original CRLF/LF line endings.
+- Harden whitespace preservation so only intended citation text changes.
+
+## Proof Reader / Character Validation Engine
+
+**Status:** ✅ Core Workflow Implemented
+
+A browser-based interactive Proof Reader was created from the existing Python proof-reading concept.
+
+### Purpose
+
+Scan English/Bengali question TXT assets for unexpected Unicode characters and provide an interactive line editor for correction.
+
+### Completed
+
+- ✅ TXT upload and file information.
+- ✅ Processing Console and Validation Statistics.
+- ✅ Character Validation Report.
+- ✅ Text Editing Window.
+- ✅ JavaScript character validator for English, Bengali, numbers, whitespace, standard punctuation and selected typographic punctuation.
+- ✅ Invalid-character and affected-line counting.
+- ✅ PASSED / FAILED validation state.
+- ✅ Unicode code point and affected line/context reporting.
+- ✅ First unresolved error automatically displayed.
+- ✅ Physical line-by-line Previous/Next navigation.
+- ✅ Edit/Save workflow with navigation lock while editing.
+- ✅ Saved edits stored in in-memory `workingLines`.
+- ✅ Re-Validate scans edited working content.
+- ✅ New earlier errors become the next displayed error.
+- ✅ Session-only Pass system.
+- ✅ Pass scoped by line number + invalid character.
+- ✅ Passed errors excluded from later validation in the same uploaded-file session.
+- ✅ Pass state clears on new file upload.
+- ✅ Editing a passed line invalidates old Pass decisions for that line.
+- ✅ Download Corrected TXT workflow introduced.
+- ✅ Corrected output filename uses `_corrected.txt`.
+
+### Example Workflow
+
+```text
+Errors: 34, 38, 48
+↓
+Line 34 displayed
+↓
+Edit → Save → Re-Validate
+↓
+If fixed, Line 38 displayed
+```
+
+If editing line 36 introduces a new invalid character:
+
+```text
+Save → Re-Validate
+↓
+Line 36 becomes earliest unresolved error
+↓
+Pass
+↓
+Line 38 displayed
+```
+
+### Browser Save Decision
+
+`Save` updates the in-memory working TXT. The browser does not silently overwrite the original local/server file. Corrected content is exported through Download Corrected TXT. Permanent server/GitHub writes would require a separate secure backend.
+
+### Future Refinements
+
+- Preserve source CRLF/LF line endings in downloaded output.
+- Add modified-line / unsaved-change tracking.
+- Optional downloadable validation report.
+- Complete visual verification of glassmorphic styling.
+
+## Maintenance Dashboard
+
+**Status:** ✅ Added
+
+A mother/landing page now provides centralized navigation.
+
+### 🧹 Citation Remover
+
+Detects and removes unwanted trailing citations while preserving question structure and validating output before download.
+
+### 🔍 Proof Reader
+
+Detects unexpected Unicode characters, shows affected lines, supports navigation/editing, session-only Pass, re-validation and corrected TXT download.
+
+### Dashboard Design
+
+- ✅ Compact centered container.
+- ✅ Icon + short description per tool.
+- ✅ Direct Open Tool navigation.
+- ✅ Animated blue gradient.
+- ✅ Glassmorphic cards.
+- ✅ Responsive desktop/mobile layout.
+- ✅ Style aligned with Conceptual Bridge `index.html`.
+- ✅ Subscribe/promotional UI removed.
+
+## Current Maintenance File Structure
+
+```text
+maintenance/
+├── maintenance.html
+├── citation-remover.html
+├── citation-remover.css
+├── citation-remover.js
+├── proof-reader.html
+├── proof-reader.css
+└── proof-reader.js
+```
+
+## Maintenance Engineering Decisions
+
+1. Keep maintenance utilities isolated from Student Portal runtime logic.
+2. Prefer browser-local TXT processing where server execution is unnecessary.
+3. Keep each tool independently testable.
+4. Use a common Maintenance Dashboard.
+5. Maintain consistent glassmorphic Conceptual Bridge branding.
+6. Require validation safety before processed output download.
+7. Never automatically delete unexpected Proof Reader characters; corrections remain user-controlled.
+8. Session-only Pass decisions must not become permanent character whitelists.
+9. Permanent server/GitHub writes require a separate secure backend.
+
+------------------------------------------------------------------------
+
+# Immediate Next Starting Point
+
+1. Finish and verify Proof Reader glassmorphic styling.
+2. End-to-end test: Upload → Validate → Navigate → Edit → Save → Re-Validate → Pass → Download Corrected TXT.
+3. Preserve original CRLF/LF line endings in corrected downloads.
+4. Verify Citation Remover output formatting preservation.
+5. Add new maintenance utilities only after both current tools are stable.
+
+The Mobile Refactoring, Authentication, Developer Inspector and other existing roadmaps remain preserved.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated)
+
+| Date | Milestone |
+|---|---|
+| 2026-07-10 | Mobile Refactoring Roadmap |
+| 2026-07-14 | Developer Workspace Foundation |
+| 2026-07-16 | Authentication Workspace Foundation |
+| 2026-07-17 | Quiz Portal UI Enhancements |
+| 2026-07-17 | Authentication Dropdown & Logout Foundation |
+| 2026-07-18 | Developer Metadata Inspector Foundation |
+| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
+| 2026-07-19 | Citation Remover Core Completed |
+| 2026-07-19 | Proof Reader Validation & Editing Workflow |
+| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
+| Next | Proof Reader UI Verification & End-to-End Testing |
+| Next | Output / Line-Ending Preservation Hardening |
+| Next | Additional Maintenance Utilities |
+
+------------------------------------------------------------------------
+
+# Documentation Note
+
+This remains the single source of truth for the Conceptual Bridge project. All previous history is preserved. This update supersedes only the earlier Maintenance Suite current-status/next-step state, while retaining the historical development record.
+
