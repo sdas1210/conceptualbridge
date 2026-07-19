@@ -273,10 +273,10 @@ function extractOriginalQuestions(text) {
                         trimmed,
 
                     content:
-                        content:
-                            trimmed
-                                .substring(2)
-                                .trimStart()
+                        trimmed
+                            .substring(2)
+                            .trimStart()
+                            
 
                 });
             }
