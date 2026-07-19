@@ -40,6 +40,7 @@ let cleanedQuestionText = "";
 
 let detectedShiftCount = 0;
 
+let normalizedShiftCount = 0;
 
 // =========================================
 // EVENT LISTENERS
@@ -139,7 +140,11 @@ function loadFile() {
     document.getElementById(
         "cleanedOutputName"
     ).textContent = "--";
+    normalizedShiftCount = 0;
 
+    document.getElementById(
+        "normalizedCount"
+    ).textContent = normalizedShiftCount;
 
     consoleBox.textContent = "";
 
@@ -550,11 +555,12 @@ function normalizeShiftTime(line) {
         
         
         // Report normalization
-        
-        if (
+                if (
             normalizedShiftValue !==
             rawShiftValue
         ) {
+        
+            normalizedShiftCount++;
         
             log(
                 `Line ${i + 1}: SHIFT extracted and time normalized`
@@ -563,11 +569,12 @@ function normalizeShiftTime(line) {
         } else {
         
             log(
-                `Line ${i + 1}: SHIFT extracted`
+                `Line ${i + 1}: SHIFT extracted — no normalization required`
             );
         }
-           
-
+        
+        
+            
 
             
 
