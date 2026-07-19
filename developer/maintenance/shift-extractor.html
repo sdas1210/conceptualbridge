@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Shift Extractor | Conceptual Bridge
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="shift-extractor.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- BACK -->
+
+    <a
+        href="maintenance.html"
+        class="back-home"
+    >
+        ← Maintenance Home
+    </a>
+
+
+    <!-- HEADER -->
+
+    <h1>
+        📅 Shift Extractor
+    </h1>
+
+    <p class="subtitle">
+        Extract SHIFT| metadata from question TXT files
+    </p>
+
+
+    <!-- FILE SELECTION -->
+
+    <div class="card">
+
+        <h2>
+            1. Select Question File
+        </h2>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".txt"
+        >
+
+    </div>
+
+
+    <!-- FILE INFORMATION -->
+
+    <div class="card">
+
+        <h2>
+            2. File Information
+        </h2>
+
+        <table>
+
+            <tr>
+                <td>File Name</td>
+                <td id="fileName">--</td>
+            </tr>
+
+            <tr>
+                <td>File Size</td>
+                <td id="fileSize">--</td>
+            </tr>
+
+            <tr>
+                <td>Total Lines</td>
+                <td id="totalLines">--</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- PROCESSING CONSOLE -->
+
+    <div class="card">
+
+        <h2>
+            3. Processing Console
+        </h2>
+
+        <pre id="console">Waiting for TXT file...</pre>
+
+    </div>
+
+
+    <!-- EXTRACTION STATISTICS -->
+
+    <div class="card">
+
+        <h2>
+            4. Extraction Statistics
+        </h2>
+
+        <table>
+
+            <tr>
+                <td>Lines Scanned</td>
+                <td id="linesScanned">0</td>
+            </tr>
+
+            <tr>
+                <td>SHIFT| Tags Found</td>
+                <td id="shiftCount">0</td>
+            </tr>
+
+            <tr>
+                <td>SHIFT| Tags Extracted</td>
+                <td id="extractedCount">0</td>
+            </tr>
+
+            <tr>
+                <td>Status</td>
+                <td id="status">Waiting</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- OUTPUT INFORMATION -->
+
+    <div class="card">
+
+        <h2>
+            5. Output Information
+        </h2>
+
+        <table>
+
+            <tr>
+                <td>Extracted Shift File</td>
+                <td id="shiftOutputName">
+                    --
+                </td>
+            </tr>
+
+            <tr>
+                <td>Cleaned Question File</td>
+                <td id="cleanedOutputName">
+                    --
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- ACTION BUTTONS -->
+
+    <div class="buttons">
+
+        <button
+            id="extractBtn"
+            disabled
+        >
+            Start Extraction
+        </button>
+
+        <button
+            id="downloadShiftBtn"
+            disabled
+        >
+            Download Shift.txt
+        </button>
+
+        <button
+            id="downloadCleanedBtn"
+            disabled
+        >
+            Download Cleaned TXT
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script src="shift-extractor.js"></script>
+
+</body>
+
+</html>
