@@ -63,7 +63,7 @@
         .maintenance-container {
 
             width: 100%;
-            max-width: 760px;
+            max-width: 1050px;
 
             text-align: center;
         }
@@ -141,8 +141,8 @@
             display: grid;
 
             grid-template-columns:
-                repeat(2, 1fr);
-
+                repeat(3, minmax(0, 1fr));
+        
             gap: 18px;
         }
 
@@ -196,6 +196,12 @@
             animation:
                 fadeInUp .8s ease .30s forwards;
         }
+        .tool-card:nth-child(3) {
+
+            animation:
+                fadeInUp .8s ease .45s forwards;
+        }
+        
 
         .tool-card:hover {
 
@@ -264,14 +270,14 @@
 
         .tool-card p {
 
-            margin: 0;
+             margin: 0;
 
-            max-width: 270px;
-
+            max-width: 290px;
+        
             color: #d5e2ef;
-
-            font-size: .88rem;
-
+        
+            font-size: .86rem;
+        
             line-height: 1.55;
         }
 
@@ -372,6 +378,29 @@
         /* =========================
            MOBILE
         ========================= */
+        @media (max-width: 950px) {
+
+            .maintenance-container {
+        
+                max-width: 760px;
+            }
+        
+            .tool-grid {
+        
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        
+            .tool-card:last-child {
+        
+                grid-column:
+                    1 / -1;
+        
+                width: calc(50% - 9px);
+        
+                justify-self: center;
+            }
+        }
 
         @media (max-width: 650px) {
 
@@ -399,6 +428,14 @@
             .tool-card {
 
                 min-height: 205px;
+            }
+
+            
+            .tool-card:last-child {
+
+                grid-column: auto;
+            
+                width: 100%;
             }
         }
 
@@ -492,6 +529,33 @@
                 Open Tool →
             </div>
 
+        </a>
+        
+        <!-- SHIFT EXTRACTOR -->
+
+        <a
+            href="shift-extractor.html"
+            class="tool-card"
+        >
+        
+            <div class="tool-icon">
+                📅
+            </div>
+        
+            <h2>
+                Shift Extractor
+            </h2>
+        
+            <p>
+                Extract SHIFT| metadata from question TXT files,
+                automatically normalize date and AM/PM time formatting,
+                and generate cleaned question and Shift.txt outputs.
+            </p>
+        
+            <div class="open-tool">
+                Open Tool →
+            </div>
+        
         </a>
 
 
