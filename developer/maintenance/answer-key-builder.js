@@ -741,7 +741,6 @@ function showCurrentQuestion() {
 // =========================================
 // SELECT ANSWER
 // =========================================
-
 function selectAnswer(answer) {
 
     if (!sessionActive) {
@@ -750,95 +749,69 @@ function selectAnswer(answer) {
     }
 
 
-    const questionNumber =
-        initialQuestion +
-        currentIndex;
+    /*
+        Save answer against current block/question.
 
+        Block 1 = answers[0]
+        Block 2 = answers[1]
+        etc.
+    */
 
-    const previousAnswer =
-        answers[currentIndex];
-
-
-    answers[currentIndex] =
+    answers[
+        currentIndex
+    ] =
         answer;
 
 
-    if (
-        previousAnswer &&
-        previousAnswer !== answer
-    ) {
-
-        log(
-            `Question ${questionNumber}: ${previousAnswer} → ${answer}`
-        );
-
-    } else if (!previousAnswer) {
-
-        log(
-            `Question ${questionNumber}: ${answer}`
-        );
-    }
-
-
-    updateGridItem(
-        currentIndex
+    log(
+        `Question ${
+            initialQuestionNumber +
+            currentIndex
+        } answered: ${answer}`
     );
 
 
-    updateProgress();
-
-    validateOutput();
-
-
     /*
-        AUTO ADVANCE
-
-        If not on final question,
-        automatically move forward.
-
-        The user can still return using:
-        - Previous
-        - Next
-        - Answer Grid
+        Auto advance both Question
+        and TXT block together.
     */
+
     if (
         currentIndex <
         totalQuestions - 1
     ) {
-    
-        currentIndex++;
-    
-    
-        /*
-            Keep TXT block synchronized
-            with automatic answer advance.
-        */
-    
+
+        const nextIndex =
+            currentIndex + 1;
+
+
         const sourceTotal =
             getSourceBlockCount();
-    
-    
+
+
         if (
-            currentIndex < sourceTotal
+            sourceTotal === 0 ||
+            nextIndex < sourceTotal
         ) {
-    
-            currentSourceBlockIndex =
-                currentIndex;
-    
-            renderSourceBlock();
+
+            goToQuestionBlock(
+                nextIndex
+            );
+
+        } else {
+
+            currentIndex =
+                nextIndex;
+
+            showCurrentQuestion();
         }
-    
-    
-        showCurrentQuestion();
-    
+
     } else {
-    
-        // Stay on final question
-    
+
         showCurrentQuestion();
     }
-    
 }
+
 
 
 // =========================================
@@ -961,42 +934,9 @@ function renderAnswerGrid() {
                     );
         
         
-                /*
-                    Update Answer Builder
-                */
-        
-                currentIndex =
-                    selectedIndex;
-        
-        
-                /*
-                    Synchronize TXT Question Viewer.
-        
-                    Only synchronize when the
-                    corresponding source block exists.
-                */
-        
-                const sourceTotal =
-                    getSourceBlockCount();
-        
-        
-                if (
-                    selectedIndex >= 0 &&
-                    selectedIndex < sourceTotal
-                ) {
-        
-                    currentSourceBlockIndex =
-                        selectedIndex;
-        
-                    renderSourceBlock();
-                }
-        
-        
-                /*
-                    Update Answer Selection UI
-                */
-        
-                showCurrentQuestion();
+                goToQuestionBlock(
+                    selectedIndex
+                );
             }
         );
         
@@ -2239,28 +2179,105 @@ function updateBilingualFileStatus() {
     fileStatus.textContent =
         `✓ Bilingual files aligned — ${englishBlocks.length} blocks found in each file.`;
 }
+// =========================================
+// MASTER QUESTION / BLOCK NAVIGATION
+// =========================================
+
+function goToQuestionBlock(index) {
+
+    const sourceTotal =
+        getSourceBlockCount();
+
+
+    /*
+        Valid answer-session range
+    */
+
+    if (
+        index < 0 ||
+        index >= totalQuestions
+    ) {
+
+        return;
+    }
+
+
+    /*
+        If TXT blocks are loaded,
+        the requested block must exist.
+    */
+
+    if (
+        sourceTotal > 0 &&
+        index >= sourceTotal
+    ) {
+
+        return;
+    }
+
+
+    /*
+        One shared index:
+
+        index 0 = Block 1 = Question 1
+        index 1 = Block 2 = Question 2
+        etc.
+    */
+
+    currentIndex =
+        index;
+
+    currentSourceBlockIndex =
+        index;
+
+
+    /*
+        Render TXT block
+    */
+
+    renderSourceBlock(false);
+
+
+    /*
+        Render Answer Selection,
+        Answer Grid and progress.
+    */
+
+    showCurrentQuestion();
+}
+
+
 
 // =========================================
 // RENDER SOURCE BLOCK
 // =========================================
 
-function renderSourceBlock() {
+function renderSourceBlock(
+    syncAnswer = true
+) {
 
     if (sourceMode === 2) {
 
-        renderSingleSourceBlock();
+        renderSingleSourceBlock(
+            syncAnswer
+        );
 
     } else {
 
-        renderBilingualSourceBlock();
+        renderBilingualSourceBlock(
+            syncAnswer
+        );
     }
+
 
     updateSourceNavigationButtons();
 }
 
 
 
-function renderSingleSourceBlock() {
+function renderSingleSourceBlock(
+    syncAnswer = true
+) {
 
     if (
         singleBlocks.length === 0
@@ -2308,10 +2325,21 @@ function renderSingleSourceBlock() {
         true;
 
 
-    syncAnswerQuestionToSourceBlock();
+    if (
+    syncAnswer &&
+    sessionActive
+) {
+
+    currentIndex =
+        currentSourceBlockIndex;
+
+    showCurrentQuestion();
+}
 }
 
-function renderBilingualSourceBlock() {
+function renderBilingualSourceBlock(
+    syncAnswer = true
+) {
 
     const total =
         Math.max(
@@ -2388,7 +2416,16 @@ function renderBilingualSourceBlock() {
         true;
 
 
-    syncAnswerQuestionToSourceBlock();
+    if (
+    syncAnswer &&
+    sessionActive
+) {
+
+    currentIndex =
+        currentSourceBlockIndex;
+
+    showCurrentQuestion();
+}
 }
 
 function clampSourceBlockIndex(
@@ -2450,10 +2487,9 @@ function goToPreviousSourceBlock() {
     }
 
 
-    currentSourceBlockIndex--;
-
-
-    renderSourceBlock();
+    goToQuestionBlock(
+        currentSourceBlockIndex - 1
+    );
 }
 
 
@@ -2480,10 +2516,9 @@ function goToNextSourceBlock() {
     }
 
 
-    currentSourceBlockIndex++;
-
-
-    renderSourceBlock();
+    goToQuestionBlock(
+        currentSourceBlockIndex + 1
+    );
 }
 
 function updateSourceNavigationButtons() {
@@ -3052,52 +3087,6 @@ function applyPdfZoom() {
 // SOURCE ↔ ANSWER SYNCHRONIZATION
 // =========================================
 
-function syncAnswerQuestionToSourceBlock() {
 
-    /*
-        Do nothing until an answer session
-        has actually been started.
-    */
-
-    if (!sessionActive) {
-
-        return;
-    }
-
-
-    /*
-        Do not allow the source viewer
-        to move beyond the configured
-        answer-session question count.
-    */
-
-    if (
-        currentSourceBlockIndex < 0 ||
-        currentSourceBlockIndex >= totalQuestions
-    ) {
-
-        return;
-    }
-
-
-    /*
-        Source block index and answer index
-        are both zero-based.
-
-        Example:
-
-        Initial Question = 101
-
-        Block 1  → index 0 → Question 101
-        Block 2  → index 1 → Question 102
-        Block 74 → index 73 → Question 174
-    */
-
-    currentIndex =
-        currentSourceBlockIndex;
-
-
-    showCurrentQuestion();
-}
 
 handleSourceModeChange();
