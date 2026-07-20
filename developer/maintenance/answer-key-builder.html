@@ -110,6 +110,31 @@
 
         </div>
 
+        <!-- NUMBER OF FILES -->
+
+        <div class="input-group">
+        
+            <label for="fileCountInput">
+                Number of Files
+            </label>
+        
+            <select id="fileCountInput">
+        
+                <option value="2" selected>
+                    2 Files — 1 TXT + 1 PDF
+                </option>
+        
+                <option value="3">
+                    3 Files — English TXT + Bengali TXT + PDF
+                </option>
+        
+            </select>
+        
+            <span class="input-help">
+                Select the source files required for this session
+            </span>
+        
+        </div>
 
         <!-- SESSION RANGE -->
 
@@ -138,8 +163,474 @@
 
     </div>
 
+    <!-- =====================================
+     SOURCE FILE UPLOADER
+    ====================================== -->
+    
+    <div class="card">
+    
+        <h2>
+            2. Source File Uploader
+        </h2>
+    
+    
+        <!-- TWO FILE MODE -->
+    
+        <div
+            id="twoFileUploader"
+            class="upload-mode"
+        >
+    
+            <div class="upload-grid two-column-upload">
+    
+                <div class="file-upload-box">
+    
+                    <label for="singleTxtInput">
+                        Question TXT File
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="singleTxtInput"
+                        accept=".txt"
+                    >
+    
+                    <span class="input-help">
+                        E/B filename suffix is not required in 2-file mode
+                    </span>
+    
+                </div>
+    
+    
+                <div class="file-upload-box">
+    
+                    <label for="singlePdfInput">
+                        Reference PDF
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="singlePdfInput"
+                        accept=".pdf,application/pdf"
+                    >
+    
+                    <span class="input-help">
+                        PDF used as the visual answer reference
+                    </span>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- THREE FILE MODE -->
+    
+        <div
+            id="threeFileUploader"
+            class="upload-mode hidden"
+        >
+    
+            <div class="upload-grid">
+    
+                <div class="file-upload-box">
+    
+                    <label for="englishTxtInput">
+                        English TXT File
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="englishTxtInput"
+                        accept=".txt"
+                    >
+    
+                    <span class="input-help">
+                        Filename must end with E.txt
+                    </span>
+    
+                </div>
+    
+    
+                <div class="file-upload-box">
+    
+                    <label for="bengaliTxtInput">
+                        Bengali TXT File
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="bengaliTxtInput"
+                        accept=".txt"
+                    >
+    
+                    <span class="input-help">
+                        Filename must end with B.txt
+                    </span>
+    
+                </div>
+    
+    
+                <div class="file-upload-box">
+    
+                    <label for="bilingualPdfInput">
+                        Reference PDF
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="bilingualPdfInput"
+                        accept=".pdf,application/pdf"
+                    >
+    
+                    <span class="input-help">
+                        PDF used as the visual answer reference
+                    </span>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    
+        <div
+            id="fileStatus"
+            class="file-status"
+        >
+            Select the required source files.
+        </div>
+    
+    </div>
 
+    <!-- =====================================
+     PDF VIEWER
+    ====================================== -->
+    
+    <div class="card">
+    
+        <div class="section-heading-row">
+    
+            <h2>
+                3. PDF Viewer
+            </h2>
+    
+    
+            <div class="pdf-controls">
+    
+                <button
+                    id="pdfZoomOutBtn"
+                    type="button"
+                    disabled
+                >
+                    −
+                </button>
+    
+    
+                <span id="pdfZoomDisplay">
+                    100%
+                </span>
+    
+    
+                <button
+                    id="pdfZoomInBtn"
+                    type="button"
+                    disabled
+                >
+                    +
+                </button>
+    
+    
+                <button
+                    id="pdfZoomResetBtn"
+                    type="button"
+                    disabled
+                >
+                    Reset
+                </button>
+    
+            </div>
+    
+        </div>
+    
+    
+        <div
+            id="pdfViewerContainer"
+            class="pdf-viewer-container"
+        >
+    
+            <div
+                id="pdfPlaceholder"
+                class="viewer-placeholder"
+            >
+                Upload a PDF to display it here.
+            </div>
+    
+    
+            <iframe
+                id="pdfViewer"
+                class="pdf-viewer hidden"
+                title="Reference PDF Viewer"
+            ></iframe>
+    
+        </div>
+    
+    </div>
 
+    <!-- =====================================
+     QUESTION BLOCK EDITOR
+    ====================================== -->
+    
+    <div class="card">
+    
+        <div class="section-heading-row">
+    
+            <h2>
+                4. Question Block Editor
+            </h2>
+    
+    
+            <div
+                id="blockPosition"
+                class="block-position"
+            >
+                Block -- / --
+            </div>
+    
+        </div>
+    
+    
+        <!-- SINGLE TXT MODE -->
+    
+        <div
+            id="singleEditorMode"
+            class="editor-mode"
+        >
+    
+            <div class="question-editor-panel">
+    
+                <div class="editor-header">
+    
+                    <strong>
+                        Question TXT
+                    </strong>
+    
+                    <span id="singleEditorFileName">
+                        No file selected
+                    </span>
+    
+                </div>
+    
+    
+                <textarea
+                    id="singleBlockEditor"
+                    class="block-editor"
+                    readonly
+                    spellcheck="false"
+                    placeholder="Upload a TXT file to display question blocks."
+                ></textarea>
+    
+    
+                <div class="editor-controls">
+    
+                    <button
+                        id="singlePreviousBtn"
+                        type="button"
+                        disabled
+                        title="Previous Question Block"
+                    >
+                        ⬅
+                    </button>
+    
+    
+                    <div class="editor-center-controls">
+    
+                        <button
+                            id="singleEditBtn"
+                            type="button"
+                            disabled
+                        >
+                            Edit
+                        </button>
+    
+                        <button
+                            id="singleSaveBtn"
+                            type="button"
+                            disabled
+                        >
+                            Save
+                        </button>
+    
+                    </div>
+    
+    
+                    <button
+                        id="singleNextBtn"
+                        type="button"
+                        disabled
+                        title="Next Question Block"
+                    >
+                        ➡
+                    </button>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- BILINGUAL SPLIT MODE -->
+    
+        <div
+            id="splitEditorMode"
+            class="editor-mode split-editor-mode hidden"
+        >
+    
+    
+            <!-- ENGLISH -->
+    
+            <div class="question-editor-panel">
+    
+                <div class="editor-header">
+    
+                    <strong>
+                        English
+                    </strong>
+    
+                    <span id="englishEditorFileName">
+                        No file selected
+                    </span>
+    
+                </div>
+    
+    
+                <textarea
+                    id="englishBlockEditor"
+                    class="block-editor"
+                    readonly
+                    spellcheck="false"
+                ></textarea>
+    
+    
+                <div class="editor-controls">
+    
+                    <button
+                        id="englishPreviousBtn"
+                        type="button"
+                        disabled
+                    >
+                        ⬅
+                    </button>
+    
+    
+                    <div class="editor-center-controls">
+    
+                        <button
+                            id="englishEditBtn"
+                            type="button"
+                            disabled
+                        >
+                            Edit
+                        </button>
+    
+                        <button
+                            id="englishSaveBtn"
+                            type="button"
+                            disabled
+                        >
+                            Save
+                        </button>
+    
+                    </div>
+    
+    
+                    <button
+                        id="englishNextBtn"
+                        type="button"
+                        disabled
+                    >
+                        ➡
+                    </button>
+    
+                </div>
+    
+            </div>
+    
+    
+            <!-- BENGALI -->
+    
+            <div class="question-editor-panel">
+    
+                <div class="editor-header">
+    
+                    <strong>
+                        Bengali
+                    </strong>
+    
+                    <span id="bengaliEditorFileName">
+                        No file selected
+                    </span>
+    
+                </div>
+    
+    
+                <textarea
+                    id="bengaliBlockEditor"
+                    class="block-editor"
+                    readonly
+                    spellcheck="false"
+                ></textarea>
+    
+    
+                <div class="editor-controls">
+    
+                    <button
+                        id="bengaliPreviousBtn"
+                        type="button"
+                        disabled
+                    >
+                        ⬅
+                    </button>
+    
+    
+                    <div class="editor-center-controls">
+    
+                        <button
+                            id="bengaliEditBtn"
+                            type="button"
+                            disabled
+                        >
+                            Edit
+                        </button>
+    
+                        <button
+                            id="bengaliSaveBtn"
+                            type="button"
+                            disabled
+                        >
+                            Save
+                        </button>
+    
+                    </div>
+    
+    
+                    <button
+                        id="bengaliNextBtn"
+                        type="button"
+                        disabled
+                    >
+                        ➡
+                    </button>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
     <!-- =====================================
          ANSWER SELECTION
     ====================================== -->
