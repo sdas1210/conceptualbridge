@@ -57,7 +57,137 @@ const downloadStandardBtn =
     document.getElementById("downloadStandardBtn");
 
 
+const fileCountInput =
+    document.getElementById("fileCountInput");
 
+
+// 2-file mode
+
+const twoFileUploader =
+    document.getElementById("twoFileUploader");
+
+const singleTxtInput =
+    document.getElementById("singleTxtInput");
+
+const singlePdfInput =
+    document.getElementById("singlePdfInput");
+
+
+// 3-file mode
+
+const threeFileUploader =
+    document.getElementById("threeFileUploader");
+
+const englishTxtInput =
+    document.getElementById("englishTxtInput");
+
+const bengaliTxtInput =
+    document.getElementById("bengaliTxtInput");
+
+const bilingualPdfInput =
+    document.getElementById("bilingualPdfInput");
+
+
+// General file status
+
+const fileStatus =
+    document.getElementById("fileStatus");
+
+
+// PDF
+
+const pdfViewer =
+    document.getElementById("pdfViewer");
+
+const pdfPlaceholder =
+    document.getElementById("pdfPlaceholder");
+
+const pdfZoomInBtn =
+    document.getElementById("pdfZoomInBtn");
+
+const pdfZoomOutBtn =
+    document.getElementById("pdfZoomOutBtn");
+
+const pdfZoomResetBtn =
+    document.getElementById("pdfZoomResetBtn");
+
+const pdfZoomDisplay =
+    document.getElementById("pdfZoomDisplay");
+
+
+// Editor mode containers
+
+const singleEditorMode =
+    document.getElementById("singleEditorMode");
+
+const splitEditorMode =
+    document.getElementById("splitEditorMode");
+
+const blockPosition =
+    document.getElementById("blockPosition");
+
+
+// Single editor
+
+const singleEditorFileName =
+    document.getElementById("singleEditorFileName");
+
+const singleBlockEditor =
+    document.getElementById("singleBlockEditor");
+
+const singlePreviousBtn =
+    document.getElementById("singlePreviousBtn");
+
+const singleNextBtn =
+    document.getElementById("singleNextBtn");
+
+const singleEditBtn =
+    document.getElementById("singleEditBtn");
+
+const singleSaveBtn =
+    document.getElementById("singleSaveBtn");
+
+
+// English editor
+
+const englishEditorFileName =
+    document.getElementById("englishEditorFileName");
+
+const englishBlockEditor =
+    document.getElementById("englishBlockEditor");
+
+const englishPreviousBtn =
+    document.getElementById("englishPreviousBtn");
+
+const englishNextBtn =
+    document.getElementById("englishNextBtn");
+
+const englishEditBtn =
+    document.getElementById("englishEditBtn");
+
+const englishSaveBtn =
+    document.getElementById("englishSaveBtn");
+
+
+// Bengali editor
+
+const bengaliEditorFileName =
+    document.getElementById("bengaliEditorFileName");
+
+const bengaliBlockEditor =
+    document.getElementById("bengaliBlockEditor");
+
+const bengaliPreviousBtn =
+    document.getElementById("bengaliPreviousBtn");
+
+const bengaliNextBtn =
+    document.getElementById("bengaliNextBtn");
+
+const bengaliEditBtn =
+    document.getElementById("bengaliEditBtn");
+
+const bengaliSaveBtn =
+    document.getElementById("bengaliSaveBtn");
 
 // =========================================
 // SESSION STATE
@@ -73,7 +203,52 @@ let answers = [];
 
 let sessionActive = false;
 
+let sourceMode = 2;
 
+let currentSourceBlockIndex = 0;
+
+
+// Single TXT mode
+
+let singleTxtFile = null;
+
+let singleTxtText = "";
+
+let singleBlocks = [];
+
+
+// Bilingual mode
+
+let englishTxtFile = null;
+
+let bengaliTxtFile = null;
+
+let englishTxtText = "";
+
+let bengaliTxtText = "";
+
+let englishBlocks = [];
+
+let bengaliBlocks = [];
+
+
+// PDF
+
+let currentPdfUrl = null;
+
+let pdfZoom = 1;
+
+
+// Edit state
+
+let activeEditSide = null;
+
+/*
+    null
+    "single"
+    "english"
+    "bengali"
+*/
 // =========================================
 // EVENT LISTENERS
 // =========================================
@@ -147,6 +322,127 @@ downloadStandardBtn.addEventListener(
 );
 
 
+fileCountInput.addEventListener(
+    "change",
+    handleSourceModeChange
+);
+
+
+// File uploads
+
+singleTxtInput.addEventListener(
+    "change",
+    loadSingleTxt
+);
+
+singlePdfInput.addEventListener(
+    "change",
+    handlePdfSelection
+);
+
+
+englishTxtInput.addEventListener(
+    "change",
+    loadEnglishTxt
+);
+
+bengaliTxtInput.addEventListener(
+    "change",
+    loadBengaliTxt
+);
+
+bilingualPdfInput.addEventListener(
+    "change",
+    handlePdfSelection
+);
+
+
+// Navigation
+
+singlePreviousBtn.addEventListener(
+    "click",
+    goToPreviousSourceBlock
+);
+
+singleNextBtn.addEventListener(
+    "click",
+    goToNextSourceBlock
+);
+
+
+englishPreviousBtn.addEventListener(
+    "click",
+    goToPreviousSourceBlock
+);
+
+englishNextBtn.addEventListener(
+    "click",
+    goToNextSourceBlock
+);
+
+
+bengaliPreviousBtn.addEventListener(
+    "click",
+    goToPreviousSourceBlock
+);
+
+bengaliNextBtn.addEventListener(
+    "click",
+    goToNextSourceBlock
+);
+
+
+// Edit / Save
+
+singleEditBtn.addEventListener(
+    "click",
+    () => beginBlockEdit("single")
+);
+
+singleSaveBtn.addEventListener(
+    "click",
+    () => saveBlockEdit("single")
+);
+
+
+englishEditBtn.addEventListener(
+    "click",
+    () => beginBlockEdit("english")
+);
+
+englishSaveBtn.addEventListener(
+    "click",
+    () => saveBlockEdit("english")
+);
+
+
+bengaliEditBtn.addEventListener(
+    "click",
+    () => beginBlockEdit("bengali")
+);
+
+bengaliSaveBtn.addEventListener(
+    "click",
+    () => saveBlockEdit("bengali")
+);
+
+
+// PDF zoom
+
+pdfZoomInBtn.addEventListener(
+    "click",
+    () => changePdfZoom(0.1)
+);
+
+pdfZoomOutBtn.addEventListener(
+    "click",
+    () => changePdfZoom(-0.1)
+);
+
+pdfZoomResetBtn.addEventListener(
+    "click",
+    resetPdfZoom
+);
 
 
 // =========================================
@@ -1374,3 +1670,1350 @@ function log(message) {
     consoleBox.scrollTop =
         consoleBox.scrollHeight;
 }
+
+// =========================================
+// SOURCE MODE
+// =========================================
+
+function handleSourceModeChange() {
+
+    if (activeEditSide !== null) {
+
+        alert(
+            "Save the currently edited question block before changing file mode."
+        );
+
+        fileCountInput.value =
+            String(sourceMode);
+
+        return;
+    }
+
+
+    sourceMode =
+        Number(
+            fileCountInput.value
+        );
+
+
+    currentSourceBlockIndex =
+        0;
+
+
+    if (sourceMode === 2) {
+
+        twoFileUploader.classList.remove(
+            "hidden"
+        );
+
+        threeFileUploader.classList.add(
+            "hidden"
+        );
+
+
+        singleEditorMode.classList.remove(
+            "hidden"
+        );
+
+        splitEditorMode.classList.add(
+            "hidden"
+        );
+
+
+        fileStatus.textContent =
+            "2-file mode: Select one TXT file and one reference PDF.";
+
+    } else {
+
+        twoFileUploader.classList.add(
+            "hidden"
+        );
+
+        threeFileUploader.classList.remove(
+            "hidden"
+        );
+
+
+        singleEditorMode.classList.add(
+            "hidden"
+        );
+
+        splitEditorMode.classList.remove(
+            "hidden"
+        );
+
+
+        fileStatus.textContent =
+            "3-file mode: Select E.txt, B.txt and one reference PDF.";
+    }
+
+
+    renderSourceBlock();
+}
+// =========================================
+// QUESTION BLOCK PARSER
+// =========================================
+
+function parseSourceBlocks(
+    text,
+    displayMode
+) {
+
+    const normalized =
+        text.replace(
+            /\r\n/g,
+            "\n"
+        );
+
+
+    const lines =
+        normalized.split("\n");
+
+
+    const blocks = [];
+
+    let currentLines = [];
+
+    let startLine = null;
+
+
+    function pushCurrentBlock() {
+
+        if (
+            currentLines.length === 0
+        ) {
+
+            return;
+        }
+
+
+        const completeBlock =
+            currentLines.join("\n");
+
+
+        let displayText =
+            completeBlock;
+
+
+        /*
+            In bilingual 3-file mode,
+            show only Q| through D|.
+
+            Other lines such as:
+
+            Shift|
+            Correct|
+            Difficulty|
+
+            remain preserved in the source block
+            but are not shown in the bilingual editor.
+        */
+
+        if (
+            displayMode === "QUESTION_OPTIONS_ONLY"
+        ) {
+
+            displayText =
+                currentLines
+                    .filter(
+                        line => {
+
+                            const trimmed =
+                                line.trimStart();
+
+                            return (
+                                trimmed.startsWith("Q|") ||
+                                trimmed.startsWith("A|") ||
+                                trimmed.startsWith("B|") ||
+                                trimmed.startsWith("C|") ||
+                                trimmed.startsWith("D|")
+                            );
+                        }
+                    )
+                    .join("\n");
+        }
+
+
+        blocks.push({
+
+            index:
+                blocks.length,
+
+            startLine:
+                startLine,
+
+            originalText:
+                completeBlock,
+
+            displayText:
+                displayText
+
+        });
+
+
+        currentLines = [];
+
+        startLine = null;
+    }
+
+
+    lines.forEach(
+        (line, index) => {
+
+            const trimmed =
+                line.trimStart();
+
+
+            /*
+                Every Q| begins a new block.
+            */
+
+            if (
+                trimmed.startsWith("Q|")
+            ) {
+
+                pushCurrentBlock();
+
+                startLine =
+                    index + 1;
+
+                currentLines.push(
+                    line
+                );
+
+                return;
+            }
+
+
+            /*
+                Ignore content before first Q|
+            */
+
+            if (
+                currentLines.length === 0
+            ) {
+
+                return;
+            }
+
+
+            currentLines.push(
+                line
+            );
+        }
+    );
+
+
+    pushCurrentBlock();
+
+
+    return blocks;
+}
+
+// =========================================
+// LOAD SINGLE TXT
+// =========================================
+
+async function loadSingleTxt() {
+
+    const file =
+        singleTxtInput.files[0];
+
+
+    if (!file) {
+
+        singleTxtFile =
+            null;
+
+        singleTxtText =
+            "";
+
+        singleBlocks =
+            [];
+
+        renderSourceBlock();
+
+        return;
+    }
+
+
+    try {
+
+        singleTxtFile =
+            file;
+
+
+        singleTxtText =
+            await file.text();
+
+
+        singleBlocks =
+            parseSourceBlocks(
+                singleTxtText,
+                "FULL_BLOCK"
+            );
+
+
+        currentSourceBlockIndex =
+            0;
+
+
+        singleEditorFileName.textContent =
+            file.name;
+
+
+        fileStatus.textContent =
+            `${file.name} loaded — ${singleBlocks.length} question blocks found.`;
+
+
+        renderSourceBlock();
+
+
+        addConsoleMessage(
+            `Question TXT loaded: ${file.name}`
+        );
+
+        addConsoleMessage(
+            `Question blocks found: ${singleBlocks.length}`
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        fileStatus.textContent =
+            "Unable to read the selected TXT file.";
+    }
+}
+
+// =========================================
+// LOAD ENGLISH TXT
+// =========================================
+
+async function loadEnglishTxt() {
+
+    const file =
+        englishTxtInput.files[0];
+
+
+    if (!file) {
+
+        englishTxtFile =
+            null;
+
+        englishBlocks =
+            [];
+
+        renderSourceBlock();
+
+        return;
+    }
+
+
+    if (
+        !/E\.txt$/i.test(
+            file.name
+        )
+    ) {
+
+        alert(
+            "English TXT filename must end with E.txt.\nExample: 100E.txt"
+        );
+
+        englishTxtInput.value =
+            "";
+
+        return;
+    }
+
+
+    englishTxtFile =
+        file;
+
+
+    englishTxtText =
+        await file.text();
+
+
+    englishBlocks =
+        parseSourceBlocks(
+            englishTxtText,
+            "QUESTION_OPTIONS_ONLY"
+        );
+
+
+    currentSourceBlockIndex =
+        0;
+
+
+    englishEditorFileName.textContent =
+        file.name;
+
+
+    updateBilingualFileStatus();
+
+    renderSourceBlock();
+}
+
+
+// =========================================
+// LOAD BENGALI TXT
+// =========================================
+
+async function loadBengaliTxt() {
+
+    const file =
+        bengaliTxtInput.files[0];
+
+
+    if (!file) {
+
+        bengaliTxtFile =
+            null;
+
+        bengaliBlocks =
+            [];
+
+        renderSourceBlock();
+
+        return;
+    }
+
+
+    if (
+        !/B\.txt$/i.test(
+            file.name
+        )
+    ) {
+
+        alert(
+            "Bengali TXT filename must end with B.txt.\nExample: 100B.txt"
+        );
+
+        bengaliTxtInput.value =
+            "";
+
+        return;
+    }
+
+
+    bengaliTxtFile =
+        file;
+
+
+    bengaliTxtText =
+        await file.text();
+
+
+    bengaliBlocks =
+        parseSourceBlocks(
+            bengaliTxtText,
+            "QUESTION_OPTIONS_ONLY"
+        );
+
+
+    currentSourceBlockIndex =
+        0;
+
+
+    bengaliEditorFileName.textContent =
+        file.name;
+
+
+    updateBilingualFileStatus();
+
+    renderSourceBlock();
+}
+
+function updateBilingualFileStatus() {
+
+    if (
+        !englishTxtFile ||
+        !bengaliTxtFile
+    ) {
+
+        fileStatus.textContent =
+            "Waiting for both English and Bengali TXT files.";
+
+        return;
+    }
+
+
+    const englishBase =
+        englishTxtFile.name
+            .replace(
+                /E\.txt$/i,
+                ""
+            );
+
+
+    const bengaliBase =
+        bengaliTxtFile.name
+            .replace(
+                /B\.txt$/i,
+                ""
+            );
+
+
+    if (
+        englishBase.toLowerCase() !==
+        bengaliBase.toLowerCase()
+    ) {
+
+        fileStatus.textContent =
+            "⚠ English and Bengali filenames have different base IDs.";
+
+        return;
+    }
+
+
+    if (
+        englishBlocks.length !==
+        bengaliBlocks.length
+    ) {
+
+        fileStatus.textContent =
+            `⚠ Block mismatch — English: ${englishBlocks.length}, Bengali: ${bengaliBlocks.length}`;
+
+        return;
+    }
+
+
+    fileStatus.textContent =
+        `✓ Bilingual files aligned — ${englishBlocks.length} blocks found in each file.`;
+}
+
+function renderSingleSourceBlock() {
+
+    if (
+        singleBlocks.length === 0
+    ) {
+
+        singleBlockEditor.value =
+            "";
+
+        blockPosition.textContent =
+            "Block -- / --";
+
+        singleEditBtn.disabled =
+            true;
+
+        singleSaveBtn.disabled =
+            true;
+
+        return;
+    }
+
+
+    clampSourceBlockIndex(
+        singleBlocks.length
+    );
+
+
+    const block =
+        singleBlocks[
+            currentSourceBlockIndex
+        ];
+
+
+    singleBlockEditor.value =
+        block.displayText;
+
+
+    blockPosition.textContent =
+        `Block ${currentSourceBlockIndex + 1} / ${singleBlocks.length}`;
+
+
+    singleEditBtn.disabled =
+        false;
+
+    singleSaveBtn.disabled =
+        true;
+
+
+    syncAnswerQuestionToSourceBlock();
+}
+
+function renderBilingualSourceBlock() {
+
+    const total =
+        Math.max(
+            englishBlocks.length,
+            bengaliBlocks.length
+        );
+
+
+    if (total === 0) {
+
+        englishBlockEditor.value =
+            "";
+
+        bengaliBlockEditor.value =
+            "";
+
+        blockPosition.textContent =
+            "Block -- / --";
+
+        englishEditBtn.disabled =
+            true;
+
+        bengaliEditBtn.disabled =
+            true;
+
+        return;
+    }
+
+
+    clampSourceBlockIndex(
+        total
+    );
+
+
+    const english =
+        englishBlocks[
+            currentSourceBlockIndex
+        ];
+
+
+    const bengali =
+        bengaliBlocks[
+            currentSourceBlockIndex
+        ];
+
+
+    englishBlockEditor.value =
+        english
+            ? english.displayText
+            : "⚠ English block missing";
+
+
+    bengaliBlockEditor.value =
+        bengali
+            ? bengali.displayText
+            : "⚠ Bengali block missing";
+
+
+    blockPosition.textContent =
+        `Block ${currentSourceBlockIndex + 1} / ${total}`;
+
+
+    englishEditBtn.disabled =
+        !english;
+
+    bengaliEditBtn.disabled =
+        !bengali;
+
+
+    englishSaveBtn.disabled =
+        true;
+
+    bengaliSaveBtn.disabled =
+        true;
+
+
+    syncAnswerQuestionToSourceBlock();
+}
+
+function clampSourceBlockIndex(
+    total
+) {
+
+    if (
+        currentSourceBlockIndex < 0
+    ) {
+
+        currentSourceBlockIndex =
+            0;
+    }
+
+
+    if (
+        currentSourceBlockIndex >= total
+    ) {
+
+        currentSourceBlockIndex =
+            total - 1;
+    }
+}
+
+// =========================================
+// SOURCE NAVIGATION
+// =========================================
+
+function getSourceBlockCount() {
+
+    if (sourceMode === 2) {
+
+        return singleBlocks.length;
+    }
+
+
+    return Math.max(
+        englishBlocks.length,
+        bengaliBlocks.length
+    );
+}
+
+
+function goToPreviousSourceBlock() {
+
+    if (
+        activeEditSide !== null
+    ) {
+
+        return;
+    }
+
+
+    if (
+        currentSourceBlockIndex <= 0
+    ) {
+
+        return;
+    }
+
+
+    currentSourceBlockIndex--;
+
+
+    renderSourceBlock();
+}
+
+
+function goToNextSourceBlock() {
+
+    if (
+        activeEditSide !== null
+    ) {
+
+        return;
+    }
+
+
+    const total =
+        getSourceBlockCount();
+
+
+    if (
+        currentSourceBlockIndex >=
+        total - 1
+    ) {
+
+        return;
+    }
+
+
+    currentSourceBlockIndex++;
+
+
+    renderSourceBlock();
+}
+
+function updateSourceNavigationButtons() {
+
+    const total =
+        getSourceBlockCount();
+
+
+    const locked =
+        activeEditSide !== null;
+
+
+    const previousDisabled =
+
+        locked ||
+        total === 0 ||
+        currentSourceBlockIndex <= 0;
+
+
+    const nextDisabled =
+
+        locked ||
+        total === 0 ||
+        currentSourceBlockIndex >=
+            total - 1;
+
+
+    singlePreviousBtn.disabled =
+        previousDisabled;
+
+    singleNextBtn.disabled =
+        nextDisabled;
+
+
+    englishPreviousBtn.disabled =
+        previousDisabled;
+
+    englishNextBtn.disabled =
+        nextDisabled;
+
+
+    bengaliPreviousBtn.disabled =
+        previousDisabled;
+
+    bengaliNextBtn.disabled =
+        nextDisabled;
+}
+
+// =========================================
+// BEGIN EDIT
+// =========================================
+
+function beginBlockEdit(side) {
+
+    if (
+        activeEditSide !== null
+    ) {
+
+        return;
+    }
+
+
+    activeEditSide =
+        side;
+
+
+    if (side === "single") {
+
+        singleBlockEditor.readOnly =
+            false;
+
+        singleBlockEditor.focus();
+
+        singleEditBtn.disabled =
+            true;
+
+        singleSaveBtn.disabled =
+            false;
+
+    } else if (
+        side === "english"
+    ) {
+
+        englishBlockEditor.readOnly =
+            false;
+
+        englishBlockEditor.focus();
+
+        englishEditBtn.disabled =
+            true;
+
+        englishSaveBtn.disabled =
+            false;
+
+
+        bengaliEditBtn.disabled =
+            true;
+
+    } else if (
+        side === "bengali"
+    ) {
+
+        bengaliBlockEditor.readOnly =
+            false;
+
+        bengaliBlockEditor.focus();
+
+        bengaliEditBtn.disabled =
+            true;
+
+        bengaliSaveBtn.disabled =
+            false;
+
+
+        englishEditBtn.disabled =
+            true;
+    }
+
+
+    updateSourceNavigationButtons();
+}
+
+// =========================================
+// SAVE EDITED BLOCK
+// =========================================
+
+function saveBlockEdit(side) {
+
+    if (
+        activeEditSide !== side
+    ) {
+
+        return;
+    }
+
+
+    if (side === "single") {
+
+        const block =
+            singleBlocks[
+                currentSourceBlockIndex
+            ];
+
+
+        block.displayText =
+            singleBlockEditor.value;
+
+        block.originalText =
+            singleBlockEditor.value;
+
+
+        singleBlockEditor.readOnly =
+            true;
+
+
+    } else if (
+        side === "english"
+    ) {
+
+        const block =
+            englishBlocks[
+                currentSourceBlockIndex
+            ];
+
+
+        const updatedVisible =
+            englishBlockEditor.value;
+
+
+        block.originalText =
+            mergeVisibleQuestionFields(
+                block.originalText,
+                updatedVisible
+            );
+
+
+        block.displayText =
+            extractQuestionOptionLines(
+                block.originalText
+            );
+
+
+        englishBlockEditor.value =
+            block.displayText;
+
+
+        englishBlockEditor.readOnly =
+            true;
+
+
+    } else if (
+        side === "bengali"
+    ) {
+
+        const block =
+            bengaliBlocks[
+                currentSourceBlockIndex
+            ];
+
+
+        const updatedVisible =
+            bengaliBlockEditor.value;
+
+
+        block.originalText =
+            mergeVisibleQuestionFields(
+                block.originalText,
+                updatedVisible
+            );
+
+
+        block.displayText =
+            extractQuestionOptionLines(
+                block.originalText
+            );
+
+
+        bengaliBlockEditor.value =
+            block.displayText;
+
+
+        bengaliBlockEditor.readOnly =
+            true;
+    }
+
+
+    activeEditSide =
+        null;
+
+
+    rebuildEditedSourceTexts();
+
+
+    renderSourceBlock();
+}
+
+// =========================================
+// QUESTION FIELD MERGE
+// =========================================
+
+function extractQuestionOptionLines(
+    blockText
+) {
+
+    return blockText
+        .split("\n")
+        .filter(
+            line => {
+
+                const trimmed =
+                    line.trimStart();
+
+                return (
+                    trimmed.startsWith("Q|") ||
+                    trimmed.startsWith("A|") ||
+                    trimmed.startsWith("B|") ||
+                    trimmed.startsWith("C|") ||
+                    trimmed.startsWith("D|")
+                );
+            }
+        )
+        .join("\n");
+}
+
+function mergeVisibleQuestionFields(
+    originalBlock,
+    editedVisibleBlock
+) {
+
+    const editedMap =
+        {};
+
+
+    editedVisibleBlock
+        .split("\n")
+        .forEach(
+            line => {
+
+                const trimmed =
+                    line.trimStart();
+
+
+                const match =
+                    trimmed.match(
+                        /^([QABCD])\|(.*)$/i
+                    );
+
+
+                if (match) {
+
+                    editedMap[
+                        match[1]
+                            .toUpperCase()
+                    ] =
+                        `${match[1].toUpperCase()}|${match[2]}`;
+                }
+            }
+        );
+
+
+    return originalBlock
+        .split("\n")
+        .map(
+            line => {
+
+                const trimmed =
+                    line.trimStart();
+
+
+                const match =
+                    trimmed.match(
+                        /^([QABCD])\|/i
+                    );
+
+
+                if (!match) {
+
+                    /*
+                        Preserve:
+
+                        Shift|
+                        Correct|
+                        Difficulty|
+                        Image|
+                        etc.
+                    */
+
+                    return line;
+                }
+
+
+                const key =
+                    match[1]
+                        .toUpperCase();
+
+
+                return (
+                    editedMap[key] !==
+                    undefined
+                )
+                    ? editedMap[key]
+                    : line;
+            }
+        )
+        .join("\n");
+}
+
+function rebuildEditedSourceTexts() {
+
+    if (sourceMode === 2) {
+
+        singleTxtText =
+            singleBlocks
+                .map(
+                    block =>
+                        block.originalText
+                )
+                .join("\n\n");
+
+        return;
+    }
+
+
+    englishTxtText =
+        englishBlocks
+            .map(
+                block =>
+                    block.originalText
+            )
+            .join("\n\n");
+
+
+    bengaliTxtText =
+        bengaliBlocks
+            .map(
+                block =>
+                    block.originalText
+            )
+            .join("\n\n");
+}
+
+// =========================================
+// PDF VIEWER
+// =========================================
+
+function handlePdfSelection(event) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) {
+
+        clearPdfViewer();
+
+        return;
+    }
+
+
+    if (
+        file.type !==
+        "application/pdf" &&
+        !file.name
+            .toLowerCase()
+            .endsWith(".pdf")
+    ) {
+
+        alert(
+            "Please select a PDF file."
+        );
+
+        event.target.value =
+            "";
+
+        return;
+    }
+
+
+    if (currentPdfUrl) {
+
+        URL.revokeObjectURL(
+            currentPdfUrl
+        );
+    }
+
+
+    currentPdfUrl =
+        URL.createObjectURL(
+            file
+        );
+
+
+    pdfViewer.src =
+        currentPdfUrl;
+
+
+    pdfViewer.classList.remove(
+        "hidden"
+    );
+
+    pdfPlaceholder.classList.add(
+        "hidden"
+    );
+
+
+    pdfZoom =
+        1;
+
+
+    applyPdfZoom();
+
+
+    pdfZoomInBtn.disabled =
+        false;
+
+    pdfZoomOutBtn.disabled =
+        false;
+
+    pdfZoomResetBtn.disabled =
+        false;
+}
+
+function clearPdfViewer() {
+
+    if (currentPdfUrl) {
+
+        URL.revokeObjectURL(
+            currentPdfUrl
+        );
+
+        currentPdfUrl =
+            null;
+    }
+
+
+    pdfViewer.src =
+        "";
+
+
+    pdfViewer.classList.add(
+        "hidden"
+    );
+
+    pdfPlaceholder.classList.remove(
+        "hidden"
+    );
+
+
+    pdfZoom =
+        1;
+
+
+    pdfZoomDisplay.textContent =
+        "100%";
+
+
+    pdfZoomInBtn.disabled =
+        true;
+
+    pdfZoomOutBtn.disabled =
+        true;
+
+    pdfZoomResetBtn.disabled =
+        true;
+}
+
+function changePdfZoom(amount) {
+
+    if (!currentPdfUrl) {
+
+        return;
+    }
+
+
+    pdfZoom +=
+        amount;
+
+
+    pdfZoom =
+        Math.max(
+            0.5,
+            Math.min(
+                2,
+                pdfZoom
+            )
+        );
+
+
+    applyPdfZoom();
+}
+
+
+function resetPdfZoom() {
+
+    pdfZoom =
+        1;
+
+    applyPdfZoom();
+}
+
+
+function applyPdfZoom() {
+
+    pdfZoomDisplay.textContent =
+        `${Math.round(
+            pdfZoom * 100
+        )}%`;
+
+
+    pdfViewer.style.width =
+        `${100 / pdfZoom}%`;
+
+
+    pdfViewer.style.height =
+        `${100 / pdfZoom}%`;
+
+
+    pdfViewer.style.transform =
+        `scale(${pdfZoom})`;
+}
+
+// =========================================
+// SOURCE ↔ ANSWER SYNCHRONIZATION
+// =========================================
+
+function syncAnswerQuestionToSourceBlock() {
+
+    /*
+        Source block index is zero-based.
+
+        Example:
+
+        Initial Question No. = 101
+
+        Block index 0 → Q101
+        Block index 1 → Q102
+        Block index 73 → Q174
+    */
+
+    const questionOffset =
+        currentSourceBlockIndex;
+
+
+    /*
+        IMPORTANT:
+
+        Replace the function below with your
+        existing Answer Key Builder function
+        that changes the current question.
+
+        If your existing function is named
+        setCurrentQuestionIndex(), use that.
+
+        If your current state is directly
+        controlled by currentIndex, update it
+        here and call the existing UI renderer.
+    */
+
+
+    if (
+        typeof goToAnswerIndex ===
+        "function"
+    ) {
+
+        goToAnswerIndex(
+            questionOffset
+        );
+    }
+}
+handleSourceModeChange();
