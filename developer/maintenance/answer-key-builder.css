@@ -1070,3 +1070,463 @@ button:disabled {
     }
 
 }
+/* =========================================
+   ANSWER KEY BUILDER
+   DESKTOP SOURCE WORKSPACE
+========================================= */
+
+
+/*
+    This maintenance utility is intentionally
+    desktop / PC oriented.
+*/
+
+.container {
+
+    width: calc(100% - 40px);
+
+    max-width: 1500px;
+}
+
+
+/* =========================================
+   SESSION CONFIG
+========================================= */
+
+.config-grid {
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+
+.input-group select {
+
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius: 9px;
+
+    background:
+        rgba(5, 15, 28, .50);
+
+    color: #ffffff;
+
+    font-size: .92rem;
+
+    outline: none;
+}
+
+
+.input-group select:focus {
+
+    border-color:
+        rgba(120, 190, 255, .65);
+}
+
+
+/* =========================================
+   GENERIC
+========================================= */
+
+.hidden {
+
+    display: none !important;
+}
+
+
+.section-heading-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 16px;
+}
+
+
+.section-heading-row h2 {
+
+    margin-bottom: 0;
+}
+
+
+/* =========================================
+   FILE UPLOADER
+========================================= */
+
+.upload-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+.two-column-upload {
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+}
+
+
+.file-upload-box {
+
+    padding: 15px;
+
+    background:
+        rgba(5, 15, 28, .28);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .11);
+
+    border-radius: 11px;
+}
+
+
+.file-upload-box label {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #ffffff;
+
+    font-size: .9rem;
+
+    font-weight: 700;
+}
+
+
+.file-upload-box input[type="file"] {
+
+    width: 100%;
+
+    margin-bottom: 8px;
+
+    padding: 9px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .15);
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, .07);
+
+    color: #ffffff;
+}
+
+
+.file-status {
+
+    margin-top: 15px;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(5, 15, 28, .30);
+
+    color: #c9d9e8;
+
+    font-size: .83rem;
+}
+
+
+/* =========================================
+   PDF VIEWER
+========================================= */
+
+.pdf-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.pdf-controls button {
+
+    min-width: 42px;
+
+    padding: 7px 11px;
+}
+
+
+#pdfZoomDisplay {
+
+    min-width: 60px;
+
+    text-align: center;
+
+    color: #dcecff;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size: .85rem;
+}
+
+
+.pdf-viewer-container {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 650px;
+
+    overflow: auto;
+
+    background:
+        rgba(0, 0, 0, .28);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .13);
+
+    border-radius: 10px;
+}
+
+
+.pdf-viewer {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    border: 0;
+
+    background: #ffffff;
+
+    transform-origin:
+        top left;
+}
+
+
+.viewer-placeholder {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    height: 100%;
+
+    color: #9eb2c5;
+
+    font-size: .9rem;
+}
+
+
+/* =========================================
+   QUESTION EDITOR
+========================================= */
+
+.block-position {
+
+    padding: 7px 12px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .13);
+
+    border-radius: 8px;
+
+    background:
+        rgba(5, 15, 28, .35);
+
+    color: #dcecff;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size: .83rem;
+}
+
+
+.split-editor-mode {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+.question-editor-panel {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .13);
+
+    border-radius: 11px;
+
+    background:
+        rgba(5, 15, 28, .30);
+}
+
+
+.editor-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 11px 14px;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, .10);
+
+    background:
+        rgba(255, 255, 255, .05);
+}
+
+
+.editor-header strong {
+
+    color: #ffffff;
+}
+
+
+.editor-header span {
+
+    overflow: hidden;
+
+    color: #aebfd0;
+
+    font-size: .78rem;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.block-editor {
+
+    display: block;
+
+    width: 100%;
+
+    height: 330px;
+
+    padding: 16px;
+
+    resize: vertical;
+
+    border: none;
+
+    outline: none;
+
+    background:
+        rgba(2, 10, 20, .42);
+
+    color: #eef7ff;
+
+    font-family:
+        Consolas,
+        "Noto Sans Bengali",
+        "Courier New",
+        monospace;
+
+    font-size: .91rem;
+
+    line-height: 1.65;
+
+    white-space: pre-wrap;
+}
+
+
+.block-editor[readonly] {
+
+    cursor: default;
+}
+
+
+.block-editor:not([readonly]) {
+
+    background:
+        rgba(20, 50, 75, .42);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(100, 190, 255, .35);
+}
+
+
+.editor-controls {
+
+    display: grid;
+
+    grid-template-columns:
+        80px 1fr 80px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 12px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, .10);
+}
+
+
+.editor-center-controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+.editor-controls button {
+
+    min-height: 38px;
+}
+
+
+/*
+    No mobile layout is intentionally provided.
+
+    Minimum practical workspace:
+    desktop / laptop.
+*/
