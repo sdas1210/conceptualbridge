@@ -741,6 +741,11 @@ function showCurrentQuestion() {
 // =========================================
 // SELECT ANSWER
 // =========================================
+
+// =========================================
+// SELECT ANSWER
+// =========================================
+
 function selectAnswer(answer) {
 
     if (!sessionActive) {
@@ -750,15 +755,22 @@ function selectAnswer(answer) {
 
 
     /*
-        Save answer against current block/question.
+        Remember which question/block
+        is being answered BEFORE auto-advance.
 
-        Block 1 = answers[0]
-        Block 2 = answers[1]
+        Index 0 = Block 1 = Question Slot 1
+        Index 1 = Block 2 = Question Slot 2
         etc.
     */
 
+    const answeredIndex =
+        currentIndex;
+
+
+    // Save answer
+
     answers[
-        currentIndex
+        answeredIndex
     ] =
         answer;
 
@@ -766,23 +778,68 @@ function selectAnswer(answer) {
     log(
         `Question ${
             initialQuestion +
-            currentIndex
+            answeredIndex
         } answered: ${answer}`
     );
 
 
     /*
-        Auto advance both Question
-        and TXT block together.
+        Update the Answer Grid immediately.
+
+        Example:
+        Block 1 → B
+        Grid Question 1 now displays B
+    */
+
+    updateGridItem(
+        answeredIndex
+    );
+
+
+    /*
+        Update:
+
+        Answered
+        Remaining
+        Percentage
+        Progress Status
+    */
+
+    updateProgress();
+
+
+    /*
+        Update:
+
+        Answers Selected
+        Missing Answers
+        Ansopt Entries
+        Validation Status
+        Download availability
+    */
+
+    validateOutput();
+
+
+    /*
+        AUTO ADVANCE
+
+        Keep:
+
+        TXT Block
+        Answer Question
+        Answer Grid
+
+        synchronized.
     */
 
     if (
-        currentIndex <
+        answeredIndex <
         totalQuestions - 1
     ) {
 
         const nextIndex =
-            currentIndex + 1;
+            answeredIndex + 1;
 
 
         const sourceTotal =
@@ -800,6 +857,14 @@ function selectAnswer(answer) {
 
         } else {
 
+            /*
+                There are more configured
+                answer questions than TXT blocks.
+
+                Continue Answer Builder without
+                moving beyond available TXT blocks.
+            */
+
             currentIndex =
                 nextIndex;
 
@@ -808,10 +873,14 @@ function selectAnswer(answer) {
 
     } else {
 
+        /*
+            Final question:
+            stay on current question.
+        */
+
         showCurrentQuestion();
     }
 }
-
 
 
 // =========================================
