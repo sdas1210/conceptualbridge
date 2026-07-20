@@ -1094,13 +1094,6 @@ function updateCurrentGridItem() {
         currentItem.classList.add(
             "current"
         );
-
-
-        currentItem.scrollIntoView(
-            {
-                block: "nearest"
-            }
-        );
     }
 }
 
