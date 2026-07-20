@@ -2240,6 +2240,26 @@ function updateBilingualFileStatus() {
         `✓ Bilingual files aligned — ${englishBlocks.length} blocks found in each file.`;
 }
 
+// =========================================
+// RENDER SOURCE BLOCK
+// =========================================
+
+function renderSourceBlock() {
+
+    if (sourceMode === 2) {
+
+        renderSingleSourceBlock();
+
+    } else {
+
+        renderBilingualSourceBlock();
+    }
+
+    updateSourceNavigationButtons();
+}
+
+
+
 function renderSingleSourceBlock() {
 
     if (
