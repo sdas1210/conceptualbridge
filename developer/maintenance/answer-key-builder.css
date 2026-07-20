@@ -1616,3 +1616,85 @@ body {
             1fr;
     }
 }
+
+
+/* =========================================
+   COMPACT QUESTION EDITOR CONTROLS
+   Half-screen + bilingual split mode
+========================================= */
+
+.editor-controls {
+
+    display: grid;
+
+    grid-template-columns:
+        42px minmax(0, 1fr) 42px;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 10px;
+}
+
+
+/* Previous / Next arrow buttons */
+
+.editor-controls > button {
+
+    min-width: 42px;
+
+    width: 42px;
+
+    height: 38px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 14px;
+
+    line-height: 1;
+}
+
+
+/* Center Edit + Save area */
+
+.editor-center-controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 6px;
+
+    min-width: 0;
+}
+
+
+/* Override global button min-width: 150px */
+
+.editor-center-controls button {
+
+    min-width: 0;
+
+    width: auto;
+
+    flex: 1 1 0;
+
+    max-width: 110px;
+
+    min-height: 38px;
+
+    padding: 8px 10px;
+
+    font-size: 0.8rem;
+
+    white-space: nowrap;
+}
