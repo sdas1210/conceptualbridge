@@ -1367,6 +1367,34 @@ function logCompletionOnce() {
     log(
         "Ansopt.txt is ready for download."
     );
+
+    /*
+    All answers have now been completed.
+
+    Only at this point automatically
+    move the user to the Answer Grid.
+*/
+
+requestAnimationFrame(
+    () => {
+
+        const gridSection =
+            document.getElementById(
+                "answerGridSection"
+            );
+
+
+        if (gridSection) {
+
+            gridSection.scrollIntoView(
+                {
+                    behavior: "smooth",
+                    block: "start"
+                }
+            );
+        }
+    }
+);
     
 }
 
