@@ -118,16 +118,16 @@
                 Number of Files
             </label>
         
-            <select id="fileCountInput">
-        
-                <option value="2" selected>
-                    2 Files — 1 TXT + 1 PDF
+           <select id="fileCountInput">
+
+                <option value="1" selected>
+                    1 File — Question TXT
                 </option>
-        
-                <option value="3">
-                    3 Files — English TXT + Bengali TXT + PDF
+            
+                <option value="2">
+                    2 Files — English TXT + Bengali TXT
                 </option>
-        
+            
             </select>
         
             <span class="input-help">
@@ -196,7 +196,7 @@
                     >
     
                     <span class="input-help">
-                        E/B filename suffix is not required in 2-file mode
+                        Select the TXT file containing the question blocks
                     </span>
     
                 </div>
@@ -204,15 +204,6 @@
     
                 <div class="file-upload-box">
     
-                    <label for="singlePdfInput">
-                        Reference PDF
-                    </label>
-    
-                    <input
-                        type="file"
-                        id="singlePdfInput"
-                        accept=".pdf,application/pdf"
-                    >
     
                     <span class="input-help">
                         PDF used as the visual answer reference
@@ -267,25 +258,6 @@
     
                     <span class="input-help">
                         Filename must end with B.txt
-                    </span>
-    
-                </div>
-    
-    
-                <div class="file-upload-box">
-    
-                    <label for="bilingualPdfInput">
-                        Reference PDF
-                    </label>
-    
-                    <input
-                        type="file"
-                        id="bilingualPdfInput"
-                        accept=".pdf,application/pdf"
-                    >
-    
-                    <span class="input-help">
-                        PDF used as the visual answer reference
                     </span>
     
                 </div>
