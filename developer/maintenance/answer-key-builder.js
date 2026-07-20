@@ -801,22 +801,43 @@ function selectAnswer(answer) {
         - Next
         - Answer Grid
     */
-
     if (
         currentIndex <
         totalQuestions - 1
     ) {
-
+    
         currentIndex++;
-
+    
+    
+        /*
+            Keep TXT block synchronized
+            with automatic answer advance.
+        */
+    
+        const sourceTotal =
+            getSourceBlockCount();
+    
+    
+        if (
+            currentIndex < sourceTotal
+        ) {
+    
+            currentSourceBlockIndex =
+                currentIndex;
+    
+            renderSourceBlock();
+        }
+    
+    
         showCurrentQuestion();
-
+    
     } else {
-
+    
         // Stay on final question
-
+    
         showCurrentQuestion();
     }
+    
 }
 
 
@@ -930,19 +951,55 @@ function renderAnswerGrid() {
             );
         }
 
-
         item.addEventListener(
             "click",
             function() {
-
-                currentIndex =
+        
+                const selectedIndex =
                     Number(
                         this.dataset.index
                     );
-
+        
+        
+                /*
+                    Update Answer Builder
+                */
+        
+                currentIndex =
+                    selectedIndex;
+        
+        
+                /*
+                    Synchronize TXT Question Viewer.
+        
+                    Only synchronize when the
+                    corresponding source block exists.
+                */
+        
+                const sourceTotal =
+                    getSourceBlockCount();
+        
+        
+                if (
+                    selectedIndex >= 0 &&
+                    selectedIndex < sourceTotal
+                ) {
+        
+                    currentSourceBlockIndex =
+                        selectedIndex;
+        
+                    renderSourceBlock();
+                }
+        
+        
+                /*
+                    Update Answer Selection UI
+                */
+        
                 showCurrentQuestion();
             }
         );
+        
 
 
         answerGrid.appendChild(
@@ -1969,11 +2026,11 @@ async function loadSingleTxt() {
         renderSourceBlock();
 
 
-        addConsoleMessage(
+        log(
             `Question TXT loaded: ${file.name}`
         );
 
-        addConsoleMessage(
+        log(
             `Question blocks found: ${singleBlocks.length}`
         );
 
@@ -2971,49 +3028,56 @@ function applyPdfZoom() {
 // =========================================
 // SOURCE ↔ ANSWER SYNCHRONIZATION
 // =========================================
+// =========================================
+// SOURCE ↔ ANSWER SYNCHRONIZATION
+// =========================================
 
 function syncAnswerQuestionToSourceBlock() {
 
     /*
-        Source block index is zero-based.
-
-        Example:
-
-        Initial Question No. = 101
-
-        Block index 0 → Q101
-        Block index 1 → Q102
-        Block index 73 → Q174
+        Do nothing until an answer session
+        has actually been started.
     */
 
-    const questionOffset =
-        currentSourceBlockIndex;
+    if (!sessionActive) {
+
+        return;
+    }
 
 
     /*
-        IMPORTANT:
-
-        Replace the function below with your
-        existing Answer Key Builder function
-        that changes the current question.
-
-        If your existing function is named
-        setCurrentQuestionIndex(), use that.
-
-        If your current state is directly
-        controlled by currentIndex, update it
-        here and call the existing UI renderer.
+        Do not allow the source viewer
+        to move beyond the configured
+        answer-session question count.
     */
 
-
     if (
-        typeof goToAnswerIndex ===
-        "function"
+        currentSourceBlockIndex < 0 ||
+        currentSourceBlockIndex >= totalQuestions
     ) {
 
-        goToAnswerIndex(
-            questionOffset
-        );
+        return;
     }
+
+
+    /*
+        Source block index and answer index
+        are both zero-based.
+
+        Example:
+
+        Initial Question = 101
+
+        Block 1  → index 0 → Question 101
+        Block 2  → index 1 → Question 102
+        Block 74 → index 73 → Question 174
+    */
+
+    currentIndex =
+        currentSourceBlockIndex;
+
+
+    showCurrentQuestion();
 }
+
 handleSourceModeChange();
