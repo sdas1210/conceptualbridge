@@ -1729,7 +1729,12 @@ function handleSourceModeChange() {
         0;
 
 
-    if (sourceMode === 2) {
+    /*
+        MODE 1
+        Single Question TXT
+    */
+
+    if (sourceMode === 1) {
 
         twoFileUploader.classList.remove(
             "hidden"
@@ -1750,9 +1755,17 @@ function handleSourceModeChange() {
 
 
         fileStatus.textContent =
-            "2-file mode: Select one TXT file and one reference PDF.";
+            "Single TXT mode: Select one question TXT file.";
 
-    } else {
+    }
+
+
+    /*
+        MODE 2
+        English + Bengali TXT
+    */
+
+    else {
 
         twoFileUploader.classList.add(
             "hidden"
@@ -1773,7 +1786,7 @@ function handleSourceModeChange() {
 
 
         fileStatus.textContent =
-            "3-file mode: Select E.txt, B.txt and one reference PDF.";
+            "Bilingual TXT mode: Select matching E.txt and B.txt files.";
     }
 
 
@@ -2288,7 +2301,7 @@ function renderSourceBlock(
     syncAnswer = true
 ) {
 
-    if (sourceMode === 2) {
+    if (sourceMode === 1) {
 
         renderSingleSourceBlock(
             syncAnswer
@@ -2488,7 +2501,7 @@ function clampSourceBlockIndex(
 
 function getSourceBlockCount() {
 
-    if (sourceMode === 2) {
+    if (sourceMode === 1) {
 
         return singleBlocks.length;
     }
@@ -2900,7 +2913,7 @@ function mergeVisibleQuestionFields(
 
 function rebuildEditedSourceTexts() {
 
-    if (sourceMode === 2) {
+    if (sourceMode === 1) {
 
         singleTxtText =
             singleBlocks
@@ -2932,185 +2945,7 @@ function rebuildEditedSourceTexts() {
             .join("\n\n");
 }
 
-// =========================================
-// PDF VIEWER
-// =========================================
 
-function handlePdfSelection(event) {
-
-    const file =
-        event.target.files[0];
-
-
-    if (!file) {
-
-        clearPdfViewer();
-
-        return;
-    }
-
-
-    if (
-        file.type !==
-        "application/pdf" &&
-        !file.name
-            .toLowerCase()
-            .endsWith(".pdf")
-    ) {
-
-        alert(
-            "Please select a PDF file."
-        );
-
-        event.target.value =
-            "";
-
-        return;
-    }
-
-
-    if (currentPdfUrl) {
-
-        URL.revokeObjectURL(
-            currentPdfUrl
-        );
-    }
-
-
-    currentPdfUrl =
-        URL.createObjectURL(
-            file
-        );
-
-
-    pdfViewer.src =
-        currentPdfUrl;
-
-
-    pdfViewer.classList.remove(
-        "hidden"
-    );
-
-    pdfPlaceholder.classList.add(
-        "hidden"
-    );
-
-
-    pdfZoom =
-        1;
-
-
-    applyPdfZoom();
-
-
-    pdfZoomInBtn.disabled =
-        false;
-
-    pdfZoomOutBtn.disabled =
-        false;
-
-    pdfZoomResetBtn.disabled =
-        false;
-}
-
-function clearPdfViewer() {
-
-    if (currentPdfUrl) {
-
-        URL.revokeObjectURL(
-            currentPdfUrl
-        );
-
-        currentPdfUrl =
-            null;
-    }
-
-
-    pdfViewer.src =
-        "";
-
-
-    pdfViewer.classList.add(
-        "hidden"
-    );
-
-    pdfPlaceholder.classList.remove(
-        "hidden"
-    );
-
-
-    pdfZoom =
-        1;
-
-
-    pdfZoomDisplay.textContent =
-        "100%";
-
-
-    pdfZoomInBtn.disabled =
-        true;
-
-    pdfZoomOutBtn.disabled =
-        true;
-
-    pdfZoomResetBtn.disabled =
-        true;
-}
-
-function changePdfZoom(amount) {
-
-    if (!currentPdfUrl) {
-
-        return;
-    }
-
-
-    pdfZoom +=
-        amount;
-
-
-    pdfZoom =
-        Math.max(
-            0.5,
-            Math.min(
-                2,
-                pdfZoom
-            )
-        );
-
-
-    applyPdfZoom();
-}
-
-
-function resetPdfZoom() {
-
-    pdfZoom =
-        1;
-
-    applyPdfZoom();
-}
-
-
-function applyPdfZoom() {
-
-    pdfZoomDisplay.textContent =
-        `${Math.round(
-            pdfZoom * 100
-        )}%`;
-
-
-    pdfViewer.style.width =
-        `${100 / pdfZoom}%`;
-
-
-    pdfViewer.style.height =
-        `${100 / pdfZoom}%`;
-
-
-    pdfViewer.style.transform =
-        `scale(${pdfZoom})`;
-}
 
 // =========================================
 // SOURCE ↔ ANSWER SYNCHRONIZATION
