@@ -765,7 +765,7 @@ function selectAnswer(answer) {
 
     log(
         `Question ${
-            initialQuestionNumber +
+            initialQuestion +
             currentIndex
         } answered: ${answer}`
     );
