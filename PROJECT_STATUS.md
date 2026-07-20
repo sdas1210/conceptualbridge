@@ -1221,3 +1221,364 @@ The Mobile Refactoring, Authentication, Developer Inspector and other existing r
 
 This remains the single source of truth for the Conceptual Bridge project. All previous history is preserved. This update supersedes only the earlier Maintenance Suite current-status/next-step state, while retaining the historical development record.
 
+------------------------------------------------------------------------
+
+# Developer Maintenance Suite Progress Update (Added: 2026-07-20)
+
+## Current Status
+
+**Version:** Developer Maintenance Suite v0.7 (Five-Tool Workflow / Final Merger Foundation)
+
+This update records all maintenance work completed after the 2026-07-19 milestone. Previous project history remains preserved.
+
+## Maintenance Dashboard
+
+`developer/maintenance/maintenance.html` is now the central mother / entry page for all current maintenance HTML utilities:
+
+```text
+Maintenance Home
+├── Citation Remover
+├── Proof Reader
+├── Shift Extractor
+├── Answer Key Builder
+└── Final Merger
+```
+
+### Dashboard Decisions
+
+- ✅ All maintenance HTML utilities must be reachable from `maintenance.html`.
+- ✅ Common Conceptual Bridge glassmorphic design retained.
+- ✅ Compact cards use icons, short descriptions and direct navigation.
+- ✅ Subscribe/promotional UI excluded.
+- ✅ Responsive grid expanded for five tools.
+- ✅ Old three-card-specific `last-child` layout behavior should be removed.
+- ✅ Future maintenance HTML tools must also be registered on this mother page.
+
+## Citation Remover
+
+**Status:** ✅ Stable Core Workflow
+
+Previously completed functionality remains preserved: browser-local TXT processing, citation scanning/removal, statistics, remaining-citation validation, structure integrity validation, safe download gating and glassmorphic Maintenance Suite UI.
+
+## Proof Reader / Character Validation Engine
+
+**Status:** ✅ Core Interactive Workflow Working
+
+Previously completed functionality remains preserved: Unicode/unexpected-character validation, Character Validation Report, Text Editing Window, physical Previous/Next line navigation, Edit/Save lock behavior, Re-Validate, session-only Pass, corrected TXT download and glassmorphic UI.
+
+Error navigation behavior remains:
+
+```text
+Errors: 34, 38, 48
+↓
+Open line 34
+↓
+Edit → Save → Re-Validate
+↓
+If fixed → line 38 becomes next unresolved error
+```
+
+If editing another physical line introduces an earlier invalid character, re-validation starts from that earliest unresolved error. Pass applies only to the current uploaded-file session.
+
+## Shift Extractor
+
+**Status:** ✅ Added
+
+Purpose:
+
+- Read TXT question assets containing `Shift|`.
+- Extract/process Shift data.
+- Normalize Shift formatting.
+- Apply the developed AM/PM modifier handling.
+- Supply standardized Shift values for later question-processing stages.
+
+Example:
+
+```text
+Shift| 27/11/2025 9:00 AM 10:30 AM
+```
+
+becomes:
+
+```text
+Shift| 27/11/2025 9:00 AM - 10:30 AM
+```
+
+The same normalization principle is used inside Final Merger when Shift data already exists in the English file; no separate Shift file is required there.
+
+## Answer Key Builder
+
+**Status:** ✅ Added and Refined
+
+Completed behavior:
+
+- ✅ Default Total Questions = 100.
+- ✅ Total Questions editable (for example 10, 20, 100).
+- ✅ Initial Question Number defaults to 1 and is editable (for example 101 or 505).
+- ✅ Current Question Number reflects configured initial number and progress.
+- ✅ Dynamic Answer Progress, Answered, Remaining and percentage/status.
+- ✅ Interactive Answer Grid.
+- ✅ Clicking a question in the Answer Grid changes its visual state/color.
+- ✅ Output validation before download.
+- ✅ Standard downloadable answer TXT retained.
+- ❌ Development-only `AnsDev.txt` output removed.
+
+## Final Merger
+
+**Status:** ✅ Four-File Validator / Merger Foundation Implemented
+
+The former Difficulty Processor has been expanded into a complete final question assembly tool and renamed conceptually to **Final Merger**.
+
+Recommended files:
+
+```text
+final-merger.html
+final-merger.css
+final-merger.js
+```
+
+### Four Required TXT Inputs
+
+1. **English Question File** — filename ending in `E`, e.g. `100E.txt`; contains English `Q|`, `A|`, `B|`, `C|`, `D|` and `Shift|`.
+2. **Bengali Question File** — filename ending in `B`, e.g. `100B.txt`; contains corresponding Bengali `Q|`, `A|`, `B|`, `C|`, `D|`.
+3. **Answer File** — standard answer format such as `Ansopt.txt`.
+4. **Difficulty Rating File** — supplies question-aligned numeric difficulty ratings.
+
+English/Bengali files must share the same base identifier, e.g. `101E.txt` ↔ `101B.txt`.
+
+### File Information and Validation
+
+The interface reports English/Bengali block counts, answer count, difficulty question/value counts and expected output count.
+
+Before merging, each question is checked for:
+
+```text
+English: Q| A| B| C| D| Shift|
+Bengali: Q| A| B| C| D|
+Answer: A/B/C/D
+Difficulty: numeric value + question alignment
+```
+
+Validation includes:
+
+- ✅ E/B filename pairing.
+- ✅ English/Bengali block counts.
+- ✅ Answer and difficulty counts.
+- ✅ Required English and Bengali fields.
+- ✅ Shift presence and normalization.
+- ✅ Valid A/B/C/D answers.
+- ✅ Numeric difficulty values.
+- ✅ Difficulty question alignment against corresponding English `Q|`.
+- ✅ Detailed issue report.
+- ✅ Failed validation blocks final merge.
+
+## Leading-Whitespace Comparison Rule
+
+A false mismatch caused by a space immediately after `Q|` was fixed conceptually.
+
+These are treated equivalently for alignment:
+
+```text
+Q|Which of the following...
+Q| Which of the following...
+Q|    Which of the following...
+```
+
+Leading whitespace after the prefix is ignored using the equivalent of:
+
+```javascript
+String(content || "").trimStart().substring(0, 10)
+```
+
+Internal question spacing is not intentionally removed.
+
+## Difficulty Rating Compatibility
+
+Final Merger must support both difficulty-source formats.
+
+### Format A — Numbered
+
+```text
+Question 1: What is the capital of India?
+Difficulty Rating: 7.25
+```
+
+### Format B — Q-Pipe
+
+Confirmed from the latest sample:
+
+```text
+Q| Who joined as the Mission Director of Atal Innovation Mission under NITI Aayog in 2025?
+Difficulty Rating: 7.88
+
+Q| Who authored 'Careless People: A Cautionary Tale of Power, Greed, and Lost Idealism', published in 2025?
+Difficulty Rating: 5.12
+```
+
+For Q-Pipe format:
+
+- Each `Q|` starts a difficulty record.
+- Question numbers are assigned sequentially by `Q|` order.
+- `Difficulty Rating:` supplies the numeric value.
+- The corresponding English question is still compared before accepting the rating.
+- Leading whitespace after `Q|` is ignored.
+
+Thus the parser supports both `Question N:` and `Q|` formats without weakening alignment validation.
+
+## Shift Handling Inside Final Merger
+
+No separate Shift file is required. Shift is read from the English question block.
+
+Input:
+
+```text
+Shift| 27/11/2025 9:00 AM 10:30 AM
+```
+
+Normalized output:
+
+```text
+Shift| 27/11/2025 9:00 AM - 10:30 AM
+```
+
+Final Merger should keep this normalization self-contained rather than depending on another maintenance page at runtime.
+
+## Final Merge Format
+
+After validation passes, English and Bengali fields are combined and the final order is:
+
+```text
+Q|
+A|
+B|
+C|
+D|
+Shift|
+Correct|
+Difficulty|
+```
+
+Example:
+
+```text
+Q|What is the capital of India? / ভারতের রাজধানী কী?
+A|Delhi / দিল্লি
+B|Mumbai / মুম্বাই
+C|Kolkata / কলকাতা
+D|Chennai / চেন্নাই
+Shift| 27/11/2025 9:00 AM - 10:30 AM
+Correct|A
+Difficulty|7.25
+```
+
+`Difficulty|` is written immediately after `Correct|`.
+
+Final integrity validation verifies generated block count, `Correct|` count and `Difficulty|` count before enabling download. Default output is currently `Final.txt`.
+
+## Current Maintenance File Structure
+
+```text
+developer/
+└── maintenance/
+    ├── maintenance.html
+    ├── citation-remover.html / .css / .js
+    ├── proof-reader.html / .css / .js
+    ├── shift-extractor.html / .css / .js
+    ├── answer-key-builder.html / .css / .js
+    └── final-merger.html / .css / .js
+```
+
+## Current End-to-End Maintenance Workflow
+
+```text
+Raw Question TXT
+↓
+Citation Remover
+↓
+Proof Reader
+↓
+Shift Extractor / Shift normalization where required
+↓
+Answer Key Builder
+↓
+English E.txt + Bengali B.txt + Ansopt.txt + Difficulty Rating TXT
+↓
+Final Merger
+↓
+Structural Validation
+↓
+Difficulty Alignment Validation
+↓
+Shift Normalization
+↓
+Bilingual Merge
+↓
+Correct| Injection
+↓
+Difficulty| Injection
+↓
+Final Integrity Validation
+↓
+Final.txt
+```
+
+## Engineering Decisions Confirmed
+
+1. Maintenance utilities remain isolated from Student Portal runtime logic.
+2. Browser-local TXT processing remains preferred where server execution is unnecessary.
+3. `maintenance.html` is the single mother page for maintenance HTML utilities.
+4. Each tool remains modular with its own HTML/CSS/JS.
+5. Final Merger validates before generation rather than blindly combining files.
+6. English/Bengali blocks are positionally paired; difficulty additionally requires English-question alignment.
+7. Leading whitespace after question prefixes must not create false mismatches.
+8. Shift is read directly from English blocks and normalized.
+9. Difficulty parsing supports both `Question N:` and `Q|` formats.
+10. `Difficulty|` is written immediately after `Correct|`.
+11. Downloads remain gated behind successful validation.
+12. Future maintenance HTML tools must be added to `maintenance.html`.
+
+## Immediate Next Starting Point
+
+1. Test Final Merger with a small 2–3 question dataset.
+2. Verify both Difficulty formats (`Question N:` and `Q|`).
+3. Verify real `Ansopt.txt` parsing.
+4. Verify all Shift AM/PM normalization cases.
+5. Verify exact bilingual output formatting.
+6. Test failures: missing Bengali option, Shift, answer, difficulty, misaligned difficulty and E/B filename mismatch.
+7. Test a full production-size question set only after small-set validation passes.
+8. Remove obsolete CSS selectors from the old Difficulty Processor if still present.
+9. Continue preserving the common glassmorphic Maintenance Suite design.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated: 2026-07-20)
+
+| Date | Milestone |
+|---|---|
+| 2026-07-10 | Mobile Refactoring Roadmap |
+| 2026-07-14 | Developer Workspace Foundation |
+| 2026-07-16 | Authentication Workspace Foundation |
+| 2026-07-17 | Quiz Portal UI Enhancements |
+| 2026-07-17 | Authentication Dropdown & Logout Foundation |
+| 2026-07-18 | Developer Metadata Inspector Foundation |
+| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
+| 2026-07-19 | Citation Remover Core Completed |
+| 2026-07-19 | Proof Reader Validation & Editing Workflow |
+| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
+| 2026-07-20 | Shift Extractor Added |
+| 2026-07-20 | Answer Key Builder Added and Refined |
+| 2026-07-20 | Maintenance Home Expanded to Five Tools |
+| 2026-07-20 | Difficulty Processor Expanded into Final Merger |
+| 2026-07-20 | Four-File Validation and Bilingual Merge Workflow Added |
+| 2026-07-20 | Dual Difficulty Rating Format Support Defined |
+| Next | Final Merger Small-Set End-to-End Testing |
+| Next | Production-Size Final Merger Validation |
+| Next | Maintenance Output Hardening |
+
+------------------------------------------------------------------------
+
+# Documentation Note (Updated: 2026-07-20)
+
+This document remains the single source of truth for the Conceptual Bridge project. All historical sections are preserved. This update supersedes only older Maintenance Suite current-status and immediate-next-step descriptions where later implementation has advanced beyond them.
+
+Future sessions should continue appending milestones rather than deleting historical development records.
