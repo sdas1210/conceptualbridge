@@ -1530,3 +1530,89 @@ button:disabled {
     Minimum practical workspace:
     desktop / laptop.
 */
+/* =========================================
+   HALF-SCREEN DESKTOP MODE
+========================================= */
+
+html,
+body {
+    min-width: 0;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.container {
+    width: min(100%, 920px);
+    max-width: 920px;
+    margin: 0 auto;
+    padding-left: 14px;
+    padding-right: 14px;
+    box-sizing: border-box;
+}
+
+.card {
+    padding: 18px;
+}
+
+.config-grid,
+.upload-grid {
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+}
+
+/* Single TXT uploader */
+
+.two-column-upload {
+    grid-template-columns: 1fr;
+}
+
+/* E + B editors remain side-by-side
+   whenever half-screen width permits */
+
+.split-editor-mode {
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.question-editor-panel {
+    min-width: 0;
+}
+
+.block-editor {
+    width: 100%;
+    min-height: 300px;
+    box-sizing: border-box;
+}
+
+.answer-options {
+    flex-wrap: wrap;
+}
+
+.answer-grid {
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(54px, 1fr)
+        );
+}
+
+@media (max-width: 700px) {
+
+    .config-grid,
+    .upload-grid,
+    .split-editor-mode {
+
+        grid-template-columns:
+            1fr;
+    }
+}
