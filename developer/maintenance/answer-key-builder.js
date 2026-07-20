@@ -69,9 +69,6 @@ const twoFileUploader =
 const singleTxtInput =
     document.getElementById("singleTxtInput");
 
-const singlePdfInput =
-    document.getElementById("singlePdfInput");
-
 
 // 3-file mode
 
@@ -84,35 +81,12 @@ const englishTxtInput =
 const bengaliTxtInput =
     document.getElementById("bengaliTxtInput");
 
-const bilingualPdfInput =
-    document.getElementById("bilingualPdfInput");
 
 
 // General file status
 
 const fileStatus =
     document.getElementById("fileStatus");
-
-
-// PDF
-
-const pdfViewer =
-    document.getElementById("pdfViewer");
-
-const pdfPlaceholder =
-    document.getElementById("pdfPlaceholder");
-
-const pdfZoomInBtn =
-    document.getElementById("pdfZoomInBtn");
-
-const pdfZoomOutBtn =
-    document.getElementById("pdfZoomOutBtn");
-
-const pdfZoomResetBtn =
-    document.getElementById("pdfZoomResetBtn");
-
-const pdfZoomDisplay =
-    document.getElementById("pdfZoomDisplay");
 
 
 // Editor mode containers
@@ -203,7 +177,7 @@ let answers = [];
 
 let sessionActive = false;
 
-let sourceMode = 2;
+let sourceMode = 1;
 
 let currentSourceBlockIndex = 0;
 
@@ -230,14 +204,6 @@ let bengaliTxtText = "";
 let englishBlocks = [];
 
 let bengaliBlocks = [];
-
-
-// PDF
-
-let currentPdfUrl = null;
-
-let pdfZoom = 1;
-
 
 // Edit state
 
@@ -335,10 +301,7 @@ singleTxtInput.addEventListener(
     loadSingleTxt
 );
 
-singlePdfInput.addEventListener(
-    "change",
-    handlePdfSelection
-);
+
 
 
 englishTxtInput.addEventListener(
@@ -351,10 +314,6 @@ bengaliTxtInput.addEventListener(
     loadBengaliTxt
 );
 
-bilingualPdfInput.addEventListener(
-    "change",
-    handlePdfSelection
-);
 
 
 // Navigation
@@ -426,23 +385,6 @@ bengaliSaveBtn.addEventListener(
     () => saveBlockEdit("bengali")
 );
 
-
-// PDF zoom
-
-pdfZoomInBtn.addEventListener(
-    "click",
-    () => changePdfZoom(0.1)
-);
-
-pdfZoomOutBtn.addEventListener(
-    "click",
-    () => changePdfZoom(-0.1)
-);
-
-pdfZoomResetBtn.addEventListener(
-    "click",
-    resetPdfZoom
-);
 
 
 // =========================================
