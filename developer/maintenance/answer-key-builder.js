@@ -1285,8 +1285,6 @@ function validateOutput() {
 return valid;
 
 }
-    
-}
 
 
 // =========================================
