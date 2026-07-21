@@ -1274,9 +1274,17 @@ function validateOutput() {
 
         downloadStandardBtn.disabled =
             true;
-
+    /*
+    Return validation result
+    so downloadStandardFile()
+    can determine whether downloading
+    is allowed.
+    */
+    
+    return valid;
         
     }
+    
 }
 
 
