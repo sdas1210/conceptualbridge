@@ -161,6 +161,33 @@
         .lang-pill { padding: 2px 6px; font-size: 0.7rem; border-radius: 3px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; cursor: pointer; font-weight: 600; }
         .lang-pill.active { background: linear-gradient(180deg, #3182ce 0%, #2b6cb0 100%); border-color: rgba(255,255,255,0.3); color: white; }
 
+        /* STUDY / PRACTICE MINI BUTTONS */
+        .pdf-mini-actions {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 7px;
+        }
+        
+        .pdf-mini-btn {
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .pdf-mini-btn:hover {
+            background: linear-gradient(180deg, #3182ce 0%, #2b6cb0 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -280,8 +307,18 @@
                                 <a id="dl-${fileNum}" href="${initialPdf}" class="btn-studio btn-download" ${initialPdf === '#' ? 'style="opacity:0.4; pointer-events:none;"' : ''} download>
                                     📁 Download PDF
                                 </a>
+                            
+                                <div class="pdf-mini-actions">
+                                    <button type="button" class="pdf-mini-btn">
+                                        Study
+                                    </button>
+                            
+                                    <button type="button" class="pdf-mini-btn">
+                                        Practice
+                                    </button>
+                                </div>
                             </td>
-                            <td style="text-align: center;">
+                                                        <td style="text-align: center;">
                                 <button class="btn-studio btn-quiz" onclick="compileMiniTest('${parsed.test_source}')">
                                     ✍️ Take 10Q Test
                                 </button>
