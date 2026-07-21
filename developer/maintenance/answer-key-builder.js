@@ -1373,7 +1373,55 @@ function createStandardOutput() {
     );
 }
 
+// =========================================
+// CREATE NUMBERED ANSWER OUTPUT
+// Ansopt.txt
+// =========================================
 
+function createNumberedOutput() {
+
+    const outputLines = [];
+
+    for (
+        let i = 0;
+        i < totalQuestions;
+        i++
+    ) {
+
+        /*
+            IMPORTANT:
+
+            Numbering always starts from Q1.
+
+            It is intentionally independent
+            of Initial Question No.
+
+            answers[0] → Q1
+            answers[1] → Q2
+            answers[2] → Q3
+            etc.
+        */
+
+        const questionNumber =
+            i + 1;
+
+        const answer =
+            answers[i];
+
+
+        if (answer) {
+
+            outputLines.push(
+                `Q${questionNumber} ${answer}`
+            );
+        }
+    }
+
+
+    return outputLines.join(
+        "\n\n"
+    );
+}
 // =========================================
 // DEVELOPMENT OUTPUT
 // AnsDev.txt
