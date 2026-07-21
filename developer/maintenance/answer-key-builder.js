@@ -1406,7 +1406,7 @@ function downloadStandardFile() {
 
     downloadTextFile(
         content,
-        "Ansopt.txt"
+        "Ansopt1.txt"
     );
 
 
