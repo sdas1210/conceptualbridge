@@ -1434,32 +1434,82 @@ function createNumberedOutput() {
 // DOWNLOAD STANDARD FILE
 // =========================================
 
+// =========================================
+// DOWNLOAD BOTH ANSWER FILES
+// =========================================
+
 function downloadStandardFile() {
 
-    if (
-        !isOutputReady()
-    ) {
+    /*
+        Download is allowed only when
+        output validation has passed.
+    */
 
-        log(
-            "Download blocked: Answer key is incomplete."
-        );
+    if (!validateOutput()) {
 
         return;
     }
 
 
-    const content =
+    /*
+        FILE 1
+        Existing / original answer format
+
+        A
+
+        B
+
+        C
+    */
+
+    const standardContent =
         createStandardOutput();
 
 
     downloadTextFile(
-        content,
+        standardContent,
         "Ansopt1.txt"
     );
 
 
+    /*
+        FILE 2
+        Numbered answer format
+
+        Q1 A
+
+        Q2 B
+
+        Q3 C
+
+        Numbering ALWAYS starts from Q1
+        and ignores Initial Question No.
+    */
+
+    const numberedContent =
+        createNumberedOutput();
+
+
+    /*
+        Small delay helps browsers process
+        two consecutive file downloads.
+    */
+
+    setTimeout(
+        () => {
+
+            downloadTextFile(
+                numberedContent,
+                "Ansopt.txt"
+            );
+
+        },
+        300
+    );
+
+
     log(
-        "Downloaded Standard Answer Key: Ansopt.txt"
+        "Ansopt1.txt and Ansopt.txt downloaded."
     );
 }
 
