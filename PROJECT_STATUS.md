@@ -1582,3 +1582,448 @@ Final.txt
 This document remains the single source of truth for the Conceptual Bridge project. All historical sections are preserved. This update supersedes only older Maintenance Suite current-status and immediate-next-step descriptions where later implementation has advanced beyond them.
 
 Future sessions should continue appending milestones rather than deleting historical development records.
+
+------------------------------------------------------------------------
+
+# Developer Maintenance Suite Progress Update (Added: 2026-07-21)
+
+## Current Status
+
+**Version:** Developer Maintenance Suite v0.8 (Answer Key Builder Desktop Split-Window Refactor In Progress)
+
+This update records the latest Answer Key Builder work after the 2026-07-20 milestone. All previous project history remains preserved.
+
+## Answer Key Builder — Updated Architecture
+
+The Answer Key Builder is being refined as a desktop maintenance utility designed to work comfortably when the browser occupies approximately half of the desktop screen.
+
+The earlier PDF-reference workflow has been removed from the intended architecture. The tool now works with question TXT source files and the interactive answer-entry system.
+
+### Current Page Structure
+
+```text
+1. Session Configuration
+2. Source File Uploader
+3. Question Block Editor
+4. Answer Selection
+5. Answer Progress
+6. Answer Grid
+7. Output Validation
+8. Processing Console
+
+Actions:
+- New Session
+- Download Ansopt.txt
+```
+
+## Source File Modes
+
+### Single Source Mode
+
+```text
+1 File — Question TXT
+```
+
+- One TXT question file.
+- One full-width Question Block Editor.
+- Question blocks displayed one block at a time.
+
+### Bilingual Source Mode
+
+```text
+2 Files — English TXT + Bengali TXT
+```
+
+- English and Bengali TXT files uploaded separately.
+- Question Block Editor switches to two-column split mode.
+- English/Bengali blocks at the same positional index are displayed together.
+- Both editors use the same shared block position.
+
+Updated intended JavaScript mapping:
+
+```text
+sourceMode = 1 → Single TXT
+sourceMode = 2 → English TXT + Bengali TXT
+```
+
+Legacy internal container IDs such as `twoFileUploader` and `threeFileUploader` may temporarily remain to avoid unnecessary regressions.
+
+## PDF Viewer Removal
+
+**Status:** Removed from the intended Answer Key Builder workflow; cleanup verification remains.
+
+Removed:
+
+- Reference PDF upload from single mode.
+- Reference PDF upload from bilingual mode.
+- PDF Viewer card and iframe.
+- PDF zoom controls and placeholder.
+
+Obsolete JavaScript references/functions to remove or verify absent:
+
+```text
+singlePdfInput
+bilingualPdfInput
+pdfViewer
+pdfPlaceholder
+pdfZoomInBtn
+pdfZoomOutBtn
+pdfZoomResetBtn
+pdfZoomDisplay
+currentPdfUrl
+pdfZoom
+handlePdfSelection()
+clearPdfViewer()
+changePdfZoom()
+resetPdfZoom()
+applyPdfZoom()
+```
+
+Obsolete CSS selectors to remove if still present:
+
+```text
+.pdf-controls
+#pdfZoomDisplay
+.pdf-viewer-container
+.pdf-viewer
+.viewer-placeholder
+```
+
+Engineering rule: PDF functionality must be removed rather than merely hidden so deleted HTML elements cannot create null-reference runtime errors.
+
+## Question Block ↔ Answer Synchronization
+
+Strict positional synchronization is now the design rule:
+
+```text
+Block 1 ↔ Answer Slot 1
+Block 2 ↔ Answer Slot 2
+Block 3 ↔ Answer Slot 3
+...
+```
+
+With Initial Question No. = 1:
+
+```text
+Block 1 → Question 1 → answers[0]
+Block 2 → Question 2 → answers[1]
+```
+
+With Initial Question No. = 101:
+
+```text
+Block 1 → Displayed Question 101 → answers[0]
+Block 2 → Displayed Question 102 → answers[1]
+```
+
+The displayed question number does not determine the internal answer slot. Block position/index is canonical.
+
+The following navigation paths must remain synchronized:
+
+```text
+Question Block Previous / Next
+Answer Selection Previous / Next
+Answer Grid click
+Automatic advance after answer selection
+```
+
+Both `currentIndex` and `currentSourceBlockIndex` must represent the same positional question/block.
+
+## Answer Selection and UI Refresh Fix
+
+Answer capture was confirmed by Processing Console output such as:
+
+```text
+Question 1 answered: B
+Question 2 answered: C
+```
+
+A UI-refresh problem was identified: answers could be stored internally while Answer Grid, Answer Progress and Output Validation remained unchanged.
+
+After saving an answer, the workflow must call:
+
+```javascript
+updateGridItem(answeredIndex);
+updateProgress();
+validateOutput();
+```
+
+before automatic advancement.
+
+A variable-name issue was also identified:
+
+```text
+Incorrect: initialQuestionNumber
+Correct:   initialQuestion
+```
+
+Expected answer workflow:
+
+```text
+Select A/B/C/D
+↓
+Save answers[currentIndex]
+↓
+Update Answer Grid
+↓
+Update Answer Progress
+↓
+Update Output Validation
+↓
+Advance synchronized TXT block + answer question
+```
+
+## Answer Progress / Validation Expectations
+
+After each answer:
+
+- Answered increments.
+- Remaining decrements.
+- Percentage/status updates.
+- Answer Grid displays the selected answer.
+- Answers Selected updates.
+- Missing Answers updates.
+- Ansopt Entries updates.
+- Validation Status recalculates.
+
+Example after two answers in a 100-question session:
+
+```text
+Answered: 2
+Remaining: 98
+Status: 2% — IN PROGRESS
+
+Answers Selected: 2
+Missing Answers: 98
+Ansopt Entries: 2
+```
+
+## Scroll Behavior Fix
+
+An unwanted downward page jump was traced to normal Answer Grid highlighting using `scrollIntoView()`.
+
+Normal answer selection must now behave as:
+
+```text
+Select Answer
+↓
+Save / refresh UI
+↓
+Advance Question + TXT Block
+↓
+KEEP CURRENT PAGE SCROLL POSITION
+```
+
+Automatic scrolling should occur only when all required answers have been completed:
+
+```text
+Final Answer
+↓
+100% Complete
+↓
+Validation / completion state
+↓
+Automatically move to Answer Grid
+```
+
+Normal per-question `scrollIntoView()` must remain removed. Completion-only scrolling may target an `answerGridSection` element.
+
+## Half-Screen Desktop Layout
+
+The Answer Key Builder is intentionally desktop-oriented but must work comfortably when the browser occupies approximately half a desktop display.
+
+Design goals:
+
+- Container approximately 900–920px maximum where appropriate.
+- No forced full-monitor width.
+- No horizontal page overflow.
+- Compact cards and controls.
+- Single TXT editor uses available width.
+- Bilingual mode splits the available editor width into English/Bengali columns.
+- Answer Grid adapts to constrained width.
+- Desktop split-window use is prioritized over mobile optimization.
+
+## Question Block Editor Control Visibility
+
+A control-layout issue was identified in bilingual and narrow split-window mode.
+
+Cause:
+
+```css
+button {
+    min-width: 150px;
+}
+```
+
+The global minimum width forces `Edit` and `Save` to become too wide inside each half-width editor, causing Previous/Next arrow controls to become cramped or visually hidden.
+
+This is a **CSS issue**, not a JavaScript issue.
+
+Target layout:
+
+```text
+| ← |     [ Edit ] [ Save ]     | → |
+```
+
+Recommended compact override in `answer-key-builder.css`:
+
+```css
+.editor-controls {
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+}
+
+.editor-controls > button {
+    min-width: 42px;
+    width: 42px;
+}
+
+.editor-center-controls button {
+    min-width: 0;
+    flex: 1 1 0;
+    max-width: 110px;
+}
+```
+
+Optional smaller navigation glyphs:
+
+```text
+⬅ → ←
+➡ → →
+```
+
+The existing HTML button structure is already suitable; only compact CSS sizing is required.
+
+## Current Answer Key Builder File State
+
+```text
+developer/
+└── maintenance/
+    ├── answer-key-builder.html
+    ├── answer-key-builder.css
+    └── answer-key-builder.js
+```
+
+### HTML
+
+- ✅ Sections renumbered 1–8.
+- ✅ Single TXT upload retained.
+- ✅ English TXT upload retained.
+- ✅ Bengali TXT upload retained.
+- ✅ PDF upload fields removed.
+- ✅ PDF Viewer card removed.
+- ✅ Single and bilingual Question Block Editor structures retained.
+- ✅ Answer Selection / Progress / Grid / Validation / Console retained.
+- ✅ `Ansopt.txt` download retained.
+
+### CSS
+
+- ✅ Glassmorphic Conceptual Bridge theme retained.
+- ✅ Half-screen desktop overrides introduced.
+- ✅ Single/bilingual editor layouts exist.
+- 🟡 Compact editor-control override needs final application/verification.
+- 🟡 Obsolete PDF Viewer CSS should be removed if still present.
+- 🟡 Duplicate/older CSS rules can be consolidated only after functional testing.
+
+### JavaScript
+
+- ✅ TXT parsing/loading foundation retained.
+- ✅ Single and bilingual source loading retained.
+- ✅ Positional block/question synchronization established conceptually.
+- ✅ Answer capture confirmed.
+- ✅ Grid/progress/validation refresh requirements corrected.
+- ✅ Normal answer-selection auto-scroll removed in intended latest behavior.
+- ✅ Completion-only Answer Grid scroll introduced.
+- 🟡 Verify every old `sourceMode === 2/3` assumption uses the new `1/2` mapping.
+- 🟡 Verify all obsolete PDF DOM references/functions are removed.
+- 🟡 Full regression testing remains required.
+
+## Immediate Testing Checklist
+
+1. Load one TXT file in Single Source mode.
+2. Confirm Block 1 displays correctly.
+3. Run a 5–10 question test session.
+4. Verify each selected answer updates Grid, Progress and Validation.
+5. Verify block/question auto-advance remains synchronized.
+6. Confirm page does not jump downward after each answer.
+7. Click Answer Grid items and confirm the matching source block opens.
+8. Test Previous/Next from Question Block Editor and Answer Selection.
+9. Test Edit → Save without damaging hidden block metadata.
+10. Complete all answers and verify automatic movement to Answer Grid occurs only at completion.
+11. Test bilingual mode with matching E/B files.
+12. Verify English/Bengali editor controls remain visible in half-screen mode.
+13. Confirm browser console has no errors referencing removed PDF elements.
+14. Confirm `Ansopt.txt` is enabled only after successful validation.
+
+## Engineering Decisions Confirmed
+
+1. Answer Key Builder is a desktop maintenance utility optimized for split-window use.
+2. PDF reference/viewer functionality is removed from the architecture.
+3. Source input is either one TXT or paired English/Bengali TXT files.
+4. Block position is the canonical link between source questions and answer slots.
+5. Initial Question Number changes displayed numbering, not positional answer mapping.
+6. All navigation mechanisms must synchronize block and answer indices.
+7. Selecting an answer must refresh Grid, Progress and Validation before advancing.
+8. Normal answer selection must not move the browser page.
+9. Automatic movement to Answer Grid occurs only after all answers are completed.
+10. Editor controls must override the global 150px button minimum in constrained layouts.
+11. Student Portal/runtime logic must remain unaffected.
+12. Functional verification comes before CSS consolidation or legacy-ID renaming.
+
+------------------------------------------------------------------------
+
+# Immediate Next Starting Point (Updated: 2026-07-21)
+
+Continue **Answer Key Builder stabilization**:
+
+1. Apply and verify compact Question Block Editor control CSS.
+2. Remove obsolete PDF Viewer CSS.
+3. Verify JavaScript contains no remaining PDF references.
+4. Verify source-mode mapping:
+   - `1 = Single TXT`
+   - `2 = English + Bengali`
+5. Run small Single TXT end-to-end test.
+6. Run small bilingual E/B end-to-end test.
+7. Verify no page jump during normal answer selection.
+8. Verify completion-only automatic scroll to Answer Grid.
+9. Verify final `Ansopt.txt` generation and validation.
+10. Consolidate duplicate/obsolete CSS only after stabilization.
+
+The Mobile Refactoring, Authentication, Developer Inspector, Final Merger and wider Maintenance Suite roadmaps remain preserved.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated: 2026-07-21)
+
+| Date | Milestone |
+|---|---|
+| 2026-07-10 | Mobile Refactoring Roadmap |
+| 2026-07-14 | Developer Workspace Foundation |
+| 2026-07-16 | Authentication Workspace Foundation |
+| 2026-07-17 | Quiz Portal UI Enhancements |
+| 2026-07-17 | Authentication Dropdown & Logout Foundation |
+| 2026-07-18 | Developer Metadata Inspector Foundation |
+| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
+| 2026-07-19 | Citation Remover Core Completed |
+| 2026-07-19 | Proof Reader Validation & Editing Workflow |
+| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
+| 2026-07-20 | Shift Extractor Added |
+| 2026-07-20 | Answer Key Builder Added and Refined |
+| 2026-07-20 | Maintenance Home Expanded to Five Tools |
+| 2026-07-20 | Final Merger Four-File Workflow |
+| 2026-07-21 | Answer Key Builder TXT-Only Refactor |
+| 2026-07-21 | PDF Viewer Removed from Answer Key Builder Architecture |
+| 2026-07-21 | Block ↔ Answer Positional Synchronization Refined |
+| 2026-07-21 | Half-Screen Desktop Layout and Scroll Behavior Refined |
+| Next | Answer Key Builder End-to-End Regression Testing |
+| Next | Final Merger Production Validation |
+| Next | Maintenance Suite Output Hardening |
+
+------------------------------------------------------------------------
+
+# Documentation Note (Updated: 2026-07-21)
+
+This document remains the single source of truth for the Conceptual Bridge project.
+
+All historical sections are preserved. This update supersedes only older descriptions of the current Answer Key Builder architecture where the PDF-based design and earlier file-count workflow are no longer applicable.
+
+Future sessions should continue preserving historical milestones and appending new progress updates rather than replacing earlier project history.
