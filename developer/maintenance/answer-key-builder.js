@@ -1250,40 +1250,41 @@ function validateOutput() {
     
 
 
-    if (valid) {
+   if (valid) {
 
-        document.getElementById(
-            "validationStatus"
-        ).textContent =
-            "PASSED";
+    document.getElementById(
+        "validationStatus"
+    ).textContent =
+        "PASSED";
+
+    downloadStandardBtn.disabled =
+        false;
+
+    logCompletionOnce();
+
+} else {
+
+    document.getElementById(
+        "validationStatus"
+    ).textContent =
+        "NOT READY";
+
+    downloadStandardBtn.disabled =
+        true;
+}
 
 
-        downloadStandardBtn.disabled =
-            false;
+/*
+    IMPORTANT:
+    Return validation result in BOTH cases.
 
-        
-        logCompletionOnce();
+    true  = download allowed
+    false = download blocked
+*/
 
-    } else {
+return valid;
 
-        document.getElementById(
-            "validationStatus"
-        ).textContent =
-            "NOT READY";
-
-
-        downloadStandardBtn.disabled =
-            true;
-    /*
-    Return validation result
-    so downloadStandardFile()
-    can determine whether downloading
-    is allowed.
-    */
-    
-    return valid;
-        
-    }
+}
     
 }
 
