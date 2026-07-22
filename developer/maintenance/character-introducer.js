@@ -531,6 +531,17 @@ function selectOperation(
         writeWorkspace.classList.remove(
             "hidden"
         );
+        writeModeSelection.classList.remove(
+            "hidden"
+        );
+    
+        payloadSection.classList.add(
+            "hidden"
+        );
+    
+        lineNavigator.classList.add(
+            "hidden"
+        );
 
     } else if (
         operation === "create"
@@ -1286,9 +1297,7 @@ function downloadModifiedTxt() {
 
     link.download =
         outputName;
-    log(
-        `Downloaded: ${outputName}`
-    );
+    
         
 
     document.body.appendChild(
