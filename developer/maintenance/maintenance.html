@@ -184,32 +184,43 @@
 
             transform: translateY(20px);
         }
-
-        .tool-card:nth-child(1) {
-    animation: fadeInUp .8s ease .15s forwards;
-        }
-        
-        .tool-card:nth-child(2) {
-            animation: fadeInUp .8s ease .25s forwards;
-        }
-        
-        .tool-card:nth-child(3) {
-            animation: fadeInUp .8s ease .35s forwards;
-        }
-        
-        .tool-card:nth-child(4) {
-            animation: fadeInUp .8s ease .45s forwards;
-        }
-        
-        .tool-card:nth-child(5) {
-            animation: fadeInUp .8s ease .55s forwards;
-        }
-        
-        .tool-card:nth-child(6) {
+        /* ----------------------*/
+                /* TOOL CARD*/
+        .tool-card {
 
             animation:
-                fadeInUp .8s ease .65s forwards;
+                fadeInUp .8s ease forwards;
         }
+        
+        
+        /* Stagger card animations */
+        
+        .tool-card:nth-of-type(1) {
+            animation-delay: .15s;
+        }
+        
+        .tool-card:nth-of-type(2) {
+            animation-delay: .25s;
+        }
+        
+        .tool-card:nth-of-type(3) {
+            animation-delay: .35s;
+        }
+        
+        .tool-card:nth-of-type(4) {
+            animation-delay: .45s;
+        }
+        
+        .tool-card:nth-of-type(5) {
+            animation-delay: .55s;
+        }
+        
+        .tool-card:nth-of-type(6) {
+            animation-delay: .65s;
+        }
+        
+        /* -----------------------*/
+       
 
         .tool-card:hover {
 
