@@ -97,6 +97,102 @@ const downloadBtn =
         "downloadBtn"
     );
 
+const writeModeSelection =
+    document.getElementById(
+        "writeModeSelection"
+    );
+
+const writeStartBtn =
+    document.getElementById(
+        "writeStartBtn"
+    );
+
+const payloadSection =
+    document.getElementById(
+        "payloadSection"
+    );
+
+const payloadInput =
+    document.getElementById(
+        "payloadInput"
+    );
+
+const payloadOkBtn =
+    document.getElementById(
+        "payloadOkBtn"
+    );
+
+const lineNavigator =
+    document.getElementById(
+        "lineNavigator"
+    );
+
+const currentLineLabel =
+    document.getElementById(
+        "currentLineLabel"
+    );
+
+const currentLineViewer =
+    document.getElementById(
+        "currentLineViewer"
+    );
+
+const previousLineBtn =
+    document.getElementById(
+        "previousLineBtn"
+    );
+
+const nextLineBtn =
+    document.getElementById(
+        "nextLineBtn"
+    );
+
+const firstAnchorBtn =
+    document.getElementById(
+        "firstAnchorBtn"
+    );
+
+const secondAnchorBtn =
+    document.getElementById(
+        "secondAnchorBtn"
+    );
+
+const adjustAnchorsBtn =
+    document.getElementById(
+        "adjustAnchorsBtn"
+    );
+
+const runOperationBtn =
+    document.getElementById(
+        "runOperationBtn"
+    );
+
+const firstAnchorDisplay =
+    document.getElementById(
+        "firstAnchorDisplay"
+    );
+
+const secondAnchorDisplay =
+    document.getElementById(
+        "secondAnchorDisplay"
+    );
+
+const gapDisplay =
+    document.getElementById(
+        "gapDisplay"
+    );
+
+const targetCountDisplay =
+    document.getElementById(
+        "targetCountDisplay"
+    );
+
+const anchorStatus =
+    document.getElementById(
+        "anchorStatus"
+    );
+
+
 
 // =========================================
 // STATE
@@ -117,7 +213,26 @@ let lines =
 let selectedOperation =
     null;
 
+let writeMode =
+    null;
 
+let payload =
+    "";
+
+let currentLineIndex =
+    0;
+
+let firstAnchorIndex =
+    null;
+
+let secondAnchorIndex =
+    null;
+
+let targetIndexes =
+    [];
+
+let operationCompleted =
+    false;
 // =========================================
 // EVENTS
 // =========================================
@@ -150,7 +265,68 @@ newSessionBtn.addEventListener(
     resetSession
 );
 
+writeStartBtn.addEventListener(
+    "click",
+    beginWriteAtStart
+);
 
+
+payloadOkBtn.addEventListener(
+    "click",
+    confirmPayload
+);
+
+
+previousLineBtn.addEventListener(
+    "click",
+    () => {
+
+        navigateLine(
+            -1
+        );
+    }
+);
+
+
+nextLineBtn.addEventListener(
+    "click",
+    () => {
+
+        navigateLine(
+            1
+        );
+    }
+);
+
+
+firstAnchorBtn.addEventListener(
+    "click",
+    setFirstAnchor
+);
+
+
+secondAnchorBtn.addEventListener(
+    "click",
+    setSecondAnchor
+);
+
+
+adjustAnchorsBtn.addEventListener(
+    "click",
+    resetAnchors
+);
+
+
+runOperationBtn.addEventListener(
+    "click",
+    runWriteAtStart
+);
+
+
+downloadBtn.addEventListener(
+    "click",
+    downloadModifiedTxt
+);
 // =========================================
 // LOAD TXT
 // =========================================
@@ -430,6 +606,56 @@ function resetSession() {
 
     selectedOperation =
         null;
+    writeMode =
+    null;
+
+    payload =
+        "";
+    
+    currentLineIndex =
+        0;
+    
+    firstAnchorIndex =
+        null;
+    
+    secondAnchorIndex =
+        null;
+    
+    targetIndexes =
+        [];
+    
+    operationCompleted =
+        false;
+    
+    
+    payloadInput.value =
+        "";
+    
+    
+    writeModeSelection.classList.remove(
+        "hidden"
+    );
+    
+    payloadSection.classList.add(
+        "hidden"
+    );
+    
+    lineNavigator.classList.add(
+        "hidden"
+    );
+    
+    
+    firstAnchorDisplay.textContent =
+        "—";
+    
+    secondAnchorDisplay.textContent =
+        "—";
+    
+    gapDisplay.textContent =
+        "—";
+    
+    targetCountDisplay.textContent =
+        "—";
 
 
     txtFileInput.value =
@@ -535,3 +761,554 @@ function log(
     consoleBox.scrollTop =
         consoleBox.scrollHeight;
 }
+
+// =========================================
+// WRITE AT START
+// =========================================
+
+function beginWriteAtStart() {
+
+    writeMode =
+        "start";
+
+
+    writeModeSelection.classList.add(
+        "hidden"
+    );
+
+
+    payloadSection.classList.remove(
+        "hidden"
+    );
+
+
+    payloadInput.value =
+        "";
+
+
+    payloadInput.focus();
+
+
+    log(
+        "Write at Start of Line selected."
+    );
+
+    log(
+        "Enter the payload and press OK."
+    );
+}
+function confirmPayload() {
+
+    const value =
+        payloadInput.value;
+
+
+    if (
+        value.length === 0
+    ) {
+
+        alert(
+            "Enter the payload first."
+        );
+
+        payloadInput.focus();
+
+        return;
+    }
+
+
+    /*
+        Keep payload EXACTLY as entered.
+
+        Do not trim spaces.
+        Leading/trailing characters may be intentional.
+    */
+
+    payload =
+        value;
+
+
+    payloadSection.classList.add(
+        "hidden"
+    );
+
+
+    lineNavigator.classList.remove(
+        "hidden"
+    );
+
+
+    currentLineIndex =
+        0;
+
+
+    resetAnchors();
+
+
+    renderCurrentLine();
+
+
+    log(
+        `Payload accepted: ${JSON.stringify(payload)}`
+    );
+
+
+    log(
+        "Navigate to the first target line and press 1️⃣."
+    );
+}
+function renderCurrentLine() {
+
+    if (
+        !lines.length
+    ) {
+
+        return;
+    }
+
+
+    currentLineLabel.textContent =
+        `Line ${currentLineIndex + 1}`;
+
+
+    currentLineViewer.value =
+        lines[currentLineIndex] ?? "";
+
+
+    previousLineBtn.disabled =
+        currentLineIndex === 0;
+
+
+    nextLineBtn.disabled =
+        currentLineIndex >=
+        lines.length - 1;
+
+
+    firstAnchorBtn.classList.toggle(
+        "anchor-selected",
+        firstAnchorIndex ===
+            currentLineIndex
+    );
+
+
+    secondAnchorBtn.classList.toggle(
+        "anchor-selected",
+        secondAnchorIndex ===
+            currentLineIndex
+    );
+}
+
+
+function navigateLine(
+    direction
+) {
+
+    const nextIndex =
+        currentLineIndex +
+        direction;
+
+
+    if (
+        nextIndex < 0 ||
+        nextIndex >=
+            lines.length
+    ) {
+
+        return;
+    }
+
+
+    currentLineIndex =
+        nextIndex;
+
+
+    renderCurrentLine();
+}
+function setFirstAnchor() {
+
+    firstAnchorIndex =
+        currentLineIndex;
+
+
+    /*
+        If changing the first anchor invalidates
+        the second anchor, clear the second.
+    */
+
+    if (
+        secondAnchorIndex !== null &&
+        secondAnchorIndex <=
+            firstAnchorIndex
+    ) {
+
+        secondAnchorIndex =
+            null;
+    }
+
+
+    calculateTargets();
+
+
+    renderCurrentLine();
+
+
+    log(
+        `First anchor selected: Line ${firstAnchorIndex + 1}`
+    );
+}
+
+
+function setSecondAnchor() {
+
+    if (
+        firstAnchorIndex === null
+    ) {
+
+        alert(
+            "Select the first anchor line using 1️⃣ first."
+        );
+
+        return;
+    }
+
+
+    if (
+        currentLineIndex <=
+        firstAnchorIndex
+    ) {
+
+        alert(
+            "The second anchor must be after the first anchor."
+        );
+
+        return;
+    }
+
+
+    secondAnchorIndex =
+        currentLineIndex;
+
+
+    calculateTargets();
+
+
+    renderCurrentLine();
+
+
+    log(
+        `Second anchor selected: Line ${secondAnchorIndex + 1}`
+    );
+}
+
+function calculateTargets() {
+
+    targetIndexes =
+        [];
+
+
+    firstAnchorDisplay.textContent =
+        firstAnchorIndex === null
+            ? "—"
+            : `Line ${firstAnchorIndex + 1}`;
+
+
+    secondAnchorDisplay.textContent =
+        secondAnchorIndex === null
+            ? "—"
+            : `Line ${secondAnchorIndex + 1}`;
+
+
+    if (
+        firstAnchorIndex === null ||
+        secondAnchorIndex === null
+    ) {
+
+        gapDisplay.textContent =
+            "—";
+
+        targetCountDisplay.textContent =
+            "—";
+
+        runOperationBtn.disabled =
+            true;
+
+        anchorStatus.textContent =
+            "Select first and second anchor lines";
+
+        return;
+    }
+
+
+    const gap =
+        secondAnchorIndex -
+        firstAnchorIndex;
+
+
+    if (
+        gap <= 0
+    ) {
+
+        runOperationBtn.disabled =
+            true;
+
+        return;
+    }
+
+
+    /*
+        Calculate all targets BEFORE modifying text.
+
+        Example:
+        First = Line 10
+        Second = Line 17
+
+        Gap = 7
+
+        Targets:
+        10, 17, 24, 31...
+    */
+
+    for (
+        let index =
+            firstAnchorIndex;
+
+        index <
+            lines.length;
+
+        index += gap
+    ) {
+
+        targetIndexes.push(
+            index
+        );
+    }
+
+
+    gapDisplay.textContent =
+        `${gap} line${gap === 1 ? "" : "s"}`;
+
+
+    targetCountDisplay.textContent =
+        String(
+            targetIndexes.length
+        );
+
+
+    anchorStatus.textContent =
+        `Ready — ${targetIndexes.length} target line(s)`;
+
+
+    runOperationBtn.disabled =
+        false;
+
+
+    log(
+        `Gap calculated: ${gap} line(s).`
+    );
+
+
+    log(
+        `Targets detected: ${targetIndexes.length}.`
+    );
+}
+
+function resetAnchors() {
+
+    firstAnchorIndex =
+        null;
+
+    secondAnchorIndex =
+        null;
+
+    targetIndexes =
+        [];
+
+
+    firstAnchorDisplay.textContent =
+        "—";
+
+    secondAnchorDisplay.textContent =
+        "—";
+
+    gapDisplay.textContent =
+        "—";
+
+    targetCountDisplay.textContent =
+        "—";
+
+
+    anchorStatus.textContent =
+        "Select first and second anchor lines";
+
+
+    runOperationBtn.disabled =
+        true;
+
+
+    renderCurrentLine();
+}
+
+function runWriteAtStart() {
+
+    if (
+        writeMode !== "start" ||
+        !payload ||
+        targetIndexes.length === 0
+    ) {
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Apply the payload to ${targetIndexes.length} target line(s)?`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    /*
+        Modify a COPY first.
+        Line count does not change.
+    */
+
+    const modifiedLines =
+        [...lines];
+
+
+    targetIndexes.forEach(
+        index => {
+
+            modifiedLines[index] =
+                payload +
+                modifiedLines[index];
+        }
+    );
+
+
+    lines =
+        modifiedLines;
+
+
+    workingText =
+        lines.join(
+            "\n"
+        );
+
+
+    operationCompleted =
+        true;
+
+
+    infoStatus.textContent =
+        "MODIFICATION COMPLETE";
+
+
+    downloadBtn.disabled =
+        false;
+
+
+    runOperationBtn.disabled =
+        true;
+
+
+    anchorStatus.textContent =
+        "OPERATION COMPLETED";
+
+
+    renderCurrentLine();
+
+
+    log(
+        "Write at Start operation completed."
+    );
+
+
+    log(
+        `${targetIndexes.length} line(s) modified.`
+    );
+
+
+    log(
+        "Modified TXT is ready for download."
+    );
+}
+
+function downloadModifiedTxt() {
+
+    if (
+        !operationCompleted
+    ) {
+
+        return;
+    }
+
+
+    const blob =
+        new Blob(
+            [workingText],
+            {
+                type:
+                    "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    /*
+        Preserve original filename.
+    */
+
+    link.href =
+        url;
+
+
+    const outputName =
+    selectedFile
+        ? selectedFile.name
+        : "modified.txt";
+
+    link.download =
+        outputName;
+    log(
+        `Downloaded: ${outputName}`
+    );
+        
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    log(
+        `Downloaded: ${link.download}`
+    );
+}
+
