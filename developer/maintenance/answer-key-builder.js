@@ -164,6 +164,35 @@ const bengaliSaveBtn =
     document.getElementById("bengaliSaveBtn");
 
 // =========================================
+// ANSWER KEY BUILDER MODE
+// =========================================
+
+const gacaModeBtn =
+    document.getElementById(
+        "gacaModeBtn"
+    );
+
+
+const mathModeBtn =
+    document.getElementById(
+        "mathModeBtn"
+    );
+
+
+const selectedBuilderMode =
+    document.getElementById(
+        "selectedBuilderMode"
+    );
+
+const questionStartMarker =
+
+    builderMode === "math"
+
+        ? "QEN|"
+
+        : "Q|";
+
+// =========================================
 // SESSION STATE
 // =========================================
 
@@ -215,6 +244,10 @@ let activeEditSide = null;
     "english"
     "bengali"
 */
+
+let sourceMode = 1;
+let builderMode =
+    "gaca";
 // =========================================
 // EVENT LISTENERS
 // =========================================
@@ -385,8 +418,227 @@ bengaliSaveBtn.addEventListener(
     () => saveBlockEdit("bengali")
 );
 
+gacaModeBtn.addEventListener(
+    "click",
+    () => {
+
+        setBuilderMode(
+            "gaca"
+        );
+
+    }
+);
 
 
+mathModeBtn.addEventListener(
+    "click",
+    () => {
+
+        setBuilderMode(
+            "math"
+        );
+
+    }
+);
+
+// =========================================
+// BUILDER MODE
+// =========================================
+
+function setBuilderMode(
+    mode
+) {
+
+    /*
+        Do not change subject mode
+        during an active answer session.
+    */
+
+    if (
+        sessionActive
+    ) {
+
+        alert(
+            "Start a New Session before changing the Answer Key Builder mode."
+        );
+
+        return;
+    }
+
+
+    builderMode =
+
+        mode === "math"
+
+            ? "math"
+
+            : "gaca";
+
+
+    /* -------------------------
+       BUTTON STATE
+    ------------------------- */
+
+    gacaModeBtn.classList.toggle(
+
+        "active",
+
+        builderMode ===
+            "gaca"
+    );
+
+
+    mathModeBtn.classList.toggle(
+
+        "active",
+
+        builderMode ===
+            "math"
+    );
+
+
+    /* -------------------------
+       LABEL
+    ------------------------- */
+
+    selectedBuilderMode.textContent =
+
+        builderMode === "math"
+
+            ? "MATH"
+
+            : "GACA";
+
+
+    /* -------------------------
+       MATH MODE
+    ------------------------- */
+
+    if (
+        builderMode ===
+        "math"
+    ) {
+
+        /*
+            Math always uses
+            exactly ONE TXT file.
+        */
+
+        fileCountInput.value =
+            "1";
+
+
+        fileCountInput.disabled =
+            true;
+
+
+        /*
+            Reuse your existing
+            source-mode rendering.
+        */
+
+        handleSourceModeChange();
+
+
+        fileStatus.textContent =
+
+            "Math Mode: Select one TXT file. " +
+
+            "Question blocks are detected from QEN|.";
+
+    }
+
+
+    /* -------------------------
+       GACA MODE
+    ------------------------- */
+
+    else {
+
+        /*
+            Restore existing behavior.
+
+            GACA may use the source
+            configuration already supported
+            by the current Answer Key Builder.
+        */
+
+        fileCountInput.disabled =
+            false;
+
+
+        handleSourceModeChange();
+
+
+        fileStatus.textContent =
+
+            "GACA Mode: Existing Answer Key Builder workflow.";
+
+    }
+
+
+    /* -------------------------
+       CLEAR OLD SOURCE DATA
+    ------------------------- */
+
+    singleTxtInput.value =
+        "";
+
+    englishTxtInput.value =
+        "";
+
+    bengaliTxtInput.value =
+        "";
+
+
+    singleTxtFile =
+        null;
+
+    singleTxtText =
+        "";
+
+    singleBlocks =
+        [];
+
+
+    englishTxtFile =
+        null;
+
+    englishTxtText =
+        "";
+
+    englishBlocks =
+        [];
+
+
+    bengaliTxtFile =
+        null;
+
+    bengaliTxtText =
+        "";
+
+    bengaliBlocks =
+        [];
+
+
+    currentSourceBlockIndex =
+        0;
+
+
+    singleEditorFileName.textContent =
+        "No file selected";
+
+
+    englishEditorFileName.textContent =
+        "No file selected";
+
+
+    bengaliEditorFileName.textContent =
+        "No file selected";
+
+
+    renderSourceBlock();
+}
 // =========================================
 // INITIAL PAGE SETUP
 // =========================================
