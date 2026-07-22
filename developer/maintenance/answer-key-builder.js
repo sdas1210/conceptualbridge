@@ -184,13 +184,7 @@ const selectedBuilderMode =
         "selectedBuilderMode"
     );
 
-const questionStartMarker =
 
-    builderMode === "math"
-
-        ? "QEN|"
-
-        : "Q|";
 
 // =========================================
 // SESSION STATE
@@ -206,8 +200,8 @@ let answers = [];
 
 let sessionActive = false;
 
-let sourceMode = 1;
 
+let sourceMode = 1;
 let currentSourceBlockIndex = 0;
 
 
@@ -245,7 +239,7 @@ let activeEditSide = null;
     "bengali"
 */
 
-let sourceMode = 1;
+
 let builderMode =
     "gaca";
 // =========================================
@@ -2175,6 +2169,13 @@ function parseSourceBlocks(
 
     let startLine = null;
 
+    const questionStartMarker =
+
+    builderMode === "math"
+
+        ? "QEN|"
+
+        : "Q|";
 
     function pushCurrentBlock() {
 
@@ -2268,7 +2269,9 @@ function parseSourceBlocks(
             */
 
             if (
-                trimmed.startsWith("Q|")
+                trimmed.startsWith(
+                    questionStartMarker
+                )
             ) {
 
                 pushCurrentBlock();
