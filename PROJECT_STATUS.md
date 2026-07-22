@@ -2237,3 +2237,397 @@ This document remains the single source of truth for the Conceptual Bridge proje
 All previous project history has been preserved. This update appends the latest Free Tutorial Corner architecture, multi-file loading behavior, missing-file handling decision, and Study/Practice UI foundation without replacing earlier milestones.
 
 Future development sessions should continue appending progress updates while preserving the historical record.
+
+
+------------------------------------------------------------------------
+
+# Mathematics Question Metadata Architecture Decision (Added: 2026-07-22)
+
+## Current Status
+
+**Version:** Mathematics Metadata Routing v0.1 (Architecture Defined / Implementation Pending)
+
+This update records the architectural decision for handling Mathematics question banks where an exam may contain either a very large collection of questions or a smaller mixed-topic Mathematics paper.
+
+This change is **strictly scoped to Mathematics only** at this stage.
+
+The behavior of General Intelligence (GI), General Science (GS/Science), General Awareness & Current Affairs (GACA), and any other subject must remain unchanged until a separate decision is made for those sections.
+
+## Problem Identified
+
+Mathematics question assets can appear in two significantly different forms.
+
+### Case 1 — Large Exam Question Bank
+
+Example:
+
+```text
+RRB GROUP-D
+Mathematics
+2500+ questions
+```
+
+Such a large collection may need to be divided into multiple manageable TXT files or learning sets.
+
+Questions may also be organized or routed by:
+
+```text
+Topic
+↓
+SubTopic
+↓
+10 / 20 / 40 Question Practice Sets
+```
+
+### Case 2 — Small Mixed Mathematics Paper
+
+Example:
+
+```text
+RRB NTPC CBT-II
+↓
+Approximately 35 Mathematics questions
+↓
+Questions belong to multiple Topics/SubTopics
+```
+
+A single exam paper may contain questions such as:
+
+```text
+Q1 → Percentage → Successive Percentage
+Q2 → Algebra → Linear Equation
+Q3 → Geometry → Triangle
+Q4 → Profit & Loss → Discount
+Q5 → Number System → HCF/LCM
+...
+```
+
+If `Topic` and `SubTopic` remain only global TXT metadata, one mixed Mathematics file cannot accurately classify every question without either changing the exam identity or unnecessarily splitting the original paper.
+
+## Architecture Decision
+
+For Mathematics, **Exam identity and academic classification must be treated independently**.
+
+### Exam / Source Identity
+
+The following information may remain global where appropriate:
+
+```text
+Exam
+Notification
+Subject
+Type
+Level
+```
+
+Example:
+
+```text
+Exam| RRB NTPC CBT-II
+Subject| MATHEMATICS
+Notification| CEN XX/XXXX
+Type| PYQ
+```
+
+The exam name must remain the true source identity of the question and must not be changed merely to organize questions by Topic/SubTopic.
+
+### Mathematics Topic Classification
+
+For Mathematics only:
+
+```text
+Topic
+SubTopic
+```
+
+must support both:
+
+1. Global/default metadata.
+2. Question-level override metadata.
+
+This creates an inheritance model.
+
+## Mathematics Metadata Inheritance Rule
+
+Conceptual parser rule:
+
+```text
+Question has its own Topic/SubTopic?
+        │
+   ┌────┴────┐
+  YES        NO
+   │          │
+Use local    Inherit global
+value        value
+```
+
+### Example A — Single-Topic Mathematics File
+
+If all questions belong to Percentage:
+
+```text
+Exam| RRB GROUP-D
+Subject| MATHEMATICS
+Topic| PERCENTAGE
+SubTopic|
+```
+
+Individual questions do not need to repeat `Topic|PERCENTAGE`.
+
+They inherit the global Topic.
+
+### Example B — Mixed Mathematics File
+
+For a mixed NTPC CBT-II Mathematics paper:
+
+```text
+Exam| RRB NTPC CBT-II
+Subject| MATHEMATICS
+Topic|
+SubTopic|
+```
+
+Each question may define its own classification:
+
+```text
+Topic| PERCENTAGE
+SubTopic| SUCCESSIVE PERCENTAGE
+Q| ...
+A| ...
+B| ...
+C| ...
+D| ...
+
+Topic| ALGEBRA
+SubTopic| LINEAR EQUATION
+Q| ...
+A| ...
+B| ...
+C| ...
+D| ...
+
+Topic| GEOMETRY
+SubTopic| TRIANGLE
+Q| ...
+A| ...
+B| ...
+C| ...
+D| ...
+```
+
+The original Exam identity remains unchanged while each question receives its correct Topic/SubTopic.
+
+### Example C — Global Topic With Selective Override
+
+A Mathematics TXT may define:
+
+```text
+Topic| PERCENTAGE
+```
+
+Most questions inherit Percentage.
+
+If an exceptional question belongs elsewhere, that question may provide its own:
+
+```text
+Topic| PROFIT & LOSS
+SubTopic| DISCOUNT
+```
+
+The local value overrides the global/default value only for that question.
+
+## Storage vs Routing Decision
+
+Physical TXT file organization must not be treated as the permanent academic classification system.
+
+The architecture distinguishes:
+
+```text
+Physical Storage
+≠
+Exam Identity
+≠
+Topic Classification
+≠
+Quiz Route
+```
+
+Large Mathematics collections may be split into manageable TXT files for engineering/storage purposes without changing the true exam metadata.
+
+Example:
+
+```text
+questions/
+└── math/
+    ├── groupd_001.txt
+    ├── groupd_002.txt
+    ├── groupd_003.txt
+    └── ...
+```
+
+A file boundary is therefore an engineering/storage boundary and does not necessarily define a Topic/SubTopic boundary.
+
+## Future Mathematics Routing Model
+
+The same Mathematics question may eventually be available through different logical routes without duplicating the physical question.
+
+Examples:
+
+```text
+Exam Practice
+RRB NTPC CBT-II
+→ Mathematics
+→ Original mixed questions
+```
+
+```text
+Topic Practice
+Mathematics
+→ Percentage
+→ Questions filtered by Topic
+```
+
+```text
+Tutorial Practice
+YouTube Tutorial
+→ Practice
+→ Exam + Topic/SubTopic filter
+→ 10 / 20 / 40 questions
+```
+
+```text
+Mixed Mathematics Practice
+Exam = RRB GROUP-D
+Subject = MATHEMATICS
+→ Shuffle
+→ Select requested question count
+```
+
+This metadata-driven routing is a future extension. The immediate implementation scope is only to make the Mathematics parser/data model capable of correctly representing global and per-question Topic/SubTopic metadata.
+
+## Backward Compatibility Requirement
+
+Existing Mathematics TXT files using only global:
+
+```text
+Topic|
+SubTopic|
+```
+
+must continue working.
+
+Existing GI, GS/Science, GACA and other subject files must not change behavior.
+
+The implementation must therefore be additive and backward-compatible.
+
+Target rule:
+
+```text
+IF Subject = MATHEMATICS:
+
+    question.Topic =
+        local Topic if present
+        ELSE global Topic
+
+    question.SubTopic =
+        local SubTopic if present
+        ELSE global SubTopic
+
+ELSE:
+
+    preserve existing parser behavior exactly
+```
+
+Exact implementation must be based on review of the current parser rather than blindly replacing existing logic.
+
+## Files Required for Next Implementation Session
+
+Start by reviewing:
+
+```text
+services/questionParser.js
+```
+
+and one representative current Mathematics TXT question file.
+
+Then verify the relevant APIs, especially:
+
+```text
+api/fetch-question.js
+api/fetch-tutorial-questions.js
+```
+
+or their current equivalent filenames.
+
+`quiz-portal.html` should not be modified initially unless parser/API verification proves a front-end change is necessary.
+
+## Implementation Safety Rules
+
+1. Apply the new metadata inheritance behavior to **Mathematics only**.
+2. Do not modify GI behavior.
+3. Do not modify GS/Science behavior.
+4. Do not modify GACA behavior.
+5. Preserve existing global Mathematics metadata compatibility.
+6. Allow per-question Mathematics `Topic` and `SubTopic` overrides.
+7. Preserve the true Exam/Notification/Shift source identity.
+8. Do not force file splitting merely because Topic/SubTopic changes.
+9. Do not redesign the Student Quiz Portal unless required.
+10. Review parser and API behavior before writing implementation changes.
+11. Test with a small mixed Mathematics TXT before production rollout.
+12. Other subjects may adopt or reject this model later through a separate architectural decision.
+
+## Next Session Starting Point — Mathematics Metadata
+
+Provide:
+
+1. `services/questionParser.js`
+2. One representative existing Mathematics TXT file
+3. Main Exam Corner question API (`fetch-question.js` or current equivalent)
+4. Tutorial question API (`fetch-tutorial-questions.js` or current equivalent)
+
+Implementation sequence:
+
+```text
+Review current parser
+↓
+Identify global metadata parsing
+↓
+Add Math-only local Topic/SubTopic detection
+↓
+Implement inheritance/fallback
+↓
+Verify existing Math TXT compatibility
+↓
+Verify mixed-topic Math TXT
+↓
+Verify Exam Corner API
+↓
+Verify Tutorial API
+↓
+Regression-test non-Math subjects unchanged
+```
+
+------------------------------------------------------------------------
+
+# Development Timeline Addition (2026-07-22)
+
+| Date | Milestone |
+|---|---|
+| 2026-07-22 | Mathematics Mixed-Topic Metadata Problem Identified |
+| 2026-07-22 | Math-Only Global + Question-Level Topic/SubTopic Architecture Defined |
+| 2026-07-22 | Mathematics Metadata Inheritance / Override Rule Defined |
+| 2026-07-22 | Non-Math Subjects Explicitly Excluded From Current Change |
+| Next | Review `questionParser.js` and Representative Math TXT |
+| Next | Implement Math-Only Topic/SubTopic Inheritance |
+| Next | Verify Exam Corner and Tutorial APIs |
+| Next | Regression-Test GI / GS / GACA Unchanged |
+
+------------------------------------------------------------------------
+
+# Documentation Note (Updated: 2026-07-22 — Mathematics Metadata Planning)
+
+This document remains the single source of truth for the Conceptual Bridge project.
+
+The Mathematics metadata architecture described above is currently an **approved design decision / implementation plan**, not yet a confirmed completed code change.
+
+Future implementation must preserve all existing project behavior outside the Mathematics-specific scope unless separately approved.
