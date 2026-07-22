@@ -7,33 +7,54 @@ html,
 body {
     margin: 0;
     min-height: 100%;
-}
+    }
+    
+    body {
+    
+        font-family:
+            Inter,
+            Arial,
+            sans-serif;
+    
+        min-height: 100vh;
+    
+        color: #ffffff;
+    
+        background:
+            linear-gradient(
+                -45deg,
+                #1a365d,
+                #2a4365,
+                #2b6cb0,
+                #3182ce
+            );
+    
+        background-size:
+            400% 400%;
+    
+        animation:
+            gradientBG 15s ease infinite;
+    }
+    
+    
+    @keyframes gradientBG {
+    
+        0% {
+            background-position:
+                0% 50%;
+        }
+    
+        50% {
+            background-position:
+                100% 50%;
+        }
+    
+        100% {
+            background-position:
+                0% 50%;
+        }
+    }
 
-
-body {
-
-    font-family:
-        Inter,
-        Arial,
-        sans-serif;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(59, 130, 246, 0.20),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(139, 92, 246, 0.18),
-            transparent 35%
-        ),
-        #07111f;
-
-    color: #e5e7eb;
-
-    min-height: 100vh;
-}
 
 
 button,
@@ -853,3 +874,445 @@ button:disabled {
     }
 
 }
+/* =========================================
+   WRITE IN LINE
+========================================= */
+
+.workspace-help {
+
+    margin:
+        0 0 16px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.72
+        );
+
+    font-size: 0.88rem;
+}
+
+
+/* WRITE MODE */
+
+.write-mode-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+
+.write-mode-card {
+
+    min-width: 0;
+
+    min-height: 125px;
+
+    padding: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    text-align: center;
+
+    border-radius: 14px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.20
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    color: #ffffff;
+}
+
+
+.write-mode-card:not(:disabled):hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.18
+        );
+
+    transform:
+        translateY(-2px);
+}
+
+
+.write-mode-card small {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    line-height: 1.4;
+}
+
+
+.mode-icon {
+
+    font-size: 1.45rem;
+}
+
+
+/* PAYLOAD */
+
+.payload-section {
+
+    max-width: 680px;
+
+    margin: 0 auto;
+}
+
+
+.payload-section textarea,
+.line-navigator textarea {
+
+    width: 100%;
+
+    resize: vertical;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.25
+        );
+
+    outline: none;
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            0.55
+        );
+
+    color: #ffffff;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size: 0.9rem;
+
+    line-height: 1.5;
+}
+
+
+.payload-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 10px;
+}
+
+
+.workspace-primary-btn {
+
+    min-width: 90px;
+
+    padding:
+        9px 18px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background:
+        rgba(
+            37,
+            99,
+            235,
+            0.90
+        );
+
+    color: #ffffff;
+
+    font-weight: 800;
+}
+
+
+/* LINE NAVIGATOR */
+
+.line-view-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 10px;
+}
+
+
+#lineNavigator textarea {
+
+    min-height: 100px;
+
+    resize: none;
+}
+
+
+#anchorStatus {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    font-size: 0.78rem;
+
+    text-align: right;
+}
+
+
+.line-controls {
+
+    display: grid;
+
+    grid-template-columns:
+        44px
+        44px
+        1fr
+        44px
+        44px
+        1fr
+        44px
+        44px;
+
+    gap: 7px;
+
+    align-items: center;
+
+    margin-top: 12px;
+}
+
+
+.line-controls button {
+
+    min-width: 44px;
+
+    width: 44px;
+
+    height: 40px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.20
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    color: #ffffff;
+
+    font-size: 1rem;
+}
+
+
+.line-controls button:hover:not(:disabled) {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.20
+        );
+}
+
+
+.line-controls button:disabled {
+
+    opacity: 0.38;
+}
+
+
+.line-controls button.anchor-selected {
+
+    outline:
+        2px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.75
+        );
+
+    background:
+        rgba(
+            37,
+            99,
+            235,
+            0.55
+        );
+}
+
+
+/* ANCHOR SUMMARY */
+
+.anchor-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin-top: 14px;
+}
+
+
+.anchor-summary > div {
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+}
+
+
+.anchor-summary span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.62
+        );
+
+    font-size: 0.7rem;
+}
+
+
+.anchor-summary strong {
+
+    font-size: 0.84rem;
+}
+
+
+@media (
+    max-width: 760px
+) {
+
+    .write-mode-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .anchor-summary {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+}
+
