@@ -302,23 +302,256 @@
                     after the exact behavior of each operation
                     is defined.
                 -->
-
-
                 <div
                     id="writeWorkspace"
                     class="operation-panel hidden"
                 >
-
-                    <h3>
-                        Write in a Line
-                    </h3>
-
-                    <p>
-                        Configuration controls will be added
-                        after the operation rules are defined.
-                    </p>
-
+                
+                    <!-- WRITE MODE SELECTION -->
+                
+                    <div
+                        id="writeModeSelection"
+                        class="write-mode-section"
+                    >
+                
+                        <h3>
+                            Write in a Line
+                        </h3>
+                
+                        <p class="workspace-help">
+                            Choose where the payload should be written.
+                        </p>
+                
+                
+                        <div class="write-mode-grid">
+                
+                            <button
+                                type="button"
+                                id="writeStartBtn"
+                                class="write-mode-card"
+                            >
+                
+                                <span class="mode-icon">
+                                    ⇤
+                                </span>
+                
+                                <strong>
+                                    Write at Start of Line
+                                </strong>
+                
+                                <small>
+                                    Insert the payload at the beginning
+                                    of selected repeating lines.
+                                </small>
+                
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                class="write-mode-card"
+                                disabled
+                            >
+                
+                                <span class="mode-icon">
+                                    ⇥
+                                </span>
+                
+                                <strong>
+                                    Write Exactly at End
+                                </strong>
+                
+                                <small>
+                                    Function will be configured later.
+                                </small>
+                
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                class="write-mode-card"
+                                disabled
+                            >
+                
+                                <span class="mode-icon">
+                                    ↔
+                                </span>
+                
+                                <strong>
+                                    Write in Middle / Somewhere
+                                </strong>
+                
+                                <small>
+                                    Function will be configured later.
+                                </small>
+                
+                            </button>
+                
+                        </div>
+                
+                    </div>
+                
+                
+                    <!-- PAYLOAD ENTRY -->
+                
+                    <div
+                        id="payloadSection"
+                        class="payload-section hidden"
+                    >
+                
+                        <h3>
+                            Enter Payload
+                        </h3>
+                
+                        <p class="workspace-help">
+                            Type exactly what should be inserted
+                            at the start of each target line.
+                        </p>
+                
+                
+                        <textarea
+                            id="payloadInput"
+                            rows="4"
+                            placeholder="Type your payload here"
+                        ></textarea>
+                
+                
+                        <div class="payload-actions">
+                
+                            <button
+                                type="button"
+                                id="payloadOkBtn"
+                                class="workspace-primary-btn"
+                            >
+                                OK
+                            </button>
+                
+                        </div>
+                
+                    </div>
+                
+                
+                    <!-- SINGLE LINE NAVIGATOR -->
+                
+                    <div
+                        id="lineNavigator"
+                        class="line-navigator hidden"
+                    >
+                
+                        <div class="line-view-header">
+                
+                            <strong id="currentLineLabel">
+                                Line 1
+                            </strong>
+                
+                            <span id="anchorStatus">
+                                Select first and second anchor lines
+                            </span>
+                
+                        </div>
+                
+                
+                        <textarea
+                            id="currentLineViewer"
+                            rows="4"
+                            readonly
+                        ></textarea>
+                
+                
+                        <div class="line-controls">
+                
+                            <button
+                                type="button"
+                                id="previousLineBtn"
+                                title="Previous Line"
+                            >
+                                🔼
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                id="nextLineBtn"
+                                title="Next Line"
+                            >
+                                🔽
+                            </button>
+                
+                
+                            <div class="control-spacer"></div>
+                
+                
+                            <button
+                                type="button"
+                                id="firstAnchorBtn"
+                                title="Set First Anchor"
+                            >
+                                1️⃣
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                id="secondAnchorBtn"
+                                title="Set Second Anchor"
+                            >
+                                2️⃣
+                            </button>
+                
+                
+                            <div class="control-spacer"></div>
+                
+                
+                            <button
+                                type="button"
+                                id="adjustAnchorsBtn"
+                                title="Adjust Anchors"
+                            >
+                                ⚙️
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                id="runOperationBtn"
+                                title="Run Operation"
+                                disabled
+                            >
+                                🆗
+                            </button>
+                
+                        </div>
+                
+                
+                        <div class="anchor-summary">
+                
+                            <div>
+                                <span>First Anchor</span>
+                                <strong id="firstAnchorDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Second Anchor</span>
+                                <strong id="secondAnchorDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Calculated Gap</span>
+                                <strong id="gapDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Targets</span>
+                                <strong id="targetCountDisplay">—</strong>
+                            </div>
+                
+                        </div>
+                
+                    </div>
+                
                 </div>
+
 
 
                 <div
