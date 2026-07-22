@@ -291,6 +291,90 @@ const createAnchorStatus =
         "createAnchorStatus"
     );
 
+const deleteModeSelection =
+    document.getElementById(
+        "deleteModeSelection"
+    );
+
+const deleteCompleteBtn =
+    document.getElementById(
+        "deleteCompleteBtn"
+    );
+
+const deleteBackspaceBtn =
+    document.getElementById(
+        "deleteBackspaceBtn"
+    );
+
+const deleteLineNavigator =
+    document.getElementById(
+        "deleteLineNavigator"
+    );
+
+const deleteCurrentLineLabel =
+    document.getElementById(
+        "deleteCurrentLineLabel"
+    );
+
+const deleteCurrentLineViewer =
+    document.getElementById(
+        "deleteCurrentLineViewer"
+    );
+
+const deletePreviousLineBtn =
+    document.getElementById(
+        "deletePreviousLineBtn"
+    );
+
+const deleteNextLineBtn =
+    document.getElementById(
+        "deleteNextLineBtn"
+    );
+
+const deleteFirstAnchorBtn =
+    document.getElementById(
+        "deleteFirstAnchorBtn"
+    );
+
+const deleteSecondAnchorBtn =
+    document.getElementById(
+        "deleteSecondAnchorBtn"
+    );
+
+const deleteAdjustAnchorsBtn =
+    document.getElementById(
+        "deleteAdjustAnchorsBtn"
+    );
+
+const deleteRunOperationBtn =
+    document.getElementById(
+        "deleteRunOperationBtn"
+    );
+
+const deleteFirstAnchorDisplay =
+    document.getElementById(
+        "deleteFirstAnchorDisplay"
+    );
+
+const deleteSecondAnchorDisplay =
+    document.getElementById(
+        "deleteSecondAnchorDisplay"
+    );
+
+const deleteGapDisplay =
+    document.getElementById(
+        "deleteGapDisplay"
+    );
+
+const deleteTargetCountDisplay =
+    document.getElementById(
+        "deleteTargetCountDisplay"
+    );
+
+const deleteAnchorStatus =
+    document.getElementById(
+        "deleteAnchorStatus"
+    );
 
 // =========================================
 // STATE
@@ -348,6 +432,21 @@ let createSecondAnchorIndex =
     null;
 
 let createTargetIndexes =
+    [];
+
+let deleteMode =
+    null;
+
+let deleteCurrentLineIndex =
+    0;
+
+let deleteFirstAnchorIndex =
+    null;
+
+let deleteSecondAnchorIndex =
+    null;
+
+let deleteTargetIndexes =
     [];
 // =========================================
 // EVENTS
@@ -495,6 +594,53 @@ createAdjustAnchorsBtn.addEventListener(
 createRunOperationBtn.addEventListener(
     "click",
     runCreateNewLine
+);
+
+deleteCompleteBtn.addEventListener(
+    "click",
+    beginDeleteComplete
+);
+
+
+deleteBackspaceBtn.addEventListener(
+    "click",
+    beginDeleteBackspace
+);
+
+
+deletePreviousLineBtn.addEventListener(
+    "click",
+    () => navigateDeleteLine(-1)
+);
+
+
+deleteNextLineBtn.addEventListener(
+    "click",
+    () => navigateDeleteLine(1)
+);
+
+
+deleteFirstAnchorBtn.addEventListener(
+    "click",
+    setDeleteFirstAnchor
+);
+
+
+deleteSecondAnchorBtn.addEventListener(
+    "click",
+    setDeleteSecondAnchor
+);
+
+
+deleteAdjustAnchorsBtn.addEventListener(
+    "click",
+    resetDeleteAnchors
+);
+
+
+deleteRunOperationBtn.addEventListener(
+    "click",
+    runDeleteOperation
 );
 // =========================================
 // LOAD TXT
@@ -2004,6 +2150,603 @@ function runCreateNewLine() {
             "Inserted blank lines only."
         );
     }
+
+
+    log(
+        "Modified TXT is ready for download."
+    );
+}
+
+function beginDeleteComplete() {
+
+    deleteMode =
+        "complete";
+
+
+    deleteModeSelection.classList.add(
+        "hidden"
+    );
+
+    deleteLineNavigator.classList.remove(
+        "hidden"
+    );
+
+
+    deleteCurrentLineIndex =
+        0;
+
+
+    resetDeleteAnchors();
+
+    renderDeleteCurrentLine();
+
+
+    log(
+        "Delete Completely selected."
+    );
+
+    log(
+        "Navigate to the first target line and press 1️⃣."
+    );
+}
+
+
+function beginDeleteBackspace() {
+
+    deleteMode =
+        "backspace";
+
+
+    deleteModeSelection.classList.add(
+        "hidden"
+    );
+
+    deleteLineNavigator.classList.remove(
+        "hidden"
+    );
+
+
+    deleteCurrentLineIndex =
+        0;
+
+
+    resetDeleteAnchors();
+
+    renderDeleteCurrentLine();
+
+
+    log(
+        "Use Backspace selected."
+    );
+
+    log(
+        "The targeted line will be joined to its previous line with one separating space."
+    );
+
+    log(
+        "Navigate to the first target line and press 1️⃣."
+    );
+}
+function renderDeleteCurrentLine() {
+
+    if (!lines.length) {
+
+        return;
+    }
+
+
+    deleteCurrentLineLabel.textContent =
+        `Line ${deleteCurrentLineIndex + 1}`;
+
+
+    deleteCurrentLineViewer.value =
+        lines[
+            deleteCurrentLineIndex
+        ] ?? "";
+
+
+    deletePreviousLineBtn.disabled =
+        deleteCurrentLineIndex === 0;
+
+
+    deleteNextLineBtn.disabled =
+        deleteCurrentLineIndex >=
+        lines.length - 1;
+
+
+    deleteFirstAnchorBtn.classList.toggle(
+        "anchor-selected",
+        deleteFirstAnchorIndex ===
+            deleteCurrentLineIndex
+    );
+
+
+    deleteSecondAnchorBtn.classList.toggle(
+        "anchor-selected",
+        deleteSecondAnchorIndex ===
+            deleteCurrentLineIndex
+    );
+}
+
+
+function navigateDeleteLine(
+    direction
+) {
+
+    const nextIndex =
+        deleteCurrentLineIndex +
+        direction;
+
+
+    if (
+        nextIndex < 0 ||
+        nextIndex >= lines.length
+    ) {
+
+        return;
+    }
+
+
+    deleteCurrentLineIndex =
+        nextIndex;
+
+
+    renderDeleteCurrentLine();
+}
+
+function setDeleteFirstAnchor() {
+
+    /*
+        Backspace cannot operate on physical Line 1
+        because there is no previous line.
+    */
+
+    if (
+        deleteMode === "backspace" &&
+        deleteCurrentLineIndex === 0
+    ) {
+
+        alert(
+            "Line 1 cannot use Backspace because it has no previous line."
+        );
+
+        return;
+    }
+
+
+    deleteFirstAnchorIndex =
+        deleteCurrentLineIndex;
+
+
+    if (
+        deleteSecondAnchorIndex !== null &&
+        deleteSecondAnchorIndex <=
+            deleteFirstAnchorIndex
+    ) {
+
+        deleteSecondAnchorIndex =
+            null;
+    }
+
+
+    calculateDeleteTargets();
+
+    renderDeleteCurrentLine();
+
+
+    log(
+        `Delete first target: Line ${deleteFirstAnchorIndex + 1}`
+    );
+}
+
+
+function setDeleteSecondAnchor() {
+
+    if (
+        deleteFirstAnchorIndex === null
+    ) {
+
+        alert(
+            "Select the first target using 1️⃣ first."
+        );
+
+        return;
+    }
+
+
+    if (
+        deleteCurrentLineIndex <=
+        deleteFirstAnchorIndex
+    ) {
+
+        alert(
+            "The second target must be after the first target."
+        );
+
+        return;
+    }
+
+
+    deleteSecondAnchorIndex =
+        deleteCurrentLineIndex;
+
+
+    calculateDeleteTargets();
+
+    renderDeleteCurrentLine();
+
+
+    log(
+        `Delete second target: Line ${deleteSecondAnchorIndex + 1}`
+    );
+}
+
+function calculateDeleteTargets() {
+
+    deleteTargetIndexes =
+        [];
+
+
+    deleteFirstAnchorDisplay.textContent =
+        deleteFirstAnchorIndex === null
+            ? "—"
+            : `Line ${deleteFirstAnchorIndex + 1}`;
+
+
+    deleteSecondAnchorDisplay.textContent =
+        deleteSecondAnchorIndex === null
+            ? "—"
+            : `Line ${deleteSecondAnchorIndex + 1}`;
+
+
+    if (
+        deleteFirstAnchorIndex === null ||
+        deleteSecondAnchorIndex === null
+    ) {
+
+        deleteGapDisplay.textContent =
+            "—";
+
+        deleteTargetCountDisplay.textContent =
+            "—";
+
+        deleteRunOperationBtn.disabled =
+            true;
+
+        deleteAnchorStatus.textContent =
+            "Select first and second target lines";
+
+        return;
+    }
+
+
+    const gap =
+        deleteSecondAnchorIndex -
+        deleteFirstAnchorIndex;
+
+
+    if (gap <= 0) {
+
+        deleteRunOperationBtn.disabled =
+            true;
+
+        return;
+    }
+
+
+    /*
+        IMPORTANT:
+
+        Calculate target indexes against the
+        ORIGINAL current file structure before
+        deleting or merging anything.
+    */
+
+    for (
+        let index =
+            deleteFirstAnchorIndex;
+
+        index < lines.length;
+
+        index += gap
+    ) {
+
+        deleteTargetIndexes.push(
+            index
+        );
+    }
+
+
+    deleteGapDisplay.textContent =
+        `${gap} line${gap === 1 ? "" : "s"}`;
+
+
+    deleteTargetCountDisplay.textContent =
+        String(
+            deleteTargetIndexes.length
+        );
+
+
+    deleteAnchorStatus.textContent =
+        `Ready — ${deleteTargetIndexes.length} target line(s)`;
+
+
+    deleteRunOperationBtn.disabled =
+        false;
+
+
+    log(
+        `Delete target gap: ${gap} line(s).`
+    );
+
+
+    log(
+        `${deleteTargetIndexes.length} target line(s) calculated.`
+    );
+}
+
+
+function resetDeleteAnchors() {
+
+    deleteFirstAnchorIndex =
+        null;
+
+    deleteSecondAnchorIndex =
+        null;
+
+    deleteTargetIndexes =
+        [];
+
+
+    deleteFirstAnchorDisplay.textContent =
+        "—";
+
+    deleteSecondAnchorDisplay.textContent =
+        "—";
+
+    deleteGapDisplay.textContent =
+        "—";
+
+    deleteTargetCountDisplay.textContent =
+        "—";
+
+
+    deleteAnchorStatus.textContent =
+        "Select first and second target lines";
+
+
+    deleteRunOperationBtn.disabled =
+        true;
+
+
+    renderDeleteCurrentLine();
+}
+
+function runDeleteOperation() {
+
+    if (
+        !deleteMode ||
+        deleteTargetIndexes.length === 0
+    ) {
+
+        return;
+    }
+
+
+    const actionName =
+        deleteMode === "complete"
+            ? "delete completely"
+            : "apply backspace to";
+
+
+    const confirmed =
+        window.confirm(
+            `Are you sure you want to ${actionName} ${deleteTargetIndexes.length} target line(s)?`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    const modifiedLines =
+        [...lines];
+
+
+    /*
+        CRITICAL:
+
+        Process targets BOTTOM → TOP.
+
+        If target indexes are:
+
+        5, 19, 33
+
+        process:
+
+        33 → 19 → 5
+
+        Therefore deletion of a later line
+        never changes the index of an earlier
+        target that still needs processing.
+    */
+
+    const targetsDescending =
+        [...deleteTargetIndexes]
+            .sort(
+                (a, b) => b - a
+            );
+
+
+    if (
+        deleteMode === "complete"
+    ) {
+
+        targetsDescending.forEach(
+            targetIndex => {
+
+                modifiedLines.splice(
+                    targetIndex,
+                    1
+                );
+            }
+        );
+
+    } else if (
+        deleteMode === "backspace"
+    ) {
+
+        targetsDescending.forEach(
+            targetIndex => {
+
+                /*
+                    Safety:
+                    physical first line has
+                    no previous line.
+                */
+
+                if (
+                    targetIndex <= 0 ||
+                    targetIndex >=
+                        modifiedLines.length
+                ) {
+
+                    return;
+                }
+
+
+                const previousLine =
+                    modifiedLines[
+                        targetIndex - 1
+                    ];
+
+
+                const targetLine =
+                    modifiedLines[
+                        targetIndex
+                    ];
+
+
+                /*
+                    Remove trailing whitespace from
+                    previous line and leading whitespace
+                    from target line.
+
+                    Then insert EXACTLY ONE separating
+                    space between them.
+                */
+
+                const mergedLine =
+                    previousLine.replace(
+                        /\s+$/,
+                        ""
+                    ) +
+                    " " +
+                    targetLine.replace(
+                        /^\s+/,
+                        ""
+                    );
+
+
+                modifiedLines[
+                    targetIndex - 1
+                ] =
+                    mergedLine;
+
+
+                /*
+                    Remove the original target line
+                    because its content now exists
+                    on the previous line.
+                */
+
+                modifiedLines.splice(
+                    targetIndex,
+                    1
+                );
+            }
+        );
+    }
+
+
+    lines =
+        modifiedLines;
+
+
+    workingText =
+        lines.join(
+            "\n"
+        );
+
+
+    operationCompleted =
+        true;
+
+
+    infoTotalLines.textContent =
+        String(
+            lines.length
+        );
+
+
+    infoStatus.textContent =
+        "MODIFICATION COMPLETE";
+
+
+    downloadBtn.disabled =
+        false;
+
+
+    deleteRunOperationBtn.disabled =
+        true;
+
+
+    deleteAnchorStatus.textContent =
+        "OPERATION COMPLETED";
+
+
+    /*
+        Ensure navigator index remains valid
+        after line count decreases.
+    */
+
+    if (
+        deleteCurrentLineIndex >=
+        lines.length
+    ) {
+
+        deleteCurrentLineIndex =
+            Math.max(
+                0,
+                lines.length - 1
+            );
+    }
+
+
+    renderDeleteCurrentLine();
+
+
+    if (
+        deleteMode === "complete"
+    ) {
+
+        log(
+            `${deleteTargetIndexes.length} line(s) deleted completely.`
+        );
+
+    } else {
+
+        log(
+            `${deleteTargetIndexes.length} line break(s) removed using Backspace.`
+        );
+    }
+
+
+    log(
+        `Updated total lines: ${lines.length}`
+    );
 
 
     log(
