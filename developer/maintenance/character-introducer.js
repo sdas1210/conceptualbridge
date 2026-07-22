@@ -191,7 +191,105 @@ const anchorStatus =
     document.getElementById(
         "anchorStatus"
     );
+const createModeSelection =
+    document.getElementById(
+        "createModeSelection"
+    );
 
+const createBlankLineBtn =
+    document.getElementById(
+        "createBlankLineBtn"
+    );
+
+const createPayloadLineBtn =
+    document.getElementById(
+        "createPayloadLineBtn"
+    );
+
+const createPayloadSection =
+    document.getElementById(
+        "createPayloadSection"
+    );
+
+const createPayloadInput =
+    document.getElementById(
+        "createPayloadInput"
+    );
+
+const createPayloadOkBtn =
+    document.getElementById(
+        "createPayloadOkBtn"
+    );
+
+const createLineNavigator =
+    document.getElementById(
+        "createLineNavigator"
+    );
+
+const createCurrentLineLabel =
+    document.getElementById(
+        "createCurrentLineLabel"
+    );
+
+const createCurrentLineViewer =
+    document.getElementById(
+        "createCurrentLineViewer"
+    );
+
+const createPreviousLineBtn =
+    document.getElementById(
+        "createPreviousLineBtn"
+    );
+
+const createNextLineBtn =
+    document.getElementById(
+        "createNextLineBtn"
+    );
+
+const createFirstAnchorBtn =
+    document.getElementById(
+        "createFirstAnchorBtn"
+    );
+
+const createSecondAnchorBtn =
+    document.getElementById(
+        "createSecondAnchorBtn"
+    );
+
+const createAdjustAnchorsBtn =
+    document.getElementById(
+        "createAdjustAnchorsBtn"
+    );
+
+const createRunOperationBtn =
+    document.getElementById(
+        "createRunOperationBtn"
+    );
+
+const createFirstAnchorDisplay =
+    document.getElementById(
+        "createFirstAnchorDisplay"
+    );
+
+const createSecondAnchorDisplay =
+    document.getElementById(
+        "createSecondAnchorDisplay"
+    );
+
+const createGapDisplay =
+    document.getElementById(
+        "createGapDisplay"
+    );
+
+const createTargetCountDisplay =
+    document.getElementById(
+        "createTargetCountDisplay"
+    );
+
+const createAnchorStatus =
+    document.getElementById(
+        "createAnchorStatus"
+    );
 
 
 // =========================================
@@ -233,6 +331,24 @@ let targetIndexes =
 
 let operationCompleted =
     false;
+
+let createMode =
+    null;
+
+let createPayload =
+    "";
+
+let createCurrentLineIndex =
+    0;
+
+let createFirstAnchorIndex =
+    null;
+
+let createSecondAnchorIndex =
+    null;
+
+let createTargetIndexes =
+    [];
 // =========================================
 // EVENTS
 // =========================================
@@ -326,6 +442,59 @@ runOperationBtn.addEventListener(
 downloadBtn.addEventListener(
     "click",
     downloadModifiedTxt
+);
+
+createBlankLineBtn.addEventListener(
+    "click",
+    beginCreateBlankLine
+);
+
+
+createPayloadLineBtn.addEventListener(
+    "click",
+    beginCreatePayloadLine
+);
+
+
+createPayloadOkBtn.addEventListener(
+    "click",
+    confirmCreatePayload
+);
+
+
+createPreviousLineBtn.addEventListener(
+    "click",
+    () => navigateCreateLine(-1)
+);
+
+
+createNextLineBtn.addEventListener(
+    "click",
+    () => navigateCreateLine(1)
+);
+
+
+createFirstAnchorBtn.addEventListener(
+    "click",
+    setCreateFirstAnchor
+);
+
+
+createSecondAnchorBtn.addEventListener(
+    "click",
+    setCreateSecondAnchor
+);
+
+
+createAdjustAnchorsBtn.addEventListener(
+    "click",
+    resetCreateAnchors
+);
+
+
+createRunOperationBtn.addEventListener(
+    "click",
+    runCreateNewLine
 );
 // =========================================
 // LOAD TXT
@@ -1318,6 +1487,527 @@ function downloadModifiedTxt() {
 
     log(
         `Downloaded: ${link.download}`
+    );
+}
+
+function beginCreateBlankLine() {
+
+    createMode =
+        "blank";
+
+    createPayload =
+        "";
+
+
+    createModeSelection.classList.add(
+        "hidden"
+    );
+
+    createPayloadSection.classList.add(
+        "hidden"
+    );
+
+    createLineNavigator.classList.remove(
+        "hidden"
+    );
+
+
+    createCurrentLineIndex =
+        0;
+
+
+    resetCreateAnchors();
+
+    renderCreateCurrentLine();
+
+
+    log(
+        "Only New Line selected."
+    );
+
+    log(
+        "Select the first target line using 1️⃣."
+    );
+}
+
+function beginCreatePayloadLine() {
+
+    createMode =
+        "payload";
+
+
+    createModeSelection.classList.add(
+        "hidden"
+    );
+
+    createLineNavigator.classList.add(
+        "hidden"
+    );
+
+    createPayloadSection.classList.remove(
+        "hidden"
+    );
+
+
+    createPayloadInput.value =
+        "";
+
+    createPayloadInput.focus();
+
+
+    log(
+        "New Line with Payload selected."
+    );
+
+    log(
+        "Enter the payload for the new line."
+    );
+}
+
+function confirmCreatePayload() {
+
+    const value =
+        createPayloadInput.value;
+
+
+    if (
+        value.length === 0
+    ) {
+
+        alert(
+            "Enter the payload first."
+        );
+
+        return;
+    }
+
+
+    /*
+        Preserve payload exactly.
+        No trim().
+    */
+
+    createPayload =
+        value;
+
+
+    createPayloadSection.classList.add(
+        "hidden"
+    );
+
+    createLineNavigator.classList.remove(
+        "hidden"
+    );
+
+
+    createCurrentLineIndex =
+        0;
+
+
+    resetCreateAnchors();
+
+    renderCreateCurrentLine();
+
+
+    log(
+        `New-line payload accepted: ${JSON.stringify(createPayload)}`
+    );
+
+    log(
+        "Select the first target line using 1️⃣."
+    );
+}
+
+function renderCreateCurrentLine() {
+
+    if (!lines.length) {
+
+        return;
+    }
+
+
+    createCurrentLineLabel.textContent =
+        `Line ${createCurrentLineIndex + 1}`;
+
+
+    createCurrentLineViewer.value =
+        lines[
+            createCurrentLineIndex
+        ] ?? "";
+
+
+    createPreviousLineBtn.disabled =
+        createCurrentLineIndex === 0;
+
+
+    createNextLineBtn.disabled =
+        createCurrentLineIndex >=
+        lines.length - 1;
+
+
+    createFirstAnchorBtn.classList.toggle(
+        "anchor-selected",
+        createFirstAnchorIndex ===
+            createCurrentLineIndex
+    );
+
+
+    createSecondAnchorBtn.classList.toggle(
+        "anchor-selected",
+        createSecondAnchorIndex ===
+            createCurrentLineIndex
+    );
+}
+
+
+function navigateCreateLine(
+    direction
+) {
+
+    const nextIndex =
+        createCurrentLineIndex +
+        direction;
+
+
+    if (
+        nextIndex < 0 ||
+        nextIndex >= lines.length
+    ) {
+
+        return;
+    }
+
+
+    createCurrentLineIndex =
+        nextIndex;
+
+
+    renderCreateCurrentLine();
+}
+
+function setCreateFirstAnchor() {
+
+    createFirstAnchorIndex =
+        createCurrentLineIndex;
+
+
+    if (
+        createSecondAnchorIndex !== null &&
+        createSecondAnchorIndex <=
+            createFirstAnchorIndex
+    ) {
+
+        createSecondAnchorIndex =
+            null;
+    }
+
+
+    calculateCreateTargets();
+
+    renderCreateCurrentLine();
+
+
+    log(
+        `Create-line first target: Line ${createFirstAnchorIndex + 1}`
+    );
+}
+
+
+function setCreateSecondAnchor() {
+
+    if (
+        createFirstAnchorIndex === null
+    ) {
+
+        alert(
+            "Select the first target using 1️⃣ first."
+        );
+
+        return;
+    }
+
+
+    if (
+        createCurrentLineIndex <=
+        createFirstAnchorIndex
+    ) {
+
+        alert(
+            "The second target must be after the first target."
+        );
+
+        return;
+    }
+
+
+    createSecondAnchorIndex =
+        createCurrentLineIndex;
+
+
+    calculateCreateTargets();
+
+    renderCreateCurrentLine();
+
+
+    log(
+        `Create-line second target: Line ${createSecondAnchorIndex + 1}`
+    );
+}
+
+function calculateCreateTargets() {
+
+    createTargetIndexes =
+        [];
+
+
+    createFirstAnchorDisplay.textContent =
+        createFirstAnchorIndex === null
+            ? "—"
+            : `Line ${createFirstAnchorIndex + 1}`;
+
+
+    createSecondAnchorDisplay.textContent =
+        createSecondAnchorIndex === null
+            ? "—"
+            : `Line ${createSecondAnchorIndex + 1}`;
+
+
+    if (
+        createFirstAnchorIndex === null ||
+        createSecondAnchorIndex === null
+    ) {
+
+        createGapDisplay.textContent =
+            "—";
+
+        createTargetCountDisplay.textContent =
+            "—";
+
+        createRunOperationBtn.disabled =
+            true;
+
+        createAnchorStatus.textContent =
+            "Select first and second target lines";
+
+        return;
+    }
+
+
+    const gap =
+        createSecondAnchorIndex -
+        createFirstAnchorIndex;
+
+
+    for (
+        let index =
+            createFirstAnchorIndex;
+
+        index < lines.length;
+
+        index += gap
+    ) {
+
+        createTargetIndexes.push(
+            index
+        );
+    }
+
+
+    createGapDisplay.textContent =
+        `${gap} line${gap === 1 ? "" : "s"}`;
+
+
+    createTargetCountDisplay.textContent =
+        String(
+            createTargetIndexes.length
+        );
+
+
+    createAnchorStatus.textContent =
+        `Ready — ${createTargetIndexes.length} new line(s)`;
+
+
+    createRunOperationBtn.disabled =
+        false;
+
+
+    log(
+        `Original target gap: ${gap} line(s).`
+    );
+
+    log(
+        `${createTargetIndexes.length} insertion target(s) calculated.`
+    );
+}
+
+function resetCreateAnchors() {
+
+    createFirstAnchorIndex =
+        null;
+
+    createSecondAnchorIndex =
+        null;
+
+    createTargetIndexes =
+        [];
+
+
+    createFirstAnchorDisplay.textContent =
+        "—";
+
+    createSecondAnchorDisplay.textContent =
+        "—";
+
+    createGapDisplay.textContent =
+        "—";
+
+    createTargetCountDisplay.textContent =
+        "—";
+
+
+    createAnchorStatus.textContent =
+        "Select first and second target lines";
+
+
+    createRunOperationBtn.disabled =
+        true;
+
+
+    renderCreateCurrentLine();
+}
+
+function runCreateNewLine() {
+
+    if (
+        !createMode ||
+        createTargetIndexes.length === 0
+    ) {
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Create ${createTargetIndexes.length} new line(s)?`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    const modifiedLines =
+        [...lines];
+
+
+    /*
+        CRITICAL:
+
+        Targets were calculated against the ORIGINAL
+        line positions.
+
+        Insert from BOTTOM → TOP.
+
+        Therefore inserting a line later in the file
+        cannot shift any earlier target that still
+        needs processing.
+    */
+
+    const targetsDescending =
+        [...createTargetIndexes]
+            .sort(
+                (a, b) => b - a
+            );
+
+
+    targetsDescending.forEach(
+        targetIndex => {
+
+            const newLine =
+                createMode === "payload"
+                    ? createPayload
+                    : "";
+
+
+            /*
+                targetIndex + 1 means:
+                insert AFTER the target line.
+            */
+
+            modifiedLines.splice(
+                targetIndex + 1,
+                0,
+                newLine
+            );
+        }
+    );
+
+
+    lines =
+        modifiedLines;
+
+
+    workingText =
+        lines.join(
+            "\n"
+        );
+
+
+    operationCompleted =
+        true;
+
+
+    infoTotalLines.textContent =
+        String(
+            lines.length
+        );
+
+
+    infoStatus.textContent =
+        "MODIFICATION COMPLETE";
+
+
+    downloadBtn.disabled =
+        false;
+
+
+    createRunOperationBtn.disabled =
+        true;
+
+
+    createAnchorStatus.textContent =
+        "OPERATION COMPLETED";
+
+
+    renderCreateCurrentLine();
+
+
+    log(
+        `Create New Line completed: ${createTargetIndexes.length} line(s) inserted.`
+    );
+
+
+    if (
+        createMode === "payload"
+    ) {
+
+        log(
+            `Inserted payload: ${JSON.stringify(createPayload)}`
+        );
+
+    } else {
+
+        log(
+            "Inserted blank lines only."
+        );
+    }
+
+
+    log(
+        "Modified TXT is ready for download."
     );
 }
 
