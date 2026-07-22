@@ -47,7 +47,79 @@
         Create Standard and Development answer-key TXT files
     </p>
 
-
+    <!-- =====================================
+         ANSWER KEY BUILDER MODE
+    ====================================== -->
+    
+    <div
+        class="card mode-selection-card"
+        id="builderModeCard"
+    >
+    
+        <h2>
+            Answer Key Builder Mode
+        </h2>
+    
+        <p class="mode-selection-help">
+            Select the subject workflow.
+        </p>
+    
+    
+        <div class="builder-mode-grid">
+    
+            <!-- GACA -->
+    
+            <button
+                id="gacaModeBtn"
+                type="button"
+                class="builder-mode-btn active"
+                data-builder-mode="gaca"
+            >
+    
+                <strong>
+                    GACA
+                </strong>
+    
+                <span>
+                    Open the existing Answer Key Builder.
+                </span>
+    
+            </button>
+    
+    
+            <!-- MATH -->
+    
+            <button
+                id="mathModeBtn"
+                type="button"
+                class="builder-mode-btn"
+                data-builder-mode="math"
+            >
+    
+                <strong>
+                    MATH
+                </strong>
+    
+                <span>
+                    Single TXT mode using QEN| question blocks.
+                </span>
+    
+            </button>
+    
+        </div>
+    
+    
+        <div class="selected-builder-mode">
+    
+            Current Mode:
+    
+            <strong id="selectedBuilderMode">
+                GACA
+            </strong>
+    
+        </div>
+    
+    </div>
     <!-- =====================================
          SESSION CONFIGURATION
     ====================================== -->
