@@ -2027,3 +2027,213 @@ This document remains the single source of truth for the Conceptual Bridge proje
 All historical sections are preserved. This update supersedes only older descriptions of the current Answer Key Builder architecture where the PDF-based design and earlier file-count workflow are no longer applicable.
 
 Future sessions should continue preserving historical milestones and appending new progress updates rather than replacing earlier project history.
+
+
+------------------------------------------------------------------------
+
+# Free Tutorial Corner Progress Update (Added: 2026-07-22)
+
+## Current Status
+
+**Version:** Free Tutorial Corner v0.2 (Multi-Tutorial Loading / Study-Practice UI Foundation)
+
+This update records the latest work on the Free Tutorial Corner. All previous project history remains preserved.
+
+## Tutorial Loading Architecture
+
+The current `tutorials.html` loads tutorial metadata from numbered TXT files inside the `Video/` directory.
+
+Current configured loader:
+
+```javascript
+const uploadedVideoFiles = [1,2,3,4,5,6];
+```
+
+For every configured number, the page attempts to load the corresponding `Video/{number}.txt`.
+
+The loading loop already safely handles missing files using:
+
+```javascript
+if (!response.ok) continue;
+```
+
+Therefore, a configured tutorial number whose TXT file does not yet exist is skipped rather than rendered.
+
+### Confirmed Behavior
+
+```text
+Configured: [1,2,3,4,5,6]
+
+Video/1.txt exists → Load
+Video/2.txt exists → Load
+Video/3.txt missing → Skip
+Video/4.txt missing → Skip
+...
+```
+
+A missing tutorial TXT file must not stop successfully available tutorial files from loading.
+
+## Tutorial Metadata Flow
+
+```text
+tutorials.html
+↓
+Video/{number}.txt
+↓
+parseTextFileData()
+↓
+Tutorial Table Row
+├── Video Title
+├── Attribute Tags
+├── ENG / BEN selector where applicable
+├── Play Video
+├── Download PDF
+└── Take 10Q Test
+```
+
+Tutorial TXT metadata maps the corresponding tutorial test through `Test_Source| questions/<subject>/<file>.txt`.
+
+The existing `compileMiniTest()` routing remains:
+
+```text
+Tutorial TXT → Test_Source → quiz-portal.html?source=<encoded question path>
+```
+
+The Student Quiz Portal architecture remains unaffected.
+
+## Missing-File Engineering Decision
+
+It is acceptable to configure future numbered tutorial slots before all corresponding TXT files are ready, provided the current safe-skip behavior remains in place.
+
+```text
+Existing TXT → Parse and display
+Missing TXT → Skip safely
+Malformed existing TXT → Log/debug separately
+```
+
+A future optimization may replace numbered probing with an API that returns only existing tutorial metadata files. This is deferred.
+
+## Download PDF Action Expansion
+
+Two compact secondary controls are being introduced directly below **Download PDF**:
+
+```text
+Download PDF
+[ Study ] [ Practice ]
+```
+
+### Study Button
+
+**Status:** UI Foundation / Function Pending
+
+- Small pill-style control.
+- Positioned below Download PDF.
+- Styled consistently with the compact ENG/BEN controls.
+- No final action or routing assigned yet.
+
+### Practice Button
+
+**Status:** UI Foundation / Function Pending
+
+- Small pill-style control.
+- Positioned beside Study.
+- Styled consistently with the compact ENG/BEN controls.
+- No final action or routing assigned yet.
+
+### Current Design Rule
+
+Study and Practice remain UI-only placeholders until their exact behavior is defined.
+
+Existing functionality must remain unchanged:
+
+- ENG / BEN language switching
+- Play Video
+- Download PDF
+- Take 10Q Test
+- Tutorial TXT parsing
+- `Test_Source` routing
+
+## Tutorial Corner Current File
+
+```text
+tutorials.html
+```
+
+Relevant JavaScript components:
+
+```text
+uploadedVideoFiles
+cachedLoadedData
+openSubjectFolder()
+generateStudioTableLayout()
+parseTextFileData()
+switchRowLanguageContext()
+compileMiniTest()
+```
+
+## Engineering Decisions Confirmed
+
+1. Tutorial metadata remains TXT-driven.
+2. Numbered tutorial files may be configured ahead of content availability.
+3. Missing TXT files must be skipped safely.
+4. Existing tutorial rows must continue loading when later numbered files are absent.
+5. Study and Practice are compact secondary PDF-area actions.
+6. Their behavior will be implemented only after functional requirements are defined.
+7. Existing ENG/BEN, video, PDF and 10Q Test behavior must remain untouched.
+8. Student Quiz Portal/runtime logic must remain unaffected.
+9. Automatic tutorial-file discovery/API remains a future optimization.
+
+------------------------------------------------------------------------
+
+# Immediate Next Starting Point (Updated: 2026-07-22)
+
+1. Verify Study and Practice buttons render correctly below Download PDF.
+2. Confirm compact layout at current desktop/table widths.
+3. Define the exact Study function.
+4. Implement and test Study independently.
+5. Define the exact Practice function.
+6. Implement and test Practice independently.
+7. Verify tutorial loading with mixed existing/missing numbered `Video/*.txt` files.
+8. Consider automatic tutorial-file discovery/API only after the current workflow is stable.
+9. Continue Answer Key Builder regression testing and Final Merger validation as previously planned.
+
+The Mobile Refactoring, Authentication, Developer Inspector, Maintenance Suite, Answer Key Builder and Final Merger roadmaps remain preserved.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated: 2026-07-22)
+
+| Date | Milestone |
+|---|---|
+| 2026-07-10 | Mobile Refactoring Roadmap |
+| 2026-07-14 | Developer Workspace Foundation |
+| 2026-07-16 | Authentication Workspace Foundation |
+| 2026-07-17 | Quiz Portal UI Enhancements |
+| 2026-07-17 | Authentication Dropdown & Logout Foundation |
+| 2026-07-18 | Developer Metadata Inspector Foundation |
+| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
+| 2026-07-19 | Citation Remover Core Completed |
+| 2026-07-19 | Proof Reader Validation & Editing Workflow |
+| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
+| 2026-07-20 | Shift Extractor Added |
+| 2026-07-20 | Answer Key Builder Added and Refined |
+| 2026-07-20 | Final Merger Four-File Workflow |
+| 2026-07-21 | Answer Key Builder TXT-Only Refactor |
+| 2026-07-21 | Block ↔ Answer Positional Synchronization Refined |
+| 2026-07-22 | Free Tutorial Corner Multi-Tutorial Loading Reviewed |
+| 2026-07-22 | Missing Tutorial TXT Safe-Skip Behavior Confirmed |
+| 2026-07-22 | Study / Practice Compact Button UI Foundation |
+| Next | Define and Implement Study Function |
+| Next | Define and Implement Practice Function |
+| Next | Answer Key Builder End-to-End Regression Testing |
+| Next | Final Merger Production Validation |
+
+------------------------------------------------------------------------
+
+# Documentation Note (Updated: 2026-07-22)
+
+This document remains the single source of truth for the Conceptual Bridge project.
+
+All previous project history has been preserved. This update appends the latest Free Tutorial Corner architecture, multi-file loading behavior, missing-file handling decision, and Study/Practice UI foundation without replacing earlier milestones.
+
+Future development sessions should continue appending progress updates while preserving the historical record.
