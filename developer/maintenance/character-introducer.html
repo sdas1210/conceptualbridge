@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Character Introducer | Conceptual Bridge
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="character-introducer.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="page-shell">
+
+    <!-- =====================================
+         PAGE HEADER
+    ====================================== -->
+
+    <header class="page-header">
+
+        <div>
+
+            <p class="eyebrow">
+                Conceptual Bridge Maintenance Suite
+            </p>
+
+            <h1>
+                Character Introducer
+            </h1>
+
+            <p class="page-description">
+                Upload and prepare a TXT file for controlled
+                line-level modification.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main class="workspace">
+
+
+        <!-- =====================================
+             1. FILE UPLOAD
+        ====================================== -->
+
+        <section class="card">
+
+            <div class="section-heading-row">
+
+                <div>
+
+                    <span class="section-number">
+                        1
+                    </span>
+
+                    <h2>
+                        TXT File Upload
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="upload-box">
+
+                <label for="txtFileInput">
+
+                    Select TXT File
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="txtFileInput"
+                    accept=".txt,text/plain"
+                >
+
+
+                <p class="input-help">
+
+                    Select the TXT file that you want
+                    to modify.
+
+                </p>
+
+            </div>
+
+
+            <div
+                id="fileStatus"
+                class="status-box"
+            >
+
+                No TXT file selected.
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             2. OPERATION SELECTION
+        ====================================== -->
+
+        <section class="card">
+
+            <div class="section-heading-row">
+
+                <div>
+
+                    <span class="section-number">
+                        2
+                    </span>
+
+                    <h2>
+                        Select Operation
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <p class="section-description">
+
+                Choose what type of modification
+                you want to perform.
+
+            </p>
+
+
+            <div
+                id="operationSelector"
+                class="operation-grid disabled-section"
+            >
+
+
+                <!-- WRITE IN LINE -->
+
+                <button
+                    type="button"
+                    class="operation-card"
+                    data-operation="write"
+                    disabled
+                >
+
+                    <span class="operation-icon">
+                        ✎
+                    </span>
+
+                    <span class="operation-title">
+                        Write in a Line
+                    </span>
+
+                    <span class="operation-description">
+                        Modify or introduce content
+                        within an existing line.
+                    </span>
+
+                </button>
+
+
+
+                <!-- CREATE NEW LINE -->
+
+                <button
+                    type="button"
+                    class="operation-card"
+                    data-operation="create"
+                    disabled
+                >
+
+                    <span class="operation-icon">
+                        ＋
+                    </span>
+
+                    <span class="operation-title">
+                        Create a New Line
+                    </span>
+
+                    <span class="operation-description">
+                        Introduce a completely new line
+                        into the TXT file.
+                    </span>
+
+                </button>
+
+
+
+                <!-- DELETE LINE -->
+
+                <button
+                    type="button"
+                    class="operation-card"
+                    data-operation="delete"
+                    disabled
+                >
+
+                    <span class="operation-icon">
+                        −
+                    </span>
+
+                    <span class="operation-title">
+                        Delete a Line
+                    </span>
+
+                    <span class="operation-description">
+                        Remove a selected line
+                        from the TXT file.
+                    </span>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             3. OPERATION WORKSPACE
+        ====================================== -->
+
+        <section class="card">
+
+            <div class="section-heading-row">
+
+                <div>
+
+                    <span class="section-number">
+                        3
+                    </span>
+
+                    <h2>
+                        Operation Workspace
+                    </h2>
+
+                </div>
+
+
+                <span
+                    id="selectedOperationBadge"
+                    class="operation-badge"
+                >
+
+                    NO OPERATION SELECTED
+
+                </span>
+
+            </div>
+
+
+            <div
+                id="operationWorkspace"
+                class="operation-workspace disabled-workspace"
+            >
+
+                <div
+                    id="workspacePlaceholder"
+                    class="workspace-placeholder"
+                >
+
+                    <span class="placeholder-icon">
+                        ✎
+                    </span>
+
+                    <strong>
+                        Select an operation
+                    </strong>
+
+                    <p>
+                        The required controls for the selected
+                        operation will appear here.
+                    </p>
+
+                </div>
+
+
+                <!--
+                    Detailed controls will be added later
+                    after the exact behavior of each operation
+                    is defined.
+                -->
+
+
+                <div
+                    id="writeWorkspace"
+                    class="operation-panel hidden"
+                >
+
+                    <h3>
+                        Write in a Line
+                    </h3>
+
+                    <p>
+                        Configuration controls will be added
+                        after the operation rules are defined.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="createWorkspace"
+                    class="operation-panel hidden"
+                >
+
+                    <h3>
+                        Create a New Line
+                    </h3>
+
+                    <p>
+                        Configuration controls will be added
+                        after the operation rules are defined.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="deleteWorkspace"
+                    class="operation-panel hidden"
+                >
+
+                    <h3>
+                        Delete a Line
+                    </h3>
+
+                    <p>
+                        Configuration controls will be added
+                        after the operation rules are defined.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             4. FILE INFORMATION
+        ====================================== -->
+
+        <section class="card">
+
+            <div class="section-heading-row">
+
+                <div>
+
+                    <span class="section-number">
+                        4
+                    </span>
+
+                    <h2>
+                        File Information
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-grid">
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        File Name
+                    </span>
+
+                    <strong id="infoFileName">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Total Lines
+                    </span>
+
+                    <strong id="infoTotalLines">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Selected Operation
+                    </span>
+
+                    <strong id="infoOperation">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Status
+                    </span>
+
+                    <strong id="infoStatus">
+                        WAITING FOR FILE
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             5. PROCESSING CONSOLE
+        ====================================== -->
+
+        <section class="card">
+
+            <div class="section-heading-row">
+
+                <div>
+
+                    <span class="section-number">
+                        5
+                    </span>
+
+                    <h2>
+                        Processing Console
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <pre
+                id="console"
+                class="console-box"
+            >Waiting for TXT file...</pre>
+
+        </section>
+
+
+
+        <!-- =====================================
+             ACTIONS
+        ====================================== -->
+
+        <div class="page-actions">
+
+
+            <button
+                type="button"
+                id="newSessionBtn"
+                class="secondary-btn"
+                disabled
+            >
+
+                New Session
+
+            </button>
+
+
+            <button
+                type="button"
+                id="downloadBtn"
+                class="primary-btn"
+                disabled
+            >
+
+                Download Modified TXT
+
+            </button>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script src="character-introducer.js"></script>
+
+</body>
+
+</html>
