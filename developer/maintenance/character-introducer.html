@@ -787,16 +787,188 @@
                     id="deleteWorkspace"
                     class="operation-panel hidden"
                 >
-
-                    <h3>
-                        Delete a Line
-                    </h3>
-
-                    <p>
-                        Configuration controls will be added
-                        after the operation rules are defined.
-                    </p>
-
+                
+                    <!-- DELETE MODE SELECTION -->
+                
+                    <div
+                        id="deleteModeSelection"
+                        class="write-mode-section"
+                    >
+                
+                        <h3>
+                            Delete a Line
+                        </h3>
+                
+                        <p class="workspace-help">
+                            Choose how the targeted lines should be removed.
+                        </p>
+                
+                
+                        <div class="write-mode-grid">
+                
+                            <button
+                                type="button"
+                                id="deleteCompleteBtn"
+                                class="write-mode-card"
+                            >
+                
+                                <span class="mode-icon">
+                                    🗑️
+                                </span>
+                
+                                <strong>
+                                    Delete Completely
+                                </strong>
+                
+                                <small>
+                                    Remove each targeted physical line
+                                    completely from the TXT file.
+                                </small>
+                
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                id="deleteBackspaceBtn"
+                                class="write-mode-card"
+                            >
+                
+                                <span class="mode-icon">
+                                    ⌫
+                                </span>
+                
+                                <strong>
+                                    Use Backspace
+                                </strong>
+                
+                                <small>
+                                    Remove the newline before each target
+                                    and join it to the previous line.
+                                </small>
+                
+                            </button>
+                
+                        </div>
+                
+                    </div>
+                
+                
+                    <!-- DELETE LINE NAVIGATOR -->
+                
+                    <div
+                        id="deleteLineNavigator"
+                        class="line-navigator hidden"
+                    >
+                
+                        <div class="line-view-header">
+                
+                            <strong id="deleteCurrentLineLabel">
+                                Line 1
+                            </strong>
+                
+                            <span id="deleteAnchorStatus">
+                                Select first and second target lines
+                            </span>
+                
+                        </div>
+                
+                
+                        <textarea
+                            id="deleteCurrentLineViewer"
+                            rows="4"
+                            readonly
+                        ></textarea>
+                
+                
+                        <div class="line-controls">
+                
+                            <button
+                                type="button"
+                                id="deletePreviousLineBtn"
+                                title="Previous Line"
+                            >
+                                🔼
+                            </button>
+                
+                            <button
+                                type="button"
+                                id="deleteNextLineBtn"
+                                title="Next Line"
+                            >
+                                🔽
+                            </button>
+                
+                
+                            <div class="control-spacer"></div>
+                
+                
+                            <button
+                                type="button"
+                                id="deleteFirstAnchorBtn"
+                                title="Set First Target"
+                            >
+                                1️⃣
+                            </button>
+                
+                            <button
+                                type="button"
+                                id="deleteSecondAnchorBtn"
+                                title="Set Second Target"
+                            >
+                                2️⃣
+                            </button>
+                
+                
+                            <div class="control-spacer"></div>
+                
+                
+                            <button
+                                type="button"
+                                id="deleteAdjustAnchorsBtn"
+                                title="Adjust Targets"
+                            >
+                                ⚙️
+                            </button>
+                
+                            <button
+                                type="button"
+                                id="deleteRunOperationBtn"
+                                title="Run Delete Operation"
+                                disabled
+                            >
+                                🆗
+                            </button>
+                
+                        </div>
+                
+                
+                        <div class="anchor-summary">
+                
+                            <div>
+                                <span>First Target</span>
+                                <strong id="deleteFirstAnchorDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Second Target</span>
+                                <strong id="deleteSecondAnchorDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Original Gap</span>
+                                <strong id="deleteGapDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Targets</span>
+                                <strong id="deleteTargetCountDisplay">—</strong>
+                            </div>
+                
+                        </div>
+                
+                    </div>
+                
                 </div>
 
 
