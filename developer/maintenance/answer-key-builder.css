@@ -1698,3 +1698,187 @@ body {
 
     white-space: nowrap;
 }
+
+
+/* =========================================
+   ANSWER KEY BUILDER MODE
+========================================= */
+
+.mode-selection-card {
+
+    margin-bottom: 18px;
+}
+
+
+.mode-selection-help {
+
+    margin-top: -4px;
+
+    margin-bottom: 14px;
+
+    opacity: 0.82;
+}
+
+
+/* MODE GRID */
+
+.builder-mode-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+}
+
+
+/* MODE BUTTON */
+
+.builder-mode-btn {
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 96px;
+
+    padding: 16px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    text-align: left;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.18
+        );
+
+    border-radius: 12px;
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    color: inherit;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+}
+
+
+.builder-mode-btn:hover {
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    transform:
+        translateY(-1px);
+}
+
+
+.builder-mode-btn strong {
+
+    font-size: 1.05rem;
+}
+
+
+.builder-mode-btn span {
+
+    font-size: 0.82rem;
+
+    line-height: 1.4;
+
+    opacity: 0.78;
+}
+
+
+/* SELECTED MODE */
+
+.builder-mode-btn.active {
+
+    border-color:
+
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            0.16
+        );
+
+    box-shadow:
+
+        0 0 0 2px
+
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        )
+
+        inset;
+}
+
+
+.selected-builder-mode {
+
+    margin-top: 12px;
+
+    font-size: 0.86rem;
+
+    opacity: 0.9;
+}
+
+
+/* MOBILE FALLBACK */
+
+@media (
+    max-width: 760px
+) {
+
+    .builder-mode-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+}
