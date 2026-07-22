@@ -983,41 +983,51 @@ enable output download.
 
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 
 # Developer Maintenance Suite Progress Update (Added: 2026-07-19)
 
 ## Current Status
 
-**Version:** Developer Maintenance Suite v0.4 (Citation Remover Complete / Proof Reader Core Complete / Maintenance Dashboard Added)
+**Version:** Developer Maintenance Suite v0.4 (Citation Remover Complete
+/ Proof Reader Core Complete / Maintenance Dashboard Added)
 
-This session substantially advanced the isolated browser-based maintenance workspace. The earlier Citation Removal Engine foundation was completed, a new Proof Reader / Character Validation Engine was created, and a common Maintenance Suite landing page was introduced.
+This session substantially advanced the isolated browser-based
+maintenance workspace. The earlier Citation Removal Engine foundation
+was completed, a new Proof Reader / Character Validation Engine was
+created, and a common Maintenance Suite landing page was introduced.
 
 ## Maintenance Architecture
 
 Current structure:
 
-```text
+``` text
 Maintenance Dashboard
 ├── Citation Removal Engine
 └── Proof Reader / Character Validation Engine
 ```
 
-Each utility remains modular with its own HTML, CSS and JavaScript. Browser-local TXT processing remains preferred so the Student Portal and shared quiz runtime are unaffected.
+Each utility remains modular with its own HTML, CSS and JavaScript.
+Browser-local TXT processing remains preferred so the Student Portal and
+shared quiz runtime are unaffected.
 
 ### UI Design Direction
 
-- ✅ Maintenance landing page introduced.
-- ✅ Compact tool cards with icons and short descriptions.
-- ✅ Visual language aligned with the main Conceptual Bridge `index.html`.
-- ✅ Animated blue gradient and glassmorphic cards/controls adopted.
-- ✅ Subscribe/promotional elements excluded from Developer Maintenance.
-- ✅ Individual tools use `← Maintenance Home` navigation.
-- ✅ Citation Remover converted to glassmorphic theme.
-- 🟡 Proof Reader glassmorphic conversion prepared / being applied.
+-   ✅ Maintenance landing page introduced.
+-   ✅ Compact tool cards with icons and short descriptions.
+-   ✅ Visual language aligned with the main Conceptual Bridge
+    `index.html`.
+-   ✅ Animated blue gradient and glassmorphic cards/controls adopted.
+-   ✅ Subscribe/promotional elements excluded from Developer
+    Maintenance.
+-   ✅ Individual tools use `← Maintenance Home` navigation.
+-   ✅ Citation Remover converted to glassmorphic theme.
+-   🟡 Proof Reader glassmorphic conversion prepared / being applied.
 
-Implementation rule: HTML, CSS and JavaScript must remain in their correct files. CSS must not be pasted after `</html>` or into JavaScript, as this can cause syntax errors such as `Unexpected token '*'`.
+Implementation rule: HTML, CSS and JavaScript must remain in their
+correct files. CSS must not be pasted after `</html>` or into
+JavaScript, as this can cause syntax errors such as
+`Unexpected token '*'`.
 
 ## Citation Removal Engine
 
@@ -1025,24 +1035,24 @@ Implementation rule: HTML, CSS and JavaScript must remain in their correct files
 
 ### Completed
 
-- ✅ TXT upload and local file reading.
-- ✅ File name, size and total-line metadata.
-- ✅ Sequential line scanning and Processing Console progress.
-- ✅ Citation detection/removal logic implemented.
-- ✅ `cleanedText` generated.
-- ✅ Lines Scanned and Citations Removed counters.
-- ✅ Tested example successfully removed 600 citations.
-- ✅ Remaining-citation integrity check.
-- ✅ Question-structure integrity check.
-- ✅ Download safety gate.
-- ✅ Download Output activates only after successful validation.
-- ✅ Cleaned TXT browser download.
-- ✅ New file upload resets previous processing/download state.
-- ✅ Glassmorphic UI and Maintenance Home navigation.
+-   ✅ TXT upload and local file reading.
+-   ✅ File name, size and total-line metadata.
+-   ✅ Sequential line scanning and Processing Console progress.
+-   ✅ Citation detection/removal logic implemented.
+-   ✅ `cleanedText` generated.
+-   ✅ Lines Scanned and Citations Removed counters.
+-   ✅ Tested example successfully removed 600 citations.
+-   ✅ Remaining-citation integrity check.
+-   ✅ Question-structure integrity check.
+-   ✅ Download safety gate.
+-   ✅ Download Output activates only after successful validation.
+-   ✅ Cleaned TXT browser download.
+-   ✅ New file upload resets previous processing/download state.
+-   ✅ Glassmorphic UI and Maintenance Home navigation.
 
 ### Validation Safety Flow
 
-```text
+``` text
 Upload TXT
 ↓
 Scan and remove matching citations
@@ -1060,47 +1070,54 @@ Enable Download Output
 
 ### Future Refinements
 
-- Preserve original filename automatically.
-- Preserve original CRLF/LF line endings.
-- Harden whitespace preservation so only intended citation text changes.
+-   Preserve original filename automatically.
+-   Preserve original CRLF/LF line endings.
+-   Harden whitespace preservation so only intended citation text
+    changes.
 
 ## Proof Reader / Character Validation Engine
 
 **Status:** ✅ Core Workflow Implemented
 
-A browser-based interactive Proof Reader was created from the existing Python proof-reading concept.
+A browser-based interactive Proof Reader was created from the existing
+Python proof-reading concept.
 
 ### Purpose
 
-Scan English/Bengali question TXT assets for unexpected Unicode characters and provide an interactive line editor for correction.
+Scan English/Bengali question TXT assets for unexpected Unicode
+characters and provide an interactive line editor for correction.
 
 ### Completed
 
-- ✅ TXT upload and file information.
-- ✅ Processing Console and Validation Statistics.
-- ✅ Character Validation Report.
-- ✅ Text Editing Window.
-- ✅ JavaScript character validator for English, Bengali, numbers, whitespace, standard punctuation and selected typographic punctuation.
-- ✅ Invalid-character and affected-line counting.
-- ✅ PASSED / FAILED validation state.
-- ✅ Unicode code point and affected line/context reporting.
-- ✅ First unresolved error automatically displayed.
-- ✅ Physical line-by-line Previous/Next navigation.
-- ✅ Edit/Save workflow with navigation lock while editing.
-- ✅ Saved edits stored in in-memory `workingLines`.
-- ✅ Re-Validate scans edited working content.
-- ✅ New earlier errors become the next displayed error.
-- ✅ Session-only Pass system.
-- ✅ Pass scoped by line number + invalid character.
-- ✅ Passed errors excluded from later validation in the same uploaded-file session.
-- ✅ Pass state clears on new file upload.
-- ✅ Editing a passed line invalidates old Pass decisions for that line.
-- ✅ Download Corrected TXT workflow introduced.
-- ✅ Corrected output filename uses `_corrected.txt`.
+-   ✅ TXT upload and file information.
+-   ✅ Processing Console and Validation Statistics.
+-   ✅ Character Validation Report.
+-   ✅ Text Editing Window.
+-   ✅ JavaScript character validator for English, Bengali, numbers,
+    whitespace, standard punctuation and selected typographic
+    punctuation.
+-   ✅ Invalid-character and affected-line counting.
+-   ✅ PASSED / FAILED validation state.
+-   ✅ Unicode code point and affected line/context reporting.
+-   ✅ First unresolved error automatically displayed.
+-   ✅ Physical line-by-line Previous/Next navigation.
+-   ✅ Edit/Save workflow with navigation lock while editing.
+-   ✅ Saved edits stored in in-memory `workingLines`.
+-   ✅ Re-Validate scans edited working content.
+-   ✅ New earlier errors become the next displayed error.
+-   ✅ Session-only Pass system.
+-   ✅ Pass scoped by line number + invalid character.
+-   ✅ Passed errors excluded from later validation in the same
+    uploaded-file session.
+-   ✅ Pass state clears on new file upload.
+-   ✅ Editing a passed line invalidates old Pass decisions for that
+    line.
+-   ✅ Download Corrected TXT workflow introduced.
+-   ✅ Corrected output filename uses `_corrected.txt`.
 
 ### Example Workflow
 
-```text
+``` text
 Errors: 34, 38, 48
 ↓
 Line 34 displayed
@@ -1112,7 +1129,7 @@ If fixed, Line 38 displayed
 
 If editing line 36 introduces a new invalid character:
 
-```text
+``` text
 Save → Re-Validate
 ↓
 Line 36 becomes earliest unresolved error
@@ -1124,14 +1141,17 @@ Line 38 displayed
 
 ### Browser Save Decision
 
-`Save` updates the in-memory working TXT. The browser does not silently overwrite the original local/server file. Corrected content is exported through Download Corrected TXT. Permanent server/GitHub writes would require a separate secure backend.
+`Save` updates the in-memory working TXT. The browser does not silently
+overwrite the original local/server file. Corrected content is exported
+through Download Corrected TXT. Permanent server/GitHub writes would
+require a separate secure backend.
 
 ### Future Refinements
 
-- Preserve source CRLF/LF line endings in downloaded output.
-- Add modified-line / unsaved-change tracking.
-- Optional downloadable validation report.
-- Complete visual verification of glassmorphic styling.
+-   Preserve source CRLF/LF line endings in downloaded output.
+-   Add modified-line / unsaved-change tracking.
+-   Optional downloadable validation report.
+-   Complete visual verification of glassmorphic styling.
 
 ## Maintenance Dashboard
 
@@ -1141,26 +1161,29 @@ A mother/landing page now provides centralized navigation.
 
 ### 🧹 Citation Remover
 
-Detects and removes unwanted trailing citations while preserving question structure and validating output before download.
+Detects and removes unwanted trailing citations while preserving
+question structure and validating output before download.
 
 ### 🔍 Proof Reader
 
-Detects unexpected Unicode characters, shows affected lines, supports navigation/editing, session-only Pass, re-validation and corrected TXT download.
+Detects unexpected Unicode characters, shows affected lines, supports
+navigation/editing, session-only Pass, re-validation and corrected TXT
+download.
 
 ### Dashboard Design
 
-- ✅ Compact centered container.
-- ✅ Icon + short description per tool.
-- ✅ Direct Open Tool navigation.
-- ✅ Animated blue gradient.
-- ✅ Glassmorphic cards.
-- ✅ Responsive desktop/mobile layout.
-- ✅ Style aligned with Conceptual Bridge `index.html`.
-- ✅ Subscribe/promotional UI removed.
+-   ✅ Compact centered container.
+-   ✅ Icon + short description per tool.
+-   ✅ Direct Open Tool navigation.
+-   ✅ Animated blue gradient.
+-   ✅ Glassmorphic cards.
+-   ✅ Responsive desktop/mobile layout.
+-   ✅ Style aligned with Conceptual Bridge `index.html`.
+-   ✅ Subscribe/promotional UI removed.
 
 ## Current Maintenance File Structure
 
-```text
+``` text
 maintenance/
 ├── maintenance.html
 ├── citation-remover.html
@@ -1173,53 +1196,63 @@ maintenance/
 
 ## Maintenance Engineering Decisions
 
-1. Keep maintenance utilities isolated from Student Portal runtime logic.
-2. Prefer browser-local TXT processing where server execution is unnecessary.
-3. Keep each tool independently testable.
-4. Use a common Maintenance Dashboard.
-5. Maintain consistent glassmorphic Conceptual Bridge branding.
-6. Require validation safety before processed output download.
-7. Never automatically delete unexpected Proof Reader characters; corrections remain user-controlled.
-8. Session-only Pass decisions must not become permanent character whitelists.
-9. Permanent server/GitHub writes require a separate secure backend.
+1.  Keep maintenance utilities isolated from Student Portal runtime
+    logic.
+2.  Prefer browser-local TXT processing where server execution is
+    unnecessary.
+3.  Keep each tool independently testable.
+4.  Use a common Maintenance Dashboard.
+5.  Maintain consistent glassmorphic Conceptual Bridge branding.
+6.  Require validation safety before processed output download.
+7.  Never automatically delete unexpected Proof Reader characters;
+    corrections remain user-controlled.
+8.  Session-only Pass decisions must not become permanent character
+    whitelists.
+9.  Permanent server/GitHub writes require a separate secure backend.
 
 ------------------------------------------------------------------------
 
 # Immediate Next Starting Point
 
-1. Finish and verify Proof Reader glassmorphic styling.
-2. End-to-end test: Upload → Validate → Navigate → Edit → Save → Re-Validate → Pass → Download Corrected TXT.
-3. Preserve original CRLF/LF line endings in corrected downloads.
-4. Verify Citation Remover output formatting preservation.
-5. Add new maintenance utilities only after both current tools are stable.
+1.  Finish and verify Proof Reader glassmorphic styling.
+2.  End-to-end test: Upload → Validate → Navigate → Edit → Save →
+    Re-Validate → Pass → Download Corrected TXT.
+3.  Preserve original CRLF/LF line endings in corrected downloads.
+4.  Verify Citation Remover output formatting preservation.
+5.  Add new maintenance utilities only after both current tools are
+    stable.
 
-The Mobile Refactoring, Authentication, Developer Inspector and other existing roadmaps remain preserved.
+The Mobile Refactoring, Authentication, Developer Inspector and other
+existing roadmaps remain preserved.
 
 ------------------------------------------------------------------------
 
 # Development Timeline (Updated)
 
-| Date | Milestone |
-|---|---|
-| 2026-07-10 | Mobile Refactoring Roadmap |
-| 2026-07-14 | Developer Workspace Foundation |
-| 2026-07-16 | Authentication Workspace Foundation |
-| 2026-07-17 | Quiz Portal UI Enhancements |
-| 2026-07-17 | Authentication Dropdown & Logout Foundation |
-| 2026-07-18 | Developer Metadata Inspector Foundation |
-| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
-| 2026-07-19 | Citation Remover Core Completed |
-| 2026-07-19 | Proof Reader Validation & Editing Workflow |
-| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
-| Next | Proof Reader UI Verification & End-to-End Testing |
-| Next | Output / Line-Ending Preservation Hardening |
-| Next | Additional Maintenance Utilities |
+  Date         Milestone
+  ------------ ---------------------------------------------------
+  2026-07-10   Mobile Refactoring Roadmap
+  2026-07-14   Developer Workspace Foundation
+  2026-07-16   Authentication Workspace Foundation
+  2026-07-17   Quiz Portal UI Enhancements
+  2026-07-17   Authentication Dropdown & Logout Foundation
+  2026-07-18   Developer Metadata Inspector Foundation
+  2026-07-18   Maintenance Suite / Citation Remover Foundation
+  2026-07-19   Citation Remover Core Completed
+  2026-07-19   Proof Reader Validation & Editing Workflow
+  2026-07-19   Maintenance Dashboard & Glassmorphic UI Direction
+  Next         Proof Reader UI Verification & End-to-End Testing
+  Next         Output / Line-Ending Preservation Hardening
+  Next         Additional Maintenance Utilities
 
 ------------------------------------------------------------------------
 
 # Documentation Note
 
-This remains the single source of truth for the Conceptual Bridge project. All previous history is preserved. This update supersedes only the earlier Maintenance Suite current-status/next-step state, while retaining the historical development record.
+This remains the single source of truth for the Conceptual Bridge
+project. All previous history is preserved. This update supersedes only
+the earlier Maintenance Suite current-status/next-step state, while
+retaining the historical development record.
 
 ------------------------------------------------------------------------
 
@@ -1227,15 +1260,18 @@ This remains the single source of truth for the Conceptual Bridge project. All p
 
 ## Current Status
 
-**Version:** Developer Maintenance Suite v0.7 (Five-Tool Workflow / Final Merger Foundation)
+**Version:** Developer Maintenance Suite v0.7 (Five-Tool Workflow /
+Final Merger Foundation)
 
-This update records all maintenance work completed after the 2026-07-19 milestone. Previous project history remains preserved.
+This update records all maintenance work completed after the 2026-07-19
+milestone. Previous project history remains preserved.
 
 ## Maintenance Dashboard
 
-`developer/maintenance/maintenance.html` is now the central mother / entry page for all current maintenance HTML utilities:
+`developer/maintenance/maintenance.html` is now the central mother /
+entry page for all current maintenance HTML utilities:
 
-```text
+``` text
 Maintenance Home
 ├── Citation Remover
 ├── Proof Reader
@@ -1246,29 +1282,40 @@ Maintenance Home
 
 ### Dashboard Decisions
 
-- ✅ All maintenance HTML utilities must be reachable from `maintenance.html`.
-- ✅ Common Conceptual Bridge glassmorphic design retained.
-- ✅ Compact cards use icons, short descriptions and direct navigation.
-- ✅ Subscribe/promotional UI excluded.
-- ✅ Responsive grid expanded for five tools.
-- ✅ Old three-card-specific `last-child` layout behavior should be removed.
-- ✅ Future maintenance HTML tools must also be registered on this mother page.
+-   ✅ All maintenance HTML utilities must be reachable from
+    `maintenance.html`.
+-   ✅ Common Conceptual Bridge glassmorphic design retained.
+-   ✅ Compact cards use icons, short descriptions and direct
+    navigation.
+-   ✅ Subscribe/promotional UI excluded.
+-   ✅ Responsive grid expanded for five tools.
+-   ✅ Old three-card-specific `last-child` layout behavior should be
+    removed.
+-   ✅ Future maintenance HTML tools must also be registered on this
+    mother page.
 
 ## Citation Remover
 
 **Status:** ✅ Stable Core Workflow
 
-Previously completed functionality remains preserved: browser-local TXT processing, citation scanning/removal, statistics, remaining-citation validation, structure integrity validation, safe download gating and glassmorphic Maintenance Suite UI.
+Previously completed functionality remains preserved: browser-local TXT
+processing, citation scanning/removal, statistics, remaining-citation
+validation, structure integrity validation, safe download gating and
+glassmorphic Maintenance Suite UI.
 
 ## Proof Reader / Character Validation Engine
 
 **Status:** ✅ Core Interactive Workflow Working
 
-Previously completed functionality remains preserved: Unicode/unexpected-character validation, Character Validation Report, Text Editing Window, physical Previous/Next line navigation, Edit/Save lock behavior, Re-Validate, session-only Pass, corrected TXT download and glassmorphic UI.
+Previously completed functionality remains preserved:
+Unicode/unexpected-character validation, Character Validation Report,
+Text Editing Window, physical Previous/Next line navigation, Edit/Save
+lock behavior, Re-Validate, session-only Pass, corrected TXT download
+and glassmorphic UI.
 
 Error navigation behavior remains:
 
-```text
+``` text
 Errors: 34, 38, 48
 ↓
 Open line 34
@@ -1278,7 +1325,9 @@ Edit → Save → Re-Validate
 If fixed → line 38 becomes next unresolved error
 ```
 
-If editing another physical line introduces an earlier invalid character, re-validation starts from that earliest unresolved error. Pass applies only to the current uploaded-file session.
+If editing another physical line introduces an earlier invalid
+character, re-validation starts from that earliest unresolved error.
+Pass applies only to the current uploaded-file session.
 
 ## Shift Extractor
 
@@ -1286,25 +1335,28 @@ If editing another physical line introduces an earlier invalid character, re-val
 
 Purpose:
 
-- Read TXT question assets containing `Shift|`.
-- Extract/process Shift data.
-- Normalize Shift formatting.
-- Apply the developed AM/PM modifier handling.
-- Supply standardized Shift values for later question-processing stages.
+-   Read TXT question assets containing `Shift|`.
+-   Extract/process Shift data.
+-   Normalize Shift formatting.
+-   Apply the developed AM/PM modifier handling.
+-   Supply standardized Shift values for later question-processing
+    stages.
 
 Example:
 
-```text
+``` text
 Shift| 27/11/2025 9:00 AM 10:30 AM
 ```
 
 becomes:
 
-```text
+``` text
 Shift| 27/11/2025 9:00 AM - 10:30 AM
 ```
 
-The same normalization principle is used inside Final Merger when Shift data already exists in the English file; no separate Shift file is required there.
+The same normalization principle is used inside Final Merger when Shift
+data already exists in the English file; no separate Shift file is
+required there.
 
 ## Answer Key Builder
 
@@ -1312,26 +1364,31 @@ The same normalization principle is used inside Final Merger when Shift data alr
 
 Completed behavior:
 
-- ✅ Default Total Questions = 100.
-- ✅ Total Questions editable (for example 10, 20, 100).
-- ✅ Initial Question Number defaults to 1 and is editable (for example 101 or 505).
-- ✅ Current Question Number reflects configured initial number and progress.
-- ✅ Dynamic Answer Progress, Answered, Remaining and percentage/status.
-- ✅ Interactive Answer Grid.
-- ✅ Clicking a question in the Answer Grid changes its visual state/color.
-- ✅ Output validation before download.
-- ✅ Standard downloadable answer TXT retained.
-- ❌ Development-only `AnsDev.txt` output removed.
+-   ✅ Default Total Questions = 100.
+-   ✅ Total Questions editable (for example 10, 20, 100).
+-   ✅ Initial Question Number defaults to 1 and is editable (for
+    example 101 or 505).
+-   ✅ Current Question Number reflects configured initial number and
+    progress.
+-   ✅ Dynamic Answer Progress, Answered, Remaining and
+    percentage/status.
+-   ✅ Interactive Answer Grid.
+-   ✅ Clicking a question in the Answer Grid changes its visual
+    state/color.
+-   ✅ Output validation before download.
+-   ✅ Standard downloadable answer TXT retained.
+-   ❌ Development-only `AnsDev.txt` output removed.
 
 ## Final Merger
 
 **Status:** ✅ Four-File Validator / Merger Foundation Implemented
 
-The former Difficulty Processor has been expanded into a complete final question assembly tool and renamed conceptually to **Final Merger**.
+The former Difficulty Processor has been expanded into a complete final
+question assembly tool and renamed conceptually to **Final Merger**.
 
 Recommended files:
 
-```text
+``` text
 final-merger.html
 final-merger.css
 final-merger.js
@@ -1339,20 +1396,27 @@ final-merger.js
 
 ### Four Required TXT Inputs
 
-1. **English Question File** — filename ending in `E`, e.g. `100E.txt`; contains English `Q|`, `A|`, `B|`, `C|`, `D|` and `Shift|`.
-2. **Bengali Question File** — filename ending in `B`, e.g. `100B.txt`; contains corresponding Bengali `Q|`, `A|`, `B|`, `C|`, `D|`.
-3. **Answer File** — standard answer format such as `Ansopt.txt`.
-4. **Difficulty Rating File** — supplies question-aligned numeric difficulty ratings.
+1.  **English Question File** --- filename ending in `E`,
+    e.g. `100E.txt`; contains English `Q|`, `A|`, `B|`, `C|`, `D|` and
+    `Shift|`.
+2.  **Bengali Question File** --- filename ending in `B`,
+    e.g. `100B.txt`; contains corresponding Bengali `Q|`, `A|`, `B|`,
+    `C|`, `D|`.
+3.  **Answer File** --- standard answer format such as `Ansopt.txt`.
+4.  **Difficulty Rating File** --- supplies question-aligned numeric
+    difficulty ratings.
 
-English/Bengali files must share the same base identifier, e.g. `101E.txt` ↔ `101B.txt`.
+English/Bengali files must share the same base identifier,
+e.g. `101E.txt` ↔ `101B.txt`.
 
 ### File Information and Validation
 
-The interface reports English/Bengali block counts, answer count, difficulty question/value counts and expected output count.
+The interface reports English/Bengali block counts, answer count,
+difficulty question/value counts and expected output count.
 
 Before merging, each question is checked for:
 
-```text
+``` text
 English: Q| A| B| C| D| Shift|
 Bengali: Q| A| B| C| D|
 Answer: A/B/C/D
@@ -1361,24 +1425,25 @@ Difficulty: numeric value + question alignment
 
 Validation includes:
 
-- ✅ E/B filename pairing.
-- ✅ English/Bengali block counts.
-- ✅ Answer and difficulty counts.
-- ✅ Required English and Bengali fields.
-- ✅ Shift presence and normalization.
-- ✅ Valid A/B/C/D answers.
-- ✅ Numeric difficulty values.
-- ✅ Difficulty question alignment against corresponding English `Q|`.
-- ✅ Detailed issue report.
-- ✅ Failed validation blocks final merge.
+-   ✅ E/B filename pairing.
+-   ✅ English/Bengali block counts.
+-   ✅ Answer and difficulty counts.
+-   ✅ Required English and Bengali fields.
+-   ✅ Shift presence and normalization.
+-   ✅ Valid A/B/C/D answers.
+-   ✅ Numeric difficulty values.
+-   ✅ Difficulty question alignment against corresponding English `Q|`.
+-   ✅ Detailed issue report.
+-   ✅ Failed validation blocks final merge.
 
 ## Leading-Whitespace Comparison Rule
 
-A false mismatch caused by a space immediately after `Q|` was fixed conceptually.
+A false mismatch caused by a space immediately after `Q|` was fixed
+conceptually.
 
 These are treated equivalently for alignment:
 
-```text
+``` text
 Q|Which of the following...
 Q| Which of the following...
 Q|    Which of the following...
@@ -1386,7 +1451,7 @@ Q|    Which of the following...
 
 Leading whitespace after the prefix is ignored using the equivalent of:
 
-```javascript
+``` javascript
 String(content || "").trimStart().substring(0, 10)
 ```
 
@@ -1396,18 +1461,18 @@ Internal question spacing is not intentionally removed.
 
 Final Merger must support both difficulty-source formats.
 
-### Format A — Numbered
+### Format A --- Numbered
 
-```text
+``` text
 Question 1: What is the capital of India?
 Difficulty Rating: 7.25
 ```
 
-### Format B — Q-Pipe
+### Format B --- Q-Pipe
 
 Confirmed from the latest sample:
 
-```text
+``` text
 Q| Who joined as the Mission Director of Atal Innovation Mission under NITI Aayog in 2025?
 Difficulty Rating: 7.88
 
@@ -1417,37 +1482,42 @@ Difficulty Rating: 5.12
 
 For Q-Pipe format:
 
-- Each `Q|` starts a difficulty record.
-- Question numbers are assigned sequentially by `Q|` order.
-- `Difficulty Rating:` supplies the numeric value.
-- The corresponding English question is still compared before accepting the rating.
-- Leading whitespace after `Q|` is ignored.
+-   Each `Q|` starts a difficulty record.
+-   Question numbers are assigned sequentially by `Q|` order.
+-   `Difficulty Rating:` supplies the numeric value.
+-   The corresponding English question is still compared before
+    accepting the rating.
+-   Leading whitespace after `Q|` is ignored.
 
-Thus the parser supports both `Question N:` and `Q|` formats without weakening alignment validation.
+Thus the parser supports both `Question N:` and `Q|` formats without
+weakening alignment validation.
 
 ## Shift Handling Inside Final Merger
 
-No separate Shift file is required. Shift is read from the English question block.
+No separate Shift file is required. Shift is read from the English
+question block.
 
 Input:
 
-```text
+``` text
 Shift| 27/11/2025 9:00 AM 10:30 AM
 ```
 
 Normalized output:
 
-```text
+``` text
 Shift| 27/11/2025 9:00 AM - 10:30 AM
 ```
 
-Final Merger should keep this normalization self-contained rather than depending on another maintenance page at runtime.
+Final Merger should keep this normalization self-contained rather than
+depending on another maintenance page at runtime.
 
 ## Final Merge Format
 
-After validation passes, English and Bengali fields are combined and the final order is:
+After validation passes, English and Bengali fields are combined and the
+final order is:
 
-```text
+``` text
 Q|
 A|
 B|
@@ -1460,7 +1530,7 @@ Difficulty|
 
 Example:
 
-```text
+``` text
 Q|What is the capital of India? / ভারতের রাজধানী কী?
 A|Delhi / দিল্লি
 B|Mumbai / মুম্বাই
@@ -1473,11 +1543,13 @@ Difficulty|7.25
 
 `Difficulty|` is written immediately after `Correct|`.
 
-Final integrity validation verifies generated block count, `Correct|` count and `Difficulty|` count before enabling download. Default output is currently `Final.txt`.
+Final integrity validation verifies generated block count, `Correct|`
+count and `Difficulty|` count before enabling download. Default output
+is currently `Final.txt`.
 
 ## Current Maintenance File Structure
 
-```text
+``` text
 developer/
 └── maintenance/
     ├── maintenance.html
@@ -1490,7 +1562,7 @@ developer/
 
 ## Current End-to-End Maintenance Workflow
 
-```text
+``` text
 Raw Question TXT
 ↓
 Citation Remover
@@ -1524,64 +1596,79 @@ Final.txt
 
 ## Engineering Decisions Confirmed
 
-1. Maintenance utilities remain isolated from Student Portal runtime logic.
-2. Browser-local TXT processing remains preferred where server execution is unnecessary.
-3. `maintenance.html` is the single mother page for maintenance HTML utilities.
-4. Each tool remains modular with its own HTML/CSS/JS.
-5. Final Merger validates before generation rather than blindly combining files.
-6. English/Bengali blocks are positionally paired; difficulty additionally requires English-question alignment.
-7. Leading whitespace after question prefixes must not create false mismatches.
-8. Shift is read directly from English blocks and normalized.
-9. Difficulty parsing supports both `Question N:` and `Q|` formats.
+1.  Maintenance utilities remain isolated from Student Portal runtime
+    logic.
+2.  Browser-local TXT processing remains preferred where server
+    execution is unnecessary.
+3.  `maintenance.html` is the single mother page for maintenance HTML
+    utilities.
+4.  Each tool remains modular with its own HTML/CSS/JS.
+5.  Final Merger validates before generation rather than blindly
+    combining files.
+6.  English/Bengali blocks are positionally paired; difficulty
+    additionally requires English-question alignment.
+7.  Leading whitespace after question prefixes must not create false
+    mismatches.
+8.  Shift is read directly from English blocks and normalized.
+9.  Difficulty parsing supports both `Question N:` and `Q|` formats.
 10. `Difficulty|` is written immediately after `Correct|`.
 11. Downloads remain gated behind successful validation.
 12. Future maintenance HTML tools must be added to `maintenance.html`.
 
 ## Immediate Next Starting Point
 
-1. Test Final Merger with a small 2–3 question dataset.
-2. Verify both Difficulty formats (`Question N:` and `Q|`).
-3. Verify real `Ansopt.txt` parsing.
-4. Verify all Shift AM/PM normalization cases.
-5. Verify exact bilingual output formatting.
-6. Test failures: missing Bengali option, Shift, answer, difficulty, misaligned difficulty and E/B filename mismatch.
-7. Test a full production-size question set only after small-set validation passes.
-8. Remove obsolete CSS selectors from the old Difficulty Processor if still present.
-9. Continue preserving the common glassmorphic Maintenance Suite design.
+1.  Test Final Merger with a small 2--3 question dataset.
+2.  Verify both Difficulty formats (`Question N:` and `Q|`).
+3.  Verify real `Ansopt.txt` parsing.
+4.  Verify all Shift AM/PM normalization cases.
+5.  Verify exact bilingual output formatting.
+6.  Test failures: missing Bengali option, Shift, answer, difficulty,
+    misaligned difficulty and E/B filename mismatch.
+7.  Test a full production-size question set only after small-set
+    validation passes.
+8.  Remove obsolete CSS selectors from the old Difficulty Processor if
+    still present.
+9.  Continue preserving the common glassmorphic Maintenance Suite
+    design.
 
 ------------------------------------------------------------------------
 
 # Development Timeline (Updated: 2026-07-20)
 
-| Date | Milestone |
-|---|---|
-| 2026-07-10 | Mobile Refactoring Roadmap |
-| 2026-07-14 | Developer Workspace Foundation |
-| 2026-07-16 | Authentication Workspace Foundation |
-| 2026-07-17 | Quiz Portal UI Enhancements |
-| 2026-07-17 | Authentication Dropdown & Logout Foundation |
-| 2026-07-18 | Developer Metadata Inspector Foundation |
-| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
-| 2026-07-19 | Citation Remover Core Completed |
-| 2026-07-19 | Proof Reader Validation & Editing Workflow |
-| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
-| 2026-07-20 | Shift Extractor Added |
-| 2026-07-20 | Answer Key Builder Added and Refined |
-| 2026-07-20 | Maintenance Home Expanded to Five Tools |
-| 2026-07-20 | Difficulty Processor Expanded into Final Merger |
-| 2026-07-20 | Four-File Validation and Bilingual Merge Workflow Added |
-| 2026-07-20 | Dual Difficulty Rating Format Support Defined |
-| Next | Final Merger Small-Set End-to-End Testing |
-| Next | Production-Size Final Merger Validation |
-| Next | Maintenance Output Hardening |
+  Date         Milestone
+  ------------ ---------------------------------------------------------
+  2026-07-10   Mobile Refactoring Roadmap
+  2026-07-14   Developer Workspace Foundation
+  2026-07-16   Authentication Workspace Foundation
+  2026-07-17   Quiz Portal UI Enhancements
+  2026-07-17   Authentication Dropdown & Logout Foundation
+  2026-07-18   Developer Metadata Inspector Foundation
+  2026-07-18   Maintenance Suite / Citation Remover Foundation
+  2026-07-19   Citation Remover Core Completed
+  2026-07-19   Proof Reader Validation & Editing Workflow
+  2026-07-19   Maintenance Dashboard & Glassmorphic UI Direction
+  2026-07-20   Shift Extractor Added
+  2026-07-20   Answer Key Builder Added and Refined
+  2026-07-20   Maintenance Home Expanded to Five Tools
+  2026-07-20   Difficulty Processor Expanded into Final Merger
+  2026-07-20   Four-File Validation and Bilingual Merge Workflow Added
+  2026-07-20   Dual Difficulty Rating Format Support Defined
+  Next         Final Merger Small-Set End-to-End Testing
+  Next         Production-Size Final Merger Validation
+  Next         Maintenance Output Hardening
 
 ------------------------------------------------------------------------
 
 # Documentation Note (Updated: 2026-07-20)
 
-This document remains the single source of truth for the Conceptual Bridge project. All historical sections are preserved. This update supersedes only older Maintenance Suite current-status and immediate-next-step descriptions where later implementation has advanced beyond them.
+This document remains the single source of truth for the Conceptual
+Bridge project. All historical sections are preserved. This update
+supersedes only older Maintenance Suite current-status and
+immediate-next-step descriptions where later implementation has advanced
+beyond them.
 
-Future sessions should continue appending milestones rather than deleting historical development records.
+Future sessions should continue appending milestones rather than
+deleting historical development records.
 
 ------------------------------------------------------------------------
 
@@ -1589,19 +1676,25 @@ Future sessions should continue appending milestones rather than deleting histor
 
 ## Current Status
 
-**Version:** Developer Maintenance Suite v0.8 (Answer Key Builder Desktop Split-Window Refactor In Progress)
+**Version:** Developer Maintenance Suite v0.8 (Answer Key Builder
+Desktop Split-Window Refactor In Progress)
 
-This update records the latest Answer Key Builder work after the 2026-07-20 milestone. All previous project history remains preserved.
+This update records the latest Answer Key Builder work after the
+2026-07-20 milestone. All previous project history remains preserved.
 
-## Answer Key Builder — Updated Architecture
+## Answer Key Builder --- Updated Architecture
 
-The Answer Key Builder is being refined as a desktop maintenance utility designed to work comfortably when the browser occupies approximately half of the desktop screen.
+The Answer Key Builder is being refined as a desktop maintenance utility
+designed to work comfortably when the browser occupies approximately
+half of the desktop screen.
 
-The earlier PDF-reference workflow has been removed from the intended architecture. The tool now works with question TXT source files and the interactive answer-entry system.
+The earlier PDF-reference workflow has been removed from the intended
+architecture. The tool now works with question TXT source files and the
+interactive answer-entry system.
 
 ### Current Page Structure
 
-```text
+``` text
 1. Session Configuration
 2. Source File Uploader
 3. Question Block Editor
@@ -1620,48 +1713,52 @@ Actions:
 
 ### Single Source Mode
 
-```text
+``` text
 1 File — Question TXT
 ```
 
-- One TXT question file.
-- One full-width Question Block Editor.
-- Question blocks displayed one block at a time.
+-   One TXT question file.
+-   One full-width Question Block Editor.
+-   Question blocks displayed one block at a time.
 
 ### Bilingual Source Mode
 
-```text
+``` text
 2 Files — English TXT + Bengali TXT
 ```
 
-- English and Bengali TXT files uploaded separately.
-- Question Block Editor switches to two-column split mode.
-- English/Bengali blocks at the same positional index are displayed together.
-- Both editors use the same shared block position.
+-   English and Bengali TXT files uploaded separately.
+-   Question Block Editor switches to two-column split mode.
+-   English/Bengali blocks at the same positional index are displayed
+    together.
+-   Both editors use the same shared block position.
 
 Updated intended JavaScript mapping:
 
-```text
+``` text
 sourceMode = 1 → Single TXT
 sourceMode = 2 → English TXT + Bengali TXT
 ```
 
-Legacy internal container IDs such as `twoFileUploader` and `threeFileUploader` may temporarily remain to avoid unnecessary regressions.
+Legacy internal container IDs such as `twoFileUploader` and
+`threeFileUploader` may temporarily remain to avoid unnecessary
+regressions.
 
 ## PDF Viewer Removal
 
-**Status:** Removed from the intended Answer Key Builder workflow; cleanup verification remains.
+**Status:** Removed from the intended Answer Key Builder workflow;
+cleanup verification remains.
 
 Removed:
 
-- Reference PDF upload from single mode.
-- Reference PDF upload from bilingual mode.
-- PDF Viewer card and iframe.
-- PDF zoom controls and placeholder.
+-   Reference PDF upload from single mode.
+-   Reference PDF upload from bilingual mode.
+-   PDF Viewer card and iframe.
+-   PDF zoom controls and placeholder.
 
 Obsolete JavaScript references/functions to remove or verify absent:
 
-```text
+``` text
 singlePdfInput
 bilingualPdfInput
 pdfViewer
@@ -1681,7 +1778,7 @@ applyPdfZoom()
 
 Obsolete CSS selectors to remove if still present:
 
-```text
+``` text
 .pdf-controls
 #pdfZoomDisplay
 .pdf-viewer-container
@@ -1689,60 +1786,66 @@ Obsolete CSS selectors to remove if still present:
 .viewer-placeholder
 ```
 
-Engineering rule: PDF functionality must be removed rather than merely hidden so deleted HTML elements cannot create null-reference runtime errors.
+Engineering rule: PDF functionality must be removed rather than merely
+hidden so deleted HTML elements cannot create null-reference runtime
+errors.
 
 ## Question Block ↔ Answer Synchronization
 
 Strict positional synchronization is now the design rule:
 
-```text
+``` text
 Block 1 ↔ Answer Slot 1
 Block 2 ↔ Answer Slot 2
 Block 3 ↔ Answer Slot 3
 ...
 ```
 
-With Initial Question No. = 1:
+With Initial Question No. = 1:
 
-```text
+``` text
 Block 1 → Question 1 → answers[0]
 Block 2 → Question 2 → answers[1]
 ```
 
-With Initial Question No. = 101:
+With Initial Question No. = 101:
 
-```text
+``` text
 Block 1 → Displayed Question 101 → answers[0]
 Block 2 → Displayed Question 102 → answers[1]
 ```
 
-The displayed question number does not determine the internal answer slot. Block position/index is canonical.
+The displayed question number does not determine the internal answer
+slot. Block position/index is canonical.
 
 The following navigation paths must remain synchronized:
 
-```text
+``` text
 Question Block Previous / Next
 Answer Selection Previous / Next
 Answer Grid click
 Automatic advance after answer selection
 ```
 
-Both `currentIndex` and `currentSourceBlockIndex` must represent the same positional question/block.
+Both `currentIndex` and `currentSourceBlockIndex` must represent the
+same positional question/block.
 
 ## Answer Selection and UI Refresh Fix
 
 Answer capture was confirmed by Processing Console output such as:
 
-```text
+``` text
 Question 1 answered: B
 Question 2 answered: C
 ```
 
-A UI-refresh problem was identified: answers could be stored internally while Answer Grid, Answer Progress and Output Validation remained unchanged.
+A UI-refresh problem was identified: answers could be stored internally
+while Answer Grid, Answer Progress and Output Validation remained
+unchanged.
 
 After saving an answer, the workflow must call:
 
-```javascript
+``` javascript
 updateGridItem(answeredIndex);
 updateProgress();
 validateOutput();
@@ -1752,14 +1855,14 @@ before automatic advancement.
 
 A variable-name issue was also identified:
 
-```text
+``` text
 Incorrect: initialQuestionNumber
 Correct:   initialQuestion
 ```
 
 Expected answer workflow:
 
-```text
+``` text
 Select A/B/C/D
 ↓
 Save answers[currentIndex]
@@ -1777,18 +1880,18 @@ Advance synchronized TXT block + answer question
 
 After each answer:
 
-- Answered increments.
-- Remaining decrements.
-- Percentage/status updates.
-- Answer Grid displays the selected answer.
-- Answers Selected updates.
-- Missing Answers updates.
-- Ansopt Entries updates.
-- Validation Status recalculates.
+-   Answered increments.
+-   Remaining decrements.
+-   Percentage/status updates.
+-   Answer Grid displays the selected answer.
+-   Answers Selected updates.
+-   Missing Answers updates.
+-   Ansopt Entries updates.
+-   Validation Status recalculates.
 
 Example after two answers in a 100-question session:
 
-```text
+``` text
 Answered: 2
 Remaining: 98
 Status: 2% — IN PROGRESS
@@ -1800,11 +1903,12 @@ Ansopt Entries: 2
 
 ## Scroll Behavior Fix
 
-An unwanted downward page jump was traced to normal Answer Grid highlighting using `scrollIntoView()`.
+An unwanted downward page jump was traced to normal Answer Grid
+highlighting using `scrollIntoView()`.
 
 Normal answer selection must now behave as:
 
-```text
+``` text
 Select Answer
 ↓
 Save / refresh UI
@@ -1814,9 +1918,10 @@ Advance Question + TXT Block
 KEEP CURRENT PAGE SCROLL POSITION
 ```
 
-Automatic scrolling should occur only when all required answers have been completed:
+Automatic scrolling should occur only when all required answers have
+been completed:
 
-```text
+``` text
 Final Answer
 ↓
 100% Complete
@@ -1826,48 +1931,55 @@ Validation / completion state
 Automatically move to Answer Grid
 ```
 
-Normal per-question `scrollIntoView()` must remain removed. Completion-only scrolling may target an `answerGridSection` element.
+Normal per-question `scrollIntoView()` must remain removed.
+Completion-only scrolling may target an `answerGridSection` element.
 
 ## Half-Screen Desktop Layout
 
-The Answer Key Builder is intentionally desktop-oriented but must work comfortably when the browser occupies approximately half a desktop display.
+The Answer Key Builder is intentionally desktop-oriented but must work
+comfortably when the browser occupies approximately half a desktop
+display.
 
 Design goals:
 
-- Container approximately 900–920px maximum where appropriate.
-- No forced full-monitor width.
-- No horizontal page overflow.
-- Compact cards and controls.
-- Single TXT editor uses available width.
-- Bilingual mode splits the available editor width into English/Bengali columns.
-- Answer Grid adapts to constrained width.
-- Desktop split-window use is prioritized over mobile optimization.
+-   Container approximately 900--920px maximum where appropriate.
+-   No forced full-monitor width.
+-   No horizontal page overflow.
+-   Compact cards and controls.
+-   Single TXT editor uses available width.
+-   Bilingual mode splits the available editor width into
+    English/Bengali columns.
+-   Answer Grid adapts to constrained width.
+-   Desktop split-window use is prioritized over mobile optimization.
 
 ## Question Block Editor Control Visibility
 
-A control-layout issue was identified in bilingual and narrow split-window mode.
+A control-layout issue was identified in bilingual and narrow
+split-window mode.
 
 Cause:
 
-```css
+``` css
 button {
     min-width: 150px;
 }
 ```
 
-The global minimum width forces `Edit` and `Save` to become too wide inside each half-width editor, causing Previous/Next arrow controls to become cramped or visually hidden.
+The global minimum width forces `Edit` and `Save` to become too wide
+inside each half-width editor, causing Previous/Next arrow controls to
+become cramped or visually hidden.
 
 This is a **CSS issue**, not a JavaScript issue.
 
 Target layout:
 
-```text
+``` text
 | ← |     [ Edit ] [ Save ]     | → |
 ```
 
 Recommended compact override in `answer-key-builder.css`:
 
-```css
+``` css
 .editor-controls {
     grid-template-columns: 42px minmax(0, 1fr) 42px;
 }
@@ -1886,16 +1998,17 @@ Recommended compact override in `answer-key-builder.css`:
 
 Optional smaller navigation glyphs:
 
-```text
+``` text
 ⬅ → ←
 ➡ → →
 ```
 
-The existing HTML button structure is already suitable; only compact CSS sizing is required.
+The existing HTML button structure is already suitable; only compact CSS
+sizing is required.
 
 ## Current Answer Key Builder File State
 
-```text
+``` text
 developer/
 └── maintenance/
     ├── answer-key-builder.html
@@ -1905,69 +2018,85 @@ developer/
 
 ### HTML
 
-- ✅ Sections renumbered 1–8.
-- ✅ Single TXT upload retained.
-- ✅ English TXT upload retained.
-- ✅ Bengali TXT upload retained.
-- ✅ PDF upload fields removed.
-- ✅ PDF Viewer card removed.
-- ✅ Single and bilingual Question Block Editor structures retained.
-- ✅ Answer Selection / Progress / Grid / Validation / Console retained.
-- ✅ `Ansopt.txt` download retained.
+-   ✅ Sections renumbered 1--8.
+-   ✅ Single TXT upload retained.
+-   ✅ English TXT upload retained.
+-   ✅ Bengali TXT upload retained.
+-   ✅ PDF upload fields removed.
+-   ✅ PDF Viewer card removed.
+-   ✅ Single and bilingual Question Block Editor structures retained.
+-   ✅ Answer Selection / Progress / Grid / Validation / Console
+    retained.
+-   ✅ `Ansopt.txt` download retained.
 
 ### CSS
 
-- ✅ Glassmorphic Conceptual Bridge theme retained.
-- ✅ Half-screen desktop overrides introduced.
-- ✅ Single/bilingual editor layouts exist.
-- 🟡 Compact editor-control override needs final application/verification.
-- 🟡 Obsolete PDF Viewer CSS should be removed if still present.
-- 🟡 Duplicate/older CSS rules can be consolidated only after functional testing.
+-   ✅ Glassmorphic Conceptual Bridge theme retained.
+-   ✅ Half-screen desktop overrides introduced.
+-   ✅ Single/bilingual editor layouts exist.
+-   🟡 Compact editor-control override needs final
+    application/verification.
+-   🟡 Obsolete PDF Viewer CSS should be removed if still present.
+-   🟡 Duplicate/older CSS rules can be consolidated only after
+    functional testing.
 
 ### JavaScript
 
-- ✅ TXT parsing/loading foundation retained.
-- ✅ Single and bilingual source loading retained.
-- ✅ Positional block/question synchronization established conceptually.
-- ✅ Answer capture confirmed.
-- ✅ Grid/progress/validation refresh requirements corrected.
-- ✅ Normal answer-selection auto-scroll removed in intended latest behavior.
-- ✅ Completion-only Answer Grid scroll introduced.
-- 🟡 Verify every old `sourceMode === 2/3` assumption uses the new `1/2` mapping.
-- 🟡 Verify all obsolete PDF DOM references/functions are removed.
-- 🟡 Full regression testing remains required.
+-   ✅ TXT parsing/loading foundation retained.
+-   ✅ Single and bilingual source loading retained.
+-   ✅ Positional block/question synchronization established
+    conceptually.
+-   ✅ Answer capture confirmed.
+-   ✅ Grid/progress/validation refresh requirements corrected.
+-   ✅ Normal answer-selection auto-scroll removed in intended latest
+    behavior.
+-   ✅ Completion-only Answer Grid scroll introduced.
+-   🟡 Verify every old `sourceMode === 2/3` assumption uses the new
+    `1/2` mapping.
+-   🟡 Verify all obsolete PDF DOM references/functions are removed.
+-   🟡 Full regression testing remains required.
 
 ## Immediate Testing Checklist
 
-1. Load one TXT file in Single Source mode.
-2. Confirm Block 1 displays correctly.
-3. Run a 5–10 question test session.
-4. Verify each selected answer updates Grid, Progress and Validation.
-5. Verify block/question auto-advance remains synchronized.
-6. Confirm page does not jump downward after each answer.
-7. Click Answer Grid items and confirm the matching source block opens.
-8. Test Previous/Next from Question Block Editor and Answer Selection.
-9. Test Edit → Save without damaging hidden block metadata.
-10. Complete all answers and verify automatic movement to Answer Grid occurs only at completion.
+1.  Load one TXT file in Single Source mode.
+2.  Confirm Block 1 displays correctly.
+3.  Run a 5--10 question test session.
+4.  Verify each selected answer updates Grid, Progress and Validation.
+5.  Verify block/question auto-advance remains synchronized.
+6.  Confirm page does not jump downward after each answer.
+7.  Click Answer Grid items and confirm the matching source block opens.
+8.  Test Previous/Next from Question Block Editor and Answer Selection.
+9.  Test Edit → Save without damaging hidden block metadata.
+10. Complete all answers and verify automatic movement to Answer Grid
+    occurs only at completion.
 11. Test bilingual mode with matching E/B files.
-12. Verify English/Bengali editor controls remain visible in half-screen mode.
-13. Confirm browser console has no errors referencing removed PDF elements.
+12. Verify English/Bengali editor controls remain visible in half-screen
+    mode.
+13. Confirm browser console has no errors referencing removed PDF
+    elements.
 14. Confirm `Ansopt.txt` is enabled only after successful validation.
 
 ## Engineering Decisions Confirmed
 
-1. Answer Key Builder is a desktop maintenance utility optimized for split-window use.
-2. PDF reference/viewer functionality is removed from the architecture.
-3. Source input is either one TXT or paired English/Bengali TXT files.
-4. Block position is the canonical link between source questions and answer slots.
-5. Initial Question Number changes displayed numbering, not positional answer mapping.
-6. All navigation mechanisms must synchronize block and answer indices.
-7. Selecting an answer must refresh Grid, Progress and Validation before advancing.
-8. Normal answer selection must not move the browser page.
-9. Automatic movement to Answer Grid occurs only after all answers are completed.
-10. Editor controls must override the global 150px button minimum in constrained layouts.
+1.  Answer Key Builder is a desktop maintenance utility optimized for
+    split-window use.
+2.  PDF reference/viewer functionality is removed from the architecture.
+3.  Source input is either one TXT or paired English/Bengali TXT files.
+4.  Block position is the canonical link between source questions and
+    answer slots.
+5.  Initial Question Number changes displayed numbering, not positional
+    answer mapping.
+6.  All navigation mechanisms must synchronize block and answer indices.
+7.  Selecting an answer must refresh Grid, Progress and Validation
+    before advancing.
+8.  Normal answer selection must not move the browser page.
+9.  Automatic movement to Answer Grid occurs only after all answers are
+    completed.
+10. Editor controls must override the global 150px button minimum in
+    constrained layouts.
 11. Student Portal/runtime logic must remain unaffected.
-12. Functional verification comes before CSS consolidation or legacy-ID renaming.
+12. Functional verification comes before CSS consolidation or legacy-ID
+    renaming.
 
 ------------------------------------------------------------------------
 
@@ -1975,59 +2104,65 @@ developer/
 
 Continue **Answer Key Builder stabilization**:
 
-1. Apply and verify compact Question Block Editor control CSS.
-2. Remove obsolete PDF Viewer CSS.
-3. Verify JavaScript contains no remaining PDF references.
-4. Verify source-mode mapping:
-   - `1 = Single TXT`
-   - `2 = English + Bengali`
-5. Run small Single TXT end-to-end test.
-6. Run small bilingual E/B end-to-end test.
-7. Verify no page jump during normal answer selection.
-8. Verify completion-only automatic scroll to Answer Grid.
-9. Verify final `Ansopt.txt` generation and validation.
+1.  Apply and verify compact Question Block Editor control CSS.
+2.  Remove obsolete PDF Viewer CSS.
+3.  Verify JavaScript contains no remaining PDF references.
+4.  Verify source-mode mapping:
+    -   `1 = Single TXT`
+    -   `2 = English + Bengali`
+5.  Run small Single TXT end-to-end test.
+6.  Run small bilingual E/B end-to-end test.
+7.  Verify no page jump during normal answer selection.
+8.  Verify completion-only automatic scroll to Answer Grid.
+9.  Verify final `Ansopt.txt` generation and validation.
 10. Consolidate duplicate/obsolete CSS only after stabilization.
 
-The Mobile Refactoring, Authentication, Developer Inspector, Final Merger and wider Maintenance Suite roadmaps remain preserved.
+The Mobile Refactoring, Authentication, Developer Inspector, Final
+Merger and wider Maintenance Suite roadmaps remain preserved.
 
 ------------------------------------------------------------------------
 
 # Development Timeline (Updated: 2026-07-21)
 
-| Date | Milestone |
-|---|---|
-| 2026-07-10 | Mobile Refactoring Roadmap |
-| 2026-07-14 | Developer Workspace Foundation |
-| 2026-07-16 | Authentication Workspace Foundation |
-| 2026-07-17 | Quiz Portal UI Enhancements |
-| 2026-07-17 | Authentication Dropdown & Logout Foundation |
-| 2026-07-18 | Developer Metadata Inspector Foundation |
-| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
-| 2026-07-19 | Citation Remover Core Completed |
-| 2026-07-19 | Proof Reader Validation & Editing Workflow |
-| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
-| 2026-07-20 | Shift Extractor Added |
-| 2026-07-20 | Answer Key Builder Added and Refined |
-| 2026-07-20 | Maintenance Home Expanded to Five Tools |
-| 2026-07-20 | Final Merger Four-File Workflow |
-| 2026-07-21 | Answer Key Builder TXT-Only Refactor |
-| 2026-07-21 | PDF Viewer Removed from Answer Key Builder Architecture |
-| 2026-07-21 | Block ↔ Answer Positional Synchronization Refined |
-| 2026-07-21 | Half-Screen Desktop Layout and Scroll Behavior Refined |
-| Next | Answer Key Builder End-to-End Regression Testing |
-| Next | Final Merger Production Validation |
-| Next | Maintenance Suite Output Hardening |
+  Date         Milestone
+  ------------ ---------------------------------------------------------
+  2026-07-10   Mobile Refactoring Roadmap
+  2026-07-14   Developer Workspace Foundation
+  2026-07-16   Authentication Workspace Foundation
+  2026-07-17   Quiz Portal UI Enhancements
+  2026-07-17   Authentication Dropdown & Logout Foundation
+  2026-07-18   Developer Metadata Inspector Foundation
+  2026-07-18   Maintenance Suite / Citation Remover Foundation
+  2026-07-19   Citation Remover Core Completed
+  2026-07-19   Proof Reader Validation & Editing Workflow
+  2026-07-19   Maintenance Dashboard & Glassmorphic UI Direction
+  2026-07-20   Shift Extractor Added
+  2026-07-20   Answer Key Builder Added and Refined
+  2026-07-20   Maintenance Home Expanded to Five Tools
+  2026-07-20   Final Merger Four-File Workflow
+  2026-07-21   Answer Key Builder TXT-Only Refactor
+  2026-07-21   PDF Viewer Removed from Answer Key Builder Architecture
+  2026-07-21   Block ↔ Answer Positional Synchronization Refined
+  2026-07-21   Half-Screen Desktop Layout and Scroll Behavior Refined
+  Next         Answer Key Builder End-to-End Regression Testing
+  Next         Final Merger Production Validation
+  Next         Maintenance Suite Output Hardening
 
 ------------------------------------------------------------------------
 
 # Documentation Note (Updated: 2026-07-21)
 
-This document remains the single source of truth for the Conceptual Bridge project.
+This document remains the single source of truth for the Conceptual
+Bridge project.
 
-All historical sections are preserved. This update supersedes only older descriptions of the current Answer Key Builder architecture where the PDF-based design and earlier file-count workflow are no longer applicable.
+All historical sections are preserved. This update supersedes only older
+descriptions of the current Answer Key Builder architecture where the
+PDF-based design and earlier file-count workflow are no longer
+applicable.
 
-Future sessions should continue preserving historical milestones and appending new progress updates rather than replacing earlier project history.
-
+Future sessions should continue preserving historical milestones and
+appending new progress updates rather than replacing earlier project
+history.
 
 ------------------------------------------------------------------------
 
@@ -2035,33 +2170,38 @@ Future sessions should continue preserving historical milestones and appending n
 
 ## Current Status
 
-**Version:** Free Tutorial Corner v0.2 (Multi-Tutorial Loading / Study-Practice UI Foundation)
+**Version:** Free Tutorial Corner v0.2 (Multi-Tutorial Loading /
+Study-Practice UI Foundation)
 
-This update records the latest work on the Free Tutorial Corner. All previous project history remains preserved.
+This update records the latest work on the Free Tutorial Corner. All
+previous project history remains preserved.
 
 ## Tutorial Loading Architecture
 
-The current `tutorials.html` loads tutorial metadata from numbered TXT files inside the `Video/` directory.
+The current `tutorials.html` loads tutorial metadata from numbered TXT
+files inside the `Video/` directory.
 
 Current configured loader:
 
-```javascript
+``` javascript
 const uploadedVideoFiles = [1,2,3,4,5,6];
 ```
 
-For every configured number, the page attempts to load the corresponding `Video/{number}.txt`.
+For every configured number, the page attempts to load the corresponding
+`Video/{number}.txt`.
 
 The loading loop already safely handles missing files using:
 
-```javascript
+``` javascript
 if (!response.ok) continue;
 ```
 
-Therefore, a configured tutorial number whose TXT file does not yet exist is skipped rather than rendered.
+Therefore, a configured tutorial number whose TXT file does not yet
+exist is skipped rather than rendered.
 
 ### Confirmed Behavior
 
-```text
+``` text
 Configured: [1,2,3,4,5,6]
 
 Video/1.txt exists → Load
@@ -2071,11 +2211,12 @@ Video/4.txt missing → Skip
 ...
 ```
 
-A missing tutorial TXT file must not stop successfully available tutorial files from loading.
+A missing tutorial TXT file must not stop successfully available
+tutorial files from loading.
 
 ## Tutorial Metadata Flow
 
-```text
+``` text
 tutorials.html
 ↓
 Video/{number}.txt
@@ -2091,11 +2232,12 @@ Tutorial Table Row
 └── Take 10Q Test
 ```
 
-Tutorial TXT metadata maps the corresponding tutorial test through `Test_Source| questions/<subject>/<file>.txt`.
+Tutorial TXT metadata maps the corresponding tutorial test through
+`Test_Source| questions/<subject>/<file>.txt`.
 
 The existing `compileMiniTest()` routing remains:
 
-```text
+``` text
 Tutorial TXT → Test_Source → quiz-portal.html?source=<encoded question path>
 ```
 
@@ -2103,21 +2245,25 @@ The Student Quiz Portal architecture remains unaffected.
 
 ## Missing-File Engineering Decision
 
-It is acceptable to configure future numbered tutorial slots before all corresponding TXT files are ready, provided the current safe-skip behavior remains in place.
+It is acceptable to configure future numbered tutorial slots before all
+corresponding TXT files are ready, provided the current safe-skip
+behavior remains in place.
 
-```text
+``` text
 Existing TXT → Parse and display
 Missing TXT → Skip safely
 Malformed existing TXT → Log/debug separately
 ```
 
-A future optimization may replace numbered probing with an API that returns only existing tutorial metadata files. This is deferred.
+A future optimization may replace numbered probing with an API that
+returns only existing tutorial metadata files. This is deferred.
 
 ## Download PDF Action Expansion
 
-Two compact secondary controls are being introduced directly below **Download PDF**:
+Two compact secondary controls are being introduced directly below
+**Download PDF**:
 
-```text
+``` text
 Download PDF
 [ Study ] [ Practice ]
 ```
@@ -2126,42 +2272,43 @@ Download PDF
 
 **Status:** UI Foundation / Function Pending
 
-- Small pill-style control.
-- Positioned below Download PDF.
-- Styled consistently with the compact ENG/BEN controls.
-- No final action or routing assigned yet.
+-   Small pill-style control.
+-   Positioned below Download PDF.
+-   Styled consistently with the compact ENG/BEN controls.
+-   No final action or routing assigned yet.
 
 ### Practice Button
 
 **Status:** UI Foundation / Function Pending
 
-- Small pill-style control.
-- Positioned beside Study.
-- Styled consistently with the compact ENG/BEN controls.
-- No final action or routing assigned yet.
+-   Small pill-style control.
+-   Positioned beside Study.
+-   Styled consistently with the compact ENG/BEN controls.
+-   No final action or routing assigned yet.
 
 ### Current Design Rule
 
-Study and Practice remain UI-only placeholders until their exact behavior is defined.
+Study and Practice remain UI-only placeholders until their exact
+behavior is defined.
 
 Existing functionality must remain unchanged:
 
-- ENG / BEN language switching
-- Play Video
-- Download PDF
-- Take 10Q Test
-- Tutorial TXT parsing
-- `Test_Source` routing
+-   ENG / BEN language switching
+-   Play Video
+-   Download PDF
+-   Take 10Q Test
+-   Tutorial TXT parsing
+-   `Test_Source` routing
 
 ## Tutorial Corner Current File
 
-```text
+``` text
 tutorials.html
 ```
 
 Relevant JavaScript components:
 
-```text
+``` text
 uploadedVideoFiles
 cachedLoadedData
 openSubjectFolder()
@@ -2173,71 +2320,84 @@ compileMiniTest()
 
 ## Engineering Decisions Confirmed
 
-1. Tutorial metadata remains TXT-driven.
-2. Numbered tutorial files may be configured ahead of content availability.
-3. Missing TXT files must be skipped safely.
-4. Existing tutorial rows must continue loading when later numbered files are absent.
-5. Study and Practice are compact secondary PDF-area actions.
-6. Their behavior will be implemented only after functional requirements are defined.
-7. Existing ENG/BEN, video, PDF and 10Q Test behavior must remain untouched.
-8. Student Quiz Portal/runtime logic must remain unaffected.
-9. Automatic tutorial-file discovery/API remains a future optimization.
+1.  Tutorial metadata remains TXT-driven.
+2.  Numbered tutorial files may be configured ahead of content
+    availability.
+3.  Missing TXT files must be skipped safely.
+4.  Existing tutorial rows must continue loading when later numbered
+    files are absent.
+5.  Study and Practice are compact secondary PDF-area actions.
+6.  Their behavior will be implemented only after functional
+    requirements are defined.
+7.  Existing ENG/BEN, video, PDF and 10Q Test behavior must remain
+    untouched.
+8.  Student Quiz Portal/runtime logic must remain unaffected.
+9.  Automatic tutorial-file discovery/API remains a future optimization.
 
 ------------------------------------------------------------------------
 
 # Immediate Next Starting Point (Updated: 2026-07-22)
 
-1. Verify Study and Practice buttons render correctly below Download PDF.
-2. Confirm compact layout at current desktop/table widths.
-3. Define the exact Study function.
-4. Implement and test Study independently.
-5. Define the exact Practice function.
-6. Implement and test Practice independently.
-7. Verify tutorial loading with mixed existing/missing numbered `Video/*.txt` files.
-8. Consider automatic tutorial-file discovery/API only after the current workflow is stable.
-9. Continue Answer Key Builder regression testing and Final Merger validation as previously planned.
+1.  Verify Study and Practice buttons render correctly below Download
+    PDF.
+2.  Confirm compact layout at current desktop/table widths.
+3.  Define the exact Study function.
+4.  Implement and test Study independently.
+5.  Define the exact Practice function.
+6.  Implement and test Practice independently.
+7.  Verify tutorial loading with mixed existing/missing numbered
+    `Video/*.txt` files.
+8.  Consider automatic tutorial-file discovery/API only after the
+    current workflow is stable.
+9.  Continue Answer Key Builder regression testing and Final Merger
+    validation as previously planned.
 
-The Mobile Refactoring, Authentication, Developer Inspector, Maintenance Suite, Answer Key Builder and Final Merger roadmaps remain preserved.
+The Mobile Refactoring, Authentication, Developer Inspector, Maintenance
+Suite, Answer Key Builder and Final Merger roadmaps remain preserved.
 
 ------------------------------------------------------------------------
 
 # Development Timeline (Updated: 2026-07-22)
 
-| Date | Milestone |
-|---|---|
-| 2026-07-10 | Mobile Refactoring Roadmap |
-| 2026-07-14 | Developer Workspace Foundation |
-| 2026-07-16 | Authentication Workspace Foundation |
-| 2026-07-17 | Quiz Portal UI Enhancements |
-| 2026-07-17 | Authentication Dropdown & Logout Foundation |
-| 2026-07-18 | Developer Metadata Inspector Foundation |
-| 2026-07-18 | Maintenance Suite / Citation Remover Foundation |
-| 2026-07-19 | Citation Remover Core Completed |
-| 2026-07-19 | Proof Reader Validation & Editing Workflow |
-| 2026-07-19 | Maintenance Dashboard & Glassmorphic UI Direction |
-| 2026-07-20 | Shift Extractor Added |
-| 2026-07-20 | Answer Key Builder Added and Refined |
-| 2026-07-20 | Final Merger Four-File Workflow |
-| 2026-07-21 | Answer Key Builder TXT-Only Refactor |
-| 2026-07-21 | Block ↔ Answer Positional Synchronization Refined |
-| 2026-07-22 | Free Tutorial Corner Multi-Tutorial Loading Reviewed |
-| 2026-07-22 | Missing Tutorial TXT Safe-Skip Behavior Confirmed |
-| 2026-07-22 | Study / Practice Compact Button UI Foundation |
-| Next | Define and Implement Study Function |
-| Next | Define and Implement Practice Function |
-| Next | Answer Key Builder End-to-End Regression Testing |
-| Next | Final Merger Production Validation |
+  Date         Milestone
+  ------------ ------------------------------------------------------
+  2026-07-10   Mobile Refactoring Roadmap
+  2026-07-14   Developer Workspace Foundation
+  2026-07-16   Authentication Workspace Foundation
+  2026-07-17   Quiz Portal UI Enhancements
+  2026-07-17   Authentication Dropdown & Logout Foundation
+  2026-07-18   Developer Metadata Inspector Foundation
+  2026-07-18   Maintenance Suite / Citation Remover Foundation
+  2026-07-19   Citation Remover Core Completed
+  2026-07-19   Proof Reader Validation & Editing Workflow
+  2026-07-19   Maintenance Dashboard & Glassmorphic UI Direction
+  2026-07-20   Shift Extractor Added
+  2026-07-20   Answer Key Builder Added and Refined
+  2026-07-20   Final Merger Four-File Workflow
+  2026-07-21   Answer Key Builder TXT-Only Refactor
+  2026-07-21   Block ↔ Answer Positional Synchronization Refined
+  2026-07-22   Free Tutorial Corner Multi-Tutorial Loading Reviewed
+  2026-07-22   Missing Tutorial TXT Safe-Skip Behavior Confirmed
+  2026-07-22   Study / Practice Compact Button UI Foundation
+  Next         Define and Implement Study Function
+  Next         Define and Implement Practice Function
+  Next         Answer Key Builder End-to-End Regression Testing
+  Next         Final Merger Production Validation
 
 ------------------------------------------------------------------------
 
 # Documentation Note (Updated: 2026-07-22)
 
-This document remains the single source of truth for the Conceptual Bridge project.
+This document remains the single source of truth for the Conceptual
+Bridge project.
 
-All previous project history has been preserved. This update appends the latest Free Tutorial Corner architecture, multi-file loading behavior, missing-file handling decision, and Study/Practice UI foundation without replacing earlier milestones.
+All previous project history has been preserved. This update appends the
+latest Free Tutorial Corner architecture, multi-file loading behavior,
+missing-file handling decision, and Study/Practice UI foundation without
+replacing earlier milestones.
 
-Future development sessions should continue appending progress updates while preserving the historical record.
-
+Future development sessions should continue appending progress updates
+while preserving the historical record.
 
 ------------------------------------------------------------------------
 
@@ -2245,33 +2405,40 @@ Future development sessions should continue appending progress updates while pre
 
 ## Current Status
 
-**Version:** Mathematics Metadata Routing v0.1 (Architecture Defined / Implementation Pending)
+**Version:** Mathematics Metadata Routing v0.1 (Architecture Defined /
+Implementation Pending)
 
-This update records the architectural decision for handling Mathematics question banks where an exam may contain either a very large collection of questions or a smaller mixed-topic Mathematics paper.
+This update records the architectural decision for handling Mathematics
+question banks where an exam may contain either a very large collection
+of questions or a smaller mixed-topic Mathematics paper.
 
 This change is **strictly scoped to Mathematics only** at this stage.
 
-The behavior of General Intelligence (GI), General Science (GS/Science), General Awareness & Current Affairs (GACA), and any other subject must remain unchanged until a separate decision is made for those sections.
+The behavior of General Intelligence (GI), General Science (GS/Science),
+General Awareness & Current Affairs (GACA), and any other subject must
+remain unchanged until a separate decision is made for those sections.
 
 ## Problem Identified
 
-Mathematics question assets can appear in two significantly different forms.
+Mathematics question assets can appear in two significantly different
+forms.
 
-### Case 1 — Large Exam Question Bank
+### Case 1 --- Large Exam Question Bank
 
 Example:
 
-```text
+``` text
 RRB GROUP-D
 Mathematics
 2500+ questions
 ```
 
-Such a large collection may need to be divided into multiple manageable TXT files or learning sets.
+Such a large collection may need to be divided into multiple manageable
+TXT files or learning sets.
 
 Questions may also be organized or routed by:
 
-```text
+``` text
 Topic
 ↓
 SubTopic
@@ -2279,11 +2446,11 @@ SubTopic
 10 / 20 / 40 Question Practice Sets
 ```
 
-### Case 2 — Small Mixed Mathematics Paper
+### Case 2 --- Small Mixed Mathematics Paper
 
 Example:
 
-```text
+``` text
 RRB NTPC CBT-II
 ↓
 Approximately 35 Mathematics questions
@@ -2293,7 +2460,7 @@ Questions belong to multiple Topics/SubTopics
 
 A single exam paper may contain questions such as:
 
-```text
+``` text
 Q1 → Percentage → Successive Percentage
 Q2 → Algebra → Linear Equation
 Q3 → Geometry → Triangle
@@ -2302,17 +2469,21 @@ Q5 → Number System → HCF/LCM
 ...
 ```
 
-If `Topic` and `SubTopic` remain only global TXT metadata, one mixed Mathematics file cannot accurately classify every question without either changing the exam identity or unnecessarily splitting the original paper.
+If `Topic` and `SubTopic` remain only global TXT metadata, one mixed
+Mathematics file cannot accurately classify every question without
+either changing the exam identity or unnecessarily splitting the
+original paper.
 
 ## Architecture Decision
 
-For Mathematics, **Exam identity and academic classification must be treated independently**.
+For Mathematics, **Exam identity and academic classification must be
+treated independently**.
 
 ### Exam / Source Identity
 
 The following information may remain global where appropriate:
 
-```text
+``` text
 Exam
 Notification
 Subject
@@ -2322,28 +2493,29 @@ Level
 
 Example:
 
-```text
+``` text
 Exam| RRB NTPC CBT-II
 Subject| MATHEMATICS
 Notification| CEN XX/XXXX
 Type| PYQ
 ```
 
-The exam name must remain the true source identity of the question and must not be changed merely to organize questions by Topic/SubTopic.
+The exam name must remain the true source identity of the question and
+must not be changed merely to organize questions by Topic/SubTopic.
 
 ### Mathematics Topic Classification
 
 For Mathematics only:
 
-```text
+``` text
 Topic
 SubTopic
 ```
 
 must support both:
 
-1. Global/default metadata.
-2. Question-level override metadata.
+1.  Global/default metadata.
+2.  Question-level override metadata.
 
 This creates an inheritance model.
 
@@ -2351,7 +2523,7 @@ This creates an inheritance model.
 
 Conceptual parser rule:
 
-```text
+``` text
 Question has its own Topic/SubTopic?
         │
    ┌────┴────┐
@@ -2361,11 +2533,11 @@ Use local    Inherit global
 value        value
 ```
 
-### Example A — Single-Topic Mathematics File
+### Example A --- Single-Topic Mathematics File
 
 If all questions belong to Percentage:
 
-```text
+``` text
 Exam| RRB GROUP-D
 Subject| MATHEMATICS
 Topic| PERCENTAGE
@@ -2376,11 +2548,11 @@ Individual questions do not need to repeat `Topic|PERCENTAGE`.
 
 They inherit the global Topic.
 
-### Example B — Mixed Mathematics File
+### Example B --- Mixed Mathematics File
 
 For a mixed NTPC CBT-II Mathematics paper:
 
-```text
+``` text
 Exam| RRB NTPC CBT-II
 Subject| MATHEMATICS
 Topic|
@@ -2389,7 +2561,7 @@ SubTopic|
 
 Each question may define its own classification:
 
-```text
+``` text
 Topic| PERCENTAGE
 SubTopic| SUCCESSIVE PERCENTAGE
 Q| ...
@@ -2415,34 +2587,38 @@ C| ...
 D| ...
 ```
 
-The original Exam identity remains unchanged while each question receives its correct Topic/SubTopic.
+The original Exam identity remains unchanged while each question
+receives its correct Topic/SubTopic.
 
-### Example C — Global Topic With Selective Override
+### Example C --- Global Topic With Selective Override
 
 A Mathematics TXT may define:
 
-```text
+``` text
 Topic| PERCENTAGE
 ```
 
 Most questions inherit Percentage.
 
-If an exceptional question belongs elsewhere, that question may provide its own:
+If an exceptional question belongs elsewhere, that question may provide
+its own:
 
-```text
+``` text
 Topic| PROFIT & LOSS
 SubTopic| DISCOUNT
 ```
 
-The local value overrides the global/default value only for that question.
+The local value overrides the global/default value only for that
+question.
 
 ## Storage vs Routing Decision
 
-Physical TXT file organization must not be treated as the permanent academic classification system.
+Physical TXT file organization must not be treated as the permanent
+academic classification system.
 
 The architecture distinguishes:
 
-```text
+``` text
 Physical Storage
 ≠
 Exam Identity
@@ -2452,11 +2628,12 @@ Topic Classification
 Quiz Route
 ```
 
-Large Mathematics collections may be split into manageable TXT files for engineering/storage purposes without changing the true exam metadata.
+Large Mathematics collections may be split into manageable TXT files for
+engineering/storage purposes without changing the true exam metadata.
 
 Example:
 
-```text
+``` text
 questions/
 └── math/
     ├── groupd_001.txt
@@ -2465,29 +2642,31 @@ questions/
     └── ...
 ```
 
-A file boundary is therefore an engineering/storage boundary and does not necessarily define a Topic/SubTopic boundary.
+A file boundary is therefore an engineering/storage boundary and does
+not necessarily define a Topic/SubTopic boundary.
 
 ## Future Mathematics Routing Model
 
-The same Mathematics question may eventually be available through different logical routes without duplicating the physical question.
+The same Mathematics question may eventually be available through
+different logical routes without duplicating the physical question.
 
 Examples:
 
-```text
+``` text
 Exam Practice
 RRB NTPC CBT-II
 → Mathematics
 → Original mixed questions
 ```
 
-```text
+``` text
 Topic Practice
 Mathematics
 → Percentage
 → Questions filtered by Topic
 ```
 
-```text
+``` text
 Tutorial Practice
 YouTube Tutorial
 → Practice
@@ -2495,7 +2674,7 @@ YouTube Tutorial
 → 10 / 20 / 40 questions
 ```
 
-```text
+``` text
 Mixed Mathematics Practice
 Exam = RRB GROUP-D
 Subject = MATHEMATICS
@@ -2503,26 +2682,30 @@ Subject = MATHEMATICS
 → Select requested question count
 ```
 
-This metadata-driven routing is a future extension. The immediate implementation scope is only to make the Mathematics parser/data model capable of correctly representing global and per-question Topic/SubTopic metadata.
+This metadata-driven routing is a future extension. The immediate
+implementation scope is only to make the Mathematics parser/data model
+capable of correctly representing global and per-question Topic/SubTopic
+metadata.
 
 ## Backward Compatibility Requirement
 
 Existing Mathematics TXT files using only global:
 
-```text
+``` text
 Topic|
 SubTopic|
 ```
 
 must continue working.
 
-Existing GI, GS/Science, GACA and other subject files must not change behavior.
+Existing GI, GS/Science, GACA and other subject files must not change
+behavior.
 
 The implementation must therefore be additive and backward-compatible.
 
 Target rule:
 
-```text
+``` text
 IF Subject = MATHEMATICS:
 
     question.Topic =
@@ -2538,13 +2721,14 @@ ELSE:
     preserve existing parser behavior exactly
 ```
 
-Exact implementation must be based on review of the current parser rather than blindly replacing existing logic.
+Exact implementation must be based on review of the current parser
+rather than blindly replacing existing logic.
 
 ## Files Required for Next Implementation Session
 
 Start by reviewing:
 
-```text
+``` text
 services/questionParser.js
 ```
 
@@ -2552,42 +2736,47 @@ and one representative current Mathematics TXT question file.
 
 Then verify the relevant APIs, especially:
 
-```text
+``` text
 api/fetch-question.js
 api/fetch-tutorial-questions.js
 ```
 
 or their current equivalent filenames.
 
-`quiz-portal.html` should not be modified initially unless parser/API verification proves a front-end change is necessary.
+`quiz-portal.html` should not be modified initially unless parser/API
+verification proves a front-end change is necessary.
 
 ## Implementation Safety Rules
 
-1. Apply the new metadata inheritance behavior to **Mathematics only**.
-2. Do not modify GI behavior.
-3. Do not modify GS/Science behavior.
-4. Do not modify GACA behavior.
-5. Preserve existing global Mathematics metadata compatibility.
-6. Allow per-question Mathematics `Topic` and `SubTopic` overrides.
-7. Preserve the true Exam/Notification/Shift source identity.
-8. Do not force file splitting merely because Topic/SubTopic changes.
-9. Do not redesign the Student Quiz Portal unless required.
-10. Review parser and API behavior before writing implementation changes.
+1.  Apply the new metadata inheritance behavior to **Mathematics only**.
+2.  Do not modify GI behavior.
+3.  Do not modify GS/Science behavior.
+4.  Do not modify GACA behavior.
+5.  Preserve existing global Mathematics metadata compatibility.
+6.  Allow per-question Mathematics `Topic` and `SubTopic` overrides.
+7.  Preserve the true Exam/Notification/Shift source identity.
+8.  Do not force file splitting merely because Topic/SubTopic changes.
+9.  Do not redesign the Student Quiz Portal unless required.
+10. Review parser and API behavior before writing implementation
+    changes.
 11. Test with a small mixed Mathematics TXT before production rollout.
-12. Other subjects may adopt or reject this model later through a separate architectural decision.
+12. Other subjects may adopt or reject this model later through a
+    separate architectural decision.
 
-## Next Session Starting Point — Mathematics Metadata
+## Next Session Starting Point --- Mathematics Metadata
 
 Provide:
 
-1. `services/questionParser.js`
-2. One representative existing Mathematics TXT file
-3. Main Exam Corner question API (`fetch-question.js` or current equivalent)
-4. Tutorial question API (`fetch-tutorial-questions.js` or current equivalent)
+1.  `services/questionParser.js`
+2.  One representative existing Mathematics TXT file
+3.  Main Exam Corner question API (`fetch-question.js` or current
+    equivalent)
+4.  Tutorial question API (`fetch-tutorial-questions.js` or current
+    equivalent)
 
 Implementation sequence:
 
-```text
+``` text
 Review current parser
 ↓
 Identify global metadata parsing
@@ -2611,23 +2800,1219 @@ Regression-test non-Math subjects unchanged
 
 # Development Timeline Addition (2026-07-22)
 
-| Date | Milestone |
-|---|---|
-| 2026-07-22 | Mathematics Mixed-Topic Metadata Problem Identified |
-| 2026-07-22 | Math-Only Global + Question-Level Topic/SubTopic Architecture Defined |
-| 2026-07-22 | Mathematics Metadata Inheritance / Override Rule Defined |
-| 2026-07-22 | Non-Math Subjects Explicitly Excluded From Current Change |
-| Next | Review `questionParser.js` and Representative Math TXT |
-| Next | Implement Math-Only Topic/SubTopic Inheritance |
-| Next | Verify Exam Corner and Tutorial APIs |
-| Next | Regression-Test GI / GS / GACA Unchanged |
+  -----------------------------------------------------------------------
+  Date                                Milestone
+  ----------------------------------- -----------------------------------
+  2026-07-22                          Mathematics Mixed-Topic Metadata
+                                      Problem Identified
+
+  2026-07-22                          Math-Only Global + Question-Level
+                                      Topic/SubTopic Architecture Defined
+
+  2026-07-22                          Mathematics Metadata Inheritance /
+                                      Override Rule Defined
+
+  2026-07-22                          Non-Math Subjects Explicitly
+                                      Excluded From Current Change
+
+  Next                                Review `questionParser.js` and
+                                      Representative Math TXT
+
+  Next                                Implement Math-Only Topic/SubTopic
+                                      Inheritance
+
+  Next                                Verify Exam Corner and Tutorial
+                                      APIs
+
+  Next                                Regression-Test GI / GS / GACA
+                                      Unchanged
+  -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
-# Documentation Note (Updated: 2026-07-22 — Mathematics Metadata Planning)
+# Documentation Note (Updated: 2026-07-22 --- Mathematics Metadata Planning)
+
+This document remains the single source of truth for the Conceptual
+Bridge project.
+
+The Mathematics metadata architecture described above is currently an
+**approved design decision / implementation plan**, not yet a confirmed
+completed code change.
+
+Future implementation must preserve all existing project behavior
+outside the Mathematics-specific scope unless separately approved.
+
+------------------------------------------------------------------------
+
+# Mathematics Question Text Format & Maintenance Workflow Update (Added: 2026-07-23)
+
+## Current Status
+
+**Version:** Mathematics TXT Format v0.2 (Bilingual Field Separation /
+Maintenance Preparation)
+
+This update records the latest Mathematics question-text decisions. All
+previous project history remains preserved.
+
+## Scope
+
+These changes are strictly **Mathematics-only**. GI, GS/Science, GACA,
+and other existing subject formats must remain unchanged unless
+separately approved.
+
+## Mathematics Bilingual Question Format
+
+Using `/` as an English/Bengali separator was rejected because slash
+characters legitimately occur in Mathematics, for example `p/q`,
+`a / b`, and `\frac{p}{q}`. `||` was also rejected because parallel/pipe
+notation may carry mathematical meaning.
+
+### Approved Format
+
+``` text
+QEN| English question
+QBN| Bengali question
+```
+
+Example:
+
+``` text
+QEN| If the given number is expressed in the form p/q, where p and q are integers and q $\neq$ 0, is:
+QBN| প্রদত্ত সংখ্যাটিকে p/q আকারে প্রকাশ করলে (যেখানে p এবং q পূর্ণসংখ্যা এবং q $\neq$ 0) তা হবে:
+```
+
+The slash inside `p/q` is therefore ordinary question content and cannot
+be confused with a language separator.
+
+## Mathematics Question Block Structure
+
+``` text
+QEN| English question
+QBN| Bengali question
+Common| optional language-independent equation/content
+Image| optional image path
+A| option A
+B| option B
+C| option C
+D| option D
+Shift| date + time
+---
+```
+
+Rules:
+
+-   `QEN|` stores English question text.
+-   `QBN|` stores Bengali question text.
+-   `Common|` stores optional shared mathematical content/equations.
+-   `Image|` is a reserved image field and may be blank.
+-   `A|`--`D|` store four answer options.
+-   `Shift|` keeps date and time together on one line.
+-   `---` is the recommended explicit question-block terminator.
+
+Keeping `Common|` and `Image|` explicit reduces structural ambiguity
+even when blank.
+
+## Representative Mathematics TXT Review
+
+The current Math TXT using this structure was reviewed and the
+architecture is suitable for mathematical content containing fractions,
+division operators, LaTeX, and similar symbols.
+
+Cleanup issues identified before production processing:
+
+1.  Accidental duplicate internal markers, for example:
+
+``` text
+QEN| If the given Equations are correct, then QEN| Find the value...
+```
+
+2.  Some malformed Bengali text with a missing/damaged initial character
+    in `প্রদত্ত`.
+3.  The reviewed sample omitted `---` separators; explicit block
+    termination is recommended instead of relying only on blank lines.
+
+These issues should be caught through Proof Reader / structural
+validation before final processing.
+
+## Math-Only Parser Compatibility Rule
+
+``` text
+IF Subject = MATHEMATICS:
+    recognize QEN| and QBN|
+    recognize Common|
+    recognize Image|
+    preserve Math-specific Topic/SubTopic inheritance
+ELSE:
+    preserve existing parser behavior exactly
+```
+
+Existing GACA, GI, GS/Science and other subject formats must not be
+changed by this work.
+
+## Character Introducer --- Second Operation Layer
+
+A second operation is planned:
+
+``` text
+CREATE A NEW LINE
+```
+
+It provides:
+
+``` text
+1. Only New Line
+2. New Line with Payload
+```
+
+### Only New Line
+
+Insert an empty physical line immediately after every calculated target
+line.
+
+``` text
+C| 20
+D| 25
+```
+
+becomes:
+
+``` text
+C| 20
+
+D| 25
+```
+
+### New Line with Payload
+
+Insert a physical line containing the exact user-entered payload.
+
+Example payload:
+
+``` text
+CLQ,
+```
+
+Result:
+
+``` text
+C| 20
+CLQ,
+D| 25
+```
+
+Payload content/whitespace should be preserved exactly.
+
+## Character Introducer UI Reuse
+
+The Create operation should reuse the established navigator:
+
+``` text
+Up / Down
+Current Line Viewer
+Marker 1
+Marker 2
+Gear / Adjustment
+OK
+```
+
+The existing two-anchor/gap concept determines target positions.
+
+## Critical Line-Index Safety Rule
+
+A new physical line shifts all subsequent indexes. Therefore all targets
+must first be calculated against the original unmodified line array.
+
+Example original targets:
+
+``` text
+5, 15, 25, 35
+```
+
+Insertions must be processed bottom-to-top:
+
+``` text
+35, 25, 15, 5
+```
+
+Conceptual implementation:
+
+``` javascript
+const insertionTargets = [...targetIndexes].sort((a, b) => b - a);
+
+insertionTargets.forEach(index => {
+    modifiedLines.splice(
+        index + 1,
+        0,
+        createMode === "payload" ? payload : ""
+    );
+});
+```
+
+After insertion, rebuild the working text and update the final
+total-line count. This operation needs its own execution path because,
+unlike Write-in-a-Line, it changes the number of physical lines.
+
+## Recommended Mathematics Maintenance Sequence
+
+``` text
+Raw / Partially Formatted Mathematics TXT
+↓
+Character Introducer / Structural Formatting
+↓
+QEN| + QBN| separation
+↓
+Common| + Image|
+↓
+A| B| C| D|
+↓
+Shift| date + time
+↓
+Explicit --- boundaries
+↓
+Proof Reader / Structural Validation
+↓
+Correct| + Difficulty|
+↓
+Math Topic/SubTopic classification
+↓
+Final parser/API validation
+```
+
+## Immediate Next Starting Point
+
+1.  Correct duplicate internal `QEN|` markers.
+2.  Correct malformed Bengali text.
+3.  Restore/confirm explicit `---` question boundaries.
+4.  Implement and test Character Introducer `CREATE A NEW LINE`.
+5.  Test both Only New Line and New Line with Payload.
+6.  Verify bottom-to-top insertion across many targets.
+7.  Confirm final line-count updates.
+8.  Preserve existing Write-in-a-Line behavior.
+9.  Review `services/questionParser.js` before implementing Math-only
+    `QEN|` / `QBN|`.
+10. Regression-test GI / GS / GACA unchanged.
+
+------------------------------------------------------------------------
+
+# Development Timeline Addition (2026-07-23)
+
+  -----------------------------------------------------------------------
+  Date                                Milestone
+  ----------------------------------- -----------------------------------
+  2026-07-23                          Math Slash-Based Bilingual
+                                      Separator Rejected
+
+  2026-07-23                          `QEN|` + `QBN|` Math-Only Bilingual
+                                      Architecture Adopted
+
+  2026-07-23                          `Common|` + `Image|` Reserved Math
+                                      Fields Confirmed
+
+  2026-07-23                          Same-Line `Shift|` Date + Time
+                                      Format Confirmed
+
+  2026-07-23                          Representative Math TXT Reviewed
+
+  2026-07-23                          Duplicate Marker and Bengali
+                                      Cleanup Issues Identified
+
+  2026-07-23                          Character Introducer
+                                      Create-New-Line Second Layer
+                                      Defined
+
+  2026-07-23                          Bottom-to-Top Line Insertion Safety
+                                      Rule Defined
+
+  Next                                Implement Character Introducer
+                                      Create-New-Line Operation
+
+  Next                                Finalize Math TXT Structural
+                                      Validation
+
+  Next                                Implement Math-Only Parser Support
+                                      for `QEN|` / `QBN|`
+
+  Next                                Regression-Test Non-Math Subjects
+                                      Unchanged
+  -----------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Documentation Note (Updated: 2026-07-23 --- Mathematics TXT Format)
+
+This document remains the single source of truth for the Conceptual
+Bridge project. The Mathematics `QEN|` / `QBN|` format, `Common|` /
+`Image|` structure, and Character Introducer Create-New-Line behavior
+are approved architecture/development decisions. Code implementation
+remains pending until the relevant maintenance and parser files are
+reviewed and updated.
+
+All historical project content remains preserved.
+
+
+------------------------------------------------------------------------
+
+# Character Introducer Progress Update (Added: 2026-07-23)
+
+## Current Status
+
+**Version:** Character Introducer v0.3 (Three Core Line Operations / Maintenance Navigation)
+
+This update records the latest Character Introducer development while preserving all previous project history.
+
+## Purpose and Workflow
+
+Character Introducer is a browser-local TXT maintenance utility for repeated, position-based physical-line transformations.
+
+``` text
+Upload TXT
+↓
+Select Operation
+├── Write in a Line
+├── Create a New Line
+└── Delete a Line
+↓
+Navigate one physical TXT line at a time
+↓
+Mark First Target (1️⃣)
+↓
+Mark Second Target (2️⃣)
+↓
+Calculate repeating gap
+↓
+Run operation
+↓
+Generate Modified TXT
+↓
+Download
+```
+
+The first and second selected target lines define the repeating positional pattern.
+
+## Maintenance Home Integration
+
+`character-introducer.html` belongs under the Developer Maintenance Suite and now requires/directly supports:
+
+``` text
+← Maintenance Home
+→ maintenance.html
+```
+
+A review of the latest HTML found an accidental duplicate nested `<header class="page-header">` and duplicated Character Introducer title/description.
+
+Required final structure:
+
+``` text
+Page Header
+├── ← Maintenance Home
+└── Header Content
+    ├── Conceptual Bridge Maintenance Suite
+    ├── Character Introducer
+    └── Page Description
+```
+
+Only one outer `.page-header` should remain.
+
+## Operation 1 — Write in a Line
+
+Available modes:
+
+``` text
+Write in a Line
+├── Write at Start of Line
+├── Write Exactly at End
+└── Write in Middle / Somewhere
+```
+
+### Write at Start of Line
+
+**Status:** Foundation implemented/defined.
+
+Workflow:
+
+``` text
+Enter payload
+↓
+Open line navigator
+↓
+Select first target (1️⃣)
+↓
+Select second target (2️⃣)
+↓
+Calculate gap
+↓
+🆗
+↓
+Insert payload at the start of every calculated target line
+```
+
+Workspace controls:
+
+``` text
+🔼 Previous Line
+🔽 Next Line
+1️⃣ First Anchor
+2️⃣ Second Anchor
+⚙️ Adjust Anchors
+🆗 Run Operation
+```
+
+`Write Exactly at End` and `Write in Middle / Somewhere` remain deferred until their exact behavior is defined.
+
+## Operation 2 — Create a New Line
+
+**Status:** UI/workspace structure added; behavior defined.
+
+Modes:
+
+``` text
+Create a New Line
+├── Only New Line
+└── New Line with Payload
+```
+
+### Only New Line
+
+Creates one blank physical line immediately after each calculated target.
+
+Example:
+
+``` text
+C| 20
+D| 25
+```
+
+becomes:
+
+``` text
+C| 20
+
+D| 25
+```
+
+### New Line with Payload
+
+Creates a new physical line after each target and writes the supplied payload there.
+
+Example payload:
+
+``` text
+CLQ,
+```
+
+Input:
+
+``` text
+C| 20
+D| 25
+```
+
+Output:
+
+``` text
+C| 20
+CLQ,
+D| 25
+```
+
+### Cumulative Insertion Rule
+
+Insertion changes later physical line indices:
+
+``` text
+1 inserted line  → following positions shift by +1
+2 inserted lines → following positions shift by +2
+N inserted lines → following positions shift by +N
+```
+
+The engine must preserve the original repeating target pattern while compensating for cumulative insertion offsets. It must not allow target drift caused by mutating the working line array.
+
+Create workspace controls include:
+
+``` text
+🔼 / 🔽
+1️⃣ / 2️⃣
+⚙️
+🆗
+First Target
+Second Target
+Original Gap
+New Lines count
+```
+
+## Operation 3 — Delete a Line
+
+**Status:** UI/workspace structure added; behavior defined.
+
+Modes:
+
+``` text
+Delete a Line
+├── Delete Completely
+└── Use Backspace
+```
+
+### Delete Completely
+
+Removes the entire targeted physical line.
+
+Example:
+
+``` text
+B| 10
+C| 20
+D| 25
+```
+
+becomes:
+
+``` text
+B| 10
+D| 25
+```
+
+when `C| 20` is targeted.
+
+### Use Backspace
+
+Removes the newline before the target and joins the target content to the previous line.
+
+Example:
+
+``` text
+B| 10
+C| 20
+D| 25
+```
+
+becomes:
+
+``` text
+B| 10 C| 20
+D| 25
+```
+
+A separating space must exist between the previous content and the shifted target content.
+
+Conceptual rule:
+
+``` text
+previous line + " " + target line
+```
+
+The implementation should avoid accidental double spaces while preventing concatenation without a separator.
+
+### Cumulative Deletion Rule
+
+Deletion/backspace joining changes later physical line indices:
+
+``` text
+1 removed line  → following positions shift by -1
+2 removed lines → following positions shift by -2
+N removed lines → following positions shift by -N
+```
+
+Target selection must remain based on the original repeating pattern while execution compensates for cumulative deletion offsets.
+
+Delete workspace controls include:
+
+``` text
+🔼 / 🔽
+1️⃣ / 2️⃣
+⚙️
+🆗
+First Target
+Second Target
+Original Gap
+Targets count
+```
+
+## Current HTML Structure
+
+Operation panels now exist for:
+
+``` text
+#writeWorkspace
+#createWorkspace
+#deleteWorkspace
+```
+
+Important Create IDs:
+
+``` text
+#createBlankLineBtn
+#createPayloadLineBtn
+#createPayloadSection
+#createLineNavigator
+#createFirstAnchorBtn
+#createSecondAnchorBtn
+#createAdjustAnchorsBtn
+#createRunOperationBtn
+```
+
+Important Delete IDs:
+
+``` text
+#deleteCompleteBtn
+#deleteBackspaceBtn
+#deleteLineNavigator
+#deleteFirstAnchorBtn
+#deleteSecondAnchorBtn
+#deleteAdjustAnchorsBtn
+#deleteRunOperationBtn
+```
+
+## Current Verification State
+
+### HTML
+
+- ✅ TXT File Upload section present.
+- ✅ Select Operation section present.
+- ✅ Write workspace present.
+- ✅ Create New Line workspace present.
+- ✅ Delete Line workspace present.
+- ✅ File Information section present.
+- ✅ Processing Console present.
+- ✅ New Session and Download Modified TXT actions present.
+- ✅ Maintenance Home navigation added.
+- ⚠ Duplicate nested page header/title block identified; remove it if not already corrected.
+
+### CSS
+
+- ✅ Existing Character Introducer visual architecture retained.
+- ✅ Maintenance Home button styling added/required.
+- 🟡 Final visual verification required after header cleanup.
+
+### JavaScript Verification Still Required
+
+The HTML contains the required controls, but full completion of Create/Delete must only be declared after checking the current `character-introducer.js`.
+
+Verify:
+
+1. All Create IDs have corresponding DOM references and event listeners.
+2. All Delete IDs have corresponding DOM references and event listeners.
+3. Operation switching correctly shows/hides Write/Create/Delete workspaces.
+4. First/second target selection calculates the intended original gap.
+5. Create operations correctly compensate for cumulative `+N` shifts.
+6. Delete operations correctly compensate for cumulative `-N` shifts.
+7. Backspace mode joins content with safe spacing.
+8. Download activates only after successful modification.
+9. New Session resets operation mode, anchors, payloads, working lines and download state.
+
+## Updated Maintenance File Structure
+
+``` text
+developer/
+└── maintenance/
+    ├── maintenance.html
+    ├── citation-remover.html / .css / .js
+    ├── proof-reader.html / .css / .js
+    ├── shift-extractor.html / .css / .js
+    ├── answer-key-builder.html / .css / .js
+    ├── final-merger.html / .css / .js
+    └── character-introducer.html / .css / .js
+```
+
+`maintenance.html` remains the single mother page for all maintenance HTML utilities.
+
+## Engineering Decisions Confirmed
+
+1. Character Introducer remains browser-local and isolated from Student Portal runtime logic.
+2. Operations work on physical TXT lines.
+3. Only one physical line is displayed at a time during target selection.
+4. Two selected target lines establish the repeating positional gap.
+5. Insertions must compensate for cumulative positive line-index shifts.
+6. Deletions/backspace joins must compensate for cumulative negative line-index shifts.
+7. Backspace joins the target to the previous line with a separating space.
+8. The repeating target pattern must not drift as the working array is mutated.
+9. Modified content is exported as a new TXT rather than silently overwriting the source.
+10. Character Introducer must provide `← Maintenance Home` navigation.
+11. Only one `.page-header` should exist.
+12. Write-at-End and Write-in-Middle remain deferred.
+
+## Immediate Next Starting Point — Character Introducer
+
+1. Remove/verify removal of the duplicate nested page header.
+2. Review `character-introducer.js` ID-by-ID against the latest HTML.
+3. Test Create → Only New Line with at least three repeating targets.
+4. Verify cumulative insertion offsets do not cause target drift.
+5. Test Create → New Line with Payload.
+6. Test Delete → Delete Completely.
+7. Verify cumulative deletion offsets do not cause target drift.
+8. Test Delete → Use Backspace and verify safe spacing.
+9. Verify New Session resets all three operation families.
+10. Verify downloaded TXT exactly preserves the intended transformed structure.
+11. Define Write Exactly at End and Write in Middle / Somewhere only after the three current core operations are stable.
+
+------------------------------------------------------------------------
+
+# Development Timeline Addition (2026-07-23)
+
+| Date | Milestone |
+| --- | --- |
+| 2026-07-23 | Character Introducer Three-Operation Architecture Expanded |
+| 2026-07-23 | Create New Line — Blank Line and Payload Modes Defined |
+| 2026-07-23 | Cumulative `+N` Shift Handling Required for Insertions |
+| 2026-07-23 | Delete Line — Complete Delete and Backspace Modes Defined |
+| 2026-07-23 | Cumulative `-N` Shift Handling Required for Deletions |
+| 2026-07-23 | Backspace Join-with-Space Rule Defined |
+| 2026-07-23 | Character Introducer Maintenance Home Navigation Added |
+| 2026-07-23 | Duplicate Character Introducer Header Identified for Cleanup |
+| Next | Character Introducer JavaScript Full Functional Verification |
+| Next | Create/Delete End-to-End Repeating-Pattern Testing |
+| Next | Write-at-End / Write-in-Middle Behavior Definition |
+
+------------------------------------------------------------------------
+
+# Documentation Note (Updated: 2026-07-23 — Character Introducer)
 
 This document remains the single source of truth for the Conceptual Bridge project.
 
-The Mathematics metadata architecture described above is currently an **approved design decision / implementation plan**, not yet a confirmed completed code change.
+All previous content has been preserved. This update appends the latest Character Introducer architecture, Create New Line behavior, Delete Line behavior, cumulative line-index mutation rules, Maintenance Home navigation, current HTML verification state and immediate testing requirements.
 
-Future implementation must preserve all existing project behavior outside the Mathematics-specific scope unless separately approved.
+The HTML currently contains the structural controls for all three operation families. Create/Delete should be marked fully complete only after the corresponding JavaScript is reviewed and end-to-end tested.
+
+
+------------------------------------------------------------------------
+
+# Answer Key Builder GACA / Mathematics Mode Update (Added: 2026-07-23 — Session Close)
+
+## Current Status
+
+**Version:** Answer Key Builder vNext (GACA / Math Mode Foundation — Implementation In Progress)
+
+This update records the latest Answer Key Builder design and partial implementation state before closing the current development session.
+
+## New Subject-Mode Architecture
+
+When the Answer Key Builder is opened, it is intended to provide two subject workflow choices:
+
+``` text
+Answer Key Builder
+        │
+        ├── GACA
+        │    └── Existing Answer Key Builder workflow
+        │
+        └── MATH
+             └── Mathematics-specific single-TXT workflow
+```
+
+### GACA Mode
+
+GACA must preserve the currently established Answer Key Builder behavior.
+
+Existing supported source modes remain:
+
+``` text
+GACA
+├── 1 TXT — Single Question TXT
+└── 2 TXT — English + Bengali TXT
+```
+
+Existing GACA question-block detection remains based on:
+
+``` text
+Q|
+```
+
+No Mathematics-specific parser change may break or globally replace the existing GACA `Q|` behavior.
+
+### Mathematics Mode
+
+Mathematics must always use exactly:
+
+``` text
+1 TXT file
+```
+
+The filename may be any valid `.txt` filename; Math mode does not require an `E.txt` or `B.txt` filename suffix.
+
+Mathematics question blocks begin with:
+
+``` text
+QEN|
+```
+
+Approved Math block structure remains:
+
+``` text
+QEN| English question
+QBN| Bengali question
+Common| optional shared mathematical content
+Image| optional image path
+A| option A
+B| option B
+C| option C
+D| option D
+Shift| date + time
+---
+```
+
+For Answer Key Builder Math mode:
+
+``` text
+QEN| = question/block start marker
+```
+
+All following lines belong to that question until the next `QEN|` block begins.
+
+## Shared Answer-Key Functions
+
+Apart from source-mode selection and block-start parsing, Math should reuse the existing Answer Key Builder engine.
+
+Functions intended to remain shared:
+
+- Question Block Editor.
+- One-block-at-a-time display.
+- Previous / Next navigation.
+- Edit / Save.
+- A / B / C / D answer selection.
+- Block ↔ answer positional synchronization.
+- Answer Progress.
+- Answer Grid.
+- Answer Grid click navigation.
+- Output Validation.
+- Processing Console.
+- New Session.
+- Completion-only automatic movement to Answer Grid.
+- No unwanted page movement after normal answer selection.
+- `Ansopt1.txt` generation.
+- `Ansopt.txt` numbered generation.
+
+## Answer Output Rule Preserved
+
+The two current output formats remain:
+
+``` text
+Ansopt1.txt
+
+A
+
+B
+
+C
+
+D
+```
+
+and:
+
+``` text
+Ansopt.txt
+
+Q1 A
+
+Q2 B
+
+Q3 C
+
+Q4 D
+```
+
+Critical numbering rule:
+
+``` text
+Ansopt.txt ALWAYS begins with Q1.
+```
+
+This numbering is independent of the configured Initial Question Number.
+
+Example:
+
+``` text
+Initial Question No. = 501
+
+UI:
+501
+502
+503
+
+Ansopt.txt:
+Q1 A
+Q2 C
+Q3 B
+```
+
+## Partial GACA / Math Implementation Added
+
+The current Answer Key Builder JavaScript contains partial additions for:
+
+``` text
+#gacaModeBtn
+#mathModeBtn
+#selectedBuilderMode
+builderMode
+setBuilderMode()
+```
+
+The intended mode behavior is:
+
+``` text
+GACA
+→ existing source configuration available
+→ Q| block marker
+
+MATH
+→ force Number of Files = 1
+→ disable file-count switching
+→ QEN| block marker
+```
+
+Switching subject modes should clear previously loaded source state so a file parsed under one subject format cannot leak into another mode.
+
+## Important Current JavaScript Defects Identified
+
+The latest reviewed `answer-key-builder.js` is **not yet safe to deploy as final**.
+
+The following issues were identified:
+
+### 1. Duplicate `sourceMode` Declaration
+
+The file currently declares:
+
+``` javascript
+let sourceMode = 1;
+```
+
+twice in the same scope.
+
+This can stop the complete script with:
+
+``` text
+SyntaxError: Identifier 'sourceMode' has already been declared
+```
+
+Required correction:
+
+- Keep exactly one `let sourceMode = 1;`.
+- Keep `let builderMode = "gaca";` as a separate state variable.
+
+### 2. `questionStartMarker` Declared Too Early
+
+The current file contains a global expression conceptually equivalent to:
+
+``` javascript
+const questionStartMarker =
+    builderMode === "math"
+        ? "QEN|"
+        : "Q|";
+```
+
+before `builderMode` is initialized.
+
+This is incorrect and can cause initialization failure.
+
+Required correction:
+
+- Remove the global `questionStartMarker`.
+- Determine the marker dynamically inside `parseSourceBlocks()`.
+
+Required rule:
+
+``` text
+builderMode === "math"
+    → QEN|
+
+otherwise
+    → Q|
+```
+
+### 3. Parser Still Hard-Coded to `Q|`
+
+The current `parseSourceBlocks()` still uses:
+
+``` javascript
+trimmed.startsWith("Q|")
+```
+
+Therefore Math mode currently cannot correctly detect `QEN|` blocks.
+
+Required parser logic:
+
+``` javascript
+const questionStartMarker =
+    builderMode === "math"
+        ? "QEN|"
+        : "Q|";
+```
+
+Then block detection must use that variable.
+
+### 4. Math Single-TXT Enforcement Requires Final Verification
+
+`setBuilderMode("math")` is intended to:
+
+``` text
+fileCountInput.value = 1
+fileCountInput.disabled = true
+```
+
+`handleSourceModeChange()` should also defensively preserve Math as single-file mode.
+
+### 5. Math Start-Session Validation Still Required
+
+Before a Math answer session begins, verify:
+
+``` text
+builderMode = math
+sourceMode = 1
+single TXT is loaded
+at least one QEN| block was detected
+```
+
+If not, the session must not start.
+
+## Correct State Architecture Required
+
+The state section should conceptually contain only one copy of each variable:
+
+``` javascript
+let totalQuestions = 100;
+let initialQuestion = 1;
+let currentIndex = 0;
+let answers = [];
+let sessionActive = false;
+
+let sourceMode = 1;
+let builderMode = "gaca";
+
+let currentSourceBlockIndex = 0;
+```
+
+## Parser Architecture Required
+
+The next session should update `parseSourceBlocks()` so block detection is subject-aware:
+
+``` text
+GACA:
+Q| starts each block
+
+MATH:
+QEN| starts each block
+```
+
+For Math single-file mode, the complete block should remain visible/preserved, including:
+
+``` text
+QEN|
+QBN|
+Common|
+Image|
+A|
+B|
+C|
+D|
+Shift|
+---
+```
+
+The existing `"FULL_BLOCK"` single-source pathway is suitable for this architecture and should be preserved unless testing reveals a problem.
+
+## Regression Safety Rule
+
+Do **not** globally replace:
+
+``` text
+Q|
+```
+
+with:
+
+``` text
+QEN|
+```
+
+throughout `answer-key-builder.js`.
+
+That would break GACA and existing non-Math question files.
+
+Only subject-aware block detection should switch between the two markers.
+
+## Current Session Closure State
+
+### Confirmed / Preserved
+
+- ✅ Existing Answer Key Builder architecture retained.
+- ✅ Existing GACA behavior is intended to remain unchanged.
+- ✅ GACA / Math subject-mode design approved.
+- ✅ Math defined as exactly one TXT input.
+- ✅ Math `QEN|` block-start rule approved.
+- ✅ Math continues using the established `QEN|` / `QBN|` question format.
+- ✅ Existing answer navigation/grid/progress/validation/output logic is intended to be shared.
+- ✅ `Ansopt1.txt` and numbered `Ansopt.txt` output architecture preserved.
+- ✅ `Ansopt.txt` numbering remains independent of Initial Question Number.
+- 🟡 Mode-selection HTML/CSS/JS foundation partially introduced.
+- ⚠ Latest reviewed JS contains duplicate `sourceMode` declaration.
+- ⚠ Latest reviewed JS initializes `questionStartMarker` before `builderMode`.
+- ⚠ Parser remains hard-coded to `Q|`.
+- ⚠ Math start-session validation remains to be completed.
+- ⚠ End-to-end Math testing has not yet been completed.
+
+## Immediate Next Starting Point — Next Session
+
+Resume specifically from **Answer Key Builder GACA / Math repair and stabilization**:
+
+1. Open the latest `answer-key-builder.js`.
+2. Remove the duplicate `let sourceMode = 1;`.
+3. Remove the global `questionStartMarker`.
+4. Keep one `let builderMode = "gaca";`.
+5. Move subject-aware marker selection inside `parseSourceBlocks()`.
+6. Confirm:
+   - GACA → `Q|`
+   - Math → `QEN|`
+7. Ensure Math always forces exactly one TXT source.
+8. Add/verify Math source validation before Start Answer Session.
+9. Test a 2–3 question Math TXT containing `QEN|`, `QBN|`, `Common|`, `Image|`, options and `Shift|`.
+10. Verify Previous / Next and block editor synchronization.
+11. Verify Edit / Save.
+12. Verify A/B/C/D selection and automatic next-block movement.
+13. Verify Answer Grid click navigation.
+14. Verify no unwanted page scroll during normal answer selection.
+15. Verify completion-only automatic movement to Answer Grid.
+16. Verify `Ansopt1.txt`.
+17. Verify numbered `Ansopt.txt` starts from `Q1` regardless of Initial Question Number.
+18. Regression-test existing GACA single-TXT mode.
+19. Regression-test existing GACA English + Bengali mode.
+20. Only after both GACA and Math tests pass, mark the dual-mode Answer Key Builder complete.
+
+------------------------------------------------------------------------
+
+# Development Timeline Addition (2026-07-23 — Session Close)
+
+| Date | Milestone |
+| --- | --- |
+| 2026-07-23 | Answer Key Builder GACA / Math Dual-Mode Architecture Approved |
+| 2026-07-23 | GACA Existing Workflow Preservation Rule Confirmed |
+| 2026-07-23 | Math Answer Key Builder Defined as Single-TXT Only |
+| 2026-07-23 | Math `QEN|` Question-Block Start Rule Confirmed |
+| 2026-07-23 | Shared Answer/Grid/Validation/Output Engine Strategy Confirmed |
+| 2026-07-23 | Partial GACA / Math Mode Code Added |
+| 2026-07-23 | Duplicate `sourceMode` JavaScript Defect Identified |
+| 2026-07-23 | Premature Global `questionStartMarker` Defect Identified |
+| 2026-07-23 | Existing Parser Still Hard-Coded to `Q|` — Repair Required |
+| Next | Repair Answer Key Builder JavaScript Initialization |
+| Next | Implement Dynamic GACA `Q|` / Math `QEN|` Parsing |
+| Next | Add Math Start-Session Validation |
+| Next | Math Small-Set End-to-End Test |
+| Next | GACA Regression Test |
+
+------------------------------------------------------------------------
+
+# Session Handoff Note (2026-07-23)
+
+The next development session should **not restart the Answer Key Builder redesign from scratch**.
+
+The existing GACA Answer Key Builder is the baseline. The new Math workflow is an additional subject mode layered onto the same engine.
+
+The highest-priority repair is the current JavaScript initialization/parsing issue. Fix that first before adding further UI or functionality.
+
+The canonical subject rule is:
+
+``` text
+GACA → existing behavior → Q| block start
+MATH → exactly 1 TXT → QEN| block start
+```
+
+All other established answer-key behavior should remain shared and intact.
+
+------------------------------------------------------------------------
