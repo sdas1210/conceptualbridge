@@ -552,23 +552,235 @@
                 
                 </div>
 
-
-
                 <div
                     id="createWorkspace"
                     class="operation-panel hidden"
                 >
-
-                    <h3>
-                        Create a New Line
-                    </h3>
-
-                    <p>
-                        Configuration controls will be added
-                        after the operation rules are defined.
-                    </p>
-
+                
+                    <!-- CREATE MODE SELECTION -->
+                
+                    <div
+                        id="createModeSelection"
+                        class="write-mode-section"
+                    >
+                
+                        <h3>
+                            Create a New Line
+                        </h3>
+                
+                        <p class="workspace-help">
+                            Choose what type of new line
+                            you want to create.
+                        </p>
+                
+                
+                        <div class="write-mode-grid">
+                
+                            <button
+                                type="button"
+                                id="createBlankLineBtn"
+                                class="write-mode-card"
+                            >
+                
+                                <span class="mode-icon">
+                                    ＋
+                                </span>
+                
+                                <strong>
+                                    Only New Line
+                                </strong>
+                
+                                <small>
+                                    Create one blank line immediately
+                                    after each calculated target line.
+                                </small>
+                
+                            </button>
+                
+                
+                            <button
+                                type="button"
+                                id="createPayloadLineBtn"
+                                class="write-mode-card"
+                            >
+                
+                                <span class="mode-icon">
+                                    ✎
+                                </span>
+                
+                                <strong>
+                                    New Line with Payload
+                                </strong>
+                
+                                <small>
+                                    Create a new line after each target
+                                    and place your payload on that line.
+                                </small>
+                
+                            </button>
+                
+                        </div>
+                
+                    </div>
+                
+                
+                    <!-- CREATE PAYLOAD -->
+                
+                    <div
+                        id="createPayloadSection"
+                        class="payload-section hidden"
+                    >
+                
+                        <h3>
+                            Enter New-Line Payload
+                        </h3>
+                
+                        <p class="workspace-help">
+                            Enter exactly what should appear
+                            on the newly created line.
+                        </p>
+                
+                
+                        <textarea
+                            id="createPayloadInput"
+                            rows="4"
+                            placeholder="Type your payload here"
+                        ></textarea>
+                
+                
+                        <div class="payload-actions">
+                
+                            <button
+                                type="button"
+                                id="createPayloadOkBtn"
+                                class="workspace-primary-btn"
+                            >
+                                OK
+                            </button>
+                
+                        </div>
+                
+                    </div>
+                
+                
+                    <!-- CREATE LINE NAVIGATOR -->
+                
+                    <div
+                        id="createLineNavigator"
+                        class="line-navigator hidden"
+                    >
+                
+                        <div class="line-view-header">
+                
+                            <strong id="createCurrentLineLabel">
+                                Line 1
+                            </strong>
+                
+                            <span id="createAnchorStatus">
+                                Select first and second target lines
+                            </span>
+                
+                        </div>
+                
+                
+                        <textarea
+                            id="createCurrentLineViewer"
+                            rows="4"
+                            readonly
+                        ></textarea>
+                
+                
+                        <div class="line-controls">
+                
+                            <button
+                                type="button"
+                                id="createPreviousLineBtn"
+                                title="Previous Line"
+                            >
+                                🔼
+                            </button>
+                
+                            <button
+                                type="button"
+                                id="createNextLineBtn"
+                                title="Next Line"
+                            >
+                                🔽
+                            </button>
+                
+                
+                            <div class="control-spacer"></div>
+                
+                
+                            <button
+                                type="button"
+                                id="createFirstAnchorBtn"
+                                title="Set First Target"
+                            >
+                                1️⃣
+                            </button>
+                
+                            <button
+                                type="button"
+                                id="createSecondAnchorBtn"
+                                title="Set Second Target"
+                            >
+                                2️⃣
+                            </button>
+                
+                
+                            <div class="control-spacer"></div>
+                
+                
+                            <button
+                                type="button"
+                                id="createAdjustAnchorsBtn"
+                                title="Adjust Targets"
+                            >
+                                ⚙️
+                            </button>
+                
+                            <button
+                                type="button"
+                                id="createRunOperationBtn"
+                                title="Create New Lines"
+                                disabled
+                            >
+                                🆗
+                            </button>
+                
+                        </div>
+                
+                
+                        <div class="anchor-summary">
+                
+                            <div>
+                                <span>First Target</span>
+                                <strong id="createFirstAnchorDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Second Target</span>
+                                <strong id="createSecondAnchorDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>Original Gap</span>
+                                <strong id="createGapDisplay">—</strong>
+                            </div>
+                
+                            <div>
+                                <span>New Lines</span>
+                                <strong id="createTargetCountDisplay">—</strong>
+                            </div>
+                
+                        </div>
+                
+                    </div>
+                
                 </div>
+
+              
 
 
                 <div
