@@ -2800,33 +2800,34 @@ Regression-test non-Math subjects unchanged
 
 # Development Timeline Addition (2026-07-22)
 
-  -----------------------------------------------------------------------
-  Date                                Milestone
-  ----------------------------------- -----------------------------------
-  2026-07-22                          Mathematics Mixed-Topic Metadata
-                                      Problem Identified
+  ---------------------------------------------------------------------
+  Date                               Milestone
+  ---------------------------------- ----------------------------------
+  2026-07-22                         Mathematics Mixed-Topic Metadata
+                                     Problem Identified
 
-  2026-07-22                          Math-Only Global + Question-Level
-                                      Topic/SubTopic Architecture Defined
+  2026-07-22                         Math-Only Global + Question-Level
+                                     Topic/SubTopic Architecture
+                                     Defined
 
-  2026-07-22                          Mathematics Metadata Inheritance /
-                                      Override Rule Defined
+  2026-07-22                         Mathematics Metadata Inheritance /
+                                     Override Rule Defined
 
-  2026-07-22                          Non-Math Subjects Explicitly
-                                      Excluded From Current Change
+  2026-07-22                         Non-Math Subjects Explicitly
+                                     Excluded From Current Change
 
-  Next                                Review `questionParser.js` and
-                                      Representative Math TXT
+  Next                               Review `questionParser.js` and
+                                     Representative Math TXT
 
-  Next                                Implement Math-Only Topic/SubTopic
-                                      Inheritance
+  Next                               Implement Math-Only Topic/SubTopic
+                                     Inheritance
 
-  Next                                Verify Exam Corner and Tutorial
-                                      APIs
+  Next                               Verify Exam Corner and Tutorial
+                                     APIs
 
-  Next                                Regression-Test GI / GS / GACA
-                                      Unchanged
-  -----------------------------------------------------------------------
+  Next                               Regression-Test GI / GS / GACA
+                                     Unchanged
+  ---------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
@@ -3096,45 +3097,45 @@ Final parser/API validation
 
 # Development Timeline Addition (2026-07-23)
 
-  -----------------------------------------------------------------------
-  Date                                Milestone
-  ----------------------------------- -----------------------------------
-  2026-07-23                          Math Slash-Based Bilingual
-                                      Separator Rejected
+  ---------------------------------------------------------------------
+  Date                               Milestone
+  ---------------------------------- ----------------------------------
+  2026-07-23                         Math Slash-Based Bilingual
+                                     Separator Rejected
 
-  2026-07-23                          `QEN|` + `QBN|` Math-Only Bilingual
-                                      Architecture Adopted
+  2026-07-23                         `QEN|` + `QBN|` Math-Only
+                                     Bilingual Architecture Adopted
 
-  2026-07-23                          `Common|` + `Image|` Reserved Math
-                                      Fields Confirmed
+  2026-07-23                         `Common|` + `Image|` Reserved Math
+                                     Fields Confirmed
 
-  2026-07-23                          Same-Line `Shift|` Date + Time
-                                      Format Confirmed
+  2026-07-23                         Same-Line `Shift|` Date + Time
+                                     Format Confirmed
 
-  2026-07-23                          Representative Math TXT Reviewed
+  2026-07-23                         Representative Math TXT Reviewed
 
-  2026-07-23                          Duplicate Marker and Bengali
-                                      Cleanup Issues Identified
+  2026-07-23                         Duplicate Marker and Bengali
+                                     Cleanup Issues Identified
 
-  2026-07-23                          Character Introducer
-                                      Create-New-Line Second Layer
-                                      Defined
+  2026-07-23                         Character Introducer
+                                     Create-New-Line Second Layer
+                                     Defined
 
-  2026-07-23                          Bottom-to-Top Line Insertion Safety
-                                      Rule Defined
+  2026-07-23                         Bottom-to-Top Line Insertion
+                                     Safety Rule Defined
 
-  Next                                Implement Character Introducer
-                                      Create-New-Line Operation
+  Next                               Implement Character Introducer
+                                     Create-New-Line Operation
 
-  Next                                Finalize Math TXT Structural
-                                      Validation
+  Next                               Finalize Math TXT Structural
+                                     Validation
 
-  Next                                Implement Math-Only Parser Support
-                                      for `QEN|` / `QBN|`
+  Next                               Implement Math-Only Parser Support
+                                     for `QEN|` / `QBN|`
 
-  Next                                Regression-Test Non-Math Subjects
-                                      Unchanged
-  -----------------------------------------------------------------------
+  Next                               Regression-Test Non-Math Subjects
+                                     Unchanged
+  ---------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
@@ -3149,20 +3150,22 @@ reviewed and updated.
 
 All historical project content remains preserved.
 
-
 ------------------------------------------------------------------------
 
 # Character Introducer Progress Update (Added: 2026-07-23)
 
 ## Current Status
 
-**Version:** Character Introducer v0.3 (Three Core Line Operations / Maintenance Navigation)
+**Version:** Character Introducer v0.3 (Three Core Line Operations /
+Maintenance Navigation)
 
-This update records the latest Character Introducer development while preserving all previous project history.
+This update records the latest Character Introducer development while
+preserving all previous project history.
 
 ## Purpose and Workflow
 
-Character Introducer is a browser-local TXT maintenance utility for repeated, position-based physical-line transformations.
+Character Introducer is a browser-local TXT maintenance utility for
+repeated, position-based physical-line transformations.
 
 ``` text
 Upload TXT
@@ -3187,18 +3190,22 @@ Generate Modified TXT
 Download
 ```
 
-The first and second selected target lines define the repeating positional pattern.
+The first and second selected target lines define the repeating
+positional pattern.
 
 ## Maintenance Home Integration
 
-`character-introducer.html` belongs under the Developer Maintenance Suite and now requires/directly supports:
+`character-introducer.html` belongs under the Developer Maintenance
+Suite and now requires/directly supports:
 
 ``` text
 ← Maintenance Home
 → maintenance.html
 ```
 
-A review of the latest HTML found an accidental duplicate nested `<header class="page-header">` and duplicated Character Introducer title/description.
+A review of the latest HTML found an accidental duplicate nested
+`<header class="page-header">` and duplicated Character Introducer
+title/description.
 
 Required final structure:
 
@@ -3213,7 +3220,7 @@ Page Header
 
 Only one outer `.page-header` should remain.
 
-## Operation 1 — Write in a Line
+## Operation 1 --- Write in a Line
 
 Available modes:
 
@@ -3257,9 +3264,10 @@ Workspace controls:
 🆗 Run Operation
 ```
 
-`Write Exactly at End` and `Write in Middle / Somewhere` remain deferred until their exact behavior is defined.
+`Write Exactly at End` and `Write in Middle / Somewhere` remain deferred
+until their exact behavior is defined.
 
-## Operation 2 — Create a New Line
+## Operation 2 --- Create a New Line
 
 **Status:** UI/workspace structure added; behavior defined.
 
@@ -3273,7 +3281,8 @@ Create a New Line
 
 ### Only New Line
 
-Creates one blank physical line immediately after each calculated target.
+Creates one blank physical line immediately after each calculated
+target.
 
 Example:
 
@@ -3292,7 +3301,8 @@ D| 25
 
 ### New Line with Payload
 
-Creates a new physical line after each target and writes the supplied payload there.
+Creates a new physical line after each target and writes the supplied
+payload there.
 
 Example payload:
 
@@ -3325,7 +3335,9 @@ Insertion changes later physical line indices:
 N inserted lines → following positions shift by +N
 ```
 
-The engine must preserve the original repeating target pattern while compensating for cumulative insertion offsets. It must not allow target drift caused by mutating the working line array.
+The engine must preserve the original repeating target pattern while
+compensating for cumulative insertion offsets. It must not allow target
+drift caused by mutating the working line array.
 
 Create workspace controls include:
 
@@ -3340,7 +3352,7 @@ Original Gap
 New Lines count
 ```
 
-## Operation 3 — Delete a Line
+## Operation 3 --- Delete a Line
 
 **Status:** UI/workspace structure added; behavior defined.
 
@@ -3375,7 +3387,8 @@ when `C| 20` is targeted.
 
 ### Use Backspace
 
-Removes the newline before the target and joins the target content to the previous line.
+Removes the newline before the target and joins the target content to
+the previous line.
 
 Example:
 
@@ -3392,7 +3405,8 @@ B| 10 C| 20
 D| 25
 ```
 
-A separating space must exist between the previous content and the shifted target content.
+A separating space must exist between the previous content and the
+shifted target content.
 
 Conceptual rule:
 
@@ -3400,7 +3414,8 @@ Conceptual rule:
 previous line + " " + target line
 ```
 
-The implementation should avoid accidental double spaces while preventing concatenation without a separator.
+The implementation should avoid accidental double spaces while
+preventing concatenation without a separator.
 
 ### Cumulative Deletion Rule
 
@@ -3412,7 +3427,8 @@ Deletion/backspace joining changes later physical line indices:
 N removed lines → following positions shift by -N
 ```
 
-Target selection must remain based on the original repeating pattern while execution compensates for cumulative deletion offsets.
+Target selection must remain based on the original repeating pattern
+while execution compensates for cumulative deletion offsets.
 
 Delete workspace controls include:
 
@@ -3466,38 +3482,45 @@ Important Delete IDs:
 
 ### HTML
 
-- ✅ TXT File Upload section present.
-- ✅ Select Operation section present.
-- ✅ Write workspace present.
-- ✅ Create New Line workspace present.
-- ✅ Delete Line workspace present.
-- ✅ File Information section present.
-- ✅ Processing Console present.
-- ✅ New Session and Download Modified TXT actions present.
-- ✅ Maintenance Home navigation added.
-- ⚠ Duplicate nested page header/title block identified; remove it if not already corrected.
+-   ✅ TXT File Upload section present.
+-   ✅ Select Operation section present.
+-   ✅ Write workspace present.
+-   ✅ Create New Line workspace present.
+-   ✅ Delete Line workspace present.
+-   ✅ File Information section present.
+-   ✅ Processing Console present.
+-   ✅ New Session and Download Modified TXT actions present.
+-   ✅ Maintenance Home navigation added.
+-   ⚠ Duplicate nested page header/title block identified; remove it if
+    not already corrected.
 
 ### CSS
 
-- ✅ Existing Character Introducer visual architecture retained.
-- ✅ Maintenance Home button styling added/required.
-- 🟡 Final visual verification required after header cleanup.
+-   ✅ Existing Character Introducer visual architecture retained.
+-   ✅ Maintenance Home button styling added/required.
+-   🟡 Final visual verification required after header cleanup.
 
 ### JavaScript Verification Still Required
 
-The HTML contains the required controls, but full completion of Create/Delete must only be declared after checking the current `character-introducer.js`.
+The HTML contains the required controls, but full completion of
+Create/Delete must only be declared after checking the current
+`character-introducer.js`.
 
 Verify:
 
-1. All Create IDs have corresponding DOM references and event listeners.
-2. All Delete IDs have corresponding DOM references and event listeners.
-3. Operation switching correctly shows/hides Write/Create/Delete workspaces.
-4. First/second target selection calculates the intended original gap.
-5. Create operations correctly compensate for cumulative `+N` shifts.
-6. Delete operations correctly compensate for cumulative `-N` shifts.
-7. Backspace mode joins content with safe spacing.
-8. Download activates only after successful modification.
-9. New Session resets operation mode, anchors, payloads, working lines and download state.
+1.  All Create IDs have corresponding DOM references and event
+    listeners.
+2.  All Delete IDs have corresponding DOM references and event
+    listeners.
+3.  Operation switching correctly shows/hides Write/Create/Delete
+    workspaces.
+4.  First/second target selection calculates the intended original gap.
+5.  Create operations correctly compensate for cumulative `+N` shifts.
+6.  Delete operations correctly compensate for cumulative `-N` shifts.
+7.  Backspace mode joins content with safe spacing.
+8.  Download activates only after successful modification.
+9.  New Session resets operation mode, anchors, payloads, working lines
+    and download state.
 
 ## Updated Maintenance File Structure
 
@@ -3513,79 +3536,122 @@ developer/
     └── character-introducer.html / .css / .js
 ```
 
-`maintenance.html` remains the single mother page for all maintenance HTML utilities.
+`maintenance.html` remains the single mother page for all maintenance
+HTML utilities.
 
 ## Engineering Decisions Confirmed
 
-1. Character Introducer remains browser-local and isolated from Student Portal runtime logic.
-2. Operations work on physical TXT lines.
-3. Only one physical line is displayed at a time during target selection.
-4. Two selected target lines establish the repeating positional gap.
-5. Insertions must compensate for cumulative positive line-index shifts.
-6. Deletions/backspace joins must compensate for cumulative negative line-index shifts.
-7. Backspace joins the target to the previous line with a separating space.
-8. The repeating target pattern must not drift as the working array is mutated.
-9. Modified content is exported as a new TXT rather than silently overwriting the source.
+1.  Character Introducer remains browser-local and isolated from Student
+    Portal runtime logic.
+2.  Operations work on physical TXT lines.
+3.  Only one physical line is displayed at a time during target
+    selection.
+4.  Two selected target lines establish the repeating positional gap.
+5.  Insertions must compensate for cumulative positive line-index
+    shifts.
+6.  Deletions/backspace joins must compensate for cumulative negative
+    line-index shifts.
+7.  Backspace joins the target to the previous line with a separating
+    space.
+8.  The repeating target pattern must not drift as the working array is
+    mutated.
+9.  Modified content is exported as a new TXT rather than silently
+    overwriting the source.
 10. Character Introducer must provide `← Maintenance Home` navigation.
 11. Only one `.page-header` should exist.
 12. Write-at-End and Write-in-Middle remain deferred.
 
-## Immediate Next Starting Point — Character Introducer
+## Immediate Next Starting Point --- Character Introducer
 
-1. Remove/verify removal of the duplicate nested page header.
-2. Review `character-introducer.js` ID-by-ID against the latest HTML.
-3. Test Create → Only New Line with at least three repeating targets.
-4. Verify cumulative insertion offsets do not cause target drift.
-5. Test Create → New Line with Payload.
-6. Test Delete → Delete Completely.
-7. Verify cumulative deletion offsets do not cause target drift.
-8. Test Delete → Use Backspace and verify safe spacing.
-9. Verify New Session resets all three operation families.
-10. Verify downloaded TXT exactly preserves the intended transformed structure.
-11. Define Write Exactly at End and Write in Middle / Somewhere only after the three current core operations are stable.
+1.  Remove/verify removal of the duplicate nested page header.
+2.  Review `character-introducer.js` ID-by-ID against the latest HTML.
+3.  Test Create → Only New Line with at least three repeating targets.
+4.  Verify cumulative insertion offsets do not cause target drift.
+5.  Test Create → New Line with Payload.
+6.  Test Delete → Delete Completely.
+7.  Verify cumulative deletion offsets do not cause target drift.
+8.  Test Delete → Use Backspace and verify safe spacing.
+9.  Verify New Session resets all three operation families.
+10. Verify downloaded TXT exactly preserves the intended transformed
+    structure.
+11. Define Write Exactly at End and Write in Middle / Somewhere only
+    after the three current core operations are stable.
 
 ------------------------------------------------------------------------
 
 # Development Timeline Addition (2026-07-23)
 
-| Date | Milestone |
-| --- | --- |
-| 2026-07-23 | Character Introducer Three-Operation Architecture Expanded |
-| 2026-07-23 | Create New Line — Blank Line and Payload Modes Defined |
-| 2026-07-23 | Cumulative `+N` Shift Handling Required for Insertions |
-| 2026-07-23 | Delete Line — Complete Delete and Backspace Modes Defined |
-| 2026-07-23 | Cumulative `-N` Shift Handling Required for Deletions |
-| 2026-07-23 | Backspace Join-with-Space Rule Defined |
-| 2026-07-23 | Character Introducer Maintenance Home Navigation Added |
-| 2026-07-23 | Duplicate Character Introducer Header Identified for Cleanup |
-| Next | Character Introducer JavaScript Full Functional Verification |
-| Next | Create/Delete End-to-End Repeating-Pattern Testing |
-| Next | Write-at-End / Write-in-Middle Behavior Definition |
+  -----------------------------------------------------------------------
+  Date                                Milestone
+  ----------------------------------- -----------------------------------
+  2026-07-23                          Character Introducer
+                                      Three-Operation Architecture
+                                      Expanded
+
+  2026-07-23                          Create New Line --- Blank Line and
+                                      Payload Modes Defined
+
+  2026-07-23                          Cumulative `+N` Shift Handling
+                                      Required for Insertions
+
+  2026-07-23                          Delete Line --- Complete Delete and
+                                      Backspace Modes Defined
+
+  2026-07-23                          Cumulative `-N` Shift Handling
+                                      Required for Deletions
+
+  2026-07-23                          Backspace Join-with-Space Rule
+                                      Defined
+
+  2026-07-23                          Character Introducer Maintenance
+                                      Home Navigation Added
+
+  2026-07-23                          Duplicate Character Introducer
+                                      Header Identified for Cleanup
+
+  Next                                Character Introducer JavaScript
+                                      Full Functional Verification
+
+  Next                                Create/Delete End-to-End
+                                      Repeating-Pattern Testing
+
+  Next                                Write-at-End / Write-in-Middle
+                                      Behavior Definition
+  -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
-# Documentation Note (Updated: 2026-07-23 — Character Introducer)
+# Documentation Note (Updated: 2026-07-23 --- Character Introducer)
 
-This document remains the single source of truth for the Conceptual Bridge project.
+This document remains the single source of truth for the Conceptual
+Bridge project.
 
-All previous content has been preserved. This update appends the latest Character Introducer architecture, Create New Line behavior, Delete Line behavior, cumulative line-index mutation rules, Maintenance Home navigation, current HTML verification state and immediate testing requirements.
+All previous content has been preserved. This update appends the latest
+Character Introducer architecture, Create New Line behavior, Delete Line
+behavior, cumulative line-index mutation rules, Maintenance Home
+navigation, current HTML verification state and immediate testing
+requirements.
 
-The HTML currently contains the structural controls for all three operation families. Create/Delete should be marked fully complete only after the corresponding JavaScript is reviewed and end-to-end tested.
-
+The HTML currently contains the structural controls for all three
+operation families. Create/Delete should be marked fully complete only
+after the corresponding JavaScript is reviewed and end-to-end tested.
 
 ------------------------------------------------------------------------
 
-# Answer Key Builder GACA / Mathematics Mode Update (Added: 2026-07-23 — Session Close)
+# Answer Key Builder GACA / Mathematics Mode Update (Added: 2026-07-23 --- Session Close)
 
 ## Current Status
 
-**Version:** Answer Key Builder vNext (GACA / Math Mode Foundation — Implementation In Progress)
+**Version:** Answer Key Builder vNext (GACA / Math Mode Foundation ---
+Implementation In Progress)
 
-This update records the latest Answer Key Builder design and partial implementation state before closing the current development session.
+This update records the latest Answer Key Builder design and partial
+implementation state before closing the current development session.
 
 ## New Subject-Mode Architecture
 
-When the Answer Key Builder is opened, it is intended to provide two subject workflow choices:
+When the Answer Key Builder is opened, it is intended to provide two
+subject workflow choices:
 
 ``` text
 Answer Key Builder
@@ -3599,7 +3665,8 @@ Answer Key Builder
 
 ### GACA Mode
 
-GACA must preserve the currently established Answer Key Builder behavior.
+GACA must preserve the currently established Answer Key Builder
+behavior.
 
 Existing supported source modes remain:
 
@@ -3615,7 +3682,8 @@ Existing GACA question-block detection remains based on:
 Q|
 ```
 
-No Mathematics-specific parser change may break or globally replace the existing GACA `Q|` behavior.
+No Mathematics-specific parser change may break or globally replace the
+existing GACA `Q|` behavior.
 
 ### Mathematics Mode
 
@@ -3625,7 +3693,8 @@ Mathematics must always use exactly:
 1 TXT file
 ```
 
-The filename may be any valid `.txt` filename; Math mode does not require an `E.txt` or `B.txt` filename suffix.
+The filename may be any valid `.txt` filename; Math mode does not
+require an `E.txt` or `B.txt` filename suffix.
 
 Mathematics question blocks begin with:
 
@@ -3654,30 +3723,32 @@ For Answer Key Builder Math mode:
 QEN| = question/block start marker
 ```
 
-All following lines belong to that question until the next `QEN|` block begins.
+All following lines belong to that question until the next `QEN|` block
+begins.
 
 ## Shared Answer-Key Functions
 
-Apart from source-mode selection and block-start parsing, Math should reuse the existing Answer Key Builder engine.
+Apart from source-mode selection and block-start parsing, Math should
+reuse the existing Answer Key Builder engine.
 
 Functions intended to remain shared:
 
-- Question Block Editor.
-- One-block-at-a-time display.
-- Previous / Next navigation.
-- Edit / Save.
-- A / B / C / D answer selection.
-- Block ↔ answer positional synchronization.
-- Answer Progress.
-- Answer Grid.
-- Answer Grid click navigation.
-- Output Validation.
-- Processing Console.
-- New Session.
-- Completion-only automatic movement to Answer Grid.
-- No unwanted page movement after normal answer selection.
-- `Ansopt1.txt` generation.
-- `Ansopt.txt` numbered generation.
+-   Question Block Editor.
+-   One-block-at-a-time display.
+-   Previous / Next navigation.
+-   Edit / Save.
+-   A / B / C / D answer selection.
+-   Block ↔ answer positional synchronization.
+-   Answer Progress.
+-   Answer Grid.
+-   Answer Grid click navigation.
+-   Output Validation.
+-   Processing Console.
+-   New Session.
+-   Completion-only automatic movement to Answer Grid.
+-   No unwanted page movement after normal answer selection.
+-   `Ansopt1.txt` generation.
+-   `Ansopt.txt` numbered generation.
 
 ## Answer Output Rule Preserved
 
@@ -3735,7 +3806,8 @@ Q3 B
 
 ## Partial GACA / Math Implementation Added
 
-The current Answer Key Builder JavaScript contains partial additions for:
+The current Answer Key Builder JavaScript contains partial additions
+for:
 
 ``` text
 #gacaModeBtn
@@ -3758,11 +3830,13 @@ MATH
 → QEN| block marker
 ```
 
-Switching subject modes should clear previously loaded source state so a file parsed under one subject format cannot leak into another mode.
+Switching subject modes should clear previously loaded source state so a
+file parsed under one subject format cannot leak into another mode.
 
 ## Important Current JavaScript Defects Identified
 
-The latest reviewed `answer-key-builder.js` is **not yet safe to deploy as final**.
+The latest reviewed `answer-key-builder.js` is **not yet safe to deploy
+as final**.
 
 The following issues were identified:
 
@@ -3784,12 +3858,13 @@ SyntaxError: Identifier 'sourceMode' has already been declared
 
 Required correction:
 
-- Keep exactly one `let sourceMode = 1;`.
-- Keep `let builderMode = "gaca";` as a separate state variable.
+-   Keep exactly one `let sourceMode = 1;`.
+-   Keep `let builderMode = "gaca";` as a separate state variable.
 
 ### 2. `questionStartMarker` Declared Too Early
 
-The current file contains a global expression conceptually equivalent to:
+The current file contains a global expression conceptually equivalent
+to:
 
 ``` javascript
 const questionStartMarker =
@@ -3804,8 +3879,8 @@ This is incorrect and can cause initialization failure.
 
 Required correction:
 
-- Remove the global `questionStartMarker`.
-- Determine the marker dynamically inside `parseSourceBlocks()`.
+-   Remove the global `questionStartMarker`.
+-   Determine the marker dynamically inside `parseSourceBlocks()`.
 
 Required rule:
 
@@ -3847,7 +3922,8 @@ fileCountInput.value = 1
 fileCountInput.disabled = true
 ```
 
-`handleSourceModeChange()` should also defensively preserve Math as single-file mode.
+`handleSourceModeChange()` should also defensively preserve Math as
+single-file mode.
 
 ### 5. Math Start-Session Validation Still Required
 
@@ -3864,7 +3940,8 @@ If not, the session must not start.
 
 ## Correct State Architecture Required
 
-The state section should conceptually contain only one copy of each variable:
+The state section should conceptually contain only one copy of each
+variable:
 
 ``` javascript
 let totalQuestions = 100;
@@ -3881,7 +3958,8 @@ let currentSourceBlockIndex = 0;
 
 ## Parser Architecture Required
 
-The next session should update `parseSourceBlocks()` so block detection is subject-aware:
+The next session should update `parseSourceBlocks()` so block detection
+is subject-aware:
 
 ``` text
 GACA:
@@ -3891,7 +3969,8 @@ MATH:
 QEN| starts each block
 ```
 
-For Math single-file mode, the complete block should remain visible/preserved, including:
+For Math single-file mode, the complete block should remain
+visible/preserved, including:
 
 ``` text
 QEN|
@@ -3906,7 +3985,8 @@ Shift|
 ---
 ```
 
-The existing `"FULL_BLOCK"` single-source pathway is suitable for this architecture and should be preserved unless testing reveals a problem.
+The existing `"FULL_BLOCK"` single-source pathway is suitable for this
+architecture and should be preserved unless testing reveals a problem.
 
 ## Regression Safety Rule
 
@@ -3926,43 +4006,51 @@ throughout `answer-key-builder.js`.
 
 That would break GACA and existing non-Math question files.
 
-Only subject-aware block detection should switch between the two markers.
+Only subject-aware block detection should switch between the two
+markers.
 
 ## Current Session Closure State
 
 ### Confirmed / Preserved
 
-- ✅ Existing Answer Key Builder architecture retained.
-- ✅ Existing GACA behavior is intended to remain unchanged.
-- ✅ GACA / Math subject-mode design approved.
-- ✅ Math defined as exactly one TXT input.
-- ✅ Math `QEN|` block-start rule approved.
-- ✅ Math continues using the established `QEN|` / `QBN|` question format.
-- ✅ Existing answer navigation/grid/progress/validation/output logic is intended to be shared.
-- ✅ `Ansopt1.txt` and numbered `Ansopt.txt` output architecture preserved.
-- ✅ `Ansopt.txt` numbering remains independent of Initial Question Number.
-- 🟡 Mode-selection HTML/CSS/JS foundation partially introduced.
-- ⚠ Latest reviewed JS contains duplicate `sourceMode` declaration.
-- ⚠ Latest reviewed JS initializes `questionStartMarker` before `builderMode`.
-- ⚠ Parser remains hard-coded to `Q|`.
-- ⚠ Math start-session validation remains to be completed.
-- ⚠ End-to-end Math testing has not yet been completed.
+-   ✅ Existing Answer Key Builder architecture retained.
+-   ✅ Existing GACA behavior is intended to remain unchanged.
+-   ✅ GACA / Math subject-mode design approved.
+-   ✅ Math defined as exactly one TXT input.
+-   ✅ Math `QEN|` block-start rule approved.
+-   ✅ Math continues using the established `QEN|` / `QBN|` question
+    format.
+-   ✅ Existing answer navigation/grid/progress/validation/output logic
+    is intended to be shared.
+-   ✅ `Ansopt1.txt` and numbered `Ansopt.txt` output architecture
+    preserved.
+-   ✅ `Ansopt.txt` numbering remains independent of Initial Question
+    Number.
+-   🟡 Mode-selection HTML/CSS/JS foundation partially introduced.
+-   ⚠ Latest reviewed JS contains duplicate `sourceMode` declaration.
+-   ⚠ Latest reviewed JS initializes `questionStartMarker` before
+    `builderMode`.
+-   ⚠ Parser remains hard-coded to `Q|`.
+-   ⚠ Math start-session validation remains to be completed.
+-   ⚠ End-to-end Math testing has not yet been completed.
 
-## Immediate Next Starting Point — Next Session
+## Immediate Next Starting Point --- Next Session
 
-Resume specifically from **Answer Key Builder GACA / Math repair and stabilization**:
+Resume specifically from **Answer Key Builder GACA / Math repair and
+stabilization**:
 
-1. Open the latest `answer-key-builder.js`.
-2. Remove the duplicate `let sourceMode = 1;`.
-3. Remove the global `questionStartMarker`.
-4. Keep one `let builderMode = "gaca";`.
-5. Move subject-aware marker selection inside `parseSourceBlocks()`.
-6. Confirm:
-   - GACA → `Q|`
-   - Math → `QEN|`
-7. Ensure Math always forces exactly one TXT source.
-8. Add/verify Math source validation before Start Answer Session.
-9. Test a 2–3 question Math TXT containing `QEN|`, `QBN|`, `Common|`, `Image|`, options and `Shift|`.
+1.  Open the latest `answer-key-builder.js`.
+2.  Remove the duplicate `let sourceMode = 1;`.
+3.  Remove the global `questionStartMarker`.
+4.  Keep one `let builderMode = "gaca";`.
+5.  Move subject-aware marker selection inside `parseSourceBlocks()`.
+6.  Confirm:
+    -   GACA → `Q|`
+    -   Math → `QEN|`
+7.  Ensure Math always forces exactly one TXT source.
+8.  Add/verify Math source validation before Start Answer Session.
+9.  Test a 2--3 question Math TXT containing `QEN|`, `QBN|`, `Common|`,
+    `Image|`, options and `Shift|`.
 10. Verify Previous / Next and block editor synchronization.
 11. Verify Edit / Save.
 12. Verify A/B/C/D selection and automatic next-block movement.
@@ -3970,41 +4058,74 @@ Resume specifically from **Answer Key Builder GACA / Math repair and stabilizati
 14. Verify no unwanted page scroll during normal answer selection.
 15. Verify completion-only automatic movement to Answer Grid.
 16. Verify `Ansopt1.txt`.
-17. Verify numbered `Ansopt.txt` starts from `Q1` regardless of Initial Question Number.
+17. Verify numbered `Ansopt.txt` starts from `Q1` regardless of Initial
+    Question Number.
 18. Regression-test existing GACA single-TXT mode.
 19. Regression-test existing GACA English + Bengali mode.
-20. Only after both GACA and Math tests pass, mark the dual-mode Answer Key Builder complete.
+20. Only after both GACA and Math tests pass, mark the dual-mode Answer
+    Key Builder complete.
 
 ------------------------------------------------------------------------
 
-# Development Timeline Addition (2026-07-23 — Session Close)
+# Development Timeline Addition (2026-07-23 --- Session Close)
 
-| Date | Milestone |
-| --- | --- |
-| 2026-07-23 | Answer Key Builder GACA / Math Dual-Mode Architecture Approved |
-| 2026-07-23 | GACA Existing Workflow Preservation Rule Confirmed |
-| 2026-07-23 | Math Answer Key Builder Defined as Single-TXT Only |
-| 2026-07-23 | Math `QEN|` Question-Block Start Rule Confirmed |
-| 2026-07-23 | Shared Answer/Grid/Validation/Output Engine Strategy Confirmed |
-| 2026-07-23 | Partial GACA / Math Mode Code Added |
-| 2026-07-23 | Duplicate `sourceMode` JavaScript Defect Identified |
-| 2026-07-23 | Premature Global `questionStartMarker` Defect Identified |
-| 2026-07-23 | Existing Parser Still Hard-Coded to `Q|` — Repair Required |
-| Next | Repair Answer Key Builder JavaScript Initialization |
-| Next | Implement Dynamic GACA `Q|` / Math `QEN|` Parsing |
-| Next | Add Math Start-Session Validation |
-| Next | Math Small-Set End-to-End Test |
-| Next | GACA Regression Test |
+  -----------------------------------------------------------------------
+  Date                                Milestone
+  ----------------------------------- -----------------------------------
+  2026-07-23                          Answer Key Builder GACA / Math
+                                      Dual-Mode Architecture Approved
+
+  2026-07-23                          GACA Existing Workflow Preservation
+                                      Rule Confirmed
+
+  2026-07-23                          Math Answer Key Builder Defined as
+                                      Single-TXT Only
+
+  2026-07-23                          Math `QEN|` Question-Block Start
+                                      Rule Confirmed
+
+  2026-07-23                          Shared
+                                      Answer/Grid/Validation/Output
+                                      Engine Strategy Confirmed
+
+  2026-07-23                          Partial GACA / Math Mode Code Added
+
+  2026-07-23                          Duplicate `sourceMode` JavaScript
+                                      Defect Identified
+
+  2026-07-23                          Premature Global
+                                      `questionStartMarker` Defect
+                                      Identified
+
+  2026-07-23                          Existing Parser Still Hard-Coded to
+                                      `Q|` --- Repair Required
+
+  Next                                Repair Answer Key Builder
+                                      JavaScript Initialization
+
+  Next                                Implement Dynamic GACA `Q|` / Math
+                                      `QEN|` Parsing
+
+  Next                                Add Math Start-Session Validation
+
+  Next                                Math Small-Set End-to-End Test
+
+  Next                                GACA Regression Test
+  -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
 # Session Handoff Note (2026-07-23)
 
-The next development session should **not restart the Answer Key Builder redesign from scratch**.
+The next development session should **not restart the Answer Key Builder
+redesign from scratch**.
 
-The existing GACA Answer Key Builder is the baseline. The new Math workflow is an additional subject mode layered onto the same engine.
+The existing GACA Answer Key Builder is the baseline. The new Math
+workflow is an additional subject mode layered onto the same engine.
 
-The highest-priority repair is the current JavaScript initialization/parsing issue. Fix that first before adding further UI or functionality.
+The highest-priority repair is the current JavaScript
+initialization/parsing issue. Fix that first before adding further UI or
+functionality.
 
 The canonical subject rule is:
 
@@ -4013,6 +4134,125 @@ GACA → existing behavior → Q| block start
 MATH → exactly 1 TXT → QEN| block start
 ```
 
-All other established answer-key behavior should remain shared and intact.
+All other established answer-key behavior should remain shared and
+intact.
 
 ------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Exam Corner Mathematics Compatibility Review (Added: 2026-07-24)
+
+## Current Status
+
+**Version:** Mathematics Exam Corner Compatibility v0.1 (Review Complete
+/ Implementation Pending)
+
+This session reviewed why Mathematics questions were not appearing in
+the Exam Corner even though Mathematics TXT files were available.
+
+## Findings
+
+-   The issue is a parser compatibility mismatch rather than missing
+    question files.
+-   Mathematics folder naming must remain consistent (`questions/math/`)
+    across the project for case-sensitive deployments.
+-   The current parser recognizes `Q|`, while the new Mathematics format
+    uses `QEN|`, `QBN|`, `Common|` and `Image|`.
+-   The parser must be extended for Mathematics only while preserving
+    GI, GS/Science and GACA behavior.
+-   Mathematics question blocks should be validated for `Correct|` and
+    `Difficulty|` compatibility before production deployment.
+
+## Implementation Order
+
+1.  Standardize Mathematics folder naming.
+2.  Extend `services/questionParser.js` for Math-only support.
+3.  Verify Exam Corner API.
+4.  Verify Tutorial API.
+5.  Regression-test GI / GS / GACA.
+6.  Validate Mathematics question banks inside Exam Corner.
+
+## Scope
+
+This work is restricted to Mathematics only. Student Portal UI and
+non-Mathematics parser behavior remain unchanged.
+
+------------------------------------------------------------------------
+
+# Development Timeline Addition (2026-07-24)
+
+  Date         Milestone
+  ------------ --------------------------------------------------------
+  2026-07-24   Mathematics Exam Corner Compatibility Review Completed
+  Next         Standardize Mathematics folder naming
+  Next         Implement Math-only parser support
+  Next         Verify Exam Corner and Tutorial APIs
+  Next         Regression-test GI / GS / GACA
+
+------------------------------------------------------------------------
+
+# Mathematics Topic & SubTopic Logger Progress Update (Added: 2026-07-24)
+
+## Current Status
+
+**Version:** Topic & SubTopic Logger v0.3 (Core Logging Workflow
+Complete)
+
+This session advanced the Mathematics Topic & SubTopic Logger from the
+metadata-planning stage to a functional browser-based maintenance tool.
+
+### Completed
+
+-   ✅ Dedicated Mathematics Logger workspace implemented.
+-   ✅ TXT upload and QEN\| block extraction.
+-   ✅ Logging Mode selection:
+    -   Topic + SubTopic per Question.
+    -   Global Topic + SubTopic Only.
+-   ✅ Global metadata preservation.
+-   ✅ Question-level metadata insertion/replacement.
+-   ✅ Metadata inheritance architecture implemented.
+-   ✅ Previous/Next navigation with metadata restoration.
+-   ✅ Automatic save and advance using the OK button.
+-   ✅ Final TXT assembly (`buildFinalMathText()`).
+-   ✅ Download UI created.
+-   ✅ Completion tracking implemented.
+-   ✅ Download button remains hidden until every question is logged.
+-   ✅ Download generates `<original>-topic-logged.txt`.
+
+### Engineering Decisions
+
+-   Mathematics uses `QEN|` as the question block delimiter.
+-   Global Topic acts as a default only in SubTopic-Only mode.
+-   Question-level Topic/SubTopic overrides remain supported.
+-   Existing global metadata is preserved wherever possible.
+-   Processing remains entirely browser-local.
+
+### Current Workflow
+
+Upload TXT ↓ Extract Global Metadata ↓ Extract QEN Blocks ↓ Choose
+Logging Mode ↓ Assign Topic/SubTopic ↓ OK (Auto Save + Next) ↓ All
+Questions Completed ↓ Download Updated TXT
+
+### Code Review
+
+During review one duplicate JavaScript declaration of
+`applyQuestionMetadataBtn` was identified. The duplicate must be removed
+to avoid a browser `Identifier has already been declared` error.
+
+### Next Development
+
+1.  End-to-end regression testing.
+2.  Verify downloaded TXT against production datasets.
+3.  Implement Topic/SubTopic catalogue management (Add/Edit Topic,
+    Add/Edit SubTopic).
+4.  Generate updated `math.json` after catalogue modifications.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated: 2026-07-24)
+
+2026-07-24 Mathematics Topic & SubTopic Logger Core Workflow Completed
+2026-07-24 Final TXT Builder Added 2026-07-24 Completion Tracking and
+Conditional Download Added Next Logger Regression Testing Next
+Topic/SubTopic Catalogue Management
