@@ -1,0 +1,541 @@
+/* =========================================
+   TOPIC & SUBTOPIC LOGGER
+   Conceptual Bridge Maintenance Suite
+========================================= */
+
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    padding: 24px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #ffffff;
+
+    background:
+
+        radial-gradient(
+            circle at top left,
+            rgba(35, 90, 130, .35),
+            transparent 40%
+        ),
+
+        radial-gradient(
+            circle at bottom right,
+            rgba(20, 100, 90, .25),
+            transparent 45%
+        ),
+
+        #07111f;
+
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.container {
+
+    width: min(
+        1100px,
+        100%
+    );
+
+    margin: 0 auto;
+
+}
+
+
+/* =========================================
+   TOP NAVIGATION
+========================================= */
+
+.top-nav {
+
+    margin-bottom: 20px;
+
+}
+
+
+.back-link {
+
+    display: inline-block;
+
+    padding: 9px 14px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            .06
+        );
+
+}
+
+
+.back-link:hover {
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+h1 {
+
+    margin:
+
+        0
+        0
+        8px;
+
+    text-align: center;
+
+    font-size: 2rem;
+
+    letter-spacing: .5px;
+
+}
+
+
+.subtitle {
+
+    margin:
+
+        0
+        0
+        26px;
+
+    text-align: center;
+
+    color: #b8c9da;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   GLASS CARD
+========================================= */
+
+.card {
+
+    margin-bottom: 22px;
+
+    padding: 24px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .15
+        );
+
+    border-radius: 16px;
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            .07
+        );
+
+    backdrop-filter:
+        blur(14px);
+
+    box-shadow:
+
+        0
+        18px
+        45px
+        rgba(
+            0,
+            0,
+            0,
+            .22
+        );
+
+}
+
+
+.card h2 {
+
+    margin:
+
+        0
+        0
+        10px;
+
+    font-size: 1.2rem;
+
+}
+
+
+.section-help {
+
+    margin:
+
+        0
+        0
+        22px;
+
+    color: #c4d2df;
+
+    font-size: .9rem;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================
+   SUBJECT GRID
+========================================= */
+
+.subject-grid {
+
+    display: grid;
+
+    grid-template-columns:
+
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 18px;
+
+}
+
+
+/* =========================================
+   SUBJECT CARDS
+========================================= */
+
+.subject-card {
+
+    position: relative;
+
+    min-width: 0;
+
+    min-height: 210px;
+
+    padding: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .15
+        );
+
+    border-radius: 15px;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    background:
+
+        rgba(
+            5,
+            15,
+            28,
+            .35
+        );
+
+}
+
+
+/*
+    Keep inactive cards visible.
+
+    We intentionally do NOT use
+    low opacity here because the user
+    should clearly see all three future
+    workflows.
+*/
+
+.subject-card:disabled {
+
+    cursor: not-allowed;
+
+}
+
+
+.subject-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            .09
+        );
+
+    font-size: 1.6rem;
+
+}
+
+
+.subject-card strong {
+
+    font-size: 1rem;
+
+    letter-spacing: .4px;
+
+}
+
+
+.subject-description {
+
+    max-width: 240px;
+
+    color: #b8c9da;
+
+    font-size: .8rem;
+
+    line-height: 1.45;
+
+}
+
+
+/* =========================================
+   STATUS BADGE
+========================================= */
+
+.status-badge {
+
+    margin-top: 4px;
+
+    padding:
+
+        5px
+        10px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .14
+        );
+
+    border-radius: 999px;
+
+    font-size: .68rem;
+
+    font-weight: bold;
+
+    letter-spacing: .7px;
+
+    background:
+
+        rgba(
+            255,
+            255,
+            255,
+            .07
+        );
+
+}
+
+
+/* =========================================
+   DEVELOPMENT STATUS
+========================================= */
+
+.status-card {
+
+    max-width: 700px;
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+}
+
+
+.status-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding:
+
+        13px
+        4px;
+
+    border-bottom:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .09
+        );
+
+}
+
+
+.status-row:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.status-row span {
+
+    color: #d3deea;
+
+}
+
+
+.status-row strong {
+
+    font-size: .75rem;
+
+    letter-spacing: .5px;
+
+    color: #aebdca;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (
+    max-width: 800px
+) {
+
+    .subject-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .subject-card {
+
+        min-height: 175px;
+
+    }
+
+}
+
+
+@media (
+    max-width: 520px
+) {
+
+    body {
+
+        padding: 14px;
+
+    }
+
+
+    h1 {
+
+        font-size: 1.55rem;
+
+    }
+
+
+    .card {
+
+        padding: 18px;
+
+    }
+
+}
