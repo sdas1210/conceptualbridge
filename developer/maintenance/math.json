@@ -1,4 +1,129 @@
 {
     "version": 1,
-    "topics": []
+    "topics": [
+        {
+            "name": "Number System",
+            "subtopics": [
+                "HCF and LCM of Numbers",
+                "Decimal Fractions",
+                "Square Roots and Cube Roots",
+                "Problems on Numbers"
+            ]
+        },
+        {
+            "name": "Simplification",
+            "subtopics": [
+                "Basic Simplification",
+                "Surds and Indices"
+            ]
+        },
+        {
+            "name": "Average",
+            "subtopics": [
+                "Average",
+                "Problems on Ages"
+            ]
+        },
+        {
+            "name": "Percentage",
+            "subtopics": [
+                "Percentage"
+            ]
+        },
+        {
+            "name": "Profit and Loss",
+            "subtopics": [
+                "Profit and Loss",
+                "Discount"
+            ]
+        },
+        {
+            "name": "Ratio and Proportion",
+            "subtopics": [
+                "Ratio and Proportion",
+                "Partnership",
+                "Chain Rule",
+                "Alligation or Mixture"
+            ]
+        },
+        {
+            "name": "Time and Work",
+            "subtopics": [
+                "Time and Work",
+                "Pipes and Cisterns"
+            ]
+        },
+        {
+            "name": "Time, Speed and Distance",
+            "subtopics": [
+                "Time and Distance",
+                "Problems on Trains",
+                "Boats and Streams",
+                "Races and Games of Skill"
+            ]
+        },
+        {
+            "name": "Interest",
+            "subtopics": [
+                "Simple Interest",
+                "Compound Interest"
+            ]
+        },
+        {
+            "name": "Commercial Mathematics",
+            "subtopics": [
+                "Stocks and Shares",
+                "True Discount",
+                "Banker's Discount"
+            ]
+        },
+        {
+            "name": "Algebra and Logarithms",
+            "subtopics": [
+                "Logarithms"
+            ]
+        },
+        {
+            "name": "Mensuration",
+            "subtopics": [
+                "Area",
+                "Volume and Surface Areas"
+            ]
+        },
+        {
+            "name": "Trigonometry",
+            "subtopics": [
+                "Heights and Distances"
+            ]
+        },
+        {
+            "name": "Calendar and Clock",
+            "subtopics": [
+                "Calendar",
+                "Clocks"
+            ]
+        },
+        {
+            "name": "Permutation, Combination and Probability",
+            "subtopics": [
+                "Permutations and Combinations",
+                "Probability"
+            ]
+        },
+        {
+            "name": "Series",
+            "subtopics": [
+                "Odd Man Out and Series"
+            ]
+        },
+        {
+            "name": "Data Interpretation",
+            "subtopics": [
+                "Tabulation",
+                "Bar Graphs",
+                "Pie Charts",
+                "Line Graphs"
+            ]
+        }
+    ]
 }
