@@ -1581,3 +1581,51 @@ h1 {
     }
 
 }
+/* =========================================
+   MATH OUTPUT DOWNLOAD
+========================================= */
+
+.math-download-area {
+
+    margin-top: 18px;
+
+    text-align: center;
+
+}
+
+
+.math-download-area button {
+
+    padding:
+        11px
+        18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .20);
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    background:
+        rgba(255, 255, 255, .10);
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+
+.math-download-area button:hover {
+
+    background:
+        rgba(255, 255, 255, .17);
+
+    transform:
+        translateY(-1px);
+
+}
