@@ -539,3 +539,381 @@ h1 {
     }
 
 }
+
+/* =========================================
+   GENERAL UTILITY
+========================================= */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================================
+   ACTIVE MATH MODE
+========================================= */
+
+.subject-card:not(:disabled) {
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+
+}
+
+
+.subject-card:not(:disabled):hover {
+
+    transform:
+        translateY(-5px);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .11
+        );
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .30
+        );
+
+}
+
+
+.active-badge {
+
+    color: #dfffea;
+
+    border-color:
+        rgba(
+            120,
+            255,
+            170,
+            .28
+        );
+
+    background:
+        rgba(
+            70,
+            180,
+            110,
+            .14
+        );
+
+}
+
+
+/* =========================================
+   MATH UPLOAD
+========================================= */
+
+.math-upload-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.math-upload-row input {
+
+    flex: 1;
+
+    min-width: 260px;
+
+    padding: 11px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .16
+        );
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            .18
+        );
+
+}
+
+
+.math-upload-row button,
+.block-navigation button {
+
+    padding:
+        10px
+        16px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+}
+
+
+.math-upload-row button:hover,
+.block-navigation button:hover:not(:disabled) {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .15
+        );
+
+}
+
+
+/* =========================================
+   FILE INFORMATION
+========================================= */
+
+.math-info-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+
+}
+
+
+.math-info-grid > div {
+
+    padding: 14px;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            .12
+        );
+
+}
+
+
+.math-info-grid span {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #aebdca;
+
+    font-size: .78rem;
+
+}
+
+
+.math-info-grid strong {
+
+    word-break: break-word;
+
+}
+
+
+/* =========================================
+   QUESTION BLOCK VIEWER
+========================================= */
+
+.block-viewer-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.block-viewer-header h2 {
+
+    margin: 0;
+
+}
+
+
+#mathBlockPosition {
+
+    color: #b8c9da;
+
+    font-size: .85rem;
+
+}
+
+
+#mathBlockContent {
+
+    min-height: 300px;
+
+    max-height: 520px;
+
+    margin: 0;
+
+    padding: 20px;
+
+    overflow: auto;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    border:
+
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .14
+        );
+
+    border-radius: 12px;
+
+    color: #edf6ff;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            .24
+        );
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: .9rem;
+
+    line-height: 1.65;
+
+}
+
+
+/* =========================================
+   BLOCK NAVIGATION
+========================================= */
+
+.block-navigation {
+
+    margin-top: 16px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.block-navigation button:first-child {
+
+    justify-self: start;
+
+}
+
+
+.block-navigation button:last-child {
+
+    justify-self: end;
+
+}
+
+
+.block-navigation button:disabled {
+
+    cursor: not-allowed;
+
+    opacity: .4;
+
+}
+
+
+#mathBlockCounter {
+
+    min-width: 90px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+}
