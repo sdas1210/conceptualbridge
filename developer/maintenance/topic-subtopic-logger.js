@@ -132,6 +132,65 @@ const confirmGlobalTopicBtn =
         "confirmGlobalTopicBtn"
     );
 // =========================================
+// QUESTION METADATA CONTROL REFERENCES
+// =========================================
+
+const questionTopicControl =
+    document.getElementById(
+        "questionTopicControl"
+    );
+
+const questionTopicSelect =
+    document.getElementById(
+        "questionTopicSelect"
+    );
+
+const addQuestionTopicBtn =
+    document.getElementById(
+        "addQuestionTopicBtn"
+    );
+
+const questionSubTopicControl =
+    document.getElementById(
+        "questionSubTopicControl"
+    );
+
+const questionSubTopicSelect =
+    document.getElementById(
+        "questionSubTopicSelect"
+    );
+
+const addQuestionSubTopicBtn =
+    document.getElementById(
+        "addQuestionSubTopicBtn"
+    );
+
+const editQuestionMetadataBtn =
+    document.getElementById(
+        "editQuestionMetadataBtn"
+    );
+
+const applyQuestionMetadataBtn =
+    document.getElementById(
+        "applyQuestionMetadataBtn"
+    );
+
+const activeGlobalTopicBar =
+    document.getElementById(
+        "activeGlobalTopicBar"
+    );
+
+const activeGlobalTopicName =
+    document.getElementById(
+        "activeGlobalTopicName"
+    );
+
+const changeGlobalTopicBtn =
+    document.getElementById(
+        "changeGlobalTopicBtn"
+    );
+
+// =========================================
 // DEVELOPMENT STATE
 // =========================================
 
@@ -244,6 +303,8 @@ async function loadMathTopicCatalogue() {
 
 
         populateGlobalTopicSelect();
+
+        populateQuestionTopicSelect();
 
 
         console.log(
@@ -361,6 +422,172 @@ function populateGlobalTopicSelect() {
 }
 
 // =========================================
+// POPULATE QUESTION TOPIC DROPDOWN
+// =========================================
+
+function populateQuestionTopicSelect() {
+
+    questionTopicSelect.innerHTML = "";
+
+
+    const defaultOption =
+        document.createElement(
+            "option"
+        );
+
+    defaultOption.value = "";
+
+    defaultOption.textContent =
+        "Topic";
+
+
+    questionTopicSelect.appendChild(
+        defaultOption
+    );
+
+
+    const sortedTopics =
+
+        [...mathTopicCatalogue.topics]
+
+            .sort(
+                (a, b) =>
+
+                    String(a.name)
+                        .localeCompare(
+                            String(b.name)
+                        )
+            );
+
+
+    for (
+        const topic
+        of sortedTopics
+    ) {
+
+        if (
+            !topic ||
+            !topic.name
+        ) {
+
+            continue;
+
+        }
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            topic.name;
+
+        option.textContent =
+            topic.name;
+
+
+        questionTopicSelect.appendChild(
+            option
+        );
+
+    }
+
+}
+
+// =========================================
+// POPULATE SUBTOPICS FOR A TOPIC
+// =========================================
+
+function populateQuestionSubTopicSelect(
+    topicName
+) {
+
+    questionSubTopicSelect.innerHTML = "";
+
+
+    const defaultOption =
+        document.createElement(
+            "option"
+        );
+
+    defaultOption.value = "";
+
+    defaultOption.textContent =
+        "SubTopic";
+
+
+    questionSubTopicSelect.appendChild(
+        defaultOption
+    );
+
+
+    if (!topicName) {
+
+        return;
+
+    }
+
+
+    const topic =
+        mathTopicCatalogue.topics.find(
+
+            item =>
+                item.name === topicName
+
+        );
+
+
+    if (
+        !topic ||
+        !Array.isArray(topic.subtopics)
+    ) {
+
+        return;
+
+    }
+
+
+    const sortedSubTopics =
+
+        [...topic.subtopics]
+
+            .sort(
+                (a, b) =>
+
+                    String(a)
+                        .localeCompare(
+                            String(b)
+                        )
+            );
+
+
+    for (
+        const subTopic
+        of sortedSubTopics
+    ) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            subTopic;
+
+        option.textContent =
+            subTopic;
+
+
+        questionSubTopicSelect.appendChild(
+            option
+        );
+
+    }
+
+}
+
+// =========================================
 // OPEN MATH WORKSPACE
 // =========================================
 mathLoggerBtn.addEventListener(
@@ -417,6 +644,21 @@ logBothModeBtn.addEventListener(
 
         mathLoggingMode =
             "both";
+
+        questionTopicControl.classList.remove(
+            "hidden"
+        );
+        
+        activeGlobalTopicBar.classList.add(
+            "hidden"
+        );
+        
+        questionTopicSelect.value =
+            "";
+        
+        populateQuestionSubTopicSelect(
+            ""
+        );
 
 
         selectedGlobalTopic =
@@ -499,6 +741,24 @@ confirmGlobalTopicBtn.addEventListener(
         selectedGlobalTopic =
             topic;
 
+        activeGlobalTopicName.textContent =
+            selectedGlobalTopic;
+        
+        
+        activeGlobalTopicBar.classList.remove(
+            "hidden"
+        );
+        
+        
+        questionTopicControl.classList.add(
+            "hidden"
+        );
+        
+        
+        populateQuestionSubTopicSelect(
+            selectedGlobalTopic
+        );
+
 
         globalTopicSetup.classList.add(
             "hidden"
@@ -518,6 +778,42 @@ confirmGlobalTopicBtn.addEventListener(
 
     }
 );
+
+questionTopicSelect.addEventListener(
+    "change",
+    () => {
+
+        populateQuestionSubTopicSelect(
+            questionTopicSelect.value
+        );
+
+    }
+);
+
+// =========================================
+// CHANGE GLOBAL TOPIC
+// =========================================
+
+changeGlobalTopicBtn.addEventListener(
+    "click",
+    () => {
+
+        globalTopicSelect.value =
+            selectedGlobalTopic;
+
+
+        mathBlockViewer.classList.add(
+            "hidden"
+        );
+
+
+        globalTopicSetup.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
 
 // =========================================
 // NORMALIZE TEXT
