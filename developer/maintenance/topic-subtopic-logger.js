@@ -190,6 +190,26 @@ const changeGlobalTopicBtn =
         "changeGlobalTopicBtn"
     );
 
+const applyQuestionMetadataBtn =
+    document.getElementById(
+        "applyQuestionMetadataBtn"
+    );
+
+
+// =========================================
+// DOWNLOAD OUTPUT REFERENCES
+// =========================================
+
+const mathDownloadArea =
+    document.getElementById(
+        "mathDownloadArea"
+    );
+
+
+const downloadMathOutputBtn =
+    document.getElementById(
+        "downloadMathOutputBtn"
+    );
 // =========================================
 // DEVELOPMENT STATE
 // =========================================
