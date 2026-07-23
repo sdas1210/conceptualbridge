@@ -1421,3 +1421,163 @@ h1 {
     }
 
 }
+
+/* =========================================
+   QUESTION OPERATION BAR
+========================================= */
+
+.operation-bar {
+
+    justify-content: flex-start;
+
+    flex-wrap: wrap;
+
+}
+
+
+.operation-field {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+}
+
+
+.operation-field select {
+
+    min-width: 150px;
+
+    height: 40px;
+
+    padding:
+        0
+        10px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius: 8px;
+
+    color: #ffffff;
+
+    background:
+        #101c2a;
+
+}
+
+
+.operation-field button {
+
+    width: 40px;
+
+    min-width: 40px;
+
+    padding: 0;
+
+    font-size: 1.1rem;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================================
+   GLOBAL TOPIC INDICATOR
+========================================= */
+
+.active-global-topic {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 16px;
+
+    padding:
+        10px
+        14px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .12);
+
+    border-radius: 9px;
+
+    background:
+        rgba(0, 0, 0, .14);
+
+}
+
+
+.active-global-topic span {
+
+    color: #aebdca;
+
+    font-size: .8rem;
+
+}
+
+
+.active-global-topic strong {
+
+    flex: 1;
+
+}
+
+
+.active-global-topic button {
+
+    padding:
+        7px
+        12px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius: 7px;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    background:
+        rgba(255, 255, 255, .08);
+
+}
+
+
+@media (
+    max-width: 700px
+) {
+
+    .operation-bar {
+
+        gap: 8px;
+
+    }
+
+
+    .operation-field {
+
+        flex:
+            1 1 200px;
+
+    }
+
+
+    .operation-field select {
+
+        flex: 1;
+
+        min-width: 0;
+
+    }
+
+}
