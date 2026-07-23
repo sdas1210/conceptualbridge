@@ -101,39 +101,291 @@
     
     </div>
     
-    
     <!-- =====================================
-         MATH PLACEHOLDER
+         MATH FINAL MERGER WORKSPACE
     ====================================== -->
     
     <div
         id="mathPlaceholder"
-        class="card hidden"
+        class="hidden"
     >
     
-        <h2>
-            Math Final Merger
-        </h2>
+        <!-- 1. FILE UPLOAD -->
     
-        <p class="mode-placeholder-text">
+        <div class="card">
     
-            Mathematics Final Merger is ready
-            for the next development phase.
+            <h2>
+                1. Select Three Math TXT Files
+            </h2>
     
-        </p>
+            <p class="mode-help">
+                Upload the Question, Answer and Difficulty files
+                in any order. The files will be detected automatically.
+            </p>
     
-        <div class="action-row">
+            <div class="math-file-grid">
+    
+                <div class="file-group">
+    
+                    <label for="mathFile1">
+                        TXT File 1
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="mathFile1"
+                        accept=".txt"
+                    >
+    
+                </div>
+    
+    
+                <div class="file-group">
+    
+                    <label for="mathFile2">
+                        TXT File 2
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="mathFile2"
+                        accept=".txt"
+                    >
+    
+                </div>
+    
+    
+                <div class="file-group">
+    
+                    <label for="mathFile3">
+                        TXT File 3
+                    </label>
+    
+                    <input
+                        type="file"
+                        id="mathFile3"
+                        accept=".txt"
+                    >
+    
+                </div>
+    
+            </div>
+    
+    
+            <div class="action-row">
+    
+                <button
+                    id="mathAnalyzeBtn"
+                    type="button"
+                >
+                    Analyze Three Files
+                </button>
+    
+                <button
+                    id="backToModeBtn"
+                    type="button"
+                >
+                    ← Back to Mode Selection
+                </button>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- 2. AUTO DETECTION -->
+    
+        <div class="card">
+    
+            <h2>
+                2. Auto Detection & File Information
+            </h2>
+    
+            <table>
+    
+                <tr>
+                    <td>Question File</td>
+                    <td id="mathQuestionFileName">
+                        Not detected
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Question Blocks</td>
+                    <td id="mathQuestionCount">
+                        0
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Answer File</td>
+                    <td id="mathAnswerFileName">
+                        Not detected
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Answers Found</td>
+                    <td id="mathAnswerCount">
+                        0
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Difficulty File</td>
+                    <td id="mathDifficultyFileName">
+                        Not detected
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Difficulty Blocks</td>
+                    <td id="mathDifficultyCount">
+                        0
+                    </td>
+                </tr>
+    
+            </table>
+    
+        </div>
+    
+    
+        <!-- 3. VALIDATION -->
+    
+        <div class="card">
+    
+            <h2>
+                3. Math Validation
+            </h2>
+    
+            <table>
+    
+                <tr>
+                    <td>File Detection</td>
+                    <td id="mathDetectionStatus">
+                        NOT CHECKED
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Block Count Alignment</td>
+                    <td id="mathCountStatus">
+                        NOT CHECKED
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Question Alignment</td>
+                    <td id="mathAlignmentStatus">
+                        NOT CHECKED
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Validation Status</td>
+                    <td id="mathValidationStatus">
+                        NOT READY
+                    </td>
+                </tr>
+    
+            </table>
+    
+    
+            <div
+                id="mathIssueReport"
+                class="issue-report hidden"
+            ></div>
+    
+        </div>
+    
+    
+        <!-- 4. MERGER -->
+    
+        <div class="card">
+    
+            <h2>
+                4. Math Final Question Merger
+            </h2>
+    
+            <table>
+    
+                <tr>
+                    <td>Generated Blocks</td>
+                    <td id="mathGeneratedCount">
+                        0
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Correct| Entries</td>
+                    <td id="mathCorrectCount">
+                        0
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Difficulty| Entries</td>
+                    <td id="mathMergedDifficultyCount">
+                        0
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td>Final Status</td>
+                    <td id="mathMergeStatus">
+                        LOCKED
+                    </td>
+                </tr>
+    
+            </table>
+    
+    
+            <div class="action-row">
+    
+                <button
+                    id="mathMergeBtn"
+                    type="button"
+                    disabled
+                >
+                    Generate Final TXT
+                </button>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- 5. CONSOLE -->
+    
+        <div class="card">
+    
+            <h2>
+                5. Math Processing Console
+            </h2>
+    
+            <pre id="mathConsole">
+    Waiting for three Math TXT files...
+            </pre>
+    
+        </div>
+    
+    
+        <!-- DOWNLOAD -->
+    
+        <div class="buttons">
     
             <button
-                id="backToModeBtn"
+                id="mathDownloadBtn"
                 type="button"
+                disabled
             >
-                ← Back to Mode Selection
+                Download Final.txt
             </button>
     
         </div>
     
     </div>
+    
     
     
     <!-- =====================================
