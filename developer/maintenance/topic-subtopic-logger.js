@@ -838,6 +838,45 @@ function normalizeMathText(text) {
 
 }
 
+// =========================================
+// EXTRACT GLOBAL SECTION
+// =========================================
+
+function extractMathGlobalSection(text) {
+
+    const normalized =
+        normalizeMathText(text);
+
+    const lines =
+        normalized.split("\n");
+
+    const globalLines = [];
+
+
+    for (const line of lines) {
+
+        if (
+            /^\s*QEN\|/i.test(line)
+        ) {
+
+            break;
+
+        }
+
+
+        globalLines.push(
+            line
+        );
+
+    }
+
+
+    return globalLines
+        .join("\n")
+        .trim();
+
+}
+
 
 // =========================================
 // EXTRACT QEN| BLOCKS
