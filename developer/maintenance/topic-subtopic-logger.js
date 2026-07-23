@@ -224,6 +224,18 @@ let mathLoggingMode = null;
 let selectedGlobalTopic = "";
 
 // =========================================
+// QUESTION LOGGING STATE
+// =========================================
+
+let originalMathText = "";
+
+let mathQuestionAssignments = [];
+
+let originalGlobalSection = "";
+
+let mathSourceFileName = "";
+
+// =========================================
 // MATH TOPIC CATALOGUE STATE
 // =========================================
 
