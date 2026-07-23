@@ -917,3 +917,66 @@ h1 {
     font-weight: bold;
 
 }
+
+
+/* =========================================
+   ACTIVE LOGGER MODE
+========================================= */
+
+.subject-card:not(:disabled) {
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+
+}
+
+
+.subject-card:not(:disabled):hover {
+
+    transform:
+        translateY(-4px);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .11
+        );
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .30
+        );
+
+}
+
+
+.active-badge {
+
+    color: #dfffea;
+
+    background:
+        rgba(
+            70,
+            180,
+            110,
+            .15
+        );
+
+    border-color:
+        rgba(
+            120,
+            255,
+            170,
+            .30
+        );
+
+}
