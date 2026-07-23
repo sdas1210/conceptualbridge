@@ -1253,6 +1253,40 @@ function buildFinalMathText() {
 }
 
 // =========================================
+// UPDATE MATH COMPLETION STATUS
+// =========================================
+
+function updateMathCompletionStatus() {
+
+    const allCompleted =
+
+        mathQuestionAssignments.length > 0 &&
+
+        mathQuestionAssignments.every(
+            assignment =>
+                assignment.completed === true
+        );
+
+
+    if (allCompleted) {
+
+        mathDownloadArea.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    else {
+
+        mathDownloadArea.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+// =========================================
 // LOAD TXT FILE
 // =========================================
 
@@ -1327,6 +1361,13 @@ loadMathFileBtn.addEventListener(
         );
         currentMathBlockIndex =
             0;
+
+        // A newly loaded file has not yet
+        // completed the logging process.
+        
+        mathDownloadArea.classList.add(
+            "hidden"
+        );
 
 
         // Show file information.
@@ -1636,6 +1677,11 @@ applyQuestionMetadataBtn.addEventListener(
                 true
 
         };
+
+        // Check whether every question
+        // has now been logged.
+        
+        updateMathCompletionStatus();
 
 
         // =================================
