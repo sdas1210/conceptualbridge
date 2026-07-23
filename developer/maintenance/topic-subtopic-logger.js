@@ -92,7 +92,45 @@ const nextMathBlockBtn =
         "nextMathBlockBtn"
     );
 
+const mathLoggingModeSelector =
+    document.getElementById(
+        "mathLoggingModeSelector"
+    );
 
+const logBothModeBtn =
+    document.getElementById(
+        "logBothModeBtn"
+    );
+
+const logSubTopicOnlyModeBtn =
+    document.getElementById(
+        "logSubTopicOnlyModeBtn"
+    );
+
+const globalTopicSetup =
+    document.getElementById(
+        "globalTopicSetup"
+    );
+
+const globalTopicSelect =
+    document.getElementById(
+        "globalTopicSelect"
+    );
+
+const addGlobalTopicBtn =
+    document.getElementById(
+        "addGlobalTopicBtn"
+    );
+
+const editGlobalTopicBtn =
+    document.getElementById(
+        "editGlobalTopicBtn"
+    );
+
+const confirmGlobalTopicBtn =
+    document.getElementById(
+        "confirmGlobalTopicBtn"
+    );
 // =========================================
 // DEVELOPMENT STATE
 // =========================================
@@ -122,7 +160,9 @@ let mathBlocks = [];
 
 let currentMathBlockIndex = 0;
 
+let mathLoggingMode = null;
 
+let selectedGlobalTopic = "";
 // =========================================
 // INITIALIZE
 // =========================================
@@ -184,6 +224,118 @@ closeMathWorkspaceBtn.addEventListener(
     }
 );
 
+// =========================================
+// MODE 1
+// TOPIC + SUBTOPIC PER QUESTION
+// =========================================
+
+logBothModeBtn.addEventListener(
+    "click",
+    () => {
+
+        mathLoggingMode =
+            "both";
+
+
+        selectedGlobalTopic =
+            "";
+
+
+        mathLoggingModeSelector.classList.add(
+            "hidden"
+        );
+
+
+        globalTopicSetup.classList.add(
+            "hidden"
+        );
+
+
+        mathBlockViewer.classList.remove(
+            "hidden"
+        );
+
+
+        currentMathBlockIndex =
+            0;
+
+
+        renderMathBlock();
+
+    }
+);
+
+// =========================================
+// MODE 2
+// GLOBAL TOPIC + PER-QUESTION SUBTOPIC
+// =========================================
+
+logSubTopicOnlyModeBtn.addEventListener(
+    "click",
+    () => {
+
+        mathLoggingMode =
+            "subtopic-only";
+
+
+        mathLoggingModeSelector.classList.add(
+            "hidden"
+        );
+
+
+        globalTopicSetup.classList.remove(
+            "hidden"
+        );
+
+
+        mathBlockViewer.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+confirmGlobalTopicBtn.addEventListener(
+    "click",
+    () => {
+
+        const topic =
+            globalTopicSelect.value.trim();
+
+
+        if (!topic) {
+
+            alert(
+                "Please select a Topic."
+            );
+
+            return;
+
+        }
+
+
+        selectedGlobalTopic =
+            topic;
+
+
+        globalTopicSetup.classList.add(
+            "hidden"
+        );
+
+
+        mathBlockViewer.classList.remove(
+            "hidden"
+        );
+
+
+        currentMathBlockIndex =
+            0;
+
+
+        renderMathBlock();
+
+    }
+);
 
 // =========================================
 // NORMALIZE TEXT
@@ -351,14 +503,18 @@ loadMathFileBtn.addEventListener(
         mathFileInfo.classList.remove(
             "hidden"
         );
-
-
-        mathBlockViewer.classList.remove(
+        
+        mathLoggingModeSelector.classList.remove(
             "hidden"
         );
-
-
-        renderMathBlock();
+        
+        mathBlockViewer.classList.add(
+            "hidden"
+        );
+        
+        globalTopicSetup.classList.add(
+            "hidden"
+        );
 
     }
 );
