@@ -1187,6 +1187,79 @@ function renderMathBlock() {
         currentMathBlockIndex ===
         mathBlocks.length - 1;
 
+    // =========================================
+    // RESTORE SAVED QUESTION ASSIGNMENT
+    // =========================================
+    
+    const assignment =
+    
+        mathQuestionAssignments[
+            currentMathBlockIndex
+        ];
+    
+    
+    if (!assignment) {
+    
+        return;
+    
+    }
+    
+    
+    // -----------------------------------------
+    // MODE 1
+    // TOPIC + SUBTOPIC PER QUESTION
+    // -----------------------------------------
+    
+    if (
+        mathLoggingMode === "both"
+    ) {
+    
+        // Restore Topic.
+    
+        questionTopicSelect.value =
+            assignment.topic || "";
+    
+    
+        // Rebuild SubTopic options
+        // according to restored Topic.
+    
+        populateQuestionSubTopicSelect(
+            assignment.topic || ""
+        );
+    
+    
+        // Restore SubTopic.
+    
+        questionSubTopicSelect.value =
+            assignment.subTopic || "";
+    
+    }
+    
+    
+    // -----------------------------------------
+    // MODE 2
+    // GLOBAL TOPIC + QUESTION SUBTOPIC
+    // -----------------------------------------
+    
+    else if (
+        mathLoggingMode ===
+        "subtopic-only"
+    ) {
+    
+        // Topic comes from the global selection.
+    
+        populateQuestionSubTopicSelect(
+            selectedGlobalTopic
+        );
+    
+    
+        // Restore this question's SubTopic.
+    
+        questionSubTopicSelect.value =
+            assignment.subTopic || "";
+    
+    }
+
 }
 
 
