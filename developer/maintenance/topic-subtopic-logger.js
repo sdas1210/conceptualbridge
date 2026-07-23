@@ -1287,6 +1287,79 @@ function updateMathCompletionStatus() {
 }
 
 // =========================================
+// DOWNLOAD UPDATED MATH TXT
+// =========================================
+
+downloadMathOutputBtn.addEventListener(
+    "click",
+    () => {
+
+        const finalText =
+            buildFinalMathText();
+
+
+        const blob =
+            new Blob(
+                [finalText],
+                {
+                    type:
+                        "text/plain;charset=utf-8"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        // Remove only the .txt extension
+
+        const baseName =
+
+            mathSourceFileName.replace(
+                /\.txt$/i,
+                ""
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+
+            baseName +
+
+            "-topic-logged.txt";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    }
+);
+
+// =========================================
 // LOAD TXT FILE
 // =========================================
 
