@@ -966,6 +966,68 @@ function extractMathBlocks(text) {
 
 }
 
+// =========================================
+// SET / REPLACE QUESTION METADATA
+// =========================================
+
+function setQuestionMetadata(
+    block,
+    topic,
+    subTopic
+) {
+
+    let lines =
+        normalizeMathText(block)
+            .split("\n");
+
+
+    // Remove any existing question-level
+    // Topic or SubTopic metadata.
+    //
+    // Supports both:
+    // SubTopic|
+    // Sub-Topic|
+
+    lines =
+        lines.filter(
+            line =>
+
+                !/^\s*Topic\|/i.test(line) &&
+
+                !/^\s*(SubTopic|Sub-Topic)\|/i.test(line)
+        );
+
+
+    // Remove trailing blank lines
+    // before adding fresh metadata.
+
+    while (
+        lines.length > 0 &&
+        lines[
+            lines.length - 1
+        ].trim() === ""
+    ) {
+
+        lines.pop();
+
+    }
+
+
+    // Add fresh metadata.
+
+    lines.push(
+        "Topic| " + topic
+    );
+
+
+    lines.push(
+        "SubTopic| " + subTopic
+    );
+
+
+    return lines.join("\n");
+
+}
 
 // =========================================
 // LOAD TXT FILE
