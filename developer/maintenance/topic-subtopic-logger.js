@@ -190,10 +190,7 @@ const changeGlobalTopicBtn =
         "changeGlobalTopicBtn"
     );
 
-const applyQuestionMetadataBtn =
-    document.getElementById(
-        "applyQuestionMetadataBtn"
-    );
+
 
 
 // =========================================
