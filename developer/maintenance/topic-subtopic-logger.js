@@ -997,6 +997,19 @@ loadMathFileBtn.addEventListener(
         const detectedBlocks =
             extractMathBlocks(text);
 
+        // Preserve original source data.
+
+        originalMathText =
+            normalizeMathText(text);
+        
+        
+        originalGlobalSection =
+            extractMathGlobalSection(text);
+        
+        
+        mathSourceFileName =
+            file.name;
+
 
         if (
             detectedBlocks.length === 0
@@ -1014,7 +1027,19 @@ loadMathFileBtn.addEventListener(
         mathBlocks =
             detectedBlocks;
 
+        mathQuestionAssignments =
 
+        mathBlocks.map(
+            () => ({
+    
+                topic: "",
+    
+                subTopic: "",
+    
+                completed: false
+    
+            })
+        );
         currentMathBlockIndex =
             0;
 
