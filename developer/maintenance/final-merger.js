@@ -38,6 +38,44 @@ const issueCard =
 const issueReport =
     document.getElementById("issueReport");
 
+// =========================================
+// FINAL MERGER MODE SELECTION
+// =========================================
+
+const mergerModeSelector =
+    document.getElementById(
+        "mergerModeSelector"
+    );
+
+
+const gacaMergerWorkspace =
+    document.getElementById(
+        "gacaMergerWorkspace"
+    );
+
+
+const mathPlaceholder =
+    document.getElementById(
+        "mathPlaceholder"
+    );
+
+
+const gacaModeBtn =
+    document.getElementById(
+        "gacaModeBtn"
+    );
+
+
+const mathModeBtn =
+    document.getElementById(
+        "mathModeBtn"
+    );
+
+
+const backToModeBtn =
+    document.getElementById(
+        "backToModeBtn"
+    );
 
 // =========================================
 // STATE
@@ -99,7 +137,107 @@ downloadBtn.addEventListener(
     "click",
     downloadFinalFile
 );
+// =========================================
+// GACA MODE
+// =========================================
 
+gacaModeBtn.addEventListener(
+    "click",
+    () => {
+
+        /*
+            Hide mode selector.
+        */
+
+        mergerModeSelector.classList.add(
+            "hidden"
+        );
+
+
+        /*
+            Make sure Math is hidden.
+        */
+
+        mathPlaceholder.classList.add(
+            "hidden"
+        );
+
+
+        /*
+            Show the complete existing
+            GACA Final Merger.
+        */
+
+        gacaMergerWorkspace.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+
+// =========================================
+// MATH MODE
+// =========================================
+
+mathModeBtn.addEventListener(
+    "click",
+    () => {
+
+        /*
+            Hide selector.
+        */
+
+        mergerModeSelector.classList.add(
+            "hidden"
+        );
+
+
+        /*
+            Hide GACA workflow.
+        */
+
+        gacaMergerWorkspace.classList.add(
+            "hidden"
+        );
+
+
+        /*
+            Show Math placeholder.
+        */
+
+        mathPlaceholder.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+
+// =========================================
+// BACK TO MODE SELECTION
+// =========================================
+
+backToModeBtn.addEventListener(
+    "click",
+    () => {
+
+        mathPlaceholder.classList.add(
+            "hidden"
+        );
+
+
+        gacaMergerWorkspace.classList.add(
+            "hidden"
+        );
+
+
+        mergerModeSelector.classList.remove(
+            "hidden"
+        );
+
+    }
+);
 
 // =========================================
 // LOAD FOUR FILES
