@@ -268,8 +268,132 @@
             </div>
     
         </div>
-    
-    
+        <!-- =====================================
+             LOGGING MODE SELECTION
+        ====================================== -->
+        
+        <div
+            id="mathLoggingModeSelector"
+            class="card hidden"
+        >
+        
+            <h2>
+                Choose Logging Mode
+            </h2>
+        
+            <p class="section-help">
+                Select how Topic and SubTopic
+                metadata should be assigned.
+            </p>
+        
+        
+            <div class="logging-mode-grid">
+        
+        
+                <!-- MODE 1 -->
+        
+                <button
+                    id="logBothModeBtn"
+                    class="logging-mode-card"
+                    type="button"
+                >
+        
+                    <strong>
+                        Topic + SubTopic
+                    </strong>
+        
+                    <span>
+                        Assign both Topic and SubTopic
+                        separately for every question.
+                    </span>
+        
+                </button>
+        
+        
+                <!-- MODE 2 -->
+        
+                <button
+                    id="logSubTopicOnlyModeBtn"
+                    class="logging-mode-card"
+                    type="button"
+                >
+        
+                    <strong>
+                        SubTopic Only
+                    </strong>
+        
+                    <span>
+                        Select Topic once globally,
+                        then assign only SubTopic
+                        for every question.
+                    </span>
+        
+                </button>
+        
+        
+            </div>
+        
+        </div>
+
+        <!-- =====================================
+             GLOBAL TOPIC SETUP
+             Used only in SubTopic-Only mode
+        ====================================== -->
+        
+        <div
+            id="globalTopicSetup"
+            class="card hidden"
+        >
+        
+            <h2>
+                Set Global Topic
+            </h2>
+        
+            <p class="section-help">
+                This Topic will apply to every
+                question in the uploaded TXT file.
+            </p>
+        
+        
+            <div class="global-topic-row">
+        
+                <select id="globalTopicSelect">
+        
+                    <option value="">
+                        Select Topic
+                    </option>
+        
+                </select>
+        
+        
+                <button
+                    id="addGlobalTopicBtn"
+                    type="button"
+                    title="Add New Topic"
+                >
+                    +
+                </button>
+        
+        
+                <button
+                    id="editGlobalTopicBtn"
+                    type="button"
+                >
+                    EDIT
+                </button>
+        
+        
+                <button
+                    id="confirmGlobalTopicBtn"
+                    type="button"
+                >
+                    OK
+                </button>
+        
+            </div>
+        
+        </div>
+                
         <!-- QUESTION BLOCK VIEWER -->
     
         <div
