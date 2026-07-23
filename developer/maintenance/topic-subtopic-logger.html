@@ -92,7 +92,7 @@
                 id="mathLoggerBtn"
                 class="subject-card"
                 type="button"
-                disabled
+               
             >
 
                 <div class="subject-icon">
@@ -112,7 +112,7 @@
                 </span>
 
                 <span class="status-badge">
-                    INACTIVE
+                    ACTIVE
                 </span>
 
             </button>
@@ -185,7 +185,141 @@
         </div>
 
     </div>
-
+    <!-- =====================================
+         MATH LOGGER WORKSPACE
+    ====================================== -->
+    
+    <div
+        id="mathLoggerWorkspace"
+        class="hidden"
+    >
+    
+        <!-- FILE UPLOAD -->
+    
+        <div class="card">
+    
+            <h2>
+                Math Topic & SubTopic Logger
+            </h2>
+    
+            <p class="section-help">
+                Upload one Mathematics TXT file.
+                Every line beginning with QEN| will
+                be treated as the start of a new
+                question block.
+            </p>
+    
+            <div class="math-upload-row">
+    
+                <input
+                    type="file"
+                    id="mathQuestionFile"
+                    accept=".txt"
+                >
+    
+                <button
+                    id="loadMathFileBtn"
+                    type="button"
+                >
+                    Load TXT File
+                </button>
+    
+                <button
+                    id="closeMathWorkspaceBtn"
+                    type="button"
+                >
+                    ← Back
+                </button>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- FILE INFORMATION -->
+    
+        <div
+            id="mathFileInfo"
+            class="card hidden"
+        >
+    
+            <h2>
+                File Information
+            </h2>
+    
+            <div class="math-info-grid">
+    
+                <div>
+                    <span>File Name</span>
+    
+                    <strong id="mathFileName">
+                        —
+                    </strong>
+                </div>
+    
+                <div>
+                    <span>Total QEN| Blocks</span>
+    
+                    <strong id="mathBlockCount">
+                        0
+                    </strong>
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- QUESTION BLOCK VIEWER -->
+    
+        <div
+            id="mathBlockViewer"
+            class="card hidden"
+        >
+    
+            <div class="block-viewer-header">
+    
+                <h2>
+                    Question Block
+                </h2>
+    
+                <span id="mathBlockPosition">
+                    Question 0 of 0
+                </span>
+    
+            </div>
+    
+    
+            <pre id="mathBlockContent"></pre>
+    
+    
+            <div class="block-navigation">
+    
+                <button
+                    id="previousMathBlockBtn"
+                    type="button"
+                >
+                    ← Previous
+                </button>
+    
+    
+                <span id="mathBlockCounter">
+                    0 / 0
+                </span>
+    
+    
+                <button
+                    id="nextMathBlockBtn"
+                    type="button"
+                >
+                    Next →
+                </button>
+    
+            </div>
+    
+        </div>
+    
+    </div>
 
     <!-- =====================================
          DEVELOPMENT STATUS
