@@ -2205,3 +2205,1174 @@ function log(message) {
     consoleBox.scrollTop =
         consoleBox.scrollHeight;
 }
+
+
+// =========================================
+// MATH FINAL MERGER
+// =========================================
+
+const mathFile1 =
+    document.getElementById("mathFile1");
+
+const mathFile2 =
+    document.getElementById("mathFile2");
+
+const mathFile3 =
+    document.getElementById("mathFile3");
+
+const mathAnalyzeBtn =
+    document.getElementById("mathAnalyzeBtn");
+
+const mathMergeBtn =
+    document.getElementById("mathMergeBtn");
+
+const mathDownloadBtn =
+    document.getElementById("mathDownloadBtn");
+
+
+let mathQuestionFile = null;
+
+let mathAnswerFile = null;
+
+let mathDifficultyFile = null;
+
+
+let mathQuestionBlocks = [];
+
+let mathAnswers = [];
+
+let mathDifficultyRecords = [];
+
+
+let mathValidationPassed = false;
+
+let mathFinalOutput = "";
+
+
+// =========================================
+// NORMALIZE LINE ENDINGS
+// =========================================
+
+function normalizeMathText(text) {
+
+    return String(text || "")
+        .replace(/\r\n?/g, "\n");
+}
+
+
+// =========================================
+// READ FILE
+// =========================================
+
+async function readMathFile(file) {
+
+    return {
+
+        name:
+            file.name,
+
+        text:
+            await file.text()
+
+    };
+}
+
+
+// =========================================
+// PARSE QUESTION FILE
+//
+// Every QEN| starts a new block.
+// =========================================
+
+function parseMathQuestionBlocks(text) {
+
+    const lines =
+        normalizeMathText(text)
+            .split("\n");
+
+
+    const blocks = [];
+
+    let currentBlock = [];
+
+
+    for (const line of lines) {
+
+        if (
+            /^\s*QEN\|/i.test(line)
+        ) {
+
+            if (
+                currentBlock.length > 0
+            ) {
+
+                blocks.push(
+                    currentBlock
+                        .join("\n")
+                        .trim()
+                );
+            }
+
+
+            currentBlock = [
+                line
+            ];
+
+        } else if (
+            currentBlock.length > 0
+        ) {
+
+            currentBlock.push(
+                line
+            );
+        }
+
+    }
+
+
+    if (
+        currentBlock.length > 0
+    ) {
+
+        blocks.push(
+            currentBlock
+                .join("\n")
+                .trim()
+        );
+    }
+
+
+    return blocks.filter(Boolean);
+}
+
+
+// =========================================
+// PARSE ANSWER FILE
+//
+// Only standalone A / B / C / D lines count.
+// =========================================
+
+function parseMathAnswers(text) {
+
+    return normalizeMathText(text)
+
+        .split("\n")
+
+        .map(
+            line =>
+                line
+                    .trim()
+                    .toUpperCase()
+        )
+
+        .filter(
+            line =>
+                /^[ABCD]$/.test(line)
+        );
+}
+
+
+// =========================================
+// PARSE DIFFICULTY FILE
+//
+// Expected:
+//
+// Question: Simplify:
+// Difficulty: 8.35
+// =========================================
+
+function parseMathDifficulty(text) {
+
+    const lines =
+        normalizeMathText(text)
+            .split("\n");
+
+
+    const records = [];
+
+    let question = null;
+
+
+    for (const rawLine of lines) {
+
+        const line =
+            rawLine.trim();
+
+
+        if (
+            /^Question\s*:/i.test(line)
+        ) {
+
+            question =
+                line.replace(
+                    /^Question\s*:\s*/i,
+                    ""
+                ).trim();
+
+            continue;
+        }
+
+
+        if (
+            /^Difficulty\s*:/i.test(line) &&
+            question !== null
+        ) {
+
+            const difficulty =
+                line.replace(
+                    /^Difficulty\s*:\s*/i,
+                    ""
+                ).trim();
+
+
+            records.push({
+
+                question:
+                    question,
+
+                difficulty:
+                    difficulty
+
+            });
+
+
+            question = null;
+        }
+
+    }
+
+
+    return records;
+}
+
+
+// =========================================
+// AUTO DETECT FILE TYPE
+// =========================================
+
+function detectMathFileType(
+    name,
+    text
+) {
+
+    const normalized =
+        normalizeMathText(text);
+
+
+    // QUESTION FILE
+
+    if (
+        /^\s*QEN\|/im.test(
+            normalized
+        )
+    ) {
+
+        return {
+
+            type:
+                "question",
+
+            name:
+                name,
+
+            text:
+                normalized,
+
+            data:
+                parseMathQuestionBlocks(
+                    normalized
+                )
+
+        };
+    }
+
+
+    // DIFFICULTY FILE
+
+    if (
+        /^\s*Question\s*:/im.test(
+            normalized
+        ) &&
+        /^\s*Difficulty\s*:/im.test(
+            normalized
+        )
+    ) {
+
+        return {
+
+            type:
+                "difficulty",
+
+            name:
+                name,
+
+            text:
+                normalized,
+
+            data:
+                parseMathDifficulty(
+                    normalized
+                )
+
+        };
+    }
+
+
+    // ANSWER FILE
+
+    const nonBlankLines =
+        normalized
+
+            .split("\n")
+
+            .map(
+                line =>
+                    line.trim()
+            )
+
+            .filter(Boolean);
+
+
+    const answerFile =
+
+        nonBlankLines.length > 0 &&
+
+        nonBlankLines.every(
+            line =>
+                /^[ABCD]$/i.test(
+                    line
+                )
+        );
+
+
+    if (answerFile) {
+
+        return {
+
+            type:
+                "answer",
+
+            name:
+                name,
+
+            text:
+                normalized,
+
+            data:
+                parseMathAnswers(
+                    normalized
+                )
+
+        };
+    }
+
+
+    return {
+
+        type:
+            "unknown",
+
+        name:
+            name,
+
+        text:
+            normalized,
+
+        data:
+            []
+
+    };
+}
+
+
+// =========================================
+// NORMALIZE QUESTION FOR COMPARISON
+// =========================================
+
+function normalizeMathQuestion(
+    question
+) {
+
+    return String(
+        question || ""
+    )
+
+        .replace(
+            /^\s*QEN\|\s*/i,
+            ""
+        )
+
+        .replace(
+            /^\s*Question\s*:\s*/i,
+            ""
+        )
+
+        .trim()
+
+        .replace(
+            /\s+/g,
+            " "
+        )
+
+        .toLowerCase();
+}
+
+
+// =========================================
+// ANALYZE THREE FILES
+// =========================================
+
+mathAnalyzeBtn.addEventListener(
+
+    "click",
+
+    async () => {
+
+        const files = [
+
+            mathFile1.files[0],
+
+            mathFile2.files[0],
+
+            mathFile3.files[0]
+
+        ];
+
+
+        if (
+            files.some(
+                file => !file
+            )
+        ) {
+
+            alert(
+                "Please upload all three Math TXT files."
+            );
+
+            return;
+        }
+
+
+        mathValidationPassed =
+            false;
+
+        mathFinalOutput =
+            "";
+
+        mathMergeBtn.disabled =
+            true;
+
+        mathDownloadBtn.disabled =
+            true;
+
+
+        document.getElementById(
+            "mathIssueReport"
+        ).classList.add(
+            "hidden"
+        );
+
+
+        document.getElementById(
+            "mathConsole"
+        ).textContent =
+            "Reading Math files...\n";
+
+
+        const loadedFiles =
+            await Promise.all(
+
+                files.map(
+                    readMathFile
+                )
+
+            );
+
+
+        const detectedFiles =
+            loadedFiles.map(
+
+                file =>
+                    detectMathFileType(
+                        file.name,
+                        file.text
+                    )
+
+            );
+
+
+        const questionFiles =
+            detectedFiles.filter(
+                file =>
+                    file.type ===
+                    "question"
+            );
+
+
+        const answerFiles =
+            detectedFiles.filter(
+                file =>
+                    file.type ===
+                    "answer"
+            );
+
+
+        const difficultyFiles =
+            detectedFiles.filter(
+                file =>
+                    file.type ===
+                    "difficulty"
+            );
+
+
+        const unknownFiles =
+            detectedFiles.filter(
+                file =>
+                    file.type ===
+                    "unknown"
+            );
+
+
+        // Must detect exactly one of each.
+
+        if (
+
+            questionFiles.length !== 1 ||
+
+            answerFiles.length !== 1 ||
+
+            difficultyFiles.length !== 1 ||
+
+            unknownFiles.length !== 0
+
+        ) {
+
+            document.getElementById(
+                "mathDetectionStatus"
+            ).textContent =
+                "FAILED";
+
+
+            document.getElementById(
+                "mathValidationStatus"
+            ).textContent =
+                "FAILED";
+
+
+            const report =
+                document.getElementById(
+                    "mathIssueReport"
+                );
+
+
+            report.textContent =
+
+                "❌ File auto-detection failed.\n\n" +
+
+                "Question files detected: " +
+                questionFiles.length +
+                "\n" +
+
+                "Answer files detected: " +
+                answerFiles.length +
+                "\n" +
+
+                "Difficulty files detected: " +
+                difficultyFiles.length +
+                "\n" +
+
+                "Unknown files: " +
+                unknownFiles.length;
+
+
+            report.classList.remove(
+                "hidden"
+            );
+
+
+            return;
+        }
+
+
+        mathQuestionFile =
+            questionFiles[0];
+
+        mathAnswerFile =
+            answerFiles[0];
+
+        mathDifficultyFile =
+            difficultyFiles[0];
+
+
+        mathQuestionBlocks =
+            mathQuestionFile.data;
+
+        mathAnswers =
+            mathAnswerFile.data;
+
+        mathDifficultyRecords =
+            mathDifficultyFile.data;
+
+
+        // DISPLAY FILE INFORMATION
+
+        document.getElementById(
+            "mathQuestionFileName"
+        ).textContent =
+            mathQuestionFile.name;
+
+
+        document.getElementById(
+            "mathQuestionCount"
+        ).textContent =
+            mathQuestionBlocks.length;
+
+
+        document.getElementById(
+            "mathAnswerFileName"
+        ).textContent =
+            mathAnswerFile.name;
+
+
+        document.getElementById(
+            "mathAnswerCount"
+        ).textContent =
+            mathAnswers.length;
+
+
+        document.getElementById(
+            "mathDifficultyFileName"
+        ).textContent =
+            mathDifficultyFile.name;
+
+
+        document.getElementById(
+            "mathDifficultyCount"
+        ).textContent =
+            mathDifficultyRecords.length;
+
+
+        document.getElementById(
+            "mathDetectionStatus"
+        ).textContent =
+            "PASSED";
+
+
+        // =================================
+        // COUNT VALIDATION
+        // =================================
+
+        const sameCount =
+
+            mathQuestionBlocks.length ===
+                mathAnswers.length &&
+
+            mathAnswers.length ===
+                mathDifficultyRecords.length;
+
+
+        if (!sameCount) {
+
+            document.getElementById(
+                "mathCountStatus"
+            ).textContent =
+                "FAILED";
+
+
+            document.getElementById(
+                "mathValidationStatus"
+            ).textContent =
+                "FAILED";
+
+
+            const report =
+                document.getElementById(
+                    "mathIssueReport"
+                );
+
+
+            report.textContent =
+
+                "❌ Block count mismatch.\n\n" +
+
+                "Question Blocks: " +
+                mathQuestionBlocks.length +
+                "\n" +
+
+                "Answers: " +
+                mathAnswers.length +
+                "\n" +
+
+                "Difficulty Blocks: " +
+                mathDifficultyRecords.length;
+
+
+            report.classList.remove(
+                "hidden"
+            );
+
+
+            return;
+        }
+
+
+        document.getElementById(
+            "mathCountStatus"
+        ).textContent =
+            "PASSED";
+
+
+        // =================================
+        // QUESTION ALIGNMENT VALIDATION
+        // =================================
+
+        for (
+
+            let i = 0;
+
+            i <
+            mathQuestionBlocks.length;
+
+            i++
+
+        ) {
+
+            const questionLine =
+
+                mathQuestionBlocks[i]
+
+                    .split("\n")
+
+                    .find(
+                        line =>
+                            /^\s*QEN\|/i.test(
+                                line
+                            )
+                    );
+
+
+            const questionText =
+                normalizeMathQuestion(
+                    questionLine
+                );
+
+
+            const difficultyQuestion =
+                normalizeMathQuestion(
+                    mathDifficultyRecords[i]
+                        .question
+                );
+
+
+            if (
+                questionText !==
+                difficultyQuestion
+            ) {
+
+                document.getElementById(
+                    "mathAlignmentStatus"
+                ).textContent =
+                    "FAILED";
+
+
+                document.getElementById(
+                    "mathValidationStatus"
+                ).textContent =
+                    "FAILED";
+
+
+                const report =
+                    document.getElementById(
+                        "mathIssueReport"
+                    );
+
+
+                report.textContent =
+
+                    "❌ Question Alignment Mismatch\n\n" +
+
+                    "Block: " +
+                    (i + 1) +
+                    "\n\n" +
+
+                    "Question File:\n" +
+                    questionLine +
+                    "\n\n" +
+
+                    "Difficulty File:\n" +
+
+                    "Question: " +
+
+                    mathDifficultyRecords[i]
+                        .question;
+
+
+                report.classList.remove(
+                    "hidden"
+                );
+
+
+                return;
+            }
+
+        }
+
+
+        document.getElementById(
+            "mathAlignmentStatus"
+        ).textContent =
+            "PASSED";
+
+
+        document.getElementById(
+            "mathValidationStatus"
+        ).textContent =
+            "READY";
+
+
+        mathValidationPassed =
+            true;
+
+
+        mathMergeBtn.disabled =
+            false;
+
+
+        document.getElementById(
+            "mathConsole"
+        ).textContent =
+
+            "Math file analysis complete.\n\n" +
+
+            "Question Blocks: " +
+            mathQuestionBlocks.length +
+            "\n" +
+
+            "Answers: " +
+            mathAnswers.length +
+            "\n" +
+
+            "Difficulty Blocks: " +
+            mathDifficultyRecords.length +
+            "\n\n" +
+
+            "All validation checks passed.\n" +
+
+            "Ready to generate Final.txt.";
+
+    }
+
+);
+
+
+// =========================================
+// REMOVE OLD GENERATED FIELDS
+// =========================================
+
+function cleanMathBlock(block) {
+
+    return block
+
+        .split("\n")
+
+        .filter(
+
+            line =>
+
+                !/^\s*Correct\|/i.test(
+                    line
+                ) &&
+
+                !/^\s*Difficulty\|/i.test(
+                    line
+                )
+
+        )
+
+        .join("\n")
+
+        .trim();
+}
+
+
+// =========================================
+// GENERATE FINAL MATH OUTPUT
+// =========================================
+
+mathMergeBtn.addEventListener(
+
+    "click",
+
+    () => {
+
+        if (
+            !mathValidationPassed
+        ) {
+
+            return;
+        }
+
+
+        const outputBlocks = [];
+
+
+        for (
+
+            let i = 0;
+
+            i <
+            mathQuestionBlocks.length;
+
+            i++
+
+        ) {
+
+            const block =
+                cleanMathBlock(
+                    mathQuestionBlocks[i]
+                );
+
+
+            const lines =
+                block.split("\n");
+
+
+            const shiftIndex =
+                lines.findIndex(
+
+                    line =>
+                        /^\s*Shift\|/i.test(
+                            line
+                        )
+
+                );
+
+
+            const newFields = [
+
+                "Correct| " +
+                mathAnswers[i],
+
+                "Difficulty| " +
+                mathDifficultyRecords[i]
+                    .difficulty
+
+            ];
+
+
+            // Insert after Shift|
+
+            if (
+                shiftIndex !== -1
+            ) {
+
+                lines.splice(
+
+                    shiftIndex + 1,
+
+                    0,
+
+                    ...newFields
+
+                );
+
+            } else {
+
+                // Safety fallback
+
+                lines.push(
+                    ...newFields
+                );
+            }
+
+
+            outputBlocks.push(
+
+                lines
+                    .join("\n")
+                    .trim()
+
+            );
+
+        }
+
+
+        mathFinalOutput =
+
+            outputBlocks.join(
+                "\n\n"
+            );
+
+
+        const generatedCount =
+            outputBlocks.length;
+
+
+        const correctCount =
+            (
+                mathFinalOutput.match(
+                    /^Correct\|/gm
+                ) || []
+            ).length;
+
+
+        const difficultyCount =
+            (
+                mathFinalOutput.match(
+                    /^Difficulty\|/gm
+                ) || []
+            ).length;
+
+
+        document.getElementById(
+            "mathGeneratedCount"
+        ).textContent =
+            generatedCount;
+
+
+        document.getElementById(
+            "mathCorrectCount"
+        ).textContent =
+            correctCount;
+
+
+        document.getElementById(
+            "mathMergedDifficultyCount"
+        ).textContent =
+            difficultyCount;
+
+
+        const finalPassed =
+
+            generatedCount ===
+                mathQuestionBlocks.length &&
+
+            correctCount ===
+                mathQuestionBlocks.length &&
+
+            difficultyCount ===
+                mathQuestionBlocks.length;
+
+
+        if (!finalPassed) {
+
+            document.getElementById(
+                "mathMergeStatus"
+            ).textContent =
+                "FAILED";
+
+
+            mathDownloadBtn.disabled =
+                true;
+
+
+            return;
+        }
+
+
+        document.getElementById(
+            "mathMergeStatus"
+        ).textContent =
+            "COMPLETE";
+
+
+        mathDownloadBtn.disabled =
+            false;
+
+
+        document.getElementById(
+            "mathConsole"
+        ).textContent +=
+
+            "\n\nMerge complete.\n" +
+
+            "Generated Blocks: " +
+            generatedCount +
+            "\n" +
+
+            "Correct| Entries: " +
+            correctCount +
+            "\n" +
+
+            "Difficulty| Entries: " +
+            difficultyCount +
+            "\n\n" +
+
+            "Final.txt is ready.";
+
+    }
+
+);
+
+
+// =========================================
+// DOWNLOAD FINAL.TXT
+// =========================================
+
+mathDownloadBtn.addEventListener(
+
+    "click",
+
+    () => {
+
+        if (
+            !mathFinalOutput
+        ) {
+
+            return;
+        }
+
+
+        const blob =
+            new Blob(
+
+                [
+                    mathFinalOutput
+                ],
+
+                {
+                    type:
+                        "text/plain;charset=utf-8"
+                }
+
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            "Final.txt";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    }
+
+);
