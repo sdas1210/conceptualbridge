@@ -39,6 +39,111 @@
     Validate, normalize and merge bilingual question data into final question blocks
 </p>
 
+    <!-- =====================================
+         FINAL MERGER MODE SELECTION
+    ====================================== -->
+    
+    <div
+        id="mergerModeSelector"
+        class="card merger-mode-card"
+    >
+    
+        <h2>
+            Choose Final Merger Mode
+        </h2>
+    
+        <p class="mode-help">
+            Select the workflow you want to use.
+        </p>
+    
+        <div class="merger-mode-grid">
+    
+            <!-- GACA -->
+    
+            <button
+                id="gacaModeBtn"
+                type="button"
+                class="merger-mode-btn"
+            >
+    
+                <strong>
+                    GACA
+                </strong>
+    
+                <span>
+                    Open the current four-file
+                    Final Merger workflow.
+                </span>
+    
+            </button>
+    
+    
+            <!-- MATH -->
+    
+            <button
+                id="mathModeBtn"
+                type="button"
+                class="merger-mode-btn"
+            >
+    
+                <strong>
+                    MATH
+                </strong>
+    
+                <span>
+                    Open the Mathematics
+                    Final Merger workflow.
+                </span>
+    
+            </button>
+    
+        </div>
+    
+    </div>
+    
+    
+    <!-- =====================================
+         MATH PLACEHOLDER
+    ====================================== -->
+    
+    <div
+        id="mathPlaceholder"
+        class="card hidden"
+    >
+    
+        <h2>
+            Math Final Merger
+        </h2>
+    
+        <p class="mode-placeholder-text">
+    
+            Mathematics Final Merger is ready
+            for the next development phase.
+    
+        </p>
+    
+        <div class="action-row">
+    
+            <button
+                id="backToModeBtn"
+                type="button"
+            >
+                ← Back to Mode Selection
+            </button>
+    
+        </div>
+    
+    </div>
+    
+    
+    <!-- =====================================
+         EXISTING GACA FINAL MERGER
+    ====================================== -->
+    
+    <div
+        id="gacaMergerWorkspace"
+        class="hidden"
+    >
 
     <!-- =====================================
          1. FILE SELECTION
@@ -366,7 +471,9 @@
         </button>
 
     </div>
-
+        
+</div>
+<!-- END GACA MERGER WORKSPACE -->
 </div>
 
 
