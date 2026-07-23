@@ -1174,6 +1174,68 @@ function buildMathGlobalSection() {
 }
 
 // =========================================
+// BUILD FINAL MATH TXT
+// =========================================
+
+function buildFinalMathText() {
+
+    const globalSection =
+        buildMathGlobalSection();
+
+
+    const questionSection =
+        mathBlocks
+            .map(
+                block =>
+                    normalizeMathText(block)
+                        .trim()
+            )
+            .filter(
+                block =>
+                    block !== ""
+            )
+            .join("\n\n");
+
+
+    // =====================================
+    // GLOBAL METADATA + QUESTIONS
+    // =====================================
+
+    if (
+        globalSection &&
+        globalSection.trim()
+    ) {
+
+        return (
+
+            globalSection.trim() +
+
+            "\n\n" +
+
+            questionSection +
+
+            "\n"
+
+        );
+
+    }
+
+
+    // =====================================
+    // QUESTIONS ONLY
+    // =====================================
+
+    return (
+
+        questionSection +
+
+        "\n"
+
+    );
+
+}
+
+// =========================================
 // LOAD TXT FILE
 // =========================================
 
