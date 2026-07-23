@@ -163,6 +163,20 @@ let currentMathBlockIndex = 0;
 let mathLoggingMode = null;
 
 let selectedGlobalTopic = "";
+
+// =========================================
+// MATH TOPIC CATALOGUE STATE
+// =========================================
+
+let mathTopicCatalogue = {
+
+    version: 1,
+
+    topics: []
+
+};
+
+let mathCatalogueChanged = false;
 // =========================================
 // INITIALIZE
 // =========================================
@@ -184,19 +198,186 @@ function initializeTopicSubTopicLogger() {
 initializeTopicSubTopicLogger();
 
 // =========================================
-// OPEN MATH WORKSPACE
+// LOAD MATH TOPIC CATALOGUE
 // =========================================
 
+async function loadMathTopicCatalogue() {
+
+    try {
+
+        const response =
+            await fetch(
+                "math.json",
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load math.json"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data ||
+            !Array.isArray(data.topics)
+        ) {
+
+            throw new Error(
+                "Invalid math.json structure"
+            );
+
+        }
+
+
+        mathTopicCatalogue =
+            data;
+
+
+        populateGlobalTopicSelect();
+
+
+        console.log(
+
+            "Math catalogue loaded:",
+
+            mathTopicCatalogue.topics.length,
+
+            "topics"
+
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+
+            "Math catalogue error:",
+
+            error
+
+        );
+
+
+        alert(
+
+            "math.json could not be loaded. " +
+
+            "Make sure math.json is in the same folder " +
+
+            "as the Topic & SubTopic Logger."
+
+        );
+
+    }
+
+}
+
+// =========================================
+// POPULATE GLOBAL TOPIC DROPDOWN
+// =========================================
+
+function populateGlobalTopicSelect() {
+
+    globalTopicSelect.innerHTML = "";
+
+
+    const defaultOption =
+        document.createElement(
+            "option"
+        );
+
+
+    defaultOption.value = "";
+
+    defaultOption.textContent =
+        "Select Topic";
+
+
+    globalTopicSelect.appendChild(
+        defaultOption
+    );
+
+
+    const sortedTopics =
+
+        [...mathTopicCatalogue.topics]
+
+            .sort(
+                (a, b) =>
+
+                    String(a.name)
+                        .localeCompare(
+                            String(b.name)
+                        )
+            );
+
+
+    for (
+        const topic
+        of sortedTopics
+    ) {
+
+        if (
+            !topic ||
+            !topic.name
+        ) {
+
+            continue;
+
+        }
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            topic.name;
+
+
+        option.textContent =
+            topic.name;
+
+
+        globalTopicSelect.appendChild(
+            option
+        );
+
+    }
+
+}
+
+// =========================================
+// OPEN MATH WORKSPACE
+// =========================================
 mathLoggerBtn.addEventListener(
     "click",
-    () => {
+    async () => {
 
         mathLoggerWorkspace.classList.remove(
             "hidden"
         );
 
+
+        await loadMathTopicCatalogue();
+
+
         mathLoggerWorkspace.scrollIntoView({
 
+            
             behavior:
                 "smooth",
 
@@ -207,6 +388,7 @@ mathLoggerBtn.addEventListener(
 
     }
 );
+
 
 
 // =========================================
