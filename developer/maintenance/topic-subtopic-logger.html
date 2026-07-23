@@ -416,9 +416,42 @@
     
             <pre id="mathBlockContent"></pre>
     
-    
-            <div class="block-navigation">
-    
+
+            <!-- =====================================
+                 ACTIVE GLOBAL TOPIC
+                 Only visible in SubTopic-Only mode
+            ====================================== -->
+            
+            <div
+                id="activeGlobalTopicBar"
+                class="active-global-topic hidden"
+            >
+            
+                <span>
+                    Global Topic:
+                </span>
+            
+                <strong id="activeGlobalTopicName">
+                    —
+                </strong>
+            
+                <button
+                    id="changeGlobalTopicBtn"
+                    type="button"
+                >
+                    EDIT
+                </button>
+            
+            </div>
+            
+            <!-- =====================================
+                 QUESTION OPERATION BAR
+            ====================================== -->
+            
+            <div class="block-navigation operation-bar">
+            
+                <!-- PREVIOUS -->
+            
                 <button
                     id="previousMathBlockBtn"
                     type="button"
@@ -426,13 +459,10 @@
                 >
                     ◀
                 </button>
-    
-    
-                <span id="mathBlockCounter">
-                    0 / 0
-                </span>
-    
-    
+            
+            
+                <!-- NEXT -->
+            
                 <button
                     id="nextMathBlockBtn"
                     type="button"
@@ -440,7 +470,91 @@
                 >
                     ▶
                 </button>
-    
+            
+            
+                <!-- QUESTION COUNTER -->
+            
+                <span id="mathBlockCounter">
+                    0 / 0
+                </span>
+            
+            
+                <!-- TOPIC CONTROL
+                     Hidden in SubTopic-Only mode -->
+            
+                <div
+                    id="questionTopicControl"
+                    class="operation-field"
+                >
+            
+                    <select id="questionTopicSelect">
+            
+                        <option value="">
+                            Topic
+                        </option>
+            
+                    </select>
+            
+            
+                    <button
+                        id="addQuestionTopicBtn"
+                        type="button"
+                        title="Add Topic"
+                    >
+                        +
+                    </button>
+            
+                </div>
+            
+            
+                <!-- SUBTOPIC CONTROL -->
+            
+                <div
+                    id="questionSubTopicControl"
+                    class="operation-field"
+                >
+            
+                    <select id="questionSubTopicSelect">
+            
+                        <option value="">
+                            SubTopic
+                        </option>
+            
+                    </select>
+            
+            
+                    <button
+                        id="addQuestionSubTopicBtn"
+                        type="button"
+                        title="Add SubTopic"
+                    >
+                        +
+                    </button>
+            
+                </div>
+            
+            
+                <!-- EDIT -->
+            
+                <button
+                    id="editQuestionMetadataBtn"
+                    type="button"
+                    title="Edit Topic / SubTopic"
+                >
+                    EDIT
+                </button>
+            
+            
+                <!-- APPLY -->
+            
+                <button
+                    id="applyQuestionMetadataBtn"
+                    type="button"
+                    title="Apply Metadata"
+                >
+                    OK
+                </button>
+            
             </div>
     
         </div>
