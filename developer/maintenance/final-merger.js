@@ -47,41 +47,6 @@ const mergerModeSelector =
         "mergerModeSelector"
     );
 
-
-const gacaMergerWorkspace =
-    document.getElementById(
-        "gacaMergerWorkspace"
-    );
-
-
-const mathPlaceholder =
-    document.getElementById(
-        "mathPlaceholder"
-    );
-
-
-const gacaModeBtn =
-    document.getElementById(
-        "gacaModeBtn"
-    );
-
-
-const mathModeBtn =
-    document.getElementById(
-        "mathModeBtn"
-    );
-
-
-const backToModeBtn =
-    document.getElementById(
-        "backToModeBtn"
-    );
-
-const mergerModeSelector =
-    document.getElementById(
-        "mergerModeSelector"
-    );
-
 const gacaMergerWorkspace =
     document.getElementById(
         "gacaMergerWorkspace"
@@ -243,64 +208,7 @@ mathModeBtn.addEventListener(
 );
 
 
-gacaModeBtn.addEventListener(
-    "click",
-    () => {
 
-        mergerModeSelector.classList.add(
-            "hidden"
-        );
-
-        mathPlaceholder.classList.add(
-            "hidden"
-        );
-
-        gacaMergerWorkspace.classList.remove(
-            "hidden"
-        );
-
-    }
-);
-
-
-mathModeBtn.addEventListener(
-    "click",
-    () => {
-
-        mergerModeSelector.classList.add(
-            "hidden"
-        );
-
-        gacaMergerWorkspace.classList.add(
-            "hidden"
-        );
-
-        mathPlaceholder.classList.remove(
-            "hidden"
-        );
-
-    }
-);
-
-
-backToModeBtn.addEventListener(
-    "click",
-    () => {
-
-        mathPlaceholder.classList.add(
-            "hidden"
-        );
-
-        gacaMergerWorkspace.classList.add(
-            "hidden"
-        );
-
-        mergerModeSelector.classList.remove(
-            "hidden"
-        );
-
-    }
-);
 // =========================================
 // BACK TO MODE SELECTION
 // =========================================
