@@ -1030,6 +1030,150 @@ function setQuestionMetadata(
 }
 
 // =========================================
+// BUILD / UPDATE GLOBAL METADATA SECTION
+// =========================================
+
+function buildMathGlobalSection() {
+
+    let globalText =
+        originalGlobalSection;
+
+
+    // =====================================
+    // MODE 1
+    // Topic + SubTopic are question-level.
+    // Do not modify global Topic.
+    // =====================================
+
+    if (
+        mathLoggingMode !==
+        "subtopic-only"
+    ) {
+
+        return globalText;
+
+    }
+
+
+    // =====================================
+    // MODE 2
+    // Global Topic is required.
+    // =====================================
+
+    if (!selectedGlobalTopic) {
+
+        return globalText;
+
+    }
+
+
+    // =====================================
+    // NO GLOBAL METADATA EXISTS
+    // =====================================
+
+    if (!globalText.trim()) {
+
+        return (
+            "Topic| " +
+            selectedGlobalTopic
+        );
+
+    }
+
+
+    let lines =
+        normalizeMathText(
+            globalText
+        ).split("\n");
+
+
+    let topicFound =
+        false;
+
+
+    // =====================================
+    // REPLACE EXISTING GLOBAL Topic|
+    // =====================================
+
+    lines =
+        lines.map(
+            line => {
+
+                if (
+                    /^\s*Topic\|/i.test(
+                        line
+                    )
+                ) {
+
+                    topicFound =
+                        true;
+
+
+                    return (
+                        "Topic| " +
+                        selectedGlobalTopic
+                    );
+
+                }
+
+
+                return line;
+
+            }
+        );
+
+
+    // =====================================
+    // IF Topic| DOES NOT EXIST,
+    // ADD IT TO GLOBAL METADATA
+    // =====================================
+
+    if (!topicFound) {
+
+        /*
+         * Prefer inserting Topic immediately
+         * after Subject| when possible.
+         */
+
+        const subjectIndex =
+            lines.findIndex(
+                line =>
+                    /^\s*Subject\|/i.test(
+                        line
+                    )
+            );
+
+
+        if (
+            subjectIndex !== -1
+        ) {
+
+            lines.splice(
+                subjectIndex + 1,
+                0,
+                "Topic| " +
+                selectedGlobalTopic
+            );
+
+        }
+
+        else {
+
+            lines.push(
+                "Topic| " +
+                selectedGlobalTopic
+            );
+
+        }
+
+    }
+
+
+    return lines.join("\n");
+
+}
+
+// =========================================
 // LOAD TXT FILE
 // =========================================
 
