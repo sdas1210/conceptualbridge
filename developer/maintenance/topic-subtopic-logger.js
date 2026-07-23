@@ -1262,6 +1262,220 @@ function renderMathBlock() {
 
 }
 
+// =========================================
+// APPLY QUESTION METADATA
+// =========================================
+
+applyQuestionMetadataBtn.addEventListener(
+    "click",
+    () => {
+
+        // ---------------------------------
+        // SAFETY CHECK
+        // ---------------------------------
+
+        if (
+            mathBlocks.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        let topic = "";
+
+        let subTopic = "";
+
+
+        // =================================
+        // MODE 1
+        // TOPIC + SUBTOPIC PER QUESTION
+        // =================================
+
+        if (
+            mathLoggingMode === "both"
+        ) {
+
+            topic =
+                questionTopicSelect
+                    .value
+                    .trim();
+
+
+            subTopic =
+                questionSubTopicSelect
+                    .value
+                    .trim();
+
+
+            if (!topic) {
+
+                alert(
+                    "Please select a Topic."
+                );
+
+                return;
+
+            }
+
+
+            if (!subTopic) {
+
+                alert(
+                    "Please select a SubTopic."
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        // =================================
+        // MODE 2
+        // GLOBAL TOPIC + SUBTOPIC PER QUESTION
+        // =================================
+
+        else if (
+            mathLoggingMode ===
+            "subtopic-only"
+        ) {
+
+            if (!selectedGlobalTopic) {
+
+                alert(
+                    "Global Topic is missing."
+                );
+
+                return;
+
+            }
+
+
+            // Question-level Topic remains blank.
+            // Global Topic will be written later
+            // into the global metadata section.
+
+            topic = "";
+
+
+            subTopic =
+                questionSubTopicSelect
+                    .value
+                    .trim();
+
+
+            if (!subTopic) {
+
+                alert(
+                    "Please select a SubTopic."
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        // =================================
+        // NO VALID MODE
+        // =================================
+
+        else {
+
+            alert(
+                "Please choose a logging mode."
+            );
+
+            return;
+
+        }
+
+
+        // =================================
+        // SAVE ASSIGNMENT
+        // =================================
+
+        mathQuestionAssignments[
+            currentMathBlockIndex
+        ] = {
+
+            topic:
+                topic,
+
+            subTopic:
+                subTopic,
+
+            completed:
+                true
+
+        };
+
+
+        // =================================
+        // MODIFY CURRENT QUESTION BLOCK
+        // =================================
+
+        mathBlocks[
+            currentMathBlockIndex
+        ] =
+
+            setQuestionMetadata(
+
+                mathBlocks[
+                    currentMathBlockIndex
+                ],
+
+                topic,
+
+                subTopic
+
+            );
+
+
+        // =================================
+        // AUTO ADVANCE
+        // =================================
+
+        if (
+
+            currentMathBlockIndex <
+
+            mathBlocks.length - 1
+
+        ) {
+
+            currentMathBlockIndex++;
+
+
+            renderMathBlock();
+
+        }
+
+
+        // =================================
+        // LAST QUESTION
+        // =================================
+
+        else {
+
+            renderMathBlock();
+
+
+            alert(
+                "You have reached the last question. " +
+                "You can use the navigation buttons " +
+                "to review your logged questions."
+            );
+
+        }
+
+    }
+);
+
 
 // =========================================
 // PREVIOUS QUESTION
