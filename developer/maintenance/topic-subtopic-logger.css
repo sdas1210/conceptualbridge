@@ -1238,3 +1238,186 @@ h1 {
     font-weight: bold;
 
 }
+
+/* =========================================
+   LOGGING MODE SELECTOR
+========================================= */
+
+.logging-mode-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+
+}
+
+
+.logging-mode-card {
+
+    min-height: 130px;
+
+    padding: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .16);
+
+    border-radius: 13px;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    background:
+        rgba(0, 0, 0, .18);
+
+}
+
+
+.logging-mode-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    background:
+        rgba(255, 255, 255, .10);
+
+}
+
+
+.logging-mode-card strong {
+
+    font-size: 1rem;
+
+}
+
+
+.logging-mode-card span {
+
+    max-width: 280px;
+
+    color: #b8c9da;
+
+    text-align: center;
+
+    font-size: .8rem;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   GLOBAL TOPIC SETUP
+========================================= */
+
+.global-topic-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.global-topic-row select {
+
+    flex: 1;
+
+    min-width: 220px;
+
+    padding:
+        10px
+        12px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    background:
+        #101c2a;
+
+}
+
+
+.global-topic-row button {
+
+    min-height: 40px;
+
+    padding:
+        8px
+        14px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    background:
+        rgba(255, 255, 255, .08);
+
+}
+
+
+#addGlobalTopicBtn {
+
+    width: 42px;
+
+    padding: 0;
+
+    font-size: 1.25rem;
+
+    font-weight: bold;
+
+}
+
+
+.global-topic-row button:hover {
+
+    background:
+        rgba(255, 255, 255, .15);
+
+}
+
+
+@media (
+    max-width: 650px
+) {
+
+    .logging-mode-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
