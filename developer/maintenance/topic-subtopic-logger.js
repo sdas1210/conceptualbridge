@@ -1477,6 +1477,115 @@ function updateMathCatalogueChangeStatus() {
 }
 
 // =========================================
+// V2 - UPDATE CATALOGUE CONTROL STATES
+// =========================================
+
+function updateMathCatalogueControlStates() {
+
+    const questionTopic =
+        questionTopicSelect
+            .value
+            .trim();
+
+
+    const questionSubTopic =
+        questionSubTopicSelect
+            .value
+            .trim();
+
+
+    const globalTopic =
+        globalTopicSelect
+            .value
+            .trim();
+
+
+    // =====================================
+    // GLOBAL TOPIC CONTROLS
+    // =====================================
+
+    // EDIT requires an existing
+    // selected Topic.
+
+    editGlobalTopicBtn.disabled =
+        !globalTopic;
+
+
+    // =====================================
+    // MODE 1
+    // TOPIC + SUBTOPIC
+    // =====================================
+
+    if (
+        mathLoggingMode === "both"
+    ) {
+
+        // A SubTopic cannot be created
+        // without selecting its parent Topic.
+
+        addQuestionSubTopicBtn.disabled =
+            !questionTopic;
+
+
+        // EDIT can be used when at least
+        // a Topic is selected.
+        //
+        // The existing EDIT handler will
+        // then ask whether Topic or
+        // SubTopic should be edited.
+
+        editQuestionMetadataBtn.disabled =
+            !questionTopic;
+
+
+        return;
+
+    }
+
+
+    // =====================================
+    // MODE 2
+    // GLOBAL TOPIC + SUBTOPIC ONLY
+    // =====================================
+
+    if (
+        mathLoggingMode ===
+        "subtopic-only"
+    ) {
+
+        // SubTopics belong to the selected
+        // Global Topic.
+
+        addQuestionSubTopicBtn.disabled =
+            !selectedGlobalTopic;
+
+
+        // Question-level EDIT in this mode
+        // edits only the selected SubTopic.
+
+        editQuestionMetadataBtn.disabled =
+            !questionSubTopic;
+
+
+        return;
+
+    }
+
+
+    // =====================================
+    // NO LOGGING MODE ACTIVE
+    // =====================================
+
+    addQuestionSubTopicBtn.disabled =
+        true;
+
+
+    editQuestionMetadataBtn.disabled =
+        true;
+
+}
+
+// =========================================
 // V2 - EDIT GLOBAL TOPIC
 // =========================================
 
@@ -2022,6 +2131,20 @@ questionTopicSelect.addEventListener(
         populateQuestionSubTopicSelect(
             questionTopicSelect.value
         );
+        
+        updateMathCatalogueControlStates();
+
+    }
+);
+// =========================================
+// V2 - SUBTOPIC CONTROL STATE
+// =========================================
+
+questionSubTopicSelect.addEventListener(
+    "change",
+    () => {
+
+        updateMathCatalogueControlStates();
 
     }
 );
