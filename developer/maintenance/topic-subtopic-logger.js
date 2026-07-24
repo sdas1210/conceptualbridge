@@ -1770,22 +1770,24 @@ editQuestionMetadataBtn.addEventListener(
                 if (!topicName) {
 
                     alert(
-                        "Please select a Topic first."
+                        "SubTopic cannot be edited.\n\n" +
+                        "Please select its parent Topic first."
                     );
-
+                
                     return;
-
+                
                 }
-
-
+                
+                
                 if (!oldSubTopic) {
-
+                
                     alert(
+                        "SubTopic cannot be edited.\n\n" +
                         "Please select a SubTopic first."
                     );
-
+                
                     return;
-
+                
                 }
 
 
@@ -1855,11 +1857,12 @@ editQuestionMetadataBtn.addEventListener(
             if (!oldSubTopic) {
 
                 alert(
+                    "SubTopic cannot be edited.\n\n" +
                     "Please select a SubTopic first."
                 );
-
+            
                 return;
-
+            
             }
 
 
@@ -2116,7 +2119,7 @@ logSubTopicOnlyModeBtn.addEventListener(
         );
         updateMathCatalogueControlStates();
 
-        });
+        
 
     }
 );
