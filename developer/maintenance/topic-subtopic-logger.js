@@ -3104,6 +3104,21 @@ loadMathFileBtn.addEventListener(
     
             })
         );
+
+        // Reset logging state for
+        // the newly loaded TXT file.
+        
+        mathLoggingMode =
+            null;
+        
+        
+        selectedGlobalTopic =
+            "";
+        
+        
+        activeGlobalTopicName.textContent =
+            "";
+        
         currentMathBlockIndex =
             0;
 
