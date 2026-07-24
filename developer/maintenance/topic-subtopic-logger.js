@@ -907,13 +907,16 @@ function renameMathTopic(
 
     }
 
-
     const enteredName =
         prompt(
-            "Rename Topic:",
+            "RENAME MATH TOPIC\n\n" +
+            "Current Topic: " +
+            topicEntry.name +
+            "\n\n" +
+            "Enter the new Topic name:",
             topicEntry.name
         );
-
+        
 
     // Cancel pressed.
 
@@ -931,11 +934,12 @@ function renameMathTopic(
     if (!newTopicName) {
 
         alert(
-            "Topic name cannot be empty."
+            "Topic was not renamed.\n\n" +
+            "The new Topic name cannot be empty."
         );
-
+    
         return;
-
+    
     }
 
 
@@ -977,9 +981,10 @@ function renameMathTopic(
     if (duplicateExists) {
 
         alert(
-            'Topic "' +
+            "Topic was not renamed.\n\n" +
+            '"' +
             newTopicName +
-            '" already exists.'
+            '" already exists in the Math catalogue.'
         );
 
         return;
@@ -1053,11 +1058,12 @@ function renameMathTopic(
 
 
     alert(
-        'Topic "' +
+        "Topic renamed successfully.\n\n" +
+        "Previous: " +
         previousName +
-        '" renamed to "' +
-        newTopicName +
-        '".'
+        "\n" +
+        "New: " +
+        newTopicName
     );
 
 
@@ -1177,10 +1183,17 @@ function renameMathSubTopic(
 
     
     const enteredName =
-        prompt(
-            "Rename SubTopic:",
-            currentName
-        );
+    prompt(
+        "RENAME MATH SUBTOPIC\n\n" +
+        "Parent Topic: " +
+        topicEntry.name +
+        "\n" +
+        "Current SubTopic: " +
+        currentName +
+        "\n\n" +
+        "Enter the new SubTopic name:",
+        currentName
+    );
 
 
     if (enteredName === null) {
@@ -1197,11 +1210,12 @@ function renameMathSubTopic(
     if (!newSubTopicName) {
 
         alert(
-            "SubTopic name cannot be empty."
+            "SubTopic was not renamed.\n\n" +
+            "The new SubTopic name cannot be empty."
         );
-
+    
         return;
-
+    
     }
 
 
@@ -1241,11 +1255,11 @@ function renameMathSubTopic(
     if (duplicateExists) {
 
         alert(
-            'SubTopic "' +
+            "SubTopic was not renamed.\n\n" +
+            '"' +
             newSubTopicName +
-            '" already exists under "' +
-            topicEntry.name +
-            '".'
+            '" already exists under:\n' +
+            topicEntry.name
         );
 
         return;
@@ -1282,11 +1296,15 @@ function renameMathSubTopic(
     updateMathCatalogueChangeStatus();
 
     alert(
-        'SubTopic "' +
+        "SubTopic renamed successfully.\n\n" +
+        "Topic: " +
+        topicEntry.name +
+        "\n" +
+        "Previous: " +
         currentName +
-        '" renamed to "' +
-        newSubTopicName +
-        '".'
+        "\n" +
+        "New: " +
+        newSubTopicName
     );
 
 
@@ -1640,9 +1658,30 @@ editQuestionMetadataBtn.addEventListener(
 
             const choice =
                 prompt(
-                    "What do you want to edit?\n\n" +
+                    "EDIT MATH CATALOGUE\n\n" +
+            
+                    "Current Topic: " +
+                    (
+                        questionTopicSelect.value ||
+                        "Not selected"
+                    ) +
+            
+                    "\n" +
+            
+                    "Current SubTopic: " +
+                    (
+                        questionSubTopicSelect.value ||
+                        "Not selected"
+                    ) +
+            
+                    "\n\n" +
+            
+                    "Choose what you want to rename:\n\n" +
+            
                     "1 = Topic\n" +
-                    "2 = SubTopic"
+                    "2 = SubTopic\n\n" +
+            
+                    "Enter 1 or 2:"
                 );
 
 
@@ -1670,6 +1709,7 @@ editQuestionMetadataBtn.addEventListener(
                 if (!oldTopic) {
 
                     alert(
+                        "Topic cannot be edited.\n\n" +
                         "Please select a Topic first."
                     );
 
@@ -1782,9 +1822,12 @@ editQuestionMetadataBtn.addEventListener(
             else {
 
                 alert(
-                    "Please enter 1 or 2."
+                    "No catalogue item was edited.\n\n" +
+                    "Please enter:\n" +
+                    "1 to rename the Topic\n" +
+                    "2 to rename the SubTopic"
                 );
-
+            
             }
 
 
