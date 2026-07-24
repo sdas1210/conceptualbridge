@@ -523,6 +523,738 @@ function populateQuestionTopicSelect() {
     }
 
 }
+// =========================================
+// V2 - ADD NEW MATH TOPIC
+// =========================================
+
+function addNewMathTopic() {
+
+    const enteredName =
+        prompt(
+            "Enter the new Math Topic:"
+        );
+
+
+    // User pressed Cancel.
+
+    if (enteredName === null) {
+
+        return;
+
+    }
+
+
+    const topicName =
+        enteredName.trim();
+
+
+    // Empty Topic is not allowed.
+
+    if (!topicName) {
+
+        alert(
+            "Topic name cannot be empty."
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // DUPLICATE CHECK
+    // Case-insensitive
+    // =====================================
+
+    const duplicateExists =
+
+        mathTopicCatalogue.topics.some(
+            topic =>
+
+                String(topic.name)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                topicName
+                    .toLowerCase()
+        );
+
+
+    if (duplicateExists) {
+
+        alert(
+            'Topic "' +
+            topicName +
+            '" already exists.'
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // ADD NEW TOPIC
+    // =====================================
+
+    mathTopicCatalogue.topics.push({
+
+        name:
+            topicName,
+
+        subtopics:
+            []
+
+    });
+
+
+    // Catalogue has changed.
+
+    mathCatalogueChanged =
+        true;
+
+
+    // =====================================
+    // REFRESH BOTH TOPIC DROPDOWNS
+    // =====================================
+
+    populateGlobalTopicSelect();
+
+    populateQuestionTopicSelect();
+
+
+    alert(
+        'Topic "' +
+        topicName +
+        '" has been added.'
+    );
+
+
+    return topicName;
+
+}
+
+
+// =========================================
+// V2 - ADD NEW MATH SUBTOPIC
+// =========================================
+
+function addNewMathSubTopic(
+    topicName
+) {
+
+    // =====================================
+    // VALIDATE PARENT TOPIC
+    // =====================================
+
+    if (!topicName) {
+
+        alert(
+            "Please select a Topic first."
+        );
+
+        return;
+
+    }
+
+
+    // Find the selected Topic
+    // inside mathTopicCatalogue.
+
+    const topicEntry =
+        mathTopicCatalogue.topics.find(
+            topic =>
+
+                String(topic.name)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                String(topicName)
+                    .trim()
+                    .toLowerCase()
+        );
+
+
+    if (!topicEntry) {
+
+        alert(
+            'Topic "' +
+            topicName +
+            '" was not found.'
+        );
+
+        return;
+
+    }
+
+
+    // Make sure subtopics exists.
+
+    if (
+        !Array.isArray(
+            topicEntry.subtopics
+        )
+    ) {
+
+        topicEntry.subtopics = [];
+
+    }
+
+
+    // =====================================
+    // ASK FOR NEW SUBTOPIC
+    // =====================================
+
+    const enteredName =
+        prompt(
+
+            "Enter a new SubTopic for:\n\n" +
+
+            topicEntry.name
+
+        );
+
+
+    // User pressed Cancel.
+
+    if (enteredName === null) {
+
+        return;
+
+    }
+
+
+    const subTopicName =
+        enteredName.trim();
+
+
+    if (!subTopicName) {
+
+        alert(
+            "SubTopic name cannot be empty."
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // DUPLICATE CHECK
+    // Only inside selected Topic.
+    // Case-insensitive.
+    // =====================================
+
+    const duplicateExists =
+
+        topicEntry.subtopics.some(
+            subTopic =>
+
+                String(subTopic)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                subTopicName
+                    .toLowerCase()
+        );
+
+
+    if (duplicateExists) {
+
+        alert(
+
+            'SubTopic "' +
+
+            subTopicName +
+
+            '" already exists under "' +
+
+            topicEntry.name +
+
+            '".'
+
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // ADD SUBTOPIC
+    // =====================================
+
+    topicEntry.subtopics.push(
+        subTopicName
+    );
+
+
+    // Catalogue has changed.
+
+    mathCatalogueChanged =
+        true;
+
+
+    alert(
+
+        'SubTopic "' +
+
+        subTopicName +
+
+        '" has been added under "' +
+
+        topicEntry.name +
+
+        '".'
+
+    );
+
+
+    return subTopicName;
+
+}
+
+// =========================================
+// V2 - RENAME MATH TOPIC
+// =========================================
+
+function renameMathTopic(
+    oldTopicName
+) {
+
+    if (!oldTopicName) {
+
+        alert(
+            "Please select a Topic first."
+        );
+
+        return;
+
+    }
+
+
+    const topicEntry =
+        mathTopicCatalogue.topics.find(
+            topic =>
+
+                String(topic.name)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                String(oldTopicName)
+                    .trim()
+                    .toLowerCase()
+        );
+
+
+    if (!topicEntry) {
+
+        alert(
+            'Topic "' +
+            oldTopicName +
+            '" was not found.'
+        );
+
+        return;
+
+    }
+
+
+    const enteredName =
+        prompt(
+            "Rename Topic:",
+            topicEntry.name
+        );
+
+
+    // Cancel pressed.
+
+    if (enteredName === null) {
+
+        return;
+
+    }
+
+
+    const newTopicName =
+        enteredName.trim();
+
+
+    if (!newTopicName) {
+
+        alert(
+            "Topic name cannot be empty."
+        );
+
+        return;
+
+    }
+
+
+    // No actual change.
+
+    if (
+        newTopicName ===
+        topicEntry.name
+    ) {
+
+        return topicEntry.name;
+
+    }
+
+
+    // =====================================
+    // DUPLICATE CHECK
+    // Ignore the Topic currently being edited.
+    // =====================================
+
+    const duplicateExists =
+
+        mathTopicCatalogue.topics.some(
+            topic =>
+
+                topic !== topicEntry &&
+
+                String(topic.name)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                newTopicName
+                    .toLowerCase()
+        );
+
+
+    if (duplicateExists) {
+
+        alert(
+            'Topic "' +
+            newTopicName +
+            '" already exists.'
+        );
+
+        return;
+
+    }
+
+
+    const previousName =
+        topicEntry.name;
+
+
+    // Rename only the Topic name.
+    // Existing subtopics remain untouched.
+
+    topicEntry.name =
+        newTopicName;
+
+
+    mathCatalogueChanged =
+        true;
+
+
+    // =====================================
+    // UPDATE CURRENT GLOBAL TOPIC IF NEEDED
+    // =====================================
+
+    if (
+        selectedGlobalTopic
+            .trim()
+            .toLowerCase()
+
+        ===
+
+        String(previousName)
+            .trim()
+            .toLowerCase()
+    ) {
+
+        selectedGlobalTopic =
+            newTopicName;
+
+
+        activeGlobalTopicName.textContent =
+            newTopicName;
+
+    }
+
+
+    // Refresh Topic dropdowns.
+
+    populateGlobalTopicSelect();
+
+    populateQuestionTopicSelect();
+
+
+    alert(
+        'Topic "' +
+        previousName +
+        '" renamed to "' +
+        newTopicName +
+        '".'
+    );
+
+
+    return newTopicName;
+
+}
+
+// =========================================
+// V2 - RENAME MATH SUBTOPIC
+// =========================================
+
+function renameMathSubTopic(
+    topicName,
+    oldSubTopicName
+) {
+
+    if (!topicName) {
+
+        alert(
+            "Please select a Topic first."
+        );
+
+        return;
+
+    }
+
+
+    if (!oldSubTopicName) {
+
+        alert(
+            "Please select a SubTopic first."
+        );
+
+        return;
+
+    }
+
+
+    const topicEntry =
+        mathTopicCatalogue.topics.find(
+            topic =>
+
+                String(topic.name)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                String(topicName)
+                    .trim()
+                    .toLowerCase()
+        );
+
+
+    if (!topicEntry) {
+
+        alert(
+            'Topic "' +
+            topicName +
+            '" was not found.'
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Array.isArray(
+            topicEntry.subtopics
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const subTopicIndex =
+        topicEntry.subtopics.findIndex(
+            subTopic =>
+
+                String(subTopic)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                String(oldSubTopicName)
+                    .trim()
+                    .toLowerCase()
+        );
+
+
+    if (
+        subTopicIndex === -1
+    ) {
+
+        alert(
+            'SubTopic "' +
+            oldSubTopicName +
+            '" was not found.'
+        );
+
+        return;
+
+    }
+
+
+    const currentName =
+        topicEntry.subtopics[
+            subTopicIndex
+        ];
+
+
+    const enteredName =
+        prompt(
+            "Rename SubTopic:",
+            currentName
+        );
+
+
+    if (enteredName === null) {
+
+        return;
+
+    }
+
+
+    const newSubTopicName =
+        enteredName.trim();
+
+
+    if (!newSubTopicName) {
+
+        alert(
+            "SubTopic name cannot be empty."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        newSubTopicName ===
+        currentName
+    ) {
+
+        return currentName;
+
+    }
+
+
+    // =====================================
+    // DUPLICATE CHECK
+    // Within the same parent Topic only.
+    // =====================================
+
+    const duplicateExists =
+
+        topicEntry.subtopics.some(
+            (subTopic, index) =>
+
+                index !== subTopicIndex &&
+
+                String(subTopic)
+                    .trim()
+                    .toLowerCase()
+
+                ===
+
+                newSubTopicName
+                    .toLowerCase()
+        );
+
+
+    if (duplicateExists) {
+
+        alert(
+            'SubTopic "' +
+            newSubTopicName +
+            '" already exists under "' +
+            topicEntry.name +
+            '".'
+        );
+
+        return;
+
+    }
+
+
+    topicEntry.subtopics[
+        subTopicIndex
+    ] =
+        newSubTopicName;
+
+
+    mathCatalogueChanged =
+        true;
+
+
+    alert(
+        'SubTopic "' +
+        currentName +
+        '" renamed to "' +
+        newSubTopicName +
+        '".'
+    );
+
+
+    return newSubTopicName;
+
+}
+
+// =========================================
+// V2 - EDIT GLOBAL TOPIC
+// =========================================
+
+editGlobalTopicBtn.addEventListener(
+    "click",
+    () => {
+
+        const currentTopic =
+            globalTopicSelect
+                .value
+                .trim();
+
+        if (!currentTopic) {
+
+            alert(
+                "Please select a Topic first."
+            );
+
+            return;
+        }
+
+        const renamedTopic =
+            renameMathTopic(
+                currentTopic
+            );
+
+        if (!renamedTopic) {
+
+            return;
+        }
+
+        // Keep renamed Topic selected.
+
+        globalTopicSelect.value =
+            renamedTopic;
+
+    }
+);
 
 // =========================================
 // POPULATE SUBTOPICS FOR A TOPIC
@@ -843,6 +1575,162 @@ changeGlobalTopicBtn.addEventListener(
     }
 );
 
+// =========================================
+// V2 - ADD GLOBAL TOPIC
+// =========================================
+
+addGlobalTopicBtn.addEventListener(
+    "click",
+    () => {
+
+        const newTopic =
+            addNewMathTopic();
+
+
+        if (!newTopic) {
+
+            return;
+
+        }
+
+
+        // Automatically select
+        // the newly created Topic.
+
+        globalTopicSelect.value =
+            newTopic;
+
+    }
+);
+
+// =========================================
+// V2 - ADD QUESTION TOPIC
+// =========================================
+
+addQuestionTopicBtn.addEventListener(
+    "click",
+    () => {
+
+        const newTopic =
+            addNewMathTopic();
+
+
+        if (!newTopic) {
+
+            return;
+
+        }
+
+
+        // Automatically select
+        // the newly created Topic.
+
+        questionTopicSelect.value =
+            newTopic;
+
+
+        // New Topic initially has
+        // no SubTopics.
+
+        populateQuestionSubTopicSelect(
+            newTopic
+        );
+
+    }
+);
+
+// =========================================
+// V2 - ADD QUESTION SUBTOPIC
+// =========================================
+
+addQuestionSubTopicBtn.addEventListener(
+    "click",
+    () => {
+
+        let parentTopic = "";
+
+
+        // =================================
+        // MODE 1
+        // Topic + SubTopic
+        // =================================
+
+        if (
+            mathLoggingMode === "both"
+        ) {
+
+            parentTopic =
+                questionTopicSelect
+                    .value
+                    .trim();
+
+        }
+
+
+        // =================================
+        // MODE 2
+        // Global Topic + SubTopic
+        // =================================
+
+        else if (
+            mathLoggingMode ===
+            "subtopic-only"
+        ) {
+
+            parentTopic =
+                selectedGlobalTopic
+                    .trim();
+
+        }
+
+
+        // =================================
+        // VALIDATION
+        // =================================
+
+        if (!parentTopic) {
+
+            alert(
+                "Please select a Topic first."
+            );
+
+            return;
+
+        }
+
+
+        // =================================
+        // ADD NEW SUBTOPIC
+        // =================================
+
+        const newSubTopic =
+            addNewMathSubTopic(
+                parentTopic
+            );
+
+
+        if (!newSubTopic) {
+
+            return;
+
+        }
+
+
+        // Refresh SubTopic dropdown.
+
+        populateQuestionSubTopicSelect(
+            parentTopic
+        );
+
+
+        // Automatically select
+        // newly created SubTopic.
+
+        questionSubTopicSelect.value =
+            newSubTopic;
+
+    }
+);
 
 // =========================================
 // NORMALIZE TEXT
