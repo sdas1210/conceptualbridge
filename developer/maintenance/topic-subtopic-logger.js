@@ -208,6 +208,8 @@ const downloadMathOutputBtn =
         "downloadMathOutputBtn"
     );
 
+
+
 // =========================================
 // V2 - CATALOGUE DOWNLOAD REFERENCES
 // =========================================
@@ -217,6 +219,10 @@ const mathCatalogueDownloadArea =
         "mathCatalogueDownloadArea"
     );
 
+const mathCatalogueStatus =
+    document.getElementById(
+        "mathCatalogueStatus"
+    );
 
 const downloadMathCatalogueBtn =
     document.getElementById(
@@ -1414,20 +1420,17 @@ function syncRenamedSubTopic(
 // =========================================
 // V2 - UPDATE CATALOGUE CHANGE STATUS
 // =========================================
+// =========================================
+// V2 - UPDATE CATALOGUE CHANGE STATUS
+// =========================================
 
 function updateMathCatalogueChangeStatus() {
 
-    if (mathCatalogueChanged) {
+    // =====================================
+    // NO CATALOGUE CHANGE
+    // =====================================
 
-        mathCatalogueDownloadArea
-            .classList
-            .remove(
-                "hidden"
-            );
-
-    }
-
-    else {
+    if (!mathCatalogueChanged) {
 
         mathCatalogueDownloadArea
             .classList
@@ -1435,9 +1438,44 @@ function updateMathCatalogueChangeStatus() {
                 "hidden"
             );
 
+        return;
+
     }
 
+
+    // Catalogue has changed,
+    // therefore show the area.
+
+    mathCatalogueDownloadArea
+        .classList
+        .remove(
+            "hidden"
+        );
+
+
+    // =====================================
+    // LATEST VERSION ALREADY DOWNLOADED
+    // =====================================
+
+    if (mathCatalogueDownloaded) {
+
+        mathCatalogueStatus.textContent =
+            "Latest catalogue downloaded.";
+
+        return;
+
+    }
+
+
+    // =====================================
+    // CHANGED BUT NOT YET DOWNLOADED
+    // =====================================
+
+    mathCatalogueStatus.textContent =
+        "Catalogue modified — download updated math.json";
+
 }
+
 // =========================================
 // V2 - EDIT GLOBAL TOPIC
 // =========================================
@@ -2776,6 +2814,9 @@ downloadMathCatalogueBtn.addEventListener(
         mathCatalogueDownloaded =
             true;
 
+        // Refresh visible status.
+
+        updateMathCatalogueChangeStatus();
     }
 );
 
