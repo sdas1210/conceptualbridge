@@ -1470,9 +1470,20 @@ function updateMathCatalogueChangeStatus() {
 
         mathCatalogueStatus.textContent =
             "Latest catalogue downloaded.";
-
+    
+    
+        mathCatalogueStatus.classList.remove(
+            "catalogue-status-pending"
+        );
+    
+    
+        mathCatalogueStatus.classList.add(
+            "catalogue-status-saved"
+        );
+    
+    
         return;
-
+    
     }
 
 
@@ -1482,6 +1493,15 @@ function updateMathCatalogueChangeStatus() {
 
     mathCatalogueStatus.textContent =
         "Catalogue modified — download updated math.json";
+
+    mathCatalogueStatus.classList.remove(
+        "catalogue-status-saved"
+    );
+    
+    
+    mathCatalogueStatus.classList.add(
+        "catalogue-status-pending"
+    );
 
 }
 
@@ -3121,6 +3141,14 @@ loadMathFileBtn.addEventListener(
 
         globalTopicSelect.value =
             "";
+
+        questionTopicSelect.value =
+            "";
+        
+        
+        populateQuestionSubTopicSelect(
+            ""
+        );
         
         
         activeGlobalTopicBar.classList.add(
@@ -3163,6 +3191,11 @@ loadMathFileBtn.addEventListener(
         globalTopicSetup.classList.add(
             "hidden"
         );
+
+        // Refresh all logger control states
+        // for the new session.
+        
+        updateMathCatalogueControlStates();
 
     }
 );
