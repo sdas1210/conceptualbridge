@@ -207,6 +207,21 @@ const downloadMathOutputBtn =
     document.getElementById(
         "downloadMathOutputBtn"
     );
+
+// =========================================
+// V2 - CATALOGUE DOWNLOAD REFERENCES
+// =========================================
+
+const mathCatalogueDownloadArea =
+    document.getElementById(
+        "mathCatalogueDownloadArea"
+    );
+
+
+const downloadMathCatalogueBtn =
+    document.getElementById(
+        "downloadMathCatalogueBtn"
+    );
 // =========================================
 // DEVELOPMENT STATE
 // =========================================
@@ -264,7 +279,9 @@ let mathTopicCatalogue = {
 
 };
 
-let mathCatalogueChanged = false;
+let mathCatalogueChanged = true;
+
+
 // =========================================
 // INITIALIZE
 // =========================================
@@ -955,9 +972,18 @@ function renameMathTopic(
     // Existing subtopics remain untouched.
 
     topicEntry.name =
-        newTopicName;
+    newTopicName;
 
 
+    // Update already-logged questions
+    // that used the old Topic name.
+    
+    syncRenamedTopic(
+        previousName,
+        newTopicName
+    );
+    
+    
     mathCatalogueChanged =
         true;
 
@@ -1115,7 +1141,10 @@ function renameMathSubTopic(
             subTopicIndex
         ];
 
+    const previousSubTopicName =
+    currentName;
 
+    
     const enteredName =
         prompt(
             "Rename SubTopic:",
@@ -1192,15 +1221,25 @@ function renameMathSubTopic(
 
     }
 
-
     topicEntry.subtopics[
         subTopicIndex
     ] =
         newSubTopicName;
+    
+    
+    // Update already-logged questions
+    // that used the old SubTopic.
+    
+    syncRenamedSubTopic(
+        topicEntry.name,
+        previousSubTopicName,
+        newSubTopicName
+    );
 
 
-    mathCatalogueChanged =
-        true;
+mathCatalogueChanged =
+    true;
+    
 
 
     alert(
@@ -1213,6 +1252,123 @@ function renameMathSubTopic(
 
 
     return newSubTopicName;
+
+}
+
+// =========================================
+// V2 - SYNC RENAMED TOPIC
+// =========================================
+
+function syncRenamedTopic(
+    oldName,
+    newName
+) {
+
+    mathQuestionAssignments.forEach(
+        (assignment, index) => {
+
+            if (
+                assignment.topic &&
+                assignment.topic
+                    .trim()
+                    .toLowerCase()
+                ===
+                oldName
+                    .trim()
+                    .toLowerCase()
+            ) {
+
+                assignment.topic =
+                    newName;
+
+
+                if (
+                    assignment.completed
+                ) {
+
+                    mathBlocks[index] =
+                        setQuestionMetadata(
+                            mathBlocks[index],
+                            newName,
+                            assignment.subTopic
+                        );
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+// =========================================
+// V2 - SYNC RENAMED SUBTOPIC
+// =========================================
+
+function syncRenamedSubTopic(
+    topicName,
+    oldName,
+    newName
+) {
+
+    mathQuestionAssignments.forEach(
+        (assignment, index) => {
+
+            const effectiveTopic =
+
+                mathLoggingMode ===
+                "subtopic-only"
+
+                    ? selectedGlobalTopic
+
+                    : assignment.topic;
+
+
+            if (
+                effectiveTopic &&
+                effectiveTopic
+                    .trim()
+                    .toLowerCase()
+                ===
+                topicName
+                    .trim()
+                    .toLowerCase()
+
+                &&
+
+                assignment.subTopic &&
+                assignment.subTopic
+                    .trim()
+                    .toLowerCase()
+                ===
+                oldName
+                    .trim()
+                    .toLowerCase()
+            ) {
+
+                assignment.subTopic =
+                    newName;
+
+
+                if (
+                    assignment.completed
+                ) {
+
+                    mathBlocks[index] =
+                        setQuestionMetadata(
+                            mathBlocks[index],
+                            assignment.topic,
+                            newName
+                        );
+
+                }
+
+            }
+
+        }
+    );
 
 }
 
@@ -1256,6 +1412,221 @@ editGlobalTopicBtn.addEventListener(
     }
 );
 
+// =========================================
+// V2 - EDIT QUESTION METADATA CATALOGUE
+// =========================================
+
+editQuestionMetadataBtn.addEventListener(
+    "click",
+    () => {
+
+        // =================================
+        // MODE 1
+        // TOPIC + SUBTOPIC
+        // =================================
+
+        if (
+            mathLoggingMode === "both"
+        ) {
+
+            const choice =
+                prompt(
+                    "What do you want to edit?\n\n" +
+                    "1 = Topic\n" +
+                    "2 = SubTopic"
+                );
+
+
+            if (choice === null) {
+
+                return;
+
+            }
+
+
+            // -----------------------------
+            // EDIT TOPIC
+            // -----------------------------
+
+            if (
+                choice.trim() === "1"
+            ) {
+
+                const oldTopic =
+                    questionTopicSelect
+                        .value
+                        .trim();
+
+
+                if (!oldTopic) {
+
+                    alert(
+                        "Please select a Topic first."
+                    );
+
+                    return;
+
+                }
+
+
+                const renamedTopic =
+                    renameMathTopic(
+                        oldTopic
+                    );
+
+
+                if (!renamedTopic) {
+
+                    return;
+
+                }
+
+
+                questionTopicSelect.value =
+                    renamedTopic;
+
+
+                populateQuestionSubTopicSelect(
+                    renamedTopic
+                );
+
+            }
+
+
+            // -----------------------------
+            // EDIT SUBTOPIC
+            // -----------------------------
+
+            else if (
+                choice.trim() === "2"
+            ) {
+
+                const topicName =
+                    questionTopicSelect
+                        .value
+                        .trim();
+
+
+                const oldSubTopic =
+                    questionSubTopicSelect
+                        .value
+                        .trim();
+
+
+                if (!topicName) {
+
+                    alert(
+                        "Please select a Topic first."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!oldSubTopic) {
+
+                    alert(
+                        "Please select a SubTopic first."
+                    );
+
+                    return;
+
+                }
+
+
+                const renamedSubTopic =
+                    renameMathSubTopic(
+                        topicName,
+                        oldSubTopic
+                    );
+
+
+                if (!renamedSubTopic) {
+
+                    return;
+
+                }
+
+
+                populateQuestionSubTopicSelect(
+                    topicName
+                );
+
+
+                questionSubTopicSelect.value =
+                    renamedSubTopic;
+
+            }
+
+
+            else {
+
+                alert(
+                    "Please enter 1 or 2."
+                );
+
+            }
+
+
+            return;
+
+        }
+
+
+        // =================================
+        // MODE 2
+        // GLOBAL TOPIC + SUBTOPIC
+        // =================================
+
+        if (
+            mathLoggingMode ===
+            "subtopic-only"
+        ) {
+
+            const oldSubTopic =
+                questionSubTopicSelect
+                    .value
+                    .trim();
+
+
+            if (!oldSubTopic) {
+
+                alert(
+                    "Please select a SubTopic first."
+                );
+
+                return;
+
+            }
+
+
+            const renamedSubTopic =
+                renameMathSubTopic(
+                    selectedGlobalTopic,
+                    oldSubTopic
+                );
+
+
+            if (!renamedSubTopic) {
+
+                return;
+
+            }
+
+
+            populateQuestionSubTopicSelect(
+                selectedGlobalTopic
+            );
+
+
+            questionSubTopicSelect.value =
+                renamedSubTopic;
+
+        }
+
+    }
+);
 // =========================================
 // POPULATE SUBTOPICS FOR A TOPIC
 // =========================================
