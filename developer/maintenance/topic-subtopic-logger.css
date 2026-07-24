@@ -1648,10 +1648,10 @@ h1 {
 }
 
 /* =========================================
-   V2 - DISABLED LOGGER CONTROLS
+   V2 - DISABLED MATH LOGGER CONTROLS
 ========================================= */
 
-button:disabled {
+#mathLoggerWorkspace button:disabled {
 
     opacity: 0.4;
 
@@ -1659,12 +1659,41 @@ button:disabled {
 
     transform: none;
 
+    box-shadow: none;
+
 }
 
 
-button:disabled:hover {
+#mathLoggerWorkspace button:disabled:hover {
 
     transform: none;
+
+    box-shadow: none;
+
+}
+
+/* =========================================
+   V2 - DISABLED MATH LOGGER SELECTS
+========================================= */
+
+#mathLoggerWorkspace select:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+}
+
+/* =========================================
+   V2 - LOGGER CONTROL FOCUS
+========================================= */
+
+#mathLoggerWorkspace button:focus-visible,
+#mathLoggerWorkspace select:focus-visible {
+
+    outline: 2px solid currentColor;
+
+    outline-offset: 2px;
 
 }
 
