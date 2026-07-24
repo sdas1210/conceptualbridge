@@ -2078,6 +2078,9 @@ logSubTopicOnlyModeBtn.addEventListener(
         mathBlockViewer.classList.add(
             "hidden"
         );
+        updateMathCatalogueControlStates();
+
+        });
 
     }
 );
