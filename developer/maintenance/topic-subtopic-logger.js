@@ -279,7 +279,7 @@ let mathTopicCatalogue = {
 
 };
 
-let mathCatalogueChanged = true;
+let mathCatalogueChanged = false;
 
 
 // =========================================
@@ -1371,7 +1371,33 @@ function syncRenamedSubTopic(
     );
 
 }
+// =========================================
+// V2 - UPDATE CATALOGUE CHANGE STATUS
+// =========================================
 
+function updateMathCatalogueChangeStatus() {
+
+    if (mathCatalogueChanged) {
+
+        mathCatalogueDownloadArea
+            .classList
+            .remove(
+                "hidden"
+            );
+
+    }
+
+    else {
+
+        mathCatalogueDownloadArea
+            .classList
+            .add(
+                "hidden"
+            );
+
+    }
+
+}
 // =========================================
 // V2 - EDIT GLOBAL TOPIC
 // =========================================
