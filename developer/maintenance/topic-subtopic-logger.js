@@ -752,11 +752,11 @@ function addNewMathSubTopic(
 
     const enteredName =
         prompt(
-
-            "Enter a new SubTopic for:\n\n" +
-
-            topicEntry.name
-
+            "ADD NEW MATH SUBTOPIC\n\n" +
+            "Parent Topic: " +
+            topicEntry.name +
+            "\n\n" +
+            "Enter the name of the new SubTopic:"
         );
 
 
@@ -776,11 +776,12 @@ function addNewMathSubTopic(
     if (!subTopicName) {
 
         alert(
-            "SubTopic name cannot be empty."
+            "SubTopic was not added.\n\n" +
+            "The SubTopic name cannot be empty."
         );
-
+    
         return;
-
+    
     }
 
 
@@ -809,21 +810,15 @@ function addNewMathSubTopic(
     if (duplicateExists) {
 
         alert(
-
-            'SubTopic "' +
-
+            "SubTopic was not added.\n\n" +
+            '"' +
             subTopicName +
-
-            '" already exists under "' +
-
-            topicEntry.name +
-
-            '".'
-
+            '" already exists under:\n' +
+            topicEntry.name
         );
-
+    
         return;
-
+    
     }
 
 
@@ -852,17 +847,12 @@ function addNewMathSubTopic(
     updateMathCatalogueChangeStatus();
     
     alert(
-
-        'SubTopic "' +
-
-        subTopicName +
-
-        '" has been added under "' +
-
+        "SubTopic added successfully.\n\n" +
+        "Topic: " +
         topicEntry.name +
-
-        '".'
-
+        "\n" +
+        "SubTopic: " +
+        subTopicName
     );
 
 
