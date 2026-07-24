@@ -1620,6 +1620,11 @@ editGlobalTopicBtn.addEventListener(
         globalTopicSelect.value =
             renamedTopic;
 
+        // Refresh controls after renamed
+        // Topic has been re-selected.
+        
+        updateMathCatalogueControlStates();
+
     }
 );
 
@@ -1701,6 +1706,11 @@ editQuestionMetadataBtn.addEventListener(
                     renamedTopic
                 );
 
+                // Refresh controls after
+                // rebuilding the dropdowns.
+                
+                updateMathCatalogueControlStates();
+
             }
 
 
@@ -1768,6 +1778,11 @@ editQuestionMetadataBtn.addEventListener(
                 questionSubTopicSelect.value =
                     renamedSubTopic;
 
+                // Refresh controls after renamed
+                // SubTopic has been re-selected.
+                
+                updateMathCatalogueControlStates();
+
             }
 
 
@@ -1833,6 +1848,11 @@ editQuestionMetadataBtn.addEventListener(
 
             questionSubTopicSelect.value =
                 renamedSubTopic;
+
+            // Refresh controls after renamed
+            // SubTopic has been re-selected.
+            
+            updateMathCatalogueControlStates();
 
         }
 
