@@ -2117,12 +2117,14 @@ logSubTopicOnlyModeBtn.addEventListener(
         mathBlockViewer.classList.add(
             "hidden"
         );
-        updateMathCatalogueControlStates();
 
-        
+
+        updateMathCatalogueControlStates();
 
     }
 );
+
+
 
 confirmGlobalTopicBtn.addEventListener(
     "click",
