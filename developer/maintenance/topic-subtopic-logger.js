@@ -1420,9 +1420,7 @@ function syncRenamedSubTopic(
 // =========================================
 // V2 - UPDATE CATALOGUE CHANGE STATUS
 // =========================================
-// =========================================
-// V2 - UPDATE CATALOGUE CHANGE STATUS
-// =========================================
+
 
 function updateMathCatalogueChangeStatus() {
 
@@ -2141,6 +2139,19 @@ questionTopicSelect.addEventListener(
 // =========================================
 
 questionSubTopicSelect.addEventListener(
+    "change",
+    () => {
+
+        updateMathCatalogueControlStates();
+
+    }
+);
+
+// =========================================
+// V2 - GLOBAL TOPIC CONTROL STATE
+// =========================================
+
+globalTopicSelect.addEventListener(
     "change",
     () => {
 
