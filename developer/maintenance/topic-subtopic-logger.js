@@ -558,9 +558,10 @@ function populateQuestionTopicSelect() {
 function addNewMathTopic() {
 
     const enteredName =
-        prompt(
-            "Enter the new Math Topic:"
-        );
+    prompt(
+        "ADD NEW MATH TOPIC\n\n" +
+        "Enter the name of the new Topic:"
+    );
 
 
     // User pressed Cancel.
@@ -581,11 +582,12 @@ function addNewMathTopic() {
     if (!topicName) {
 
         alert(
-            "Topic name cannot be empty."
+            "Topic was not added.\n\n" +
+            "The Topic name cannot be empty."
         );
-
+    
         return;
-
+    
     }
 
 
@@ -613,13 +615,14 @@ function addNewMathTopic() {
     if (duplicateExists) {
 
         alert(
-            'Topic "' +
+            "Topic was not added.\n\n" +
+            '"' +
             topicName +
-            '" already exists.'
+            '" already exists in the Math catalogue.'
         );
-
+    
         return;
-
+    
     }
 
 
@@ -664,9 +667,9 @@ function addNewMathTopic() {
 
 
     alert(
-        'Topic "' +
-        topicName +
-        '" has been added.'
+        "Topic added successfully.\n\n" +
+        "Topic: " +
+        topicName
     );
 
 
