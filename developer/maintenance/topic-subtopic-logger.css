@@ -1629,3 +1629,41 @@ h1 {
         translateY(-1px);
 
 }
+
+
+/* =========================================
+   V2 - CATALOGUE STATUS
+========================================= */
+
+.catalogue-status {
+
+    margin-bottom: 10px;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    opacity: .85;
+
+}
+
+/* =========================================
+   V2 - DISABLED LOGGER CONTROLS
+========================================= */
+
+button:disabled {
+
+    opacity: 0.4;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+button:disabled:hover {
+
+    transform: none;
+
+}
