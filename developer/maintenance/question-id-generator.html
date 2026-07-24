@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question ID Generator</title>
+    <link rel="stylesheet" href="question-id-generator.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Question ID Generator</h2>
+        
+        <!-- Step 1: Upload Files -->
+        <div class="card">
+            <div class="form-group">
+                <label for="txtFileInput">1. Select Question Text File (.txt):</label>
+                <input type="file" id="txtFileInput" accept=".txt">
+            </div>
+
+            <div class="form-group">
+                <label for="jsonFileInput">2. Select ID Tracking File (ID.json) [Optional]:</label>
+                <input type="file" id="jsonFileInput" accept=".json">
+                <small>If not provided, IDs will start from 000001 for chosen section.</small>
+            </div>
+        </div>
+
+        <!-- Step 2: Choose Section Mode -->
+        <div class="card">
+            <label>3. Select Section Mode:</label>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="sectionMode" value="GACA" checked>
+                    <span><strong>1. GACA</strong> (Delimiter: <code>Q|</code> to <code>Difficulty|</code>)</span>
+                </label>
+
+                <label class="radio-label">
+                    <input type="radio" name="sectionMode" value="MATH">
+                    <span><strong>2. MATH</strong> (Delimiter: <code>QEN|</code> to <code>SubTopic|</code> / <code>Sub-Topic|</code>)</span>
+                </label>
+
+                <label class="radio-label disabled">
+                    <input type="radio" name="sectionMode" value="GI" disabled>
+                    <span><strong>3. GI</strong> (Inactive)</span>
+                </label>
+
+                <label class="radio-label disabled">
+                    <input type="radio" name="sectionMode" value="GS" disabled>
+                    <span><strong>4. GS</strong> (Inactive)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        <button id="processBtn" class="btn">Process File & Generate IDs</button>
+
+        <!-- Status Log -->
+        <div id="statusLog" class="status-box" style="display: none;"></div>
+
+        <!-- Step 3: Downloads -->
+        <div id="downloadSection" class="card download-card" style="display: none;">
+            <h3>Results Ready</h3>
+            <div class="btn-group">
+                <button id="downloadTxtBtn" class="btn btn-success">Download Updated TXT</button>
+                <button id="downloadJsonBtn" class="btn btn-secondary">Download Updated ID.json</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="question-id-generator.js"></script>
+</body>
+</html>
