@@ -2347,6 +2347,10 @@ addQuestionSubTopicBtn.addEventListener(
         questionSubTopicSelect.value =
             newSubTopic;
 
+        // Refresh button/control states.
+
+        updateMathCatalogueControlStates();
+
     }
 );
 
