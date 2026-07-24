@@ -281,6 +281,11 @@ let mathTopicCatalogue = {
 
 let mathCatalogueChanged = false;
 
+// Has the latest changed catalogue
+// been downloaded as math.json?
+
+let mathCatalogueDownloaded =
+    false;
 
 // =========================================
 // INITIALIZE
@@ -629,16 +634,26 @@ function addNewMathTopic() {
 
     // Catalogue has changed.
 
-    mathCatalogueChanged =
+       mathCatalogueChanged =
         true;
-
-
+    
+    
+    // The previously downloaded JSON,
+    // if any, is now outdated.
+    
+    mathCatalogueDownloaded =
+        false;
+    
+    
+    updateMathCatalogueChangeStatus();
+    
+    
     // =====================================
     // REFRESH BOTH TOPIC DROPDOWNS
     // =====================================
-
+    
     populateGlobalTopicSelect();
-
+    
     populateQuestionTopicSelect();
 
 
@@ -818,6 +833,15 @@ function addNewMathSubTopic(
         true;
 
 
+    // The previously downloaded JSON,
+    // if any, is now outdated.
+    
+    mathCatalogueDownloaded =
+        false;
+    
+    
+    updateMathCatalogueChangeStatus();
+    
     alert(
 
         'SubTopic "' +
@@ -986,8 +1010,16 @@ function renameMathTopic(
     
     mathCatalogueChanged =
         true;
-
-
+    
+    
+    // The previously downloaded JSON,
+    // if any, is now outdated.
+    
+    mathCatalogueDownloaded =
+        false;
+    
+    
+    updateMathCatalogueChangeStatus();
     // =====================================
     // UPDATE CURRENT GLOBAL TOPIC IF NEEDED
     // =====================================
@@ -1237,10 +1269,18 @@ function renameMathSubTopic(
     );
 
 
-mathCatalogueChanged =
-    true;
+    mathCatalogueChanged =
+        true;
     
-
+    
+    // The previously downloaded JSON,
+    // if any, is now outdated.
+    
+    mathCatalogueDownloaded =
+        false;
+    
+    
+    updateMathCatalogueChangeStatus();
 
     alert(
         'SubTopic "' +
@@ -2643,6 +2683,101 @@ downloadMathOutputBtn.addEventListener(
 
     }
 );
+// =========================================
+// V2 - DOWNLOAD UPDATED MATH.JSON
+// =========================================
+
+downloadMathCatalogueBtn.addEventListener(
+    "click",
+    () => {
+
+        // =================================
+        // SAFETY CHECK
+        // =================================
+
+        if (!mathCatalogueChanged) {
+
+            alert(
+                "No catalogue changes were made."
+            );
+
+            return;
+
+        }
+
+
+        // =================================
+        // BUILD UPDATED JSON
+        // =================================
+
+        const jsonText =
+            JSON.stringify(
+                mathTopicCatalogue,
+                null,
+                2
+            );
+
+
+        // =================================
+        // CREATE JSON FILE
+        // =================================
+
+        const blob =
+            new Blob(
+                [jsonText],
+                {
+                    type:
+                        "application/json;charset=utf-8"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        // This file is intended to replace
+        // the existing catalogue file.
+
+        link.download =
+            "math.json";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
+        
+        // The latest catalogue state
+        // has now been downloaded.
+        
+        mathCatalogueDownloaded =
+            true;
+
+    }
+);
 
 // =========================================
 // LOAD TXT FILE
@@ -3150,4 +3285,39 @@ nextMathBlockBtn.addEventListener(
 
     }
 );
+
+// =========================================
+// V2 - UNSAVED CATALOGUE CHANGE PROTECTION
+// =========================================
+
+window.addEventListener(
+    "beforeunload",
+    event => {
+
+        // Warn only when:
+        //
+        // 1. Catalogue was changed
+        // AND
+        // 2. Latest version was not downloaded.
+
+        if (
+            mathCatalogueChanged &&
+            !mathCatalogueDownloaded
+        ) {
+
+            event.preventDefault();
+
+
+            // Required by some browsers
+            // to trigger the standard
+            // leave-page confirmation.
+
+            event.returnValue =
+                "";
+
+        }
+
+    }
+);
+
 
