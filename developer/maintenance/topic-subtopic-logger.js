@@ -3118,6 +3118,14 @@ loadMathFileBtn.addEventListener(
         
         activeGlobalTopicName.textContent =
             "";
+
+        globalTopicSelect.value =
+            "";
+        
+        
+        activeGlobalTopicBar.classList.add(
+            "hidden"
+        );
         
         currentMathBlockIndex =
             0;
