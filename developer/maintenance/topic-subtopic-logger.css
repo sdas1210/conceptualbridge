@@ -1667,3 +1667,22 @@ button:disabled:hover {
     transform: none;
 
 }
+
+/* =========================================
+   V2 - CATALOGUE STATUS STATES
+========================================= */
+
+.catalogue-status-pending {
+
+    font-weight: 600;
+
+}
+
+
+.catalogue-status-saved {
+
+    font-weight: 600;
+
+    opacity: 0.75;
+
+}
