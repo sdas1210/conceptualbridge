@@ -3225,6 +3225,12 @@ function renderMathBlock() {
     
     }
 
+    // =====================================
+    // V2 - REFRESH CONTROL STATES
+    // =====================================
+
+    updateMathCatalogueControlStates();
+
 }
 
 // =========================================
