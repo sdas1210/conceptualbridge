@@ -2208,9 +2208,14 @@ addGlobalTopicBtn.addEventListener(
 
         globalTopicSelect.value =
             newTopic;
+        
+        // Refresh button/control states.
+        updateMathCatalogueControlStates();
 
     }
 );
+
+
 
 // =========================================
 // V2 - ADD QUESTION TOPIC
@@ -2244,6 +2249,10 @@ addQuestionTopicBtn.addEventListener(
         populateQuestionSubTopicSelect(
             newTopic
         );
+
+        // Refresh button/control states.
+
+        updateMathCatalogueControlStates();
 
     }
 );
