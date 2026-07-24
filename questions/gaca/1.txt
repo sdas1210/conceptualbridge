@@ -17,6 +17,7 @@ D| IIT Guwahati / আইআইটি গুয়াহাটি (IIT Guwahati)
 Shift|08/01/2026 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|9.03
+QuestionID| GACA-000001
 
 Q| Which 2025 novel by Colum McCann follows a journalist on a submarine cable-laying ship? / ক্যালাম ম্যাকক্যানের ২০২৫ সালের কোন উপন্যাসটি সাবমেরিন কেবল-লেয়িং জাহাজে থাকা এক সাংবাদিকের কাহিনী অনুসরণ করে?
 A| Silver Elite / সিলভার এলিট (Silver Elite)
@@ -26,6 +27,7 @@ D| Under the Eye of the Big Bird / আন্ডার দ্য আই অফ �
 Shift|04/12/2025 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|9.14
+QuestionID| GACA-000002
 
 Q| How much percentage of the rural population has access to all-season roads in India in the Sustainable Development Report 2025? / টেকসই উন্নয়ন প্রতিবেদন (Sustainable Development Report) ২০২৫ অনুযায়ী, ভারতে গ্রামীণ জনসংখ্যার কত শতাংশের বারোমাসি রাস্তায় প্রবেশাধিকার রয়েছে?
 A| 95.6% / ৯৫.৬%
@@ -35,6 +37,7 @@ D| 89.9% / ৮৯.৯%
 Shift|15/12/2025 4:30 PM - 6:00 PM
 Correct|C
 Difficulty|6.08
+QuestionID| GACA-000003
 
 Q| In which of the following Sustainable Development Goals (SDGs) is India on track or maintaining SDG achievement, as per the Sustainable Development Report 2025? / টেকসই উন্নয়ন প্রতিবেদন ২০২৫ অনুসারে, নিচের কোন টেকসই উন্নয়ন লক্ষ্যমাত্রায় (SDGs) ভারত সঠিক পথে রয়েছে বা লক্ষ্যমাত্রা বজায় রাখছে?
 A| SDG 1 / SDG 1
@@ -44,6 +47,7 @@ D| SDG 9 / SDG 9
 Shift|23/12/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|5.87
+QuestionID| GACA-000004
 
 Q| In which of the following months, during the 'Genomics Data Conclave', was the 'Genomelndia Data' dedicated to the researchers by Narendra Modi, Prime Minister of India? / 'জেনোমিক্স ডেটা কনক্লেভ' চলাকালীন কোন মাসে ভারতের প্রধানমন্ত্রী নরেন্দ্র মোদী গবেষকদের উদ্দেশ্যে 'জেনোমইন্ডিয়া ডেটা' (GenomeIndia Data) উৎসর্গ করেছিলেন?
 A| January 2025 / জানুয়ারি ২০২৫
@@ -53,6 +57,7 @@ D| March 2025 / মার্চ ২০২৫
 Shift|01/12/2025 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|8.78
+QuestionID| GACA-000005
 
 Q| Which athlete broke the Australian national 200 m record with a time of 20.02 seconds at the Golden Spike meet in Ostrava in 2025? / ওস্ট্রাভায় ২০২৫ সালের গোল্ডেন স্পাইক মিটে ২০.০২ সেকেন্ড সময় নিয়ে কোন অ্যাথলেট অস্ট্রেলিয়ার জাতীয় ২০০ মিটার রেকর্ড ভেঙেছেন?
 A| Gout Gout / গৌত গৌত (Gout Gout)
@@ -62,6 +67,7 @@ D| Armand Duplantis / আরমান্ড ডুপ্লান্টিস (A
 Shift|21/12/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|5.09
+QuestionID| GACA-000006
 
 Q| The earlier Bilateral Investment Treaty (BIT) between India and Kyrgyzstan, which was replaced in 2025, was originally enforced in which year? / ভারত ও কিরগিজস্তানের মধ্যকার পূর্ববর্তী দ্বিপাক্ষিক বিনিয়োগ চুক্তি (BIT), যা ২০২৫ সালে প্রতিস্থাপিত হয়েছিল, তা মূলত কোন বছর কার্যকর হয়েছিল?
 A| 2000 / ২০00
@@ -71,6 +77,7 @@ D| 2019 / ২০১৯
 Shift|03/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|8.55
+QuestionID| GACA-000007
 
 Q| Who became the first athlete in history to run sub-10 s in the 100 m for 11 consecutive years? / ইতিহাসের প্রথম অ্যাথলেট হিসেবে কে টানা ১১ বছর ১০০ মিটারে ১০ সেকেন্ডের কম সময়ে (sub-10 s) দৌড়ানোর কীর্তি গড়েছেন?
 A| Usain Bolt / উসেইন বোল্ট (Usain Bolt)
@@ -80,6 +87,7 @@ D| Andre De Grasse / আন্দ্রে দে গ্রাস (Andre De Gras
 Shift|09/12/2025 4:30 PM - 6:00 PM
 Correct|C
 Difficulty|8.99
+QuestionID| GACA-000008
 
 Q| What honourarium did the P C Chandra Puraskaar include? / পি সি চন্দ্র পুরস্কারের (P C Chandra Puraskaar) সম্মানীর পরিমাণ কত ছিল?
 A| ₹20 lakh / ₹২০ লাখ
@@ -89,6 +97,7 @@ D| ₹5 lakh / ₹৫ লাখ
 Shift|16/12/2025 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|9.69
+QuestionID| GACA-000009
 
 Q| Which of the following banks of India reported a 33 per cent rise in standalone net profit at ₹5,004 crore for the fourth quarter (Q4) of the financial year 2024-25 (FY25)? / ভারতের কোন ব্যাংক ২০২৪-২৫ অর্থবর্ষের (FY25) চতুর্থ ত্রৈমাসিকে (Q4) একক নিট লাভে ৩৩ শতাংশ বৃদ্ধির সাথে ৫,০০৪ কোটি টাকা লাভ করেছে বলে জানিয়েছে?
 A| Canara Bank / কানারা ব্যাংক (Canara Bank)
@@ -98,6 +107,7 @@ D| Punjab National Bank / পাঞ্জাব ন্যাশনাল ব্�
 Shift|27/11/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|8.98
+QuestionID| GACA-000010
 
 Q| Which book, launched by Union Minister Dharmendra Pradhan at the World Book Fair 2025, is part of the PM YUVA 2.0 scheme? / বিশ্ব বইমেলা ২০২৫-এ কেন্দ্রীয় মন্ত্রী ধর্মেন্দ্র প্রধান কর্তৃক উন্মোচিত কোন বইটি পিএম যুব ২.০ (PM YUVA 2.0) প্রকল্পের অংশ?
 A| Indian Renaissance: The Modi Decade / ইন্ডিয়ান রেনেসাঁ: দ্য মোদি ডিকেড (Indian Renaissance: The Modi Decade)
@@ -107,6 +117,7 @@ D| Death of a Gentleman / ডেথ অফ এ জেন্টলম্যান
 Shift|08/12/2025 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|8.46
+QuestionID| GACA-000011
 
 Q| As announced in the April 2025 Monetary Policy Committee meeting, the Reserve Bank of India aims to keep liquidity surplus close to what percentage of deposits? / এপ্রিল ২০২৫-এর মুদ্রানীতি কমিটির (Monetary Policy Committee) বৈঠকে ঘোষণা অনুযায়ী, রিজার্ভ ব্যাংক অফ ইন্ডিয়া তারল্য উদ্বৃত্ত আমানতের কত শতাংশের কাছাকাছি রাখার লক্ষ্য নির্ধারণ করেছে?
 A| 0.5% / ০.৫%
@@ -116,6 +127,7 @@ D| 1.5% / ১.৫%
 Shift|23/12/2025 4:30 PM - 6:00 PM
 Correct|C
 Difficulty|6.42
+QuestionID| GACA-000012
 
 Q| Which team won the 2025 EFL Championship playoff final and secured promotion to the Premier League? / কোন দল ২০২৫ সালের ইএফএল চ্যাম্পিয়নশিপ প্লে-অফ ফাইনালে জিতে প্রিমিয়ার লিগে উন্নীত হয়েছে?
 A| Southampton / সাউদাম্পটন (Southampton)
@@ -125,6 +137,7 @@ D| Leeds United / লিডস ইউনাইটেড (Leeds United)
 Shift|26/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|8.78
+QuestionID| GACA-000013
 
 Q| Which sprinter broke his own national 200 m record with a run of 20.02 seconds in Ostrava? / ওস্ট্রাভায় ২০.০২ সেকেন্ডে দৌড়ে কোন স্প্রিন্টার নিজেরই জাতীয় ২০০ মিটার রেকর্ড ভেঙেছেন?
 A| Gout Gout / গৌত গৌত (Gout Gout)
@@ -134,6 +147,7 @@ D| Lamine Yamal / লামিনে ইয়ামাল (Lamine Yamal)
 Shift|19/12/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|5.85
+QuestionID| GACA-000014
 
 Q| Who set a new world record in the men's 100 m freestyle swimming at Olympic Games Paris, 2024? / প্যারিস অলিম্পিক গেমস ২০২৪-এ পুরুষদের ১০০ মিটার ফ্রিস্টাইল সাঁতারে কে নতুন বিশ্ব রেকর্ড গড়েছেন?
 A| David Popovici / ডেভিড পপোভিসি (David Popovici)
@@ -143,6 +157,7 @@ D| Pan Zhanle / প্যান জানলে (Pan Zhanle)
 Shift|24/12/2025 12:45 PM - 2:15 PM
 Correct|D
 Difficulty|7.78
+QuestionID| GACA-000015
 
 Q| Which of the following missions led to the establishment of a National Biobank at the CSIR-Institute of Genomics and Integrative Biology (IGIB), New Delhi, in July 2025? / কোন মিশনের ফলে ২০২৫ সালের জুলাই মাসে নয়াদিল্লির সিএসআইআর-ইনституটিউট অফ জেনোমিক্স অ্যান্ড ইন্টিগ্রেティブ বায়োলজি (IGIB)-তে একটি জাতীয় বায়োব্যাংক (National Biobank) প্রতিষ্ঠিত হয়?
 A| Bharat GeneBank Initiative / ভারত জিনব্যাংক উদ্যোগ (Bharat GeneBank Initiative)
@@ -152,6 +167,7 @@ D| India Biotech 2030 Mission / ইন্ডিয়া বায়োটে�
 Shift|21/12/2025 12:45 PM - 2:15 PM
 Correct|B
 Difficulty|5.85
+QuestionID| GACA-000016
 
 Q| In 2025, which authority raised serious objections to the Aparajita Bill 2024, calling its proposed punishments under BNS excessively harsh and disproportionate? / ২০২৫ সালে কোন কর্তৃপক্ষ অপরাজিতা বিল ২০২৪-এর তীব্র আপত্তি জানিয়ে বিএনএস (BNS)-এর অধীনে এর প্রস্তাবিত শাস্তিগুলোকে অতিরিক্ত কঠোর ও অসঙ্গতিপূর্ণ বলে অভিহিত করেছে?
 A| Supreme Court / সুপ্রিম কোর্ট
@@ -161,6 +177,7 @@ D| National Commission for Women / জাতীয় মহিলা কমি�
 Shift|11/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|7.21
+QuestionID| GACA-000017
 
 Q| Valueattics Reinsurance, India's first private reinsurer, which received the nod of the Insurance Regulatory and Development Authority of India (IRDAI) to commence reinsurance business in India in March 2025 is promoted by which of the following individuals/entities? / ভ্যালুঅ্যাটিক্স রিইন্সুরেন্স (Valueattics Reinsurance), ভারতের প্রথম বেসরকারি পুনঃবীমাকারী প্রতিষ্ঠান, যেটি ২০২৫ সালের মার্চ মাসে ভারতে পুনঃবীমা ব্যবসা শুরু করার জন্য আইআরডিএআই (IRDAI)-এর অনুমোদন পেয়েছে, এটি নিচের কোন ব্যক্তি/সংস্থা দ্বারা প্রবর্তিত?
 A| Nandan Nilekani and SBI Life / নন্দন নিলেকানি এবং এসবিআই লাইফ (Nandan Nilekani and SBI Life)
@@ -170,6 +187,7 @@ D| Prem Watsa and Kamesh Goyal / প্রেম ওয়াটসা এবং
 Shift|03/02/2026 12:45 PM - 2:15 PM
 Correct|D
 Difficulty|8.03
+QuestionID| GACA-000018
 
 Q| As per Sustainable Development Goals - National Indicator Framework Progress Report, 2025, what was the percentage of waste processed in 2024-25, from 17.97% in 2015-16, indicating significant progress in waste management efficiency in India? / টেকসই উন্নয়ন লক্ষ্যমাত্রা - জাতীয় সূচক কাঠামো অগ্রগতি প্রতিবেদন (Sustainable Development Goals - National Indicator Framework Progress Report) ২০২৫ অনুসারে, ভারতে বর্জ্য ব্যবস্থাপনা দক্ষতার উল্লেখযোগ্য অগ্রগতি নির্দেশ করে, বর্জ্য প্রক্রিয়াকরণের হার ২০১৫-১৬ সালের ১৭.৯৭% থেকে বেড়ে ২০২৪-২৫ সালে কত শতাংশ হয়েছে?
 A| 55.65% / ৫৫.৬৫%
@@ -179,6 +197,7 @@ D| 80.7% / ৮০.৭%
 Shift|03/12/2025 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|7.46
+QuestionID| GACA-000019
 
 Q| Which young swimmer matched Michael Phelps's achievement by setting three individual world records at one meet during the Canadian Trials? / কোন তরুণ সাঁতারু কানাডিয়ান ট্রায়ালসের একটি মিটেই তিনটি একক বিশ্ব রেকর্ড গড়ে মাইকেল ফেলপসের কীর্তি স্পর্শ করেছেন?
 A| Athing Mu-Nikolayev / অ্যাথিং মু-নিকোলায়েভ (Athing Mu-Nikolayev)
@@ -188,6 +207,7 @@ D| Beatrice Chebet / বিয়াট্রিস চেবেট (Beatrice Ch
 Shift|14/12/2025 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|9.92
+QuestionID| GACA-000020
 
 Q| How many critical highway segments are outlined in the report on India's Priority Corridors for Zero-Emission Trucking for the adoption of zero-emission trucks? / জিরো-এমিশন (নির্গমনহীন) ট্রাক গ্রহণের জন্য 'ইন্ডিয়াস প্রায়োরিটি করিডোরস FOR জিরো-এমিশন ট্রাকিং' প্রতিবেদনে কতটি গুরুত্বপূর্ণ মহাসড়ক অংশের রূপরেখা দেওয়া হয়েছে?
 A| Five / পাঁচটি
@@ -197,6 +217,7 @@ D| Eight / আটটি
 Shift|03/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|7.89
+QuestionID| GACA-000021
 
 Q| In June 2025, the Multi-Purpose Decontamination System technology was transferred to which companies? / ২০২৫ সালের জুনে মাল্টি-পারপাস ডিকন্টামিনেশন সিস্টেম (Multi-Purpose Decontamination System) প্রযুক্তি কোন কোম্পানিগুলোর কাছে হস্তান্তর করা হয়েছিল?
 A| Bharat Forge and Metaltech Motor Bodies Pvt Ltd / ভারত ফোর্জ এবং মেটালটেক মোটর বডিস প্রাঃ লিঃ (Bharat Forge and Metaltech Motor Bodies Pvt Ltd)
@@ -206,6 +227,7 @@ D| Dass Hitachi Ltd and Goma Engineering Pvt Ltd / ডাস হিতাচি 
 Shift|15/12/2025 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|9.40
+QuestionID| GACA-000022
 
 Q| Who inaugurated the Esports Conclave 2025 in New Delhi? / নয়াদিল্লিতে এস্পোর্টস কনক্লেভ ২০২৫ (Esports Conclave 2025)-এর উদ্বোধন কে করেছিলেন?
 A| Narendra Modi / নরেন্দ্র মোদী
@@ -215,6 +237,7 @@ D| Raksha Nikhil Khadse / রক্ষা নিখিল খড়সে
 Shift|10/02/2026 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|5.40
+QuestionID| GACA-000023
 
 Q| The Defense Research and Development Organisation (DRDO) lab in which city has created an advanced polymeric membrane designed for high-pressure desalination of sea water in May 2025? / ডিফেন্স রিসার্চ অ্যান্ড Desenvolvimento অর্গানাইজেশন (DRDO)-এর কোন শহরের ল্যাব ২০২৫ সালের মে মাসে সমুদ্রের জল উচ্চ-চাপে লবণমুক্ত করার জন্য একটি উন্নত পলিমারিক মেমব্রেন তৈরি করেছে?
 A| Pune / পুনে
@@ -224,6 +247,7 @@ D| Hyderabad / হায়দরাবাদ
 Shift|08/12/2025 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|6.96
+QuestionID| GACA-000024
 
 Q| In August 2025, the first phase of the Darwin Tree of Life (DToL) project neared completion. What is the primary aim of this international biodiversity initiative? / ২০২৫ সালের আগস্টে ডারউইন ট্রি অফ লাইফ (DToL) প্রকল্পের প্রথম ধাপ সমাপ্তির কাছাকাছি পৌঁছেছিল। এই আন্তর্জাতিক জীববৈচিত্র্য উদ্যোগের প্রাথমিক উদ্দেশ্য কী?
 A| To engineer climate-resilient crops using data from ancestral plant genomes / পূর্বপুরুষের উদ্ভিদের জিনোম থেকে প্রাপ্ত তথ্য ব্যবহার করে জলবায়ু-সহনশীল ফসল তৈরি করা
@@ -233,6 +257,7 @@ D| To decode the genetic basis of rare diseases in isolated human populations / 
 Shift|24/12/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|5.93
+QuestionID| GACA-000025
 
 Q| As per the guidelines of the Reserve Bank of India, from 1 August 2025, the trading hours of market repo and Tri-Party Repo (TREP) were extended till what time? / ভারতীয় রিজার্ভ ব্যাংকের নির্দেশিকা অনুযায়ী, ২০২৫ সালের ১ আগস্ট থেকে মার্কেট রেপো এবং ট্রাই-পার্টি রেপো (TREP)-এর লেনদেনের সময়সীমা কতক্ষণ পর্যন্ত বাড়ানো হয়েছে?
 A| 5:00 PM / বিকেল ৫:০০ টা (5:00 PM)
@@ -242,6 +267,7 @@ D| 7:00 PM / সন্ধে ৭:০০ টা (7:00 PM)
 Shift|05/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|5.22
+QuestionID| GACA-000026
 
 Q| Which of the following portals was launched in Punjab in June 2025 that has helped digitise land records and curb corruption in registry services? / ২০২৫ সালের জুনে পাঞ্জাবে নিচের কোন পোর্টালটি চালু করা হয়েছে যা জমির রেকর্ড ডিজিটাইজ করতে এবং রেজিস্ট্রি পরিষেবায় দুর্নীতি কমাতে সাহায্য করেছে?
 A| Punjab Land Records System / পাঞ্জাব ল্যান্ড রেকর্ডস সিস্টেম (Punjab Land Records System)
@@ -251,6 +277,7 @@ D| Digital Registry Punjab / ডিজিটাল রেজিস্ট্র�
 Shift|05/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|8.21
+QuestionID| GACA-000027
 
 Q| By how much has the grant for National Championships in high-priority sports been increased, as per the 2025 announcement? / ২০২৫ সালের ঘোষণা অনুযায়ী, উচ্চ-অগ্রাধিকারমূলক খেলাধুলার জাতীয় চ্যাম্পিয়নশিপের জন্য অনুদান কত টাকা বাড়ানো হয়েছে?
 A| ₹30 lakh / ₹৩০ লাখ
@@ -260,6 +287,7 @@ D| ₹90 lakh / ₹৯০ লাখ
 Shift|24/12/2025 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|5.40
+QuestionID| GACA-000028
 
 Q| As per the June 2025 India Child Protection report, what percentage of 44,902 rescued children were found in the worst forms of child labour? / জুন ২০২৫-এর 'ইন্ডিয়া চাইল্ড প্রোটেকশন' রিপোর্ট অনুসারে, উদ্ধারকৃত ৪৪,৯০২ জন শিশুর মধ্যে কত শতাংশ শিশুকে শিশুশ্রমের সবচেয়ে ভয়াবহ রূপগুলোর মধ্যে নিযুক্ত পাওয়া গেছে?
 A| 50% / ৫০%
@@ -269,6 +297,7 @@ D| 90% / ৯০%
 Shift|28/11/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|8.22
+QuestionID| GACA-000029
 
 Q| Which of the following reports, released in October 2025, stated that human-caused PM2.5 pollution was responsible for more than 1.7 million deaths in India in 2022? / ২০২৫ সালের অক্টোবরে প্রকাশিত নিচের কোন রিপোর্টে বলা হয়েছে যে, ২০২২ সালে ভারতে ১.৭ মিলিয়নেরও বেশি মানুষের মৃত্যুর জন্য মানবসৃষ্ট PM2.5 দূষণ দায়ী ছিল?
 A| The World Health Organization Air Quality Assessment Report, 2025 / দ্য ওয়ার্ল্ড হেলথ অর্গানাইজেশন এয়ার কোয়ালিটি অ্যাসেসমেন্ট রিপোর্ট, ২০২৫ (The World Health Organization Air Quality Assessment Report, 2025)
@@ -278,6 +307,7 @@ D| The UNEP Global Assessment Report on Air Pollution and Health / দ্য ই
 Shift|12/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|8.19
+QuestionID| GACA-000030
 
 Q| Bima Vistaar, an insurance product covering life, health and property for rural people, is likely to be launched by / গ্রামীণ মানুষের জীবন, স্বাস্থ্য এবং সম্পত্তি কভার করে এমন একটি বীমা পণ্য 'বীমা বিস্তার' (Bima Vistaar) সম্ভবত কবে চালু হতে পারে?
 A| December 2025 / ডিসেম্বর ২০২৫ (December 2025)
@@ -287,6 +317,7 @@ D| November 2025 / নভেম্বর ২০২৫ (November 2025)
 Shift|12/12/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|5.29
+QuestionID| GACA-000031
 
 Q| As per Ministry of Earth Sciences, the number of seismic observatories in India increased from 80 in 2014 to how many in February 2025? / পৃথিবী বিজ্ঞান মন্ত্রকের মতে, ভারতে ভূমিকম্প পর্যবেক্ষণ কেন্দ্রের সংখ্যা ২০১৪ সালের ৮০টি থেকে বৃদ্ধি পেয়ে ২০২৫ সালের ফেব্রুয়ারিতে কত হয়েছে?
 A| 168 / ১৬৮
@@ -296,6 +327,7 @@ D| 142 / ১৪২
 Shift|28/11/2025 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|5.23
+QuestionID| GACA-000032
 
 Q| In November 2025, the standing committee of the National Board for Wildlife approved a proposal to construct a Pinjoli bridge in which of the following wildlife sanctuaries? / ২০২৫ সালের নভেম্বরে, জাতীয় বন্যপ্রাণী বোর্ডের স্থায়ী কমিটি নিচের কোন বন্যপ্রাণী অভয়ারণ্যে একটি পিঞ্জোলি সেতু নির্মাণের প্রস্তাব অনুমোদন করেছে?
 A| Dehing Patkai Wildlife Sanctuary / দেহিং পাটকাই বন্যপ্রাণী অভয়ারণ্য (Dehing Patkai Wildlife Sanctuary)
@@ -305,6 +337,7 @@ D| Sepahijala Wildlife Sanctuary / সেপাহিজলা বন্যপ�
 Shift|30/12/2025 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|9.07
+QuestionID| GACA-000033
 
 Q| Which of the following Union Ministers launched India's National Red List Roadmap in October 2025? / নিচের কোন কেন্দ্রীয় মন্ত্রী ২০২৫ সালের অক্টোবরে ভারতের জাতীয় রেড লিস্ট রোডম্যাপ (National Red List Roadmap) চালু করেন?
 A| Bhupender Yadav / ভূপেন্দর যাদব (Bhupender Yadav)
@@ -314,6 +347,7 @@ D| Piyush Goyal / পীযূষ গোয়েল (Piyush Goyal)
 Shift|08/01/2026 12:45 PM - 2:15 PM
 Correct|B
 Difficulty|8.12
+QuestionID| GACA-000034
 
 Q| As per the new Know Your Customer (KYC) relaxations of the Reserve Bank of India (RBI) notified in May 2025, low-risk customers are allowed to continue transactions without KYC until / ২০২৫ সালের মে মাসে বিজ্ঞাপিত ভারতীয় রিজার্ভ ব্যাংকের (RBI) নতুন নো ইয়োর কাস্টমার (KYC) শিথিলকরণ অনুযায়ী, কম ঝুঁকিপূর্ণ গ্রাহকদের কত তারিখ পর্যন্ত কেওয়াইসি ছাড়াই লেনদেন চালিয়ে যাওয়ার অনুমতি দেওয়া হয়েছে?
 A| 30 June 2025 / ৩০ জুন ২০২৫
@@ -323,6 +357,7 @@ D| 31 March 2026 / ৩১ মার্চ ২০২৬
 Shift|06/02/2026 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|8.05
+QuestionID| GACA-000035
 
 Q| Which organisation developed the SAKSHAM counter-Unmanned Aircraft System grid launched by the Indian Army in 2025? / ২০২৫ সালে ভারতীয় সেনাবাহিনী কর্তৃক চালু হওয়া 'সক্ষম' (SAKSHAM) কাউন্টার-আনম্যানড এয়ারক্রাফট সিস্টেম গ্রিডটি কোন সংস্থা তৈরি করেছে?
 A| Defence Research and Development Organisation Hyderabad / ডিফেন্স রিসার্চ অ্যান্ড ডেভেলপমেন্ট অর্গানাইজেশন হায়দরাবাদ (Defence Research and Development Organisation Hyderabad)
@@ -332,6 +367,7 @@ D| Indian Space Research Organisation Bengaluru / ইন্ডিয়ান �
 Shift|10/02/2026 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|9.19
+QuestionID| GACA-000036
 
 Q| Under the Ministry of Commerce and Industry (via Startup India), which of the following schemes saw a government allocation of ₹211 crore into the Indian space-tech sector in 2025? / বাণিজ্য ও শিল্প মন্ত্রকের অধীনে (স্টার্টআপ ইন্ডিয়ার মাধ্যমে), ২০২৫ সালে ভারতীয় স্পেস-টেক সেক্টরে কোন প্রকল্পের অধীনে সরকারের পক্ষ থেকে ২১১ কোটি টাকা বরাদ্দ করা হয়েছে?
 A| Fund of Funds for Startups (FFS) / ফান্ড অফ ফান্ডস ফর স্টার্টআপস (Fund of Funds for Startups - FFS)
@@ -341,6 +377,7 @@ D| Atmanirbhar Bharat Innovation Fund (ABIF) / আত্মনির্ভর �
 Shift|14/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|9.06
+QuestionID| GACA-000037
 
 Q| The Fit India Movement's premier cycling event, promoting fitness and pollution solutions, was staged at Mumbai's Gateway of India in February 2025, under what name? / ২০২৫ সালের ফেব্রুয়ারিতে ফিট ইন্ডিয়া মুভমেন্টের প্রধান সাইক্লিং ইভেন্টটি, যা ফিটনেস এবং দূষণ সমাধানের প্রচার করে, মুম্বাইয়ের গেটওয়ে অফ ইন্ডিয়াতে কী নামে অনুষ্ঠিত হয়েছিল?
 A| Wheels for Wellness / হুইলস ফর ওয়েলনেস (Wheels for Wellness)
@@ -350,6 +387,7 @@ D| Fit India Cycling Marathon / ফিট ইন্ডিয়া সাইক�
 Shift|26/12/2025 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|6.97
+QuestionID| GACA-000038
 
 Q| The Andhra Pradesh government rejected Telangana's demand for a 50:50 share of Krishna river water in January 2025. Currently, what is the water sharing ratio between Andhra Pradesh and Telangana? / অন্ধ্রপ্রদেশ সরকার ২০২৫ সালের জানুয়ারিতে কৃষ্ণা নদীর জলের ৫০:৫০ ভাগের তেলেঙ্গানার দাবি প্রত্যাখ্যান করেছে। বর্তমানে অন্ধ্রপ্রদেশ ও তেলেঙ্গানার মধ্যে জল বণ্টনের অনুপাত কত?
 A| 55:45 / ৫৫:৪৫
@@ -359,6 +397,7 @@ D| 66:34 / ৬৬:৩৪
 Shift|08/12/2025 12:45 PM - 2:15 PM
 Correct|D
 Difficulty|5.27
+QuestionID| GACA-000039
 
 Q| Which of the following institutions co-organised 'the Belém Health Action Plan' event with the WHO and other UN partners at COP30 in November 2025? / নিচের কোন প্রতিষ্ঠানটি ২০২৫ সালের নভেম্বরে COP30-এ WHO এবং অন্যান্য UN অংশীদারদের সাথে 'বেলেম হেলথ অ্যাকশন প্ল্যান' (the Belém Health Action Plan) ইভেন্টটি সহ-আয়োজন করেছিল?
 A| Global Institute of Public Health (GIPH) / গ্লোবাল ইনস্টিটিউট অফ পাবলিক হেলথ (Global Institute of Public Health - GIPH)
@@ -368,6 +407,7 @@ D| World Trade Institute (WTI) / ওয়ার্ল্ড ট্রেড ই
 Shift|26/12/2025 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|9.10
+QuestionID| GACA-000040
 
 Q| In February 2025, who broke the world indoor 800 m American record with a time of 1:43.90 at Millrose? / ২০২৫ সালের ফেব্রুয়ারিতে, মিলরোসে ১:৪৩.৯০ সময়ে পুরুষদের ইনডোর ৮00 মিটার আমেরিকান রেকর্ড কে ভেঙেছেন?
 A| Bryce Hoppel / ব্রাইস হোপেল (Bryce Hoppel)
@@ -377,6 +417,7 @@ D| Josh Hoey / জশ হোয়াই (Josh Hoey)
 Shift|09/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|9.98
+QuestionID| GACA-000041
 
 Q| Which first-time MP from Thane was named a Sansad Ratna Award recipient in 2025? / থানে থেকে কোন প্রথমবার নির্বাচিত সংসদ সদস্যকে (MP) ২০২৫ সালে সংসদ রত্ন পুরস্কারের প্রাপক হিসেবে মনোনীত করা হয়েছিল?
 A| Rahul Shewale / রাহুল শেওয়ালে (Rahul Shewale)
@@ -386,6 +427,7 @@ D| Arvind Sawant / অরবিন্দ সাওয়ান্ত (Arvind Saw
 Shift|08/01/2026 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|9.65
+QuestionID| GACA-000042
 
 Q| On 5-6 February 2025, the national executive council meetings of FICCI and CII converged at BGBS in which city? / ২০২৫ সালের ৫-৬ ফেব্রুয়ারি, FICCI এবং CII-এর জাতীয় কার্যনির্বাহী পরিষদের বৈঠক কোন শহরের BGBS-এ মিলিত হয়েছিল?
 A| Raipur / রায়পুর (Raipur)
@@ -395,6 +437,7 @@ D| Surat / সুরাট (Surat)
 Shift|19/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|7.42
+QuestionID| GACA-000043
 
 Q| As per the Sustainable Development Goals National Indicator Framework Progress Report, 2025, published in June 2025, what percentage of the rural population used improved sources of drinking water during the year 2024-2025? / জুন ২০২৫ সালে প্রকাশিত টেকসই উন্নয়ন লক্ষ্যমাত্রা জাতীয় সূচক কাঠামো অগ্রগতি প্রতিবেদন, ২০২৫ অনুসারে, ২০২৪-২০২৫ সালের মধ্যে গ্রামীণ জনসংখ্যার কত শতাংশ উন্নত পানীয় জলের উৎস ব্যবহার করেছে?
 A| 97.80% / ৯৭.৮০%
@@ -404,6 +447,7 @@ D| 95.45% / ৯৫.৪৫%
 Shift|08/01/2026 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|5.38
+QuestionID| GACA-000044
 
 Q| Which of the following organisations partnered with Vivifi Finance in December 2024 to provide loans to gig workers? / গিগ শ্রমিকদের (gig workers) ঋণ প্রদানের জন্য ২০২৪ সালের ডিসেম্বরে নিচের কোন সংস্থাটি ভিভিফি ফাইন্যান্সের (Vivifi Finance) সাথে অংশীদারিত্ব করেছে?
 A| National Payments Corporation of India (NPCI) / ন্যাশনাল পেমেন্টস কর্পোরেশন অফ ইন্ডিয়া (National Payments Corporation of India - NPCI)
@@ -413,6 +457,7 @@ D| Small Industries Development Bank of India (SIDBI) / স্মল ইন্�
 Shift|17/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|6.36
+QuestionID| GACA-000045
 
 Q| As per the Commission for Air Quality Management (CAQM)-revised Graded Response Action Plan (GRAP) for the entire NCR in November 2025, which measure was advanced from Stage II to Stage I? / ২০২৫ সালের নভেম্বরে সমগ্র NCR-এর জন্য বায়ুর গুণমান ব্যবস্থাপনা কমিশন (CAQM) দ্বারা সংশোধিত গ্রেডেড রেসপন্স অ্যাকশন প্ল্যান (GRAP) অনুসারে, কোন পদক্ষেপটি স্টেজ II থেকে স্টেজ I-এ এগিয়ে আনা হয়েছিল?
 A| Staggering timings for public offices in Delhi and key NCR districts / দিল্লি এবং প্রধান NCR জেলাগুলোতে সরকারি অফিসের সময় পরিবর্তন করা
@@ -422,6 +467,7 @@ D| Complete ban on all construction activities across NCR / সমগ্র NCR 
 Shift|26/12/2025 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|6.71
+QuestionID| GACA-000046
 
 Q| The Reserve Bank of India launched the PRAVAAH portal with effect from / ভারতীয় রিজার্ভ ব্যাংক কোন তারিখ থেকে 'প্রবাহ' (PRAVAAH) পোর্টাল চালু করেছে?
 A| 1 June 2025 / ১ জুন ২০২৫
@@ -431,6 +477,7 @@ D| 1 May 2025 / ১ মে ২০২৫
 Shift|08/12/2025 12:45 PM - 2:15 PM
 Correct|D
 Difficulty|6.94
+QuestionID| GACA-000047
 
 Q| According to the the Sustainable Development Report 2025, what is the percentage of the population with access to electricity in India? / টেকসই উন্নয়ন প্রতিবেদন ২০২৫ অনুসারে, ভারতে বিদ্যুৎ ব্যবহারের সুবিধা থাকা জনসংখ্যার শতাংশ কত?
 A| 97.3% / ৯৭.৩%
@@ -440,6 +487,7 @@ D| 95.8% / ৯৫.৮%
 Shift|10/12/2025 12:45 PM - 2:15 PM
 Correct|B
 Difficulty|5.29
+QuestionID| GACA-000048
 
 Q| Which of the following female runners won the women's race in the Paris Marathon 2025? / নিচের কোন মহিলা রানার ২০২৫ সালের প্যারিস ম্যারাথনে মহিলাদের রেসে জয়ী হয়েছেন?
 A| Bedatu Hirpa / বেদাতু হিরপা (Bedatu Hirpa)
@@ -449,6 +497,7 @@ D| Letesenbet Gidey / লেটেসেনবেত গিডি (Letesenbet Gi
 Shift|02/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|9.84
+QuestionID| GACA-000049
 
 Q| In which of the following months was the grand finale and prize distribution ceremony of the Defence Innovation Challenge for Excellence (DICE-2024) organised during Aero India 2025 in Bengaluru by the Marathwada Accelerator for Growth and Incubation Council (MAGIC)? / মারাঠাওয়াড়া অ্যাক্সিলারেটর ফর গ্রোথ অ্যান্ড ইনকিউবেশন কাউন্সিল (MAGIC) দ্বারা বেঙ্গালুরুতে অ্যারো ইন্ডিয়া ২০২৫ চলাকালীন কোন মাসে ডিফেন্স ইনোভেশন চ্যালেঞ্জ ফর এক্সেলেন্স (DICE-2024)-এর গ্র্যান্ড ফিনালে এবং পুরস্কার বিতরণী অনুষ্ঠানের আয়োজন করা হয়েছিল?
 A| February 2025 / ফেব্রুয়ারি ২০২৫
@@ -458,6 +507,7 @@ D| March 2025 / মার্চ ২০২৫
 Shift|01/12/2025 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|7.84
+QuestionID| GACA-000050
 
 Q| The Reserve Bank of India revised Priority Sector Lending (PSL) guidelines for Small Finance Banks from FY 2025-26, reducing the PSL target to what percentage of ANBC (adjusted net bank credit) or Credit Equivalent of Off-Balance Sheet Exposures (CEOBE)? / ভারতীয় রিজার্ভ ব্যাংক FY 2025-26 থেকে স্মল ফাইন্যান্স ব্যাংকগুলোর জন্য প্রায়োরিটি সেক্টর লেন্ডিং (PSL) নির্দেশিকা সংশোধন করেছে, যা ANBC বা CEOBE-এর কত শতাংশে পিএসএল লক্ষ্যমাত্রা হ্রাস করেছে?
 A| 60% / ৬০%
@@ -467,6 +517,7 @@ D| 50% / ৫০%
 Shift|24/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|8.42
+QuestionID| GACA-000051
 
 Q| In 2025, Uttar Pradesh and which other state hosted the Defence Industrial Corridor that together have attracted investments worth over ₹8,658 crore? / ২০২৫ সালে, উত্তর প্রদেশ এবং অন্য কোন রাজ্য ডিফেন্স ইন্ডাস্ট্রিয়াল করিডোর হোস্ট করেছে যা একসাথে ৮,৬৫৮ কোটি টাকারও বেশি বিনিয়োগ আকর্ষণ করেছে?
 A| Karnataka / কর্ণাটক (Karnataka)
@@ -476,6 +527,7 @@ D| Maharashtra / মহারাষ্ট্র (Maharashtra)
 Shift|30/12/2025 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|5.64
+QuestionID| GACA-000052
 
 Q| Which seat did Congress win in the Kerala by-elections in June 2025? / ২০২৫ সালের জুনে কেরল উপনির্বাচনে কংগ্রেস কোন আসনে জয়লাভ করেছিল?
 A| Nilambur / নিলাম্বুর​ (Nilambur)
@@ -485,6 +537,7 @@ D| Ernakulam / এরনাকুলাম (Ernakulam)
 Shift|09/02/2026 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|8.70
+QuestionID| GACA-000053
 
 Q| By what percentage did the All-India House Price Index increased annually in Q4 FY25, with Kolkata recording the highest price growth and Kochi witnessing a decline? / Q4 FY25-এ অল-ইন্ডিয়া হাউস প্রাইস ইনডেক্স বার্ষিকভাবে কত শতাংশ বৃদ্ধি পেয়েছে, যেখানে কলকাতা সর্বোচ্চ মূল্য বৃদ্ধি রেকর্ড করেছে এবং কোচি হ্রাস পেয়েছে?
 A| 4.1% / ৪.১%
@@ -494,6 +547,7 @@ D| 3.1% / ৩.১%
 Shift|23/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|7.75
+QuestionID| GACA-000054
 
 Q| As part of Tripura's tech-driven disaster preparedness initiative launched in August 2025, how many automated weather stations and rain gauges are proposed to be installed? / ২০২৫ সালের আগস্টে চালু হওয়া ত্রিপুরার প্রযুক্তি-চালিত দুর্যোগ প্রস্তুতি উদ্যোগের অংশ হিসেবে, কতটি স্বয়ংক্রিয় আবহাওয়া কেন্দ্র এবং বৃষ্টির পরিমাপক যন্ত্র স্থাপনের প্রস্তাব করা হয়েছে?
 A| 14 / ১৪
@@ -503,6 +557,7 @@ D| 26 / ২৬
 Shift|03/02/2026 12:45 PM - 2:15 PM
 Correct|D
 Difficulty|6.68
+QuestionID| GACA-000055
 
 Q| In which city was the 15 th edition of the Hockey India Senior Men National Championship 2025 conducted? / হকি ইন্ডিয়া সিনিয়র পুরুষ জাতীয় চ্যাম্পিয়নশিপ ২০২৫-এর ১৫ তম সংস্করণ কোন শহরে পরিচালিত হয়েছিল?
 A| Bhopal / ভোপাল (Bhopal)
@@ -512,6 +567,7 @@ D| Lucknow / লখনউ (Lucknow)
 Shift|05/02/2026 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|9.08
+QuestionID| GACA-000056
 
 Q| Prof. Syed Wajih Ahmad Naqvi, an outstanding Biogeochemical Oceanographer with national and international recognition, received the 2024 Rashtriya Vigyan Puraskar in which of the following categories? / জাতীয় ও আন্তর্জাতিক স্বীকৃতিসম্পন্ন একজন অসামান্য বায়োজিওকেমিক্যাল সমুদ্রবিজ্ঞানী অধ্যাপক সৈয়দ ওয়াজিল আহমেদ নকভি নিচের কোন বিভাগে ২০২৪ সালের রাষ্ট্রীয় বিজ্ঞান পুরস্কার পেয়েছেন?
 A| Vigyan Shri (VS) Award / বিজ্ঞান শ্রী (Vigyan Shri - VS) পুরস্কার
@@ -521,6 +577,7 @@ D| Vigyan Team (VT) Award / বিজ্ঞান টিম (Vigyan Team - VT) �
 Shift|09/01/2026 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|6.02
+QuestionID| GACA-000057
 
 Q| In which of the following places was the regional workshop on 'Sangathan, Swasthya, Samriddhi: Women Collective's Action on Food, Nutrition, Health and Water, Sanitation and Hygiene,' held from 22 nd to 23 rd July 2025? / ২০২৫ সালের ২২ থেকে ২৩ জুলাই পর্যন্ত কোন স্থানে 'সংগঠন, স্বাস্থ্য, সমৃদ্ধি: খাদ্য, পুষ্টি, স্বাস্থ্য এবং জল, স্যানিটেশন ও হাইজিনের ওপর মহিলা যৌথ কর্ম' শীর্ষক আঞ্চলিক কর্মশালা অনুষ্ঠিত হয়েছিল?
 A| Ranchi, Jharkhand / রাঁচি, ঝাড়খণ্ড (Ranchi, Jharkhand)
@@ -530,6 +587,7 @@ D| Patna, Bihar / পাটনা, বিহার (Patna, Bihar)
 Shift|16/12/2025 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|8.44
+QuestionID| GACA-000058
 
 Q| The Supreme Court declared in October 2025 that the principle of public trust extends to artificial lakes this ruling affirmed the directive of which of the following High Court benches? / সুপ্রিম কোর্ট ২০২৫ সালের অক্টোবরে ঘোষণা করেছে যে পাবলিক ট্রাস্টের নীতি কৃত্রিম হ্রদের ক্ষেত্রেও প্রযোজ্য; এই রায় নিচের কোন হাইকোর্ট বেঞ্চের নির্দেশকে নিশ্চিত করেছে?
 A| Jaipur Bench of the Rajasthan High Court / রাজস্থান হাইকোর্টের জয়পুর বেঞ্চ (Jaipur Bench of the Rajasthan High Court)
@@ -539,6 +597,7 @@ D| Madurai Bench of the Madras High Court / মাদ্রাজ হাইক�
 Shift|09/01/2026 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|9.91
+QuestionID| GACA-000059
 
 Q| In May 2025, the Reserve Bank of India (RBI) approved the renaming of the North East Small Finance Bank to / ২০২৫ সালের মে মাসে, ভারতীয় রিজার্ভ ব্যাংক (RBI) নর্থ ইস্ট স্মল ফাইন্যান্স ব্যাংক-এর নাম পরিবর্তন করে কী রাখার অনুমোদন দিয়েছে?
 A| Synergy Small Finance Bank Limited / সিনার্জি স্মল ফাইন্যান্স ব্যাংক লিমিটেড (Synergy Small Finance Bank Limited)
@@ -548,6 +607,7 @@ D| Northeast Micro Finance Bank Limited / নর্থইস্ট মাইক�
 Shift|26/12/2025 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|9.37
+QuestionID| GACA-000060
 
 Q| Which NFL player won the BET Sportsman of the Year Award 2025? / কোন NFL খেলোয়াড় BET স্পোর্টসম্যান অফ দ্য ইয়ার অ্যাওয়ার্ড ২০২৫ জিতেছেন?
 A| Josh Allen / জশ অ্যালেন (Josh Allen)
@@ -557,6 +617,7 @@ D| Jalen Hurts / জ্যালেন হার্টস (Jalen Hurts)
 Shift|03/12/2025 12:45 PM - 2:15 PM
 Correct|D
 Difficulty|8.23
+QuestionID| GACA-000061
 
 Q| Why was Acko General Insurance fined ₹1 crore by the Insurance Regulatory and Development Authority of India (IRDAI) in May 2025? / ২০২৫ সালের মে মাসে ইন্স্যুরেন্স রেগুলেটরি অ্যান্ড ডেভেলপমেন্ট অথরিটি অফ ইন্ডিয়া (IRDAI) কেন অ্যাকো জেনারেল ইন্স্যুরেন্সকে ₹১ কোটি জরিমানা করেছে?
 A| Denial of health insurance claims / স্বাস্থ্য বীমা দাবি প্রত্যাখ্যানের জন্য
@@ -566,6 +627,7 @@ D| Payments to an unregistered intermediary / একজন অনিবন্ধ
 Shift|21/12/2025 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|6.79
+QuestionID| GACA-000062
 
 Q| Which tennis veteran became the first Asian male with 450 career wins by April 2025? / কোন অভিজ্ঞ টেনিস খেলোয়াড় ২০২৫ সালের এপ্রিলের মধ্যে ৪৫০টি কেরিয়ার জয়লাভকারী প্রথম এশিয়ান পুরুষ হয়েছেন?
 A| Yuki Bhambri / ইউকি ভাম্ব্রি (Yuki Bhambri)
@@ -575,6 +637,7 @@ D| Kei Nishikori / কেই নিশিকোরি (Kei Nishikori)
 Shift|23/12/2025 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|5.52
+QuestionID| GACA-000063
 
 Q| As notified in February 2025, which of the following companies introduced India's first Air Quality Index-based parametric insurance for construction workers in the Delhi-National Capital Region? / ২০২৫ সালের ফেব্রুয়ারির বিজ্ঞপ্তি অনুযায়ী, নিচের কোন কোম্পানি দিল্লি-জাতীয় রাজধানী অঞ্চলে নির্মাণ শ্রমিকদের জন্য ভারতের প্রথম এয়ার কোয়ালিটি ইনডেক্স-ভিত্তিক প্যারামেট্রিক বীমা চালু করেছে?
 A| Tata AIG General Insurance / টাটা এআইজি জেনারেল ইন্স্যুরেন্স (Tata AIG General Insurance)
@@ -584,6 +647,7 @@ D| Star Health and Allied Insurance / স্টার হেলথ অ্যা�
 Shift|02/02/2026 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|7.62
+QuestionID| GACA-000064
 
 Q| In which state did the Defence Research and Development Organisation (DRDO) successfully test its indigenous Stratospheric Airship Platform on 3 May 2025? / কোন রাজ্যে ডিফেন্স রিসার্চ অ্যান্ড ডেভেলপমেন্ট অর্গানাইজেশন (DRDO) ২০২৫ সালের ৩ মে সফলভাবে তার নিজস্ব স্ট্র্যাটোস্ফিয়ারিক এয়ারশিপ প্ল্যাটফর্ম পরীক্ষা করেছে?
 A| Gujarat / গুজরাট (Gujarat)
@@ -593,6 +657,7 @@ D| Andhra Pradesh / অন্ধ্রপ্রদেশ (Andhra Pradesh)
 Shift|01/12/2025 4:30 PM - 6:00 PM
 Correct|C
 Difficulty|5.02
+QuestionID| GACA-000065
 
 Q| Under the proposed Constitution (131st Amendment) Bill 2025, which seeks to include Chandigarh under Article 240, the Union Territory will be aligned with which category of regions? / প্রস্তাবিত সংবিধান (১৩১ তম সংশোধনী) বিল ২০২৫-এর অধীনে, যা চণ্ডীগড়কে ২৪০ অনুচ্ছেদের অন্তর্ভুক্ত করতে চায়, এই কেন্দ্রশাসিত অঞ্চলটিকে কোন শ্রেণীর অঞ্চলের সাথে যুক্ত করা হবে?
 A| Union Territories without legislatures / আইনসভা বিহীন কেন্দ্রশাসিত অঞ্চল (Union Territories without legislatures)
@@ -602,6 +667,7 @@ D| Union Territories governed under special provisions / বিশেষ বি�
 Shift|09/01/2026 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|6.62
+QuestionID| GACA-000066
 
 Q| What is the purpose of the new Global Innovation Hub 'District I' launched in Bengaluru Airport City? / বেঙ্গালুরু এয়ারপোর্ট সিটিতে চালু হওয়া নতুন গ্লোবাল ইনোভেশন হাব 'ডিস্ট্রিক্ট আই' (District I)-এর উদ্দেশ্য কী?
 A| Deep-tech entrepreneurship and Al innovation / ডিপ-টেক উদ্যোক্তা এবং এআই উদ্ভাবন (Deep-tech entrepreneurship and AI innovation)
@@ -611,6 +677,7 @@ D| Retail and e-commerce incubation / খুচরা ও ই-কমার্স
 Shift|05/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|5.40
+QuestionID| GACA-000067
 
 Q| Which of the following missile systems did India test within a 24-hour window in July 2025, showcasing strategic deterrence capabilities? / কৌশলগত প্রতিরোধ ক্ষমতা প্রদর্শনের অংশ হিসেবে ভারত ২০২৫ সালের জুলাই মাসে ২৪ ঘণ্টার ব্যবধানে নিচের কোন ক্ষেপণাস্ত্র ব্যবস্থার পরীক্ষা চালিয়েছিল?
 A| Prithvi-II, Agni-I / পৃথ্বী-II, অগ্নি-I (Prithvi-II, Agni-I)
@@ -620,6 +687,7 @@ D| Agni-ll, Astra, Shaurya / অগ্নি-II, অস্ত্র, শৌর�
 Shift|21/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|5.75
+QuestionID| GACA-000068
 
 Q| Which fungal pathogen has been found to use chromosome alterations to resist common antifungal drugs like fluconazole and voriconazole? / ফ্লুকোনাজোল এবং ভরিলোনাজোলের মতো সাধারণ অ্যান্টিফাঙ্গাল ওষুধের প্রতিরোধ করতে কোন ছত্রাক প্যাথোজেন ক্রোমোজোম পরিবর্তন ব্যবহার করে বলে প্রমাণিত হয়েছে?
 A| Cryptococcus neoformans / ক্রিপ্টোকক্কাস নিওফরম্যানস (Cryptococcus neoformans)
@@ -629,6 +697,7 @@ D| Aspergillus fumigatus / অ্যাসপারগিলাস ফিউম�
 Shift|23/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|7.88
+QuestionID| GACA-000069
 
 Q| In which of the following states was the Skill Development Centre inaugurated under the 'Pradhan Mantri Jan Vikas Karyakram' scheme in July 2025? / ২০২৫ সালের জুলাই মাসে 'প্রধানমন্ত্রী জন বিকাশ কার্যক্রম' প্রকল্পের অধীনে কোন রাজ্যে স্কিল ডেভেলপমেন্ট সেন্টার উদ্বোধন করা হয়েছিল?
 A| Gujarat / গুজরাট (Gujarat)
@@ -638,6 +707,7 @@ D| Punjab / পাঞ্জাব (Punjab)
 Shift|29/12/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|8.16
+QuestionID| GACA-000070
 
 Q| Who became the sixth male golfer in history to complete a career Grand Slam by winning the 2025 Masters Tournament? / ২০২৫ সালের মাস্টার্স টুর্নামেন্ট জিতে ইতিহাসের ষষ্ঠ পুরুষ গলফার হিসেবে কে ক্যারিয়ার গ্র্যান্ড স্ল্যাম সম্পন্ন করেছেন?
 A| Phil Mickelson / ফিল মিকেলসন (Phil Mickelson)
@@ -647,6 +717,7 @@ D| Rory Mcllroy / ররি ম্যাকইলরয় (Rory McIlroy)
 Shift|06/02/2026 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|9.25
+QuestionID| GACA-000071
 
 Q| Which polo team made history in 2025 by sweeping all major awards for the fourth consecutive year at the Indian Polo Awards held in Jaipur? / জয়পুরে অনুষ্ঠিত ইন্ডিয়ান পোলো অ্যাওয়ার্ডস-এ কোন পোলো দল ২০২৫ সালে টানা চতুর্থ বছরের মতো সমস্ত প্রধান পুরস্কার জিতে ইতিহাস তৈরি করেছে?
 A| Jaipur Warriors / জয়পুর ওয়ারিয়র্স (Jaipur Warriors)
@@ -656,6 +727,7 @@ D| Royal Riders / রয়্যাল রাইডার্স (Royal Riders)
 Shift|10/12/2025 4:30 PM - 6:00 PM
 Correct|C
 Difficulty|8.69
+QuestionID| GACA-000072
 
 Q| Which novel by Nell Stevens exploring queerness in Victorian London was reviewed in June 2025? / ভিক্টোরিয়ান লন্ডনে সমকামিতা বা কুয়ারনেস অন্বেষণকারী নেল স্টিভেন্সের কোন উপন্যাসটি ২০২৫ সালের জুনে পর্যালোচনা করা হয়েছিল?
 A| Dream Count / ড্রিম কাউন্ট (Dream Count)
@@ -665,6 +737,7 @@ D| The Devil's Party / দ্য ডেভিলস পার্টি (The Devi
 Shift|05/02/2026 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|5.56
+QuestionID| GACA-000073
 
 Q| In May 2025, the Reserve Bank of India (RBI) penalised the Union Bank of India and which of the following companies? / ২০২৫ সালের মে মাসে, ভারতীয় রিজার্ভ ব্যাংক (RBI) ইউনিয়ন ব্যাংক অফ ইন্ডিয়া এবং নিচের কোন কোম্পানিকে জরিমানা করেছে?
 A| Razorpay / রেজারপে (Razorpay)
@@ -674,6 +747,7 @@ D| Transactree Technologies / ট্রানজ্যাক্টরি টে�
 Shift|09/02/2026 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|7.64
+QuestionID| GACA-000074
 
 Q| According to the NITI Aayog press release (July 2025) on the second edition of the NER District SDG Index 2023-24, how many categories are districts classified into based on their SDG scores? / NER জেলা SDG সূচক ২০২৩-২৪ এর দ্বিতীয় সংস্করণের ওপর নীতি আয়োগের প্রেস রিলিজ (জুলাই ২০২৫) অনুসারে, জেলাগুলোকে তাদের এসডিজি স্কোরের ভিত্তিতে কীভাবে শ্রেণীবদ্ধ করা হয়েছে?
 A| Achiever 100; Front Runner 70-99; Performer 55-69; Aspirant <55 / অ্যাচিভার ১০০; ফ্রন্ট রানার ৭০-৯৯; পারফর্মার ৫৫-৬৯; অ্যাসপির্যান্ট <৫৫
@@ -683,6 +757,7 @@ D| Achiever 100; Front Runner 65-99; Performer 50-65; Aspirant <50 / অ্য�
 Shift|22/12/2025 4:30 PM - 6:00 PM
 Correct|D
 Difficulty|7.61
+QuestionID| GACA-000075
 
 Q| As announced on June 17, 2025, which of the following institutes have developed a novel one-step colloidal synthesis method for fabricating PEGylated semi-shells (SS) with nano-cup morphology at room temperature to treat cancer? / ২০২৫ সালের ১৭ জুনের ঘোষণা অনুযায়ী, ক্যান্সার নিরাময়ের জন্য ঘরের তাপমাত্রায় ন্যানো-কাপ মরফোলজি সহ পিইজিলেটেড সেমি-শেল (SS) তৈরির জন্য কোন প্রতিষ্ঠান একটি অভিনব ওয়ান-স্টেপ কলয়েডাল সিন্থেসিস পদ্ধতি তৈরি করেছে?
 A| Institute of Nano Science and Technology (INST), Raebareli / ইনস্টিটিউট অফ ন্যানো সায়েন্স অ্যান্ড টেকনোলজি রায়বেরেলি (Institute of Nano Science and Technology - INST, Raebareli)
@@ -692,6 +767,7 @@ D| Institute of Nano Science and Technology (INST), Chandigarh / ইনস্ট
 Shift|28/11/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|9.16
+QuestionID| GACA-000076
 
 Q| Which category of climate finance did India argue should be scaled up independently during the post-COP-30 negotiations held in November 2025? / ২০২৫ সালের নভেম্বরে অনুষ্ঠিত পোস্ট-COP-30 আলোচনায় ভারত জলবায়ু অর্থায়নের কোন বিভাগটি স্বাধীনভাবে বৃদ্ধি করার পক্ষে যুক্তি দিয়েছিল?
 A| Adaptation finance / অ্যাডাপ্টেশন ফাইন্যান্স (Adaptation finance)
@@ -701,6 +777,7 @@ D| Green hydrogen finance / গ্রিন হাইড্রোজেন ফ�
 Shift|10/02/2026 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|7.91
+QuestionID| GACA-000077
 
 Q| The city of Awaza, the venue of the Third UN Conference on Landlocked Developing Countries (2025), is located in which nation? / ল্যান্ডলকড ডেভেলপিং কান্ট্রিজ (2025)-এর তৃতীয় জাতিসংঘ সম্মেলনের ভেন্যু 'আওয়াজা' (Awaza) শহরটি কোন দেশে অবস্থিত?
 A| Uzbekistan / উজবেকিস্তান (Uzbekistan)
@@ -710,6 +787,7 @@ D| Kyrgyz Republic / কিরগিজ প্রজাতন্ত্র (Kyrgy
 Shift|11/12/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|5.25
+QuestionID| GACA-000078
 
 Q| Which of the following cities hosted the G20 Digital Economy Working Groups' second meeting in South Africa in 2025? / ২০২৫ সালে দক্ষিণ আফ্রিকায় G20 ডিজিটাল ইকোনমি ওয়ার্কিং গ্রুপের দ্বিতীয় বৈঠক নিচের কোন শহরে অনুষ্ঠিত হয়েছিল?
 A| Eastern Cape / ইস্টার্ন কেপ (Eastern Cape)
@@ -719,6 +797,7 @@ D| Durban / ডারবান (Durban)
 Shift|11/12/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|9.42
+QuestionID| GACA-000079
 
 Q| Who among the following is the head of the 7-member committee set up by the Insurance Regulatory and Development Authority of India (IRDAI) in February 2025 to examine and suggest amendments to the Insurance Act, 1938? / ১৯৩৮ সালের বীমা আইন পরীক্ষা করার এবং সংশোধনের পরামর্শ দেওয়ার জন্য ২০২৫ সালের ফেব্রুয়ারিতে ইন্স্যুরেন্স রেগুলেটরি অ্যান্ড ডেভেলপমেন্ট অথরিটি অফ ইন্ডিয়া (IRDAI) দ্বারা গঠিত ৭ সদস্যের কমিটির প্রধান কে?
 A| Dinesh Khara / দিনেশ খারা (Dinesh Khara)
@@ -728,6 +807,7 @@ D| TS Vijayan / টি এস বিজয়ন (TS Vijayan)
 Shift|24/12/2025 12:45 PM - 2:15 PM
 Correct|A
 Difficulty|9.33
+QuestionID| GACA-000080
 
 Q| The Van Dhan Vikas Kendra at Dugong Creek aims to make the Onge tribe self-sustainable through which of the following? / ডুগং ক্রিকের বন ধন বিকাশ কেন্দ্রের উদ্দেশ্য নিচের কোনটির মাধ্যমে ওনজে (Onge) উপজাতিকে স্বাবলম্বী করে তোলা?
 A| Bamboo handicrafts / বাঁশের হস্তশিল্প (Bamboo handicrafts)
@@ -737,6 +817,7 @@ D| Honey and wild forest produce / মধু এবং বন্য বনজ �
 Shift|10/02/2026 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|9.75
+QuestionID| GACA-000081
 
 Q| In 2025, which organisation reintroduced the SPREE initiative and launched the Amnesty Scheme 2025 to expand social security coverage for workers? / ২০২৫ সালে, কোন সংস্থা শ্রমিকদের সামাজিক নিরাপত্তা কভারেজ প্রসারিত করার জন্য SPREE উদ্যোগটি পুনরায় চালু করেছে এবং অ্যামনেস্টি স্কিম ২০২৫ চালু করেছে?
 A| NITI Aayog / নীতি আয়োগ (NITI Aayog)
@@ -746,6 +827,7 @@ D| Employees Provident Fund Organisation / এমপ্লয়িজ প্র
 Shift|23/12/2025 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|5.46
+QuestionID| GACA-000082
 
 Q| In which of the following cities was the regional meeting with Waqf Boards held in October 2025? / ২০২৫ সালের অক্টোবরে ওয়াকফ বোর্ডগুলোর সাথে আঞ্চলিক সভা নিচের কোন শহরে অনুষ্ঠিত হয়েছিল?
 A| Mumbai / মুম্বাই (Mumbai)
@@ -755,6 +837,7 @@ D| Delhi / দিল্লি (Delhi)
 Shift|26/12/2025 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|6.54
+QuestionID| GACA-000083
 
 Q| Who scored the winning goal for Sunderland in the 2025 EFL Championship playoff final? / ২০২৫ সালের ইএফএল চ্যাম্পিয়নশিপ প্লে-অফ ফাইনালে সান্ডারল্যান্ডের হয়ে জয়সূচক গোলটি কে করেছিলেন?
 A| Eliezer Mayenda / এলিজার মায়েন্দা (Eliezer Mayenda)
@@ -764,6 +847,7 @@ D| Dan Neil / ড্যান নিল (Dan Neil)
 Shift|27/12/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|6.98
+QuestionID| GACA-000084
 
 Q| Under what theme is the 'Swachhata Hi Seva' campaign, in alignment with the Government of India's vision of a clean and garbage-free India, being observed in 2025? / ভারত সরকারের পরিচ্ছন্ন ও আবর্জনামুক্ত ভারতের ভিশনের সাথে মিল রেখে ২০২৫ সালে কোন থিমের অধীনে 'স্বচ্ছতা হি সেবা' অভিযান পালিত হচ্ছে?
 A| Clean India Green India / ক্লিন ইন্ডিয়া গ্রিন ইন্ডিয়া (Clean India Green India)
@@ -773,6 +857,7 @@ D| Swachh Survekshan / স্বচ্ছ সর্বেক্ষণ (Swachh Su
 Shift|05/02/2026 12:45 PM - 2:15 PM
 Correct|C
 Difficulty|5.44
+QuestionID| GACA-000085
 
 Q| As per the Sustainable Development Goals National Indicator Framework Progress Report, 2025, published in June 2025, what was the percentage of the total waste processed during the year 2024-2025, indicating progress in waste management efficiency? / জুন ২০২৫ সালে প্রকাশিত টেকসই উন্নয়ন লক্ষ্যমাত্রা জাতীয় সূচক কাঠামো অগ্রগতি প্রতিবেদন, ২০২৫ অনুসারে, বর্জ্য ব্যবস্থাপনা দক্ষতার অগ্রগতি নির্দেশ করে ২০২৪-২০২৫ সালের মধ্যে মোট প্রক্রিয়াজাত বর্জ্যের শতাংশ কত ছিল?
 A| 97.80% / ৯৭.৮০%
@@ -782,6 +867,7 @@ D| 75.6% / ৭৫.৬%
 Shift|23/12/2025 9:00 AM - 10:30 AM
 Correct|C
 Difficulty|5.52
+QuestionID| GACA-000086
 
 Q| Indian boxer Nishant Dev secured his second professional win against which opponent in a Super Welterweight bout at Madison Square Garden Theatre, New York in June 2025? / ভারতীয় বক্সার নিশান্ত দেব ২০২৫ সালের জুনে নিউ ইয়র্কের ম্যাডিসন স্কয়ার গার্ডেন থিয়েটারে একটি সুপার ওয়েল্টারওয়েট বাউটে কোন প্রতিপক্ষের বিরুদ্ধে তার দ্বিতীয় পেশাদার জয় নিশ্চিত করেছেন?
 A| Victor Ortiz / ভিক্টর ওর্টিজ (Victor Ortiz)
@@ -791,6 +877,7 @@ D| Josue Silva / জোসুয়ে সিলভা (Josue Silva)
 Shift|15/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|6.98
+QuestionID| GACA-000087
 
 Q| Where in Andhra Pradesh was the Rajiv Sports Complex, developed by Greater Visakhapatnam Municipal Corporation (GVMC), inaugurated in June 2025? / অন্ধ্রপ্রদেশের কোথায় গ্রেটার বিশাখাপত্তনম মিউনিসিপ্যাল কর্পোরেশন (GVMC) দ্বারা তৈরি রাজীব স্পোর্টস কমপ্লেক্সটি ২০২৫ সালের জুনে উদ্বোধন করা হয়েছিল?
 A| Kollam / কোল্লাম (Kollam)
@@ -800,6 +887,7 @@ D| Dwaraka Nagar / দ্বারকা নগর (Dwaraka Nagar)
 Shift|08/01/2026 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|5.70
+QuestionID| GACA-000088
 
 Q| Which Indian naval asset participated in the defense exercise La Pérouse 2025? / কোন ভারতীয় নৌ সম্পদ লা পেরুস ২০২৫ (La Pérouse 2025) প্রতিরক্ষা অনুশীলনে অংশ নিয়েছিল?
 A| INS Mumbai / আইএনএস মুম্বাই (INS Mumbai)
@@ -809,6 +897,7 @@ D| INS Vikrant / আইএনএস বিক্রান্ত (INS Vikrant)
 Shift|09/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|9.17
+QuestionID| GACA-000089
 
 Q| What is the revised policy repo rate announced by the Reserve Bank of India in April 2025? / ২০২৫ সালের এপ্রিলে ভারতীয় রিজার্ভ ব্যাংক কর্তৃক ঘোষিত সংশোধিত পলিসি রেপো রেট কত?
 A| 6.25% / ৬.২৫%
@@ -818,6 +907,7 @@ D| 6.50% / ৬.৫০%
 Shift|28/11/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|6.01
+QuestionID| GACA-000090
 
 Q| Where and when were the 2025 Juno Awards hosted? / ২০২৫ সালের জুনো পুরস্কার (Juno Awards) কোথায় এবং কখন অনুষ্ঠিত হয়েছিল?
 A| Ottawa, March 25 / অটোয়া, ২৫ মার্চ (Ottawa, March 25)
@@ -827,6 +917,7 @@ D| Montreal, May 5 / মন্ট্রিল, ৫ মে (Montreal, May 5)
 Shift|30/12/2025 4:30 PM - 6:00 PM
 Correct|C
 Difficulty|5.22
+QuestionID| GACA-000091
 
 Q| Which author's work 'Paradise Inc.' critiques Western conservation models in Africa through memoir and photojournalism? / কোন লেখকের কাজ 'প্যারাডাইস ইনকর্পোরেটেড' (Paradise Inc.) স্মৃতিকথা এবং ফটোসাংবাদিকতার মাধ্যমে আফ্রিকায় পশ্চিমা সংরক্ষণ মডেলের সমালোচনা করে?
 A| Nell Stevens / নেল স্টিভেন্স (Nell Stevens)
@@ -836,6 +927,7 @@ D| Guillaume Bonn / গুইলোম বন (Guillaume Bonn)
 Shift|21/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|8.46
+QuestionID| GACA-000092
 
 Q| Which of the following National Parks received rupees ₹1.5 crore in June 2025 for the establishment of two new Rhino Rehabilitation Areas? / নিচের কোন জাতীয় উদ্যানটি দুটি নতুন গণ্ডার পুনর্বাসন এলাকা প্রতিষ্ঠার জন্য ২০২৫ সালের জুনে দেড় কোটি টাকা পেয়েছে?
 A| Kaziranga National Park / কাজিরাঙ্গা জাতীয় উদ্যান (Kaziranga National Park)
@@ -845,6 +937,7 @@ D| Sundarbans National Park / সুন্দরবন জাতীয় উদ
 Shift|10/02/2026 9:00 AM - 10:30 AM
 Correct|B
 Difficulty|8.82
+QuestionID| GACA-000093
 
 Q| What is the name of the portal launched by the Government of India to support gender-responsive planning and budgeting? / জেন্ডার-রেসপন্সিভ পরিকল্পনা ও বাজেটকে সহায়তা করার জন্য ভারত সরকার কর্তৃক চালু করা পোর্টালের নাম কী?
 A| Gender Budgeting Knowledge Hub / জেন্ডার বাজেটিং নলেজ হাব (Gender Budgeting Knowledge Hub)
@@ -854,6 +947,7 @@ D| Gender Planning & Budget Portal / জেন্ডার প্ল্যান
 Shift|21/12/2025 4:30 PM - 6:00 PM
 Correct|A
 Difficulty|5.45
+QuestionID| GACA-000094
 
 Q| Which prodigious ice-hockey talent was awarded the EJ McGuire Award of Excellence, highlighting character and athleticism, ahead of the 2025 NHL Draft? / ২০২৫ সালের এনএইচএল ড্রাফটের আগে চরিত্র এবং অ্যাথলেটিসিজম প্রদর্শন করার জন্য কোন প্রতিভাবান আইস-হকি তারকাকে ইজে ম্যাকগুয়ার অ্যাওয়ার্ড অফ এক্সেলেন্স দেওয়া হয়েছিল?
 A| Michael Misa / মাইকেল মিসা (Michael Misa)
@@ -863,6 +957,7 @@ D| Matvei Michkov / মাটভেই মিচকভ (Matvei Michkov)
 Shift|05/02/2026 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|8.36
+QuestionID| GACA-000095
 
 Q| What is the new Loan-to-Value (LTV) ratio, set by the Reserve Bank of India for loans below ₹2.5 lakh in June 2025? / ২০২৫ সালের জুনে ₹২.৫ লাখের কম ঋণের জন্য ভারতীয় রিজার্ভ ব্যাংক কর্তৃক নির্ধারিত নতুন লোন-টু-ভ্যালু (LTV) অনুপাত কত?
 A| 85% / ৮৫%
@@ -872,6 +967,7 @@ D| 75% / ৭৫%
 Shift|10/12/2025 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|9.95
+QuestionID| GACA-000096
 
 Q| Who was voted the 2024 NBA Finals most valuable player (FMVP)? / ২০২৪ সালের এনবিএ ফাইনালসের মোস্ট ভ্যালুয়েবল প্লেয়ার (FMVP) কে নির্বাচিত হয়েছিলেন?
 A| Jaylen Brown / জ্যালেন ব্রাউন (Jaylen Brown)
@@ -881,6 +977,7 @@ D| Immanuel Jaylen Quickley / ইমানুয়েল জ্যালেন 
 Shift|10/02/2026 9:00 AM - 10:30 AM
 Correct|A
 Difficulty|8.39
+QuestionID| GACA-000097
 
 Q| Which of the following DRDO-executed schemes under the 'Make in India' initiative provides grants-in-aid to Indian industries (MSMEs/start-ups) for developing defence and dual-use technologies? / 'মেক ইন ভারত' উদ্যোগের অধীনে ডিআরডিও দ্বারা পরিচালিত নিচের কোন স্কিমটি প্রতিরক্ষা এবং দ্বৈত-ব্যবহারের প্রযুক্তি তৈরির জন্য ভারতীয় শিল্পকে (MSME/স্টার্টআপ) অনুদান প্রদান করে?
 A| Aatmanirbhar Defence Innovation & Technology Initiative (ADITI) / আত্মনির্ভর ডিফেন্স ইনোভেশন অ্যান্ড টেকনোলজি ইনিশিয়েটিভ (Aatmanirbhar Defence Innovation & Technology Initiative - ADITI)
@@ -890,6 +987,7 @@ D| Innovations for Defence Excellence (iDEX) / ইনোভেশনস ফর �
 Shift|23/12/2025 4:30 PM - 6:00 PM
 Correct|B
 Difficulty|5.15
+QuestionID| GACA-000098
 
 Q| Who was appointed as the youngest US Ryder Cup captain since 1963? / ১৯৬৩ সালের পর থেকে কে সবচেয়ে কম বয়সী মার্কিন রাইডার কাপের অধিনায়ক হিসেবে নিযুক্ত হয়েছেন?
 A| Phil Mickelson / ফিল মিকেলসন (Phil Mickelson)
@@ -899,6 +997,7 @@ D| Keegan Bradley / কিগান ব্র্যাডলি (Keegan Bradley)
 Shift|29/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|9.79
+QuestionID| GACA-000099
 
 Q| As notified in April 2025, how many new species of Sericinae scarab beetles from the biodiversity-rich regions of India were discovered by Zoological Survey of India in collaboration with Germany's Museum A. Koenig? / ২০২৫ সালের এপ্রিলের বিজ্ঞপ্তি অনুসারে, ভারতের জীববৈচিত্র্য সমৃদ্ধ অঞ্চল থেকে সেরিসিনা স্কারাব বিটলের কতটি নতুন প্রজাতি ভারতীয় প্রাণীবিজ্ঞান জরিপ (ZSI) জার্মানির মিউজিয়াম এ. কোয়েনিগ-এর সাথে যৌথভাবে আবিষ্কার করেছে?
 A| 4 / ৪
@@ -908,4 +1007,5 @@ D| 6 / ৬
 Shift|04/12/2025 9:00 AM - 10:30 AM
 Correct|D
 Difficulty|8.42
+QuestionID| GACA-000100
 
