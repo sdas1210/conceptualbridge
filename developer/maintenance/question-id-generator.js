@@ -173,9 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lines = text.split(/\r?\n/);
         const outputLines = [];
 
-        let inBlock = false;
         let blockLines = [];
-
         let questionCount = 0;
         let addedCount = 0;
         let existingIdCount = 0;
@@ -190,11 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = {
             GACA: {
                 startTag: 'Q|',
-                endTag: 'Difficulty|'
+                insertionPoint: line => line.startsWith('Difficulty|')
             },
             MATH: {
                 startTag: 'QEN|',
-                endTagRegex: /^Sub-?Topic\|/i
+                insertionPoint: line => /^Sub-?Topic\|/i.test(line)
             }
         };
 
@@ -204,88 +202,102 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error(`Unsupported section mode: ${mode}`);
         }
 
+        function finalizeBlock(linesForBlock) {
+            if (!linesForBlock.length) return;
+
+            const insertionIndex = linesForBlock.findIndex(line =>
+                activeConfig.insertionPoint(line.trim())
+            );
+
+            if (insertionIndex === -1) {
+                incompleteBlocks++;
+                outputLines.push(...linesForBlock);
+                return;
+            }
+
+            const existingIdIndexes = [];
+
+            linesForBlock.forEach((line, index) => {
+                if (/^QuestionID\|/i.test(line.trim())) {
+                    existingIdIndexes.push(index);
+                }
+            });
+
+            if (existingIdIndexes.length > 0) {
+                existingIdCount += existingIdIndexes.length;
+
+                for (const index of existingIdIndexes) {
+                    const idValue = linesForBlock[index]
+                        .trim()
+                        .substring('QuestionID|'.length)
+                        .trim();
+
+                    if (idValue) {
+                        if (seenIds.has(idValue)) {
+                            duplicateIds.push(idValue);
+                        }
+                        seenIds.add(idValue);
+                    }
+                }
+
+                // Preserve existing QuestionID exactly where it already is.
+                // Do not generate or overwrite an existing ID.
+                outputLines.push(...linesForBlock);
+                return;
+            }
+
+            currentIdCounter++;
+
+            const formattedCounter =
+                String(currentIdCounter).padStart(6, '0');
+
+            const generatedId =
+                `${mode}-${formattedCounter}`;
+
+            const generatedIdTag =
+                `QuestionID| ${generatedId}`;
+
+            // Insert immediately AFTER the required metadata line:
+            // GACA -> Difficulty|
+            // MATH -> SubTopic| / Sub-Topic|
+            linesForBlock.splice(
+                insertionIndex + 1,
+                0,
+                generatedIdTag
+            );
+
+            seenIds.add(generatedId);
+            addedCount++;
+
+            outputLines.push(...linesForBlock);
+        }
+
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             const trimmed = line.trim();
 
-            if (!inBlock && trimmed.startsWith(activeConfig.startTag)) {
-                inBlock = true;
+            const isQuestionStart =
+                trimmed.startsWith(activeConfig.startTag);
+
+            if (isQuestionStart) {
+                if (blockLines.length > 0) {
+                    finalizeBlock(blockLines);
+                }
+
                 blockLines = [line];
                 questionCount++;
                 continue;
             }
 
-            if (inBlock) {
+            if (blockLines.length > 0) {
                 blockLines.push(line);
-
-                let isEnd = false;
-
-                if (
-                    activeConfig.endTag &&
-                    trimmed.startsWith(activeConfig.endTag)
-                ) {
-                    isEnd = true;
-                } else if (
-                    activeConfig.endTagRegex &&
-                    activeConfig.endTagRegex.test(trimmed)
-                ) {
-                    isEnd = true;
-                }
-
-                if (isEnd) {
-                    const existingIdLines = blockLines.filter(line =>
-                        /^QuestionID\|/i.test(line.trim())
-                    );
-
-                    if (existingIdLines.length > 0) {
-                        existingIdCount += existingIdLines.length;
-
-                        for (const idLine of existingIdLines) {
-                            const idValue =
-                                idLine.trim().substring('QuestionID|'.length).trim();
-
-                            if (idValue) {
-                                if (seenIds.has(idValue)) {
-                                    duplicateIds.push(idValue);
-                                }
-                                seenIds.add(idValue);
-                            }
-                        }
-                    } else {
-                        currentIdCounter++;
-
-                        const formattedCounter =
-                            String(currentIdCounter).padStart(6, '0');
-
-                        const generatedId =
-                            `${mode}-${formattedCounter}`;
-
-                        const generatedIdTag =
-                            `QuestionID| ${generatedId}`;
-
-                        // Append QuestionID AFTER the block end metadata:
-                        // GACA -> after Difficulty|
-                        // MATH -> after SubTopic| / Sub-Topic|
-                        blockLines.push(generatedIdTag);
-
-                        seenIds.add(generatedId);
-                        addedCount++;
-                    }
-
-                    outputLines.push(...blockLines);
-
-                    blockLines = [];
-                    inBlock = false;
-                }
-
             } else {
                 outputLines.push(line);
             }
         }
 
         if (blockLines.length > 0) {
-            incompleteBlocks++;
-            outputLines.push(...blockLines);
+            finalizeBlock(blockLines);
         }
 
         if (questionCount === 0) {
