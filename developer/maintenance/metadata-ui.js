@@ -153,6 +153,15 @@ window.MetadataUI = (function () {
     };
   }
 
+  /**
+   * Helper to check if a field is permitted to be saved/verified as blank.
+   * @param {string} key
+   * @returns {boolean}
+   */
+  function isBlankAllowed(key) {
+    return key === 'Topic' || key === 'SubTopic';
+  }
+
   // =========================================================================
   // PUBLIC API & INITIALIZATION (Backward-Compatible)
   // =========================================================================
@@ -426,8 +435,13 @@ window.MetadataUI = (function () {
     const cached = domCache[key];
     if (!cached) return;
 
-    // Enable save button if a selection is made
-    cached.btnSave.disabled = !cached.selectDropdown.value;
+    if (isBlankAllowed(key)) {
+      // Always allow enabling save for Topic and SubTopic regardless of selection
+      cached.btnSave.disabled = false;
+    } else {
+      // Standard fields require a non-empty choice
+      cached.btnSave.disabled = !cached.selectDropdown.value;
+    }
   }
 
   /**
@@ -440,8 +454,8 @@ window.MetadataUI = (function () {
 
     const selectedVal = cached.selectDropdown.value;
 
-    // Save requires a valid non-empty value
-    if (!selectedVal || selectedVal.trim() === '') {
+    // Standard fields block save if blank; Topic and SubTopic allow blank
+    if (!isBlankAllowed(key) && (!selectedVal || selectedVal.trim() === '')) {
       return;
     }
 
@@ -466,8 +480,8 @@ window.MetadataUI = (function () {
 
   /**
    * Handles Verification Checkbox Click
-   * Strengthened Rule: Row must have a non-empty value, must not be in EDITING state,
-   * and if edited, must have been explicitly SAVED before verifying.
+   * Enforces that standard fields must have a non-empty value, while
+   * Topic and SubTopic are permitted to be verified when blank.
    * @param {string} key 
    */
   function handleCheckboxClick(key) {
@@ -476,9 +490,15 @@ window.MetadataUI = (function () {
 
     const hasValue = rowState.value && rowState.value.trim() !== '';
 
-    // Reject verification if value is empty or row is currently being edited
-    if (!hasValue || rowState.state === ROW_STATES.EDITING) {
-      logDebug('VerificationBlocked', `${key} cannot verify: empty value or in EDITING state`);
+    // Standard fields require a non-empty value; Topic/SubTopic allow blank verification
+    if (!isBlankAllowed(key) && !hasValue) {
+      logDebug('VerificationBlocked', `${key} cannot verify: value is required`);
+      return;
+    }
+
+    // Reject verification if row is currently being edited
+    if (rowState.state === ROW_STATES.EDITING) {
+      logDebug('VerificationBlocked', `${key} cannot verify: in EDITING state`);
       return;
     }
 
@@ -512,11 +532,16 @@ window.MetadataUI = (function () {
 
     if (currentSubjectMode === 'MATHEMATICS' && (key === 'Topic' || key === 'SubTopic')) {
       if (key === 'Topic') {
-        options = mathCatalogRef ? Object.keys(mathCatalogRef) : [];
+        if (mathCatalogRef && Array.isArray(mathCatalogRef.topics)) {
+          options = mathCatalogRef.topics.map(t => t.name).filter(Boolean);
+        }
       } else if (key === 'SubTopic') {
         const selectedTopic = workflowStore['Topic'] ? workflowStore['Topic'].value : '';
-        if (selectedTopic && mathCatalogRef && mathCatalogRef[selectedTopic]) {
-          options = mathCatalogRef[selectedTopic];
+        if (selectedTopic && mathCatalogRef && Array.isArray(mathCatalogRef.topics)) {
+          const matchedTopicObj = mathCatalogRef.topics.find(t => t.name === selectedTopic);
+          if (matchedTopicObj && Array.isArray(matchedTopicObj.subtopics)) {
+            options = matchedTopicObj.subtopics;
+          }
         }
       }
     } else if (currentSubjectMode === 'GACA' && (key === 'Topic' || key === 'SubTopic')) {
@@ -582,7 +607,7 @@ window.MetadataUI = (function () {
         renderUnlockedState(cached, rowState);
         break;
       case ROW_STATES.EDITING:
-        renderEditingState(cached);
+        renderEditingState(cached, key);
         break;
       case ROW_STATES.SAVED:
         renderSavedState(cached, rowState);
@@ -623,8 +648,8 @@ window.MetadataUI = (function () {
     cached.btnEdit.disabled = !hasValue;
     cached.btnSave.disabled = true;
 
-    // Checkbox is clickable ONLY if row has a non-empty value
-    if (hasValue) {
+    // Checkbox is clickable if row has a value OR if blank values are allowed for this key
+    if (hasValue || isBlankAllowed(rowState.key)) {
       cached.checkbox.style.pointerEvents = 'auto';
       cached.checkbox.style.opacity = '1.0';
     } else {
@@ -638,12 +663,16 @@ window.MetadataUI = (function () {
   /**
    * Renders EDITING State
    * @param {Object} cached 
+   * @param {string} key
    */
-  function renderEditingState(cached) {
+  function renderEditingState(cached, key) {
     cached.rowEl.style.opacity = '1.0';
     cached.btnAdd.disabled = true;
     cached.btnEdit.disabled = true;
-    cached.btnSave.disabled = !cached.selectDropdown.value;
+    
+    // Save button enabled if a value is selected OR if field allows blank
+    cached.btnSave.disabled = isBlankAllowed(key) ? false : !cached.selectDropdown.value;
+    
     cached.checkbox.style.pointerEvents = 'none';
     cached.checkbox.style.opacity = '0.3';
   }
