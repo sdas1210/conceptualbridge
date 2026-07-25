@@ -1,13 +1,13 @@
 Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
-Topic|
+Topic| 
 SubTopic| 
-Level| 10
-Notification| 08/2024
+Level| 
+Notification| CEN-08/2024
 Type| PYQ
-Marks|
-QType|MCQ
-ImageFolder|No
+Marks| 1
+QType| MCQ
+ImageFolder| No
 
 Q| Which institution's researchers developed smart peptides for pH-responsive medical applications in June 2025? / কোন প্রতিষ্ঠানের গবেষকরা ২০২৫ সালের জুনে পিএইচ-রেসপন্সিভ (pH-responsive) চিকিৎসা প্রয়োগের জন্য স্মার্ট পেপটাইড তৈরি করেছেন?
 A| BITS Pilani / বিআইটিএস পিলানি (BITS Pilani)
