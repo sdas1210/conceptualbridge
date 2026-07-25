@@ -1,13 +1,13 @@
 Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
-Topic|
+Topic| 
 SubTopic| 
-Level| 10
-Notification| 08/2024
+Level| 
+Notification| CEN-08/2024
 Type| PYQ
-Marks|
-QType|MCQ
-ImageFolder|No
+Marks| 1
+QType| MCQ
+ImageFolder| No
 
 Q|Which of the following shifted its Andhra Pradesh regional office to Vijayawada, inaugurating the new premises on 16 June 2025? / নিচের মধ্যে কোনটি ২০২৫ সালের ১৬ জুন তার অন্ধ্রপ্রদেশ আঞ্চলিক কার্যালয় বিজয়ওয়াড়াতে স্থানান্তরিত করে নতুন প্রাঙ্গণের উদ্বোধন করেছে?
 A|Securities and Exchange Board of India / সিকিউরিটিজ অ্যান্ড এক্সচেঞ্জ বোর্ড অফ ইন্ডিয়া (Securities and Exchange Board of India)
