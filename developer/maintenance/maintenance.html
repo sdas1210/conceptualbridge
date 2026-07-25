@@ -183,6 +183,10 @@
             opacity: 0;
 
             transform: translateY(20px);
+
+            /* Contain shine sweep pseudo-element within card boundary */
+            position: relative;
+            overflow: hidden;
         }
         /* ----------------------*/
                 /* TOOL CARD*/
@@ -404,8 +408,108 @@
                 opacity: 1;
             }
         }
+        /* =========================
+           GLASS SHINE SWEEP EFFECT (V2)
+        ========================= */
 
+        /* Card boundary & z-index stacking context base */
+        .tool-card {
+            position: relative;
+            overflow: hidden;
+            z-index: 1; /* Establishes stacking context */
+        }
 
+        /* 
+         * Ensure all card content (icons, text, links) renders above the shine.
+         * Keeps text crisp and readable without modifying HTML structure.
+         */
+        .tool-card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 
+         * Polished, narrow diagonal glass reflection element.
+         * Rendered between the card background (z-index 0) and card text (z-index 2).
+         */
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: 1; /* Layered underneath content */
+            
+            /* Extremely narrow, soft specular beam gradient */
+            background: linear-gradient(
+                45deg,
+                transparent 46%,
+                rgba(255, 255, 255, 0.01) 48.5%,
+                rgba(255, 255, 255, 0.12) 50%,
+                rgba(255, 255, 255, 0.01) 51.5%,
+                transparent 54%
+            );
+            
+            transform: translate3d(-105%, -105%, 0);
+            
+            /* Hardware-accelerated sweep animation */
+            animation: glassShineV2 7s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        /* =========================================================
+           STAGGERED SHINE DELAYS
+           Calculated so the first shine starts AFTER the fade-in finishes.
+           Fade-in completes at (card delay + 0.8s).
+           Shine delays start at ~1.5s and stagger cleanly across cards.
+        ========================================================= */
+        .tool-card:nth-of-type(1)::before { animation-delay: 1.50s; }
+        .tool-card:nth-of-type(2)::before { animation-delay: 1.85s; }
+        .tool-card:nth-of-type(3)::before { animation-delay: 2.20s; }
+        .tool-card:nth-of-type(4)::before { animation-delay: 2.55s; }
+        .tool-card:nth-of-type(5)::before { animation-delay: 2.90s; }
+        .tool-card:nth-of-type(6)::before { animation-delay: 3.25s; }
+        .tool-card:nth-of-type(7)::before { animation-delay: 3.60s; }
+        .tool-card:nth-of-type(8)::before { animation-delay: 3.95s; }
+        .tool-card:nth-of-type(9)::before { animation-delay: 4.30s; }
+
+        /* 
+         * Premium Hover Enhancement:
+         * Gently boosts beam opacity and speeds up movement without jarring flashes.
+         */
+        .tool-card:hover::before {
+            background: linear-gradient(
+                45deg,
+                transparent 46%,
+                rgba(255, 255, 255, 0.02) 48.5%,
+                rgba(255, 255, 255, 0.18) 50%,
+                rgba(255, 255, 255, 0.02) 51.5%,
+                transparent 54%
+            );
+            /* Slightly faster, sleek sweep on hover */
+            animation-duration: 4.5s;
+        }
+
+        /* 
+         * Ultra-smooth animation timeline.
+         * The beam passes cleanly across the card in ~1.5s, 
+         * then rests completely off-screen for the remainder of the cycle.
+         */
+        @keyframes glassShineV2 {
+            0% {
+                transform: translate3d(-105%, -105%, 0);
+            }
+            22% {
+                transform: translate3d(105%, 105%, 0);
+            }
+            100% {
+                transform: translate3d(105%, 105%, 0);
+            }
+        }
+        
+        
         /* =========================
            MOBILE
         ========================= */
