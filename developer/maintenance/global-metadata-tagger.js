@@ -153,10 +153,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if any newly added values exist to register into catalogData
     Object.keys(currentState).forEach(key => {
-      const val = currentState[key];
-      if (val && catalogData[key] && !catalogData[key].includes(val)) {
+      const rawVal = currentState[key];
+      const trimmedVal = rawVal ? rawVal.trim() : '';
+
+      if (trimmedVal && catalogData[key] && Array.isArray(catalogData[key])) {
         if (key !== 'Topic' && key !== 'SubTopic') {
-          catalogData[key].push(val);
+          // Check duplicates by comparing trimmed strings
+          const exists = catalogData[key].some(item => item.trim() === trimmedVal);
+          if (!exists) {
+            catalogData[key].push(trimmedVal);
+          }
         }
       }
     });
@@ -169,13 +175,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalMetadataState = MetadataUI.getMetadataState();
     const updatedTxtContent = MetadataHandler.buildUpdatedTxt(finalMetadataState, parsedBodySection);
     
-    MetadataHandler.triggerDownload(updatedTxtContent, activeFileName, 'text/plain');
+    // Generate safe filename (e.g., example.txt -> example_updated.txt)
+    let safeFileName = activeFileName;
+    const dotIndex = activeFileName.lastIndexOf('.');
+    if (dotIndex !== -1) {
+      safeFileName = activeFileName.substring(0, dotIndex) + '_updated' + activeFileName.substring(dotIndex);
+    } else {
+      safeFileName = activeFileName + '_updated.txt';
+    }
+
+    MetadataHandler.triggerDownload(updatedTxtContent, safeFileName, 'text/plain');
   }
 
   /**
    * Export Updated metadata.json Catalogue
    */
   function exportCatalogJson() {
+    // Sort every metadata array alphabetically before JSON stringification
+    Object.keys(catalogData).forEach(key => {
+      if (Array.isArray(catalogData[key])) {
+        catalogData[key].sort((a, b) => a.localeCompare(b));
+      }
+    });
+
     const jsonString = JSON.stringify(catalogData, null, 2);
     MetadataHandler.triggerDownload(jsonString, 'metadata.json', 'application/json');
   }
