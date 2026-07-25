@@ -1,0 +1,38 @@
+{
+  "Exam": [
+    "RRB GROUP-D CBT-I",
+    "RRB NTPC CBT-I",
+    "RRB NTPC CBT-II"
+  ],
+  "Subject": [
+    "GENERAL AWARENESS & CURRENT AFFAIRS (GACA)",
+    "MATHEMATICS",
+    "GENERAL SCIENCE (GS)",
+    "GENERAL INTELLIGENCE (GI)"
+  ],
+  "Level": [
+    "10",
+    "12",
+    "12+"
+  ],
+  "Notification": [
+    "08/2024",
+    "01/2025"
+  ],
+  "Type": [
+    "PYQ",
+    "MOCK",
+    "PRACTICE"
+  ],
+  "Marks": [
+    "1",
+    "2"
+  ],
+  "QType": [
+    "MCQ"
+  ],
+  "ImageFolder": [
+    "YES",
+    "NO"
+  ]
+}
