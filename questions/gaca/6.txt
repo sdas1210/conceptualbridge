@@ -1,13 +1,13 @@
 Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
-Topic|
+Topic| 
 SubTopic| 
-Level| 10
-Notification| 08/2024
+Level| 
+Notification| CEN-08/2024
 Type| PYQ
-Marks|
-QType|MCQ
-ImageFolder|No
+Marks| 1
+QType| MCQ
+ImageFolder| No
 
 Q|Which body emphasised safety audits for women in public spaces during a symposium in June 2025? / ২০২৫ সালের জুনে একটি সিম্পোজিয়াম বা আলোচনা সভায় কোন সংস্থা প্রকাশ্য স্থানে মহিলাদের নিরাপত্তা অডিট বা সুরক্ষার পর্যালোচনার ওপর জোর দিয়েছিল?
 A|Ministry of Home Affairs / স্বরাষ্ট্র মন্ত্রক (Ministry of Home Affairs)
