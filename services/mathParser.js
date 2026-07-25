@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 /**
- * Parse a single question file
+ * Parse a single Mathematics question file
  * @param {string} filePath
  * @param {string} folder
  * @returns {Array<Question>}
@@ -18,7 +18,7 @@ export function parseQuestionFile(filePath, folder = "") {
     let currentQuestion = null;
     let globalMetadata = {
 
-       exam: "",
+        exam: "",
 
         subject: "",
     
@@ -38,7 +38,7 @@ export function parseQuestionFile(filePath, folder = "") {
     
         imageFolder: ""
         
-        };
+    };
 
     function saveCurrentQuestion() {
 
@@ -54,8 +54,6 @@ export function parseQuestionFile(filePath, folder = "") {
             currentQuestion.d &&
             currentQuestion.correct !== null
         ) {
-
-            
 
             currentQuestion.sourceFile =
                 path.basename(filePath);
@@ -74,15 +72,18 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (!line) continue;
 
-        // ---------- NEW QUESTION ----------
+        // ---------- NEW MATHEMATICS QUESTION ----------
 
-        if (line.startsWith("Q|")) {
+        if (line.startsWith("QEN|")) {
 
             saveCurrentQuestion();
 
+            const textValue = line.substring(4).trim();
+
             currentQuestion = {
 
-                text: line.substring(2).trim(),
+                // Existing Quiz Engine Compatibility Properties
+                text: textValue,
 
                 a: "",
                 b: "",
@@ -113,8 +114,32 @@ export function parseQuestionFile(filePath, folder = "") {
             
                 marks: globalMetadata.marks,
             
-                qType: globalMetadata.qType
+                qType: globalMetadata.qType,
 
+                // Mathematics Specific Properties
+                questionEnglish: textValue,
+
+                questionBengali: "",
+
+                equation: "",
+
+                optionEnglish: {
+                    a: "",
+                    b: "",
+                    c: "",
+                    d: ""
+                },
+
+                optionBengali: {
+                    a: "",
+                    b: "",
+                    c: "",
+                    d: ""
+                },
+
+                correctLetter: "",
+
+                QuestionID: ""
             
             };
 
@@ -251,16 +276,51 @@ export function parseQuestionFile(filePath, folder = "") {
         
         }
 
-        // Ignore question-specific fields until a Q| is found
+        // Ignore question-specific fields until a QEN| is found
         if (!currentQuestion)
             continue;
+
+        // ---------- BENGALI QUESTION TEXT ----------
+
+        if (line.startsWith("QBN|")) {
+
+            currentQuestion.questionBengali =
+                line.substring(4).trim();
+
+            continue;
+
+        }
+
+        // ---------- EQUATION ----------
+
+        if (line.startsWith("Equation|")) {
+
+            currentQuestion.equation =
+                line.substring(9).trim();
+
+            continue;
+
+        }
 
         // ---------- OPTIONS ----------
 
         if (line.startsWith("A|")) {
 
-            currentQuestion.a =
-                line.substring(2).trim();
+            const rawVal = line.substring(2).trim();
+
+            if (rawVal.includes("/")) {
+                const slashIdx = rawVal.indexOf("/");
+                const eng = rawVal.substring(0, slashIdx).trim();
+                const bng = rawVal.substring(slashIdx + 1).trim();
+
+                currentQuestion.a = eng;
+                currentQuestion.optionEnglish.a = eng;
+                currentQuestion.optionBengali.a = bng;
+            } else {
+                currentQuestion.a = rawVal;
+                currentQuestion.optionEnglish.a = rawVal;
+                currentQuestion.optionBengali.a = rawVal;
+            }
 
             continue;
 
@@ -268,8 +328,21 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("B|")) {
 
-            currentQuestion.b =
-                line.substring(2).trim();
+            const rawVal = line.substring(2).trim();
+
+            if (rawVal.includes("/")) {
+                const slashIdx = rawVal.indexOf("/");
+                const eng = rawVal.substring(0, slashIdx).trim();
+                const bng = rawVal.substring(slashIdx + 1).trim();
+
+                currentQuestion.b = eng;
+                currentQuestion.optionEnglish.b = eng;
+                currentQuestion.optionBengali.b = bng;
+            } else {
+                currentQuestion.b = rawVal;
+                currentQuestion.optionEnglish.b = rawVal;
+                currentQuestion.optionBengali.b = rawVal;
+            }
 
             continue;
 
@@ -277,8 +350,21 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("C|")) {
 
-            currentQuestion.c =
-                line.substring(2).trim();
+            const rawVal = line.substring(2).trim();
+
+            if (rawVal.includes("/")) {
+                const slashIdx = rawVal.indexOf("/");
+                const eng = rawVal.substring(0, slashIdx).trim();
+                const bng = rawVal.substring(slashIdx + 1).trim();
+
+                currentQuestion.c = eng;
+                currentQuestion.optionEnglish.c = eng;
+                currentQuestion.optionBengali.c = bng;
+            } else {
+                currentQuestion.c = rawVal;
+                currentQuestion.optionEnglish.c = rawVal;
+                currentQuestion.optionBengali.c = rawVal;
+            }
 
             continue;
 
@@ -286,8 +372,56 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("D|")) {
 
-            currentQuestion.d =
-                line.substring(2).trim();
+            const rawVal = line.substring(2).trim();
+
+            if (rawVal.includes("/")) {
+                const slashIdx = rawVal.indexOf("/");
+                const eng = rawVal.substring(0, slashIdx).trim();
+                const bng = rawVal.substring(slashIdx + 1).trim();
+
+                currentQuestion.d = eng;
+                currentQuestion.optionEnglish.d = eng;
+                currentQuestion.optionBengali.d = bng;
+            } else {
+                currentQuestion.d = rawVal;
+                currentQuestion.optionEnglish.d = rawVal;
+                currentQuestion.optionBengali.d = rawVal;
+            }
+
+            continue;
+
+        }
+
+        // ---------- QUESTION OVERRIDES (TOPIC / SUBTOPIC) ----------
+
+        if (line.startsWith("Topic|")) {
+
+            const value = line.substring(6).trim();
+
+            if (value !== "")
+                currentQuestion.topic = value;
+
+            continue;
+
+        }
+
+        if (line.startsWith("SubTopic|")) {
+
+            const value = line.substring(9).trim();
+
+            if (value !== "")
+                currentQuestion.subTopic = value;
+
+            continue;
+
+        }
+
+        // ---------- QUESTION ID ----------
+
+        if (line.startsWith("QuestionID|")) {
+
+            currentQuestion.QuestionID =
+                line.substring(11).trim();
 
             continue;
 
@@ -299,6 +433,8 @@ export function parseQuestionFile(filePath, folder = "") {
 
             const ans =
                 line.substring(8).trim().toUpperCase();
+
+            currentQuestion.correctLetter = ans;
 
             currentQuestion.correct =
                 ans === "A" ? 0 :
@@ -343,6 +479,9 @@ export function parseQuestionFile(filePath, folder = "") {
             continue;
 
         }
+
+        // ---------- IMAGE ----------
+
         if (line.startsWith("Image|")) {
 
             const value = line.substring(6).trim();
@@ -373,15 +512,68 @@ export function parseQuestionFile(filePath, folder = "") {
         
         }
 
-        
-        
-
     }
-
-    
 
     saveCurrentQuestion();
 
     return questions;
 
 }
+
+/*
+=================================================
+
+CHANGE LOG
+
+=================================================
+
+Changed Question Delimiter
+Old:
+Q|
+New:
+QEN|
+Reason:
+Mathematics files use QEN| to indicate the start of an English question block.
+
+--------------------------------------------
+
+Added QBN Parsing
+Reason:
+Supports Bengali translation/text for Mathematics questions (`questionBengali`).
+
+--------------------------------------------
+
+Added Equation Parsing
+Reason:
+Supports mathematical formulas and raw LaTeX expressions (`equation`).
+
+--------------------------------------------
+
+Updated Options Parsing Format (A|, B|, C|, D|)
+Reason:
+Retained traditional A|, B|, C|, D| prefixes while adding optional inline slash parsing (`English / Bengali`). If a slash is present, splits on the first slash into `optionEnglish` and `optionBengali`. If no slash is present, assigns the full string to both `optionEnglish` and `optionBengali`. Standard Quiz Engine fields (`a`, `b`, `c`, `d`) receive the English value in both scenarios.
+
+--------------------------------------------
+
+Added Question-Level Topic and SubTopic Parsing
+Reason:
+Allows specific Mathematics questions to override file-level global metadata topics/subtopics.
+
+--------------------------------------------
+
+Added QuestionID Parsing
+Reason:
+Supports permanent, unique Mathematics question identification across portals and review modes.
+
+--------------------------------------------
+
+Added correctLetter Property
+Reason:
+Retains string representation of answer ("A", "B", "C", "D") alongside numeric index `correct` used by Quiz Engine.
+
+--------------------------------------------
+
+Preserved Quiz Engine Object Model & Architecture
+Reason:
+Maintains complete structural compatibility with existing Quiz Engine (`text`, `a`, `b`, `c`, `d`, `correct`, `difficulty`, etc.) while gracefully handling optional fields.
+*/
