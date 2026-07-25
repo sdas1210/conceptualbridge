@@ -1,13 +1,13 @@
 Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
-Topic|
+Topic| 
 SubTopic| 
-Level| 10
-Notification| 08/2024
+Level| 
+Notification| CEN-08/2024
 Type| PYQ
-Marks|
-QType|MCQ
-ImageFolder|No
+Marks| 1
+QType| MCQ
+ImageFolder| No
 
 Q|Who joined as the Mission Director of Atal Innovation Mission under NITI Aayog in 2025? / ২০২৫ সালে নীতি আয়োগের (NITI Aayog) অধীনে অটল ইনোভেশন মিশনের (Atal Innovation Mission) মিশন ডিরেক্টর হিসেবে কে যোগ দিয়েছিলেন?
 A|BS Subrahmanyam / বিএস সুব্রহ্মণ্যম (BS Subrahmanyam)
