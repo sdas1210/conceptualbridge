@@ -1,13 +1,13 @@
 Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
-Topic|
+Topic| 
 SubTopic| 
-Level| 10
-Notification| 08/2024
+Level| 
+Notification| CEN-08/2024
 Type| PYQ
-Marks|
-QType|MCQ
-ImageFolder|No
+Marks| 1
+QType| MCQ
+ImageFolder| No
 
 Q|Which eminent economist was honoured with the Punyabhushan Puraskar in June 2025 for contributions to economics? / কোন বিশিষ্ট অর্থনীতিবিদকে অর্থনীতিতে অবদানের জন্য ২০২৫ সালের জুনে পুণ্যভূষণ পুরস্কারে (Punyabhushan Puraskar) ভূষিত করা হয়েছিল?
 A|Arvind Subramanian / অরবিন্দ সুব্রহ্মণ্যন (Arvind Subramanian)
