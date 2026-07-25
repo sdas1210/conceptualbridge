@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Metadata Tagger — Conceptual Bridge</title>
+  <link rel="stylesheet" href="global-metadata-tagger.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>Global Metadata Tagger</h1>
+      <p class="subtitle">Conceptual Bridge Maintenance Suite</p>
+    </header>
+
+    <main class="app-content">
+      <!-- Subject Selection Workspace -->
+      <section class="card glass-card">
+        <h2>1. Select Subject Workspace</h2>
+        <div class="subject-grid">
+          <div class="subject-card active" data-subject="GACA">
+            <h3>GACA</h3>
+            <p>General Awareness & Current Affairs</p>
+            <span class="badge">Delimiter: Q|</span>
+          </div>
+          <div class="subject-card" data-subject="MATHEMATICS">
+            <h3>MATHEMATICS</h3>
+            <p>Mathematics Section</p>
+            <span class="badge">Delimiter: QEN|</span>
+          </div>
+          <div class="subject-card disabled" data-subject="GS">
+            <h3>GS</h3>
+            <p>General Science</p>
+            <span class="badge">Inactive</span>
+          </div>
+          <div class="subject-card disabled" data-subject="GI">
+            <h3>GI</h3>
+            <p>General Intelligence</p>
+            <span class="badge">Inactive</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- File Upload & Inspection -->
+      <section class="card glass-card">
+        <h2>2. TXT File Upload</h2>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="txtFileInput" accept=".txt" hidden>
+          <div class="upload-prompt">
+            <span class="upload-icon">📁</span>
+            <p>Click or Drag & Drop TXT file here</p>
+            <small id="selectedFileName">No file selected</small>
+          </div>
+        </div>
+
+        <div class="file-summary" id="fileSummary" style="display: none;">
+          <div class="summary-metric">
+            <span class="metric-label">Questions Found:</span>
+            <span class="metric-value" id="questionCountDisplay">0</span>
+          </div>
+          <div class="summary-metric">
+            <span class="metric-label">Existing Metadata Status:</span>
+            <span class="metric-value" id="metadataStatusDisplay">None Detected</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dynamic Metadata Form Editor -->
+      <section class="card glass-card" id="editorCard" style="display: none;">
+        <h2>3. Global Metadata Editor</h2>
+        <div class="metadata-form" id="metadataFormContainer">
+          <!-- Rows rendered dynamically by metadata-ui.js -->
+        </div>
+      </section>
+
+      <!-- Export Actions -->
+      <section class="card glass-card download-card" id="downloadSection" style="display: none;">
+        <h2>4. Export Final Outputs</h2>
+        <div class="action-row">
+          <button id="downloadTxtBtn" class="btn btn-primary" disabled>
+            💾 Download Updated TXT
+          </button>
+          <button id="downloadJsonBtn" class="btn btn-secondary">
+            ⚙️ Download Updated metadata.json
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Component Scripts -->
+  <script src="metadata-handler.js"></script>
+  <script src="metadata-ui.js"></script>
+  <script src="global-metadata-tagger.js"></script>
+</body>
+</html>
