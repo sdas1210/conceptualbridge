@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sort every metadata array alphabetically before JSON stringification
     Object.keys(catalogData).forEach(key => {
       if (Array.isArray(catalogData[key])) {
-        catalogData[key].sort((a, b) => a.localeCompare(b));
+        catalogData[key].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
       }
     });
 
