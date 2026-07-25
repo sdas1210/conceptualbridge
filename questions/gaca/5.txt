@@ -1,13 +1,13 @@
 Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
-Topic|
+Topic| 
 SubTopic| 
-Level| 10
-Notification| 08/2024
+Level| 
+Notification| CEN-08/2024
 Type| PYQ
-Marks|
-QType|MCQ
-ImageFolder|No
+Marks| 1
+QType| MCQ
+ImageFolder| No
 
 Q|What is the projected space budget of India for the year 2025-26? / ২০২৫-২৬ সালের জন্য ভারতের প্রাক্কলিত মহাকাশ বাজেট (space budget) কত?
 A|₹ 23,416 crore / ₹ ২৩,৪১৬ কোটি
