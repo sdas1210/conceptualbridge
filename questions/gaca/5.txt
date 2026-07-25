@@ -2,7 +2,7 @@ Exam| RRB GROUP-D CBT-I
 Subject| GENERAL AWARENESS & CURRENT AFFARIS (GACA)
 Topic| 
 SubTopic| 
-Level| 
+Level| 12+
 Notification| CEN-08/2024
 Type| PYQ
 Marks| 1
