@@ -381,27 +381,27 @@ Potential future work includes:
 
 ## Development Timeline Addition
 
-  -----------------------------------------------------------------------
-  Date                                Milestone
-  ----------------------------------- -----------------------------------
-  2026-07-24                          Mathematics Topic & SubTopic Logger
-                                      core workflow completed
+  ---------------------------------------------------------------------
+  Date                               Milestone
+  ---------------------------------- ----------------------------------
+  2026-07-24                         Mathematics Topic & SubTopic
+                                     Logger core workflow completed
 
-  2026-07-24                          V2 catalogue management and
-                                      synchronization completed
+  2026-07-24                         V2 catalogue management and
+                                     synchronization completed
 
-  2026-07-24                          V2 Step 7D final UI/state cleanup
-                                      completed
+  2026-07-24                         V2 Step 7D final UI/state cleanup
+                                     completed
 
-  2026-07-25                          V2 Step 8 Production Closure
-                                      recorded
+  2026-07-25                         V2 Step 8 Production Closure
+                                     recorded
 
-  2026-07-25                          Existing global Topic/SubTopic
-                                      behavior documented
+  2026-07-25                         Existing global Topic/SubTopic
+                                     behavior documented
 
-  Next                                Production smoke testing / V3 only
-                                      if new requirements arise
-  -----------------------------------------------------------------------
+  Next                               Production smoke testing / V3 only
+                                     if new requirements arise
+  ---------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
@@ -409,26 +409,28 @@ Potential future work includes:
 
 ------------------------------------------------------------------------
 
-# Question ID Generator — Development Status
+# Question ID Generator --- Development Status
 
-**Status:** Core Development Complete / Controlled Functional Testing Pending  
+**Status:** Core Development Complete / Controlled Functional Testing
+Pending\
 **Session update:** 2026-07-25
 
 ------------------------------------------------------------------------
 
 ## 14. Purpose
 
-The Question ID Generator is a browser-based maintenance tool for assigning
-permanent, section-specific `QuestionID|` metadata to question-bank TXT files.
+The Question ID Generator is a browser-based maintenance tool for
+assigning permanent, section-specific `QuestionID|` metadata to
+question-bank TXT files.
 
-The Question ID is intended to provide a stable identity for each question,
-independent of:
+The Question ID is intended to provide a stable identity for each
+question, independent of:
 
-- Question order.
-- TXT filename.
-- Topic/SubTopic classification.
-- Exam/source metadata.
-- Future movement of a question between TXT files.
+-   Question order.
+-   TXT filename.
+-   Topic/SubTopic classification.
+-   Exam/source metadata.
+-   Future movement of a question between TXT files.
 
 Current active sections:
 
@@ -459,8 +461,8 @@ GS-000001
 
 IDs use a six-digit numeric sequence after the section prefix.
 
-The registry tracks one global counter per section. Counters are not maintained
-separately per TXT file.
+The registry tracks one global counter per section. Counters are not
+maintained separately per TXT file.
 
 Canonical registry structure:
 
@@ -483,8 +485,8 @@ ID.json
 
 ## 16. Permanent `ID.json` Registry Architecture
 
-`ID.json` is a permanent maintenance-file dependency and is deployed in the
-same folder as the Question ID Generator.
+`ID.json` is a permanent maintenance-file dependency and is deployed in
+the same folder as the Question ID Generator.
 
 Target production structure:
 
@@ -505,35 +507,35 @@ ID.json
 
 from the same-folder deployment location.
 
-The previous manual UI field for uploading an optional ID tracking JSON file
-has been removed.
+The previous manual UI field for uploading an optional ID tracking JSON
+file has been removed.
 
 ### Registry safety behavior
 
-- Processing is disabled while `ID.json` is loading.
-- `ID.json` must contain valid non-negative integer counters for:
-  - `GACA`
-  - `MATH`
-  - `GI`
-  - `GS`
-- If the registry cannot be loaded or is invalid, Question ID generation is
-  blocked.
-- The generator must not silently fall back to zero counters when the permanent
-  registry fails to load.
-- Cache-busting/no-store behavior is used when requesting `ID.json`.
+-   Processing is disabled while `ID.json` is loading.
+-   `ID.json` must contain valid non-negative integer counters for:
+    -   `GACA`
+    -   `MATH`
+    -   `GI`
+    -   `GS`
+-   If the registry cannot be loaded or is invalid, Question ID
+    generation is blocked.
+-   The generator must not silently fall back to zero counters when the
+    permanent registry fails to load.
+-   Cache-busting/no-store behavior is used when requesting `ID.json`.
 
 Because the maintenance tool is browser-based, it does not overwrite the
 deployed `ID.json` automatically.
 
 After successful processing:
 
-1. Download the updated TXT.
-2. Download the updated `ID.json`.
-3. Replace the deployed `ID.json` manually.
-4. Reload the generator before processing another file.
+1.  Download the updated TXT.
+2.  Download the updated `ID.json`.
+3.  Replace the deployed `ID.json` manually.
+4.  Reload the generator before processing another file.
 
-The processing session is locked after successful generation to reduce the
-risk of generating IDs from a stale registry.
+The processing session is locked after successful generation to reduce
+the risk of generating IDs from a stale registry.
 
 ------------------------------------------------------------------------
 
@@ -591,8 +593,8 @@ SubTopic| ...
 QuestionID| MATH-000001
 ```
 
-`QuestionID|` is placed immediately after the applicable SubTopic metadata
-line.
+`QuestionID|` is placed immediately after the applicable SubTopic
+metadata line.
 
 The canonical Mathematics metadata spelling remains:
 
@@ -600,8 +602,8 @@ The canonical Mathematics metadata spelling remains:
 SubTopic|
 ```
 
-but the ID Generator accepts both `SubTopic|` and `Sub-Topic|` as insertion
-points for compatibility.
+but the ID Generator accepts both `SubTopic|` and `Sub-Topic|` as
+insertion points for compatibility.
 
 ------------------------------------------------------------------------
 
@@ -622,16 +624,17 @@ existing ID  section ID
 
 Existing `QuestionID|` values must not be automatically overwritten.
 
-A block-boundary issue discovered during integrated review was corrected.
+A block-boundary issue discovered during integrated review was
+corrected.
 
-Previously, GACA could be considered complete immediately at `Difficulty|`,
-and Mathematics immediately at `SubTopic|` / `Sub-Topic|`. Since the canonical
-`QuestionID|` is now physically placed after those metadata lines, an
-already-processed file could have its existing ID outside the prematurely
-closed block.
+Previously, GACA could be considered complete immediately at
+`Difficulty|`, and Mathematics immediately at `SubTopic|` /
+`Sub-Topic|`. Since the canonical `QuestionID|` is now physically placed
+after those metadata lines, an already-processed file could have its
+existing ID outside the prematurely closed block.
 
-The corrected logic reads the complete question block before deciding whether
-a `QuestionID|` already exists.
+The corrected logic reads the complete question block before deciding
+whether a `QuestionID|` already exists.
 
 Therefore, reprocessing an already-processed question such as:
 
@@ -663,9 +666,10 @@ Existing IDs detected
 0 new IDs added
 ```
 
-Advanced reconciliation between existing IDs and a stale/out-of-sync registry
-is deferred. Current operational policy is that production question files
-should pass through the Question ID Generator before deployment.
+Advanced reconciliation between existing IDs and a stale/out-of-sync
+registry is deferred. Current operational policy is that production
+question files should pass through the Question ID Generator before
+deployment.
 
 ------------------------------------------------------------------------
 
@@ -673,26 +677,26 @@ should pass through the Question ID Generator before deployment.
 
 Implemented:
 
-- Glassmorphic visual theme aligned with the Maintenance Suite.
-- Question ID Generator connected from `maintenance.html`.
-- TXT upload control.
-- GACA mode active.
-- MATH mode active.
-- GI mode visibly inactive/disabled.
-- GS mode visibly inactive/disabled.
-- Manual `ID.json` upload control removed.
-- Automatic permanent `ID.json` loading.
-- Process button disabled until registry loading succeeds.
-- Disabled-button styling added:
-  - Reduced opacity.
-  - `not-allowed` cursor.
-  - No misleading hover lift.
-- Download Updated TXT button.
-- Download Updated `ID.json` button.
-- Status/report area.
-- Session lock after successful processing.
-- Injected local Kaspersky script removed from the maintained HTML source during
-  cleanup.
+-   Glassmorphic visual theme aligned with the Maintenance Suite.
+-   Question ID Generator connected from `maintenance.html`.
+-   TXT upload control.
+-   GACA mode active.
+-   MATH mode active.
+-   GI mode visibly inactive/disabled.
+-   GS mode visibly inactive/disabled.
+-   Manual `ID.json` upload control removed.
+-   Automatic permanent `ID.json` loading.
+-   Process button disabled until registry loading succeeds.
+-   Disabled-button styling added:
+    -   Reduced opacity.
+    -   `not-allowed` cursor.
+    -   No misleading hover lift.
+-   Download Updated TXT button.
+-   Download Updated `ID.json` button.
+-   Status/report area.
+-   Session lock after successful processing.
+-   Injected local Kaspersky script removed from the maintained HTML
+    source during cleanup.
 
 Production filenames:
 
@@ -703,8 +707,8 @@ question-id-generator.js
 ID.json
 ```
 
-Development/download suffixes such as `(1)`, `(2)`, or `-fresh` are not part of
-the production filename contract.
+Development/download suffixes such as `(1)`, `(2)`, or `-fresh` are not
+part of the production filename contract.
 
 ------------------------------------------------------------------------
 
@@ -726,15 +730,16 @@ STATUS
 
 Implemented safeguards include:
 
-- Block processing if `ID.json` is unavailable or invalid.
-- Block unsupported/inactive section processing.
-- Detect zero valid question blocks.
-- Detect duplicate Question IDs encountered during processing.
-- Detect incomplete blocks where the required insertion metadata is missing.
-- Preserve existing IDs rather than overwrite them.
-- Lock the current session after successful generation.
-- Require manual replacement of the downloaded updated `ID.json` before the
-  next production run.
+-   Block processing if `ID.json` is unavailable or invalid.
+-   Block unsupported/inactive section processing.
+-   Detect zero valid question blocks.
+-   Detect duplicate Question IDs encountered during processing.
+-   Detect incomplete blocks where the required insertion metadata is
+    missing.
+-   Preserve existing IDs rather than overwrite them.
+-   Lock the current session after successful generation.
+-   Require manual replacement of the downloaded updated `ID.json`
+    before the next production run.
 
 A registry-update warning is shown after successful processing.
 
@@ -764,17 +769,17 @@ GI and GS remain reserved/inactive at this stage.
 
 ------------------------------------------------------------------------
 
-## 22. Controlled Functional Testing — Pending
+## 22. Controlled Functional Testing --- Pending
 
-Core development and integrated file review have been completed up to the
-Question ID Generator implementation.
+Core development and integrated file review have been completed up to
+the Question ID Generator implementation.
 
 Controlled functional testing is the next step.
 
-### Test 1 — Fresh GACA file
+### Test 1 --- Fresh GACA file
 
-Use a small GACA TXT containing approximately 3–5 valid question blocks with
-no existing `QuestionID|`.
+Use a small GACA TXT containing approximately 3--5 valid question blocks
+with no existing `QuestionID|`.
 
 Expected:
 
@@ -811,10 +816,10 @@ Expected updated registry:
 }
 ```
 
-### Test 2 — GACA reprocessing/idempotency
+### Test 2 --- GACA reprocessing/idempotency
 
-After replacing the deployed registry and reloading the page, process the
-already-ID-tagged GACA TXT again.
+After replacing the deployed registry and reloading the page, process
+the already-ID-tagged GACA TXT again.
 
 Expected:
 
@@ -825,18 +830,18 @@ New Question IDs Added: 0
 
 No duplicate `QuestionID|` lines may be created.
 
-### Test 3 — Fresh Mathematics file
+### Test 3 --- Fresh Mathematics file
 
 Verify:
 
-- `QEN|` question detection.
-- `SubTopic|` insertion-point handling.
-- `Sub-Topic|` compatibility.
-- Sequential `MATH-xxxxxx` generation.
-- ID placement immediately after SubTopic metadata.
-- Correct `ID.json` counter update.
+-   `QEN|` question detection.
+-   `SubTopic|` insertion-point handling.
+-   `Sub-Topic|` compatibility.
+-   Sequential `MATH-xxxxxx` generation.
+-   ID placement immediately after SubTopic metadata.
+-   Correct `ID.json` counter update.
 
-### Test 4 — Mathematics reprocessing/idempotency
+### Test 4 --- Mathematics reprocessing/idempotency
 
 Reprocess the completed Mathematics TXT.
 
@@ -849,15 +854,15 @@ New Question IDs Added: 0
 
 Existing IDs must remain unchanged.
 
-### Test 5 — Registry continuity
+### Test 5 --- Registry continuity
 
-After replacing the deployed `ID.json`, reload the generator and verify that
-the next file continues from the last issued section counter rather than
-restarting at `000001`.
+After replacing the deployed `ID.json`, reload the generator and verify
+that the next file continues from the last issued section counter rather
+than restarting at `000001`.
 
 ------------------------------------------------------------------------
 
-## 23. Question ID Generator — Current Release Boundary
+## 23. Question ID Generator --- Current Release Boundary
 
 Current status:
 
@@ -879,63 +884,228 @@ Controlled functional testing           PENDING
 Production validation                   PENDING
 ```
 
-The Question ID Generator should not yet be marked production-validated until
-the controlled GACA, Mathematics, reprocessing, and registry-continuity tests
-have passed.
+The Question ID Generator should not yet be marked production-validated
+until the controlled GACA, Mathematics, reprocessing, and
+registry-continuity tests have passed.
 
 ------------------------------------------------------------------------
 
-## 24. Question ID Generator — Deferred / Future Work
+## 24. Question ID Generator --- Deferred / Future Work
 
 Deferred items include:
 
-- Advanced synchronization/reconciliation when an uploaded TXT contains IDs
-  higher than the deployed `ID.json` counter.
-- More extensive cross-file duplicate-ID auditing.
-- Activation and final block contracts for GI.
-- Activation and final block contracts for GS.
-- Database-backed or server-side automatic registry persistence, if introduced
-  in a future architecture.
-- Broader regression testing after future parser integration.
+-   Advanced synchronization/reconciliation when an uploaded TXT
+    contains IDs higher than the deployed `ID.json` counter.
+-   More extensive cross-file duplicate-ID auditing.
+-   Activation and final block contracts for GI.
+-   Activation and final block contracts for GS.
+-   Database-backed or server-side automatic registry persistence, if
+    introduced in a future architecture.
+-   Broader regression testing after future parser integration.
 
 ------------------------------------------------------------------------
 
 ## 25. Question ID Safety Rules
 
-1. One question should have one permanent `QuestionID|`.
-2. IDs are section-specific and globally sequential within that section.
-3. Do not derive permanent identity from question order or TXT filename.
-4. Existing IDs must not be silently overwritten.
-5. `ID.json` is the authoritative latest-issued counter registry for the current
-   workflow.
-6. Never silently reset counters to zero when `ID.json` cannot be loaded.
-7. GACA IDs are inserted immediately after `Difficulty|`.
-8. Mathematics IDs are inserted immediately after `SubTopic|` / `Sub-Topic|`.
-9. GI and GS remain inactive until separately implemented and approved.
-10. Replace the deployed `ID.json` after every successful production generation
-    before processing another file.
+1.  One question should have one permanent `QuestionID|`.
+2.  IDs are section-specific and globally sequential within that
+    section.
+3.  Do not derive permanent identity from question order or TXT
+    filename.
+4.  Existing IDs must not be silently overwritten.
+5.  `ID.json` is the authoritative latest-issued counter registry for
+    the current workflow.
+6.  Never silently reset counters to zero when `ID.json` cannot be
+    loaded.
+7.  GACA IDs are inserted immediately after `Difficulty|`.
+8.  Mathematics IDs are inserted immediately after `SubTopic|` /
+    `Sub-Topic|`.
+9.  GI and GS remain inactive until separately implemented and approved.
+10. Replace the deployed `ID.json` after every successful production
+    generation before processing another file.
 11. Reprocessing an already-completed TXT must add zero new IDs.
-12. Keep Question ID identity separate from Exam/source and Topic/SubTopic
-    metadata.
+12. Keep Question ID identity separate from Exam/source and
+    Topic/SubTopic metadata.
 
 ------------------------------------------------------------------------
 
-## Development Timeline Addition — Question ID Generator
+## Development Timeline Addition --- Question ID Generator
 
-| Date | Milestone |
-|---|---|
-| 2026-07-25 | Question ID architecture defined with section-prefixed permanent IDs |
-| 2026-07-25 | Permanent same-folder `ID.json` global counter model established |
-| 2026-07-25 | Question ID Generator connected to Maintenance Suite |
-| 2026-07-25 | Generator aligned with glassmorphic maintenance theme |
-| 2026-07-25 | Manual JSON upload removed; automatic `ID.json` loading implemented |
-| 2026-07-25 | GACA and Mathematics final ID placement implemented |
-| 2026-07-25 | Existing-ID/reprocessing block-boundary issue corrected |
-| 2026-07-25 | Processing safeguards, report, and disabled-button styling completed |
-| Next | Controlled GACA → Mathematics → reprocessing → registry continuity testing |
+  -----------------------------------------------------------------------
+  Date                                Milestone
+  ----------------------------------- -----------------------------------
+  2026-07-25                          Question ID architecture defined
+                                      with section-prefixed permanent IDs
+
+  2026-07-25                          Permanent same-folder `ID.json`
+                                      global counter model established
+
+  2026-07-25                          Question ID Generator connected to
+                                      Maintenance Suite
+
+  2026-07-25                          Generator aligned with glassmorphic
+                                      maintenance theme
+
+  2026-07-25                          Manual JSON upload removed;
+                                      automatic `ID.json` loading
+                                      implemented
+
+  2026-07-25                          GACA and Mathematics final ID
+                                      placement implemented
+
+  2026-07-25                          Existing-ID/reprocessing
+                                      block-boundary issue corrected
+
+  2026-07-25                          Processing safeguards, report, and
+                                      disabled-button styling completed
+
+  Next                                Controlled GACA → Mathematics →
+                                      reprocessing → registry continuity
+                                      testing
+  -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
 **Current continuation point:** Begin controlled Question ID Generator
 functional testing, starting with a small fresh GACA TXT file.
 
+------------------------------------------------------------------------
+
+# Global Metadata Tagger --- Development Status
+
+**Status:** Core Development Complete / Integration Review Complete /
+Production Validation Pending\
+**Session update:** 2026-07-25
+
+------------------------------------------------------------------------
+
+## 26. Purpose
+
+The Global Metadata Tagger is a browser-based maintenance tool for
+creating, reviewing and updating the global metadata section that
+appears before the first question block in Conceptual Bridge
+question-bank TXT files.
+
+Current supported sections:
+
+``` text
+GACA
+MATHEMATICS
+```
+
+Reserved for future activation:
+
+``` text
+GI
+GS
+```
+
+The tool preserves the integrity of the question blocks while allowing
+the global metadata to be edited through a guided workflow.
+
+------------------------------------------------------------------------
+
+## 27. Development Summary
+
+Completed during this session:
+
+-   Dedicated Global Metadata Tagger maintenance page created.
+-   Glassmorphic UI aligned with the Maintenance Suite.
+-   Maintenance Home button added.
+-   Standardized maintenance header introduced with icon support.
+-   Metadata workflow reorganized into guided stages.
+-   Existing global metadata preservation verified.
+-   Production file naming aligned with the Maintenance Suite.
+
+Current production filenames:
+
+``` text
+global-metadata-tagger.html
+global-metadata-tagger.css
+global-metadata-tagger.js
+metadata-ui.js
+```
+
+------------------------------------------------------------------------
+
+## 28. Maintenance Suite Updates
+
+The Maintenance Suite now contains nine production maintenance tools:
+
+1.  Citation Remover
+2.  Proof Reader
+3.  Shift Extractor
+4.  Answer Key Builder
+5.  Final Merger
+6.  Character Introducer
+7.  Question ID Generator
+8.  Topic & SubTopic Logger
+9.  Global Metadata Tagger
+
+Maintenance improvements completed:
+
+-   Standardized Maintenance Home navigation.
+-   Standardized page header icon layout.
+-   Animation timing corrected for the ninth tool card.
+-   Maintenance Suite remains visually consistent across all tools.
+
+------------------------------------------------------------------------
+
+## 29. Maintenance UI Polish
+
+The Maintenance Suite received a production polish review.
+
+Completed:
+
+-   Glassmorphism consistency maintained.
+-   Header icon standardization.
+-   Maintenance Home button integration.
+-   Sequential fade-in animation corrected.
+-   Premium Glass Shine (V2) effect reviewed and accepted.
+
+Current project decision:
+
+``` text
+No further UI modifications are planned at this stage.
+The current Maintenance Suite design is accepted as the working baseline.
+```
+
+Future UI enhancements should only be introduced when accompanied by new
+functional requirements.
+
+------------------------------------------------------------------------
+
+## Development Timeline Addition
+
+  -----------------------------------------------------------------------
+  Date                                Milestone
+  ----------------------------------- -----------------------------------
+  2026-07-25                          Global Metadata Tagger integrated
+                                      into the Maintenance Suite
+
+  2026-07-25                          Maintenance Suite expanded to nine
+                                      production tools
+
+  2026-07-25                          Maintenance Home navigation
+                                      standardized
+
+  2026-07-25                          Header icon system standardized
+                                      across maintenance pages
+
+  2026-07-25                          Ninth-card animation timing
+                                      corrected
+
+  2026-07-25                          Premium Glass Shine (V2) reviewed
+                                      and accepted
+
+  Next                                Controlled functional testing of
+                                      Question ID Generator and
+                                      integration validation of Global
+                                      Metadata Tagger
+  -----------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+**Current continuation point:** Proceed with controlled functional
+testing of the Question ID Generator, followed by integration validation
+of the Global Metadata Tagger before declaring production readiness.
