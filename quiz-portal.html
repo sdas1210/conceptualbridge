@@ -1664,8 +1664,14 @@
                         </label>
                     </div>
                 `; 
+                const container = document.getElementById("target-options-container");
+
+                /* build all options */
+                
+                renderKatexInElement(container);
                 container.insertAdjacentHTML('beforeend', optHtml); 
             }); 
+            renderKatexInElement(container);
 
             if (isReviewModeActive) { 
                 const correctOptionText = getLocalizedText(optArray[correctChoice]);
