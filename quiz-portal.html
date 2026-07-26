@@ -1717,6 +1717,7 @@
                 } else {
                     const userOptionText = getLocalizedText(optArray[userChoice]);
                     feedbackContainer.innerHTML = `
+                    renderKatexInElement(feedbackContainer);
             <div class="review-status-box">
                 <div class="review-card red compact">
                     <div class="review-card-title">
