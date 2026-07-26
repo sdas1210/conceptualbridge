@@ -1740,10 +1740,22 @@
             
             } 
 
-            const questionText =
-                currentLanguage === "EN"
-                    ? currentItem.text
-                    : (currentItem.textBn || currentItem.text);
+            let questionText;
+
+            if (typeof currentItem.textBn !== "undefined") {
+            
+                // Mathematics Parser
+                questionText =
+                    currentLanguage === "EN"
+                        ? currentItem.text
+                        : (currentItem.textBn || currentItem.text);
+            
+            } else {
+            
+                // GACA / GI / GS Parser
+                questionText = getLocalizedText(currentItem.text);
+            
+            }
             
             document.getElementById("target-question-text").innerHTML = `
                 <div class="question-text">
