@@ -1302,7 +1302,7 @@
                 lines.forEach(line => {
                     if (!line) return;
 
-                    let cleanLine = line.replace(/\/gi, '').trim();
+                    let cleanLine = line.replace(/\\/g, '').trim();
                     if (!cleanLine) return;
 
                     const pipeIdx = cleanLine.indexOf('|');
