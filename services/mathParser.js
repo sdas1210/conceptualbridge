@@ -291,15 +291,20 @@ export function parseQuestionFile(filePath, folder = "") {
 
         }
 
-        // ---------- EQUATION ----------
+       // ---------- COMMON / EQUATION ----------
 
-        if (line.startsWith("Equation|")) {
-
-            currentQuestion.equation =
-                line.substring(9).trim();
-
+        if (
+            line.startsWith("Common|") ||
+            line.startsWith("Equation|")
+        ) {
+        
+            const value =
+                line.substring(line.indexOf("|") + 1).trim();
+        
+            currentQuestion.equation = value;
+        
             continue;
-
+        
         }
 
         // ---------- OPTIONS ----------
