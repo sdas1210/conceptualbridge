@@ -1465,20 +1465,33 @@
             }
         }
 
-    const container = document.getElementById("instruction-scroll-pane");
-    const nextButton = document.getElementById("instruction-next-action-btn");
+        function checkInstructionScrollProgress() {
 
-    if (!container || !nextButton) return;
-
-    const reachedBottom =
-        Math.ceil(container.scrollTop + container.clientHeight)
-        >= container.scrollHeight - 20;
-
-    if (reachedBottom || container.scrollHeight <= container.clientHeight) {
-        nextButton.disabled = false;
-    }
-}
-
+            const container = document.getElementById("instruction-scroll-pane");
+            const nextButton = document.getElementById("instruction-next-action-btn");
+        
+            if (!container || !nextButton) {
+                console.log("Container or button not found");
+                return;
+            }
+        
+            console.log(
+                "Scroll:",
+                container.scrollTop,
+                container.clientHeight,
+                container.scrollHeight
+            );
+        
+            const reachedBottom =
+                Math.ceil(container.scrollTop + container.clientHeight)
+                >= container.scrollHeight - 20;
+        
+            if (reachedBottom) {
+                console.log("Reached Bottom");
+                nextButton.disabled = false;
+            }
+        }
+        
         function goToWizardStageTwo() { 
             document.getElementById('step-instructions-1').style.display = 'none'; 
             document.getElementById('step-footer-1').style.display = 'none'; 
