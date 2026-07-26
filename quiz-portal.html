@@ -1742,8 +1742,8 @@
 
             const questionText =
                 currentLanguage === "EN"
-                    ? currentItem.questionEnglish
-                    : (currentItem.questionBengali || currentItem.questionEnglish);
+                    ? currentItem.text
+                    : (currentItem.textBn || currentItem.text);
             
             document.getElementById("target-question-text").innerHTML = `
                 <div class="question-text">
@@ -1762,7 +1762,20 @@
             container.innerHTML = ''; 
             feedbackContainer.innerHTML = ''; 
             
-            const optArray = [currentItem.a, currentItem.b, currentItem.c, currentItem.d]; 
+            const optArray =
+                currentLanguage === "EN"
+                    ? [
+                        currentItem.a,
+                        currentItem.b,
+                        currentItem.c,
+                        currentItem.d
+                    ]
+                    : [
+                        currentItem.aBn || currentItem.a,
+                        currentItem.bBn || currentItem.b,
+                        currentItem.cBn || currentItem.c,
+                        currentItem.dBn || currentItem.d
+                    ];
             const userChoice = selectedAnswers[activeIndex]; 
             const correctChoice = currentItem.correct; 
 
