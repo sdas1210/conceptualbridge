@@ -498,11 +498,14 @@
             height: 60px;
             background: #f3f4f6;
             border-top: 1px solid var(--tcs-border);
+        
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 0 30px;
+        
+            padding: 0 25px;
             box-sizing: border-box;
-        }
+                }
         
         .wizard-footer-fullwidth {
             padding: 12px 30px;
@@ -536,14 +539,15 @@
         }
         
         .btn-wizard-next {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: auto;
+            background:#3b82f6;
+    color:white;
+    border:none;
+    padding:10px 30px;
+    font-weight:bold;
+    border-radius:4px;
+    cursor:pointer;
+
+    margin-left:0;
         }
         .btn-wizard-next:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
 
@@ -860,7 +864,7 @@
     </div>
 
     <div class="wizard-container" id="step-instructions-1">
-        <div class="wizard-left" id="instruction-scroll-pane" onscroll="checkInstructionScrollProgress()">
+        <div class="wizard-left" id="instruction-scroll-pane" >
             <h3 style="margin-top: 0; border-bottom: 1px solid var(--tcs-border); padding-bottom: 8px;">General Instructions:</h3>
             <ol style="padding-left: 20px;">
                 <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You need not terminate the examination or submit your paper.</li>
