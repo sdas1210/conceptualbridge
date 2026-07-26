@@ -367,6 +367,7 @@ export function parseQuestionFile(filePath, folder = "") {
                 
                 currentQuestion.optionEnglish.c = rawVal;
                 currentQuestion.optionBengali.c = rawVal;
+            }
 
             continue;
 
