@@ -83,42 +83,25 @@ export function parseQuestionFile(filePath, folder = "") {
             currentQuestion = {
 
                 // Existing Quiz Engine Compatibility Properties
+
+                // Standard Quiz Engine Fields
                 text: textValue,
-
+                textBn: "",
+                
                 a: "",
+                aBn: "",
+                
                 b: "",
+                bBn: "",
+                
                 c: "",
+                cBn: "",
+                
                 d: "",
-            
-                correct: null,
-            
-                difficulty: 5,
-            
-                shift: "",
-            
-                image: "",
-            
-                exam: globalMetadata.exam,
-            
-                subject: globalMetadata.subject,
-            
-                topic: globalMetadata.topic,
-            
-                subTopic: globalMetadata.subTopic,
-            
-                level: globalMetadata.level,
-            
-                notification: globalMetadata.notification,
-            
-                type: globalMetadata.type,
-            
-                marks: globalMetadata.marks,
-            
-                qType: globalMetadata.qType,
-
-                // Mathematics Specific Properties
+                dBn: "",
+                
+                // Math-specific fields (kept for compatibility)
                 questionEnglish: textValue,
-
                 questionBengali: "",
 
                 equation: "",
@@ -284,8 +267,10 @@ export function parseQuestionFile(filePath, folder = "") {
 
         if (line.startsWith("QBN|")) {
 
-            currentQuestion.questionBengali =
-                line.substring(4).trim();
+            const value = line.substring(4).trim();
+
+            currentQuestion.questionBengali = value;
+            currentQuestion.textBn = value;
 
             continue;
 
@@ -319,13 +304,18 @@ export function parseQuestionFile(filePath, folder = "") {
                 const bng = rawVal.substring(slashIdx + 1).trim();
 
                 currentQuestion.a = eng;
+                currentQuestion.aBn = bng;
+                
                 currentQuestion.optionEnglish.a = eng;
                 currentQuestion.optionBengali.a = bng;
+                
             } else {
                 currentQuestion.a = rawVal;
+                currentQuestion.aBn = rawVal;
+                
                 currentQuestion.optionEnglish.a = rawVal;
                 currentQuestion.optionBengali.a = rawVal;
-            }
+                            }
 
             continue;
 
@@ -341,10 +331,14 @@ export function parseQuestionFile(filePath, folder = "") {
                 const bng = rawVal.substring(slashIdx + 1).trim();
 
                 currentQuestion.b = eng;
+                currentQuestion.bBn = bng;
+                
                 currentQuestion.optionEnglish.b = eng;
                 currentQuestion.optionBengali.b = bng;
             } else {
                 currentQuestion.b = rawVal;
+                currentQuestion.bBn = rawVal;
+                
                 currentQuestion.optionEnglish.b = rawVal;
                 currentQuestion.optionBengali.b = rawVal;
             }
@@ -363,13 +357,16 @@ export function parseQuestionFile(filePath, folder = "") {
                 const bng = rawVal.substring(slashIdx + 1).trim();
 
                 currentQuestion.c = eng;
+                currentQuestion.cBn = bng;
+                
                 currentQuestion.optionEnglish.c = eng;
                 currentQuestion.optionBengali.c = bng;
             } else {
                 currentQuestion.c = rawVal;
+                currentQuestion.cBn = rawVal;
+                
                 currentQuestion.optionEnglish.c = rawVal;
                 currentQuestion.optionBengali.c = rawVal;
-            }
 
             continue;
 
@@ -385,10 +382,14 @@ export function parseQuestionFile(filePath, folder = "") {
                 const bng = rawVal.substring(slashIdx + 1).trim();
 
                 currentQuestion.d = eng;
+                currentQuestion.dBn = bng;
+                
                 currentQuestion.optionEnglish.d = eng;
                 currentQuestion.optionBengali.d = bng;
             } else {
                 currentQuestion.d = rawVal;
+                currentQuestion.dBn = rawVal;
+                
                 currentQuestion.optionEnglish.d = rawVal;
                 currentQuestion.optionBengali.d = rawVal;
             }
