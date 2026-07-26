@@ -1443,13 +1443,24 @@
             const container = document.getElementById("instruction-scroll-pane");
             const nextButton = document.getElementById("instruction-next-action-btn");
         
-            if (!container || !nextButton) return;
+            if (!container || !nextButton) {
+                console.log("Container or button not found");
+                return;
+            }
+        
+            console.log(
+                "Scroll:",
+                container.scrollTop,
+                container.clientHeight,
+                container.scrollHeight
+            );
         
             const reachedBottom =
                 Math.ceil(container.scrollTop + container.clientHeight)
                 >= container.scrollHeight - 20;
         
-            if (reachedBottom || container.scrollHeight <= container.clientHeight) {
+            if (reachedBottom) {
+                console.log("Reached Bottom");
                 nextButton.disabled = false;
             }
         }
