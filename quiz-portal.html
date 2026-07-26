@@ -1684,7 +1684,7 @@
 
                 if (userChoice === null) {
                     feedbackContainer.innerHTML = `
-                    renderKatexInElement(feedbackContainer);
+                    
             <div class="review-status-box">
                 <div class="review-card pink compact">
                     <div class="review-card-title">
@@ -1697,10 +1697,10 @@
                 ${renderLearnModule()}
             </div>
             `;
+            renderKatexInElement(feedbackContainer);
                 } else if (userChoice === correctChoice) {
                     const userOptionText = getLocalizedText(optArray[userChoice]);
                     feedbackContainer.innerHTML = `
-                    renderKatexInElement(feedbackContainer);
             <div class="review-status-box">
                 <div class="review-card blue compact">
                     <div class="review-card-title">
@@ -1714,10 +1714,12 @@
                 ${renderLearnModule()}
             </div>
             `;
+            renderKatexInElement(feedbackContainer);
+                    
                 } else {
                     const userOptionText = getLocalizedText(optArray[userChoice]);
                     feedbackContainer.innerHTML = `
-                    renderKatexInElement(feedbackContainer);
+                    
             <div class="review-status-box">
                 <div class="review-card red compact">
                     <div class="review-card-title">
@@ -1740,6 +1742,7 @@
                 ${renderLearnModule()}
             </div>
             `;
+            renderKatexInElement(feedbackContainer);
                 }
             } 
             const questionContent = document.querySelector(".question-content");
