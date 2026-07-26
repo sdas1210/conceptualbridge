@@ -504,7 +504,7 @@
             align-items: center;
         
             padding: 0 25px;
-            box-sizing: border-box;
+            
                 }
         
         .wizard-footer-fullwidth {
@@ -936,11 +936,29 @@
             <div class="wizard-name student-name">Guest Student</div>
         </div>
     </div>
-    
     <div class="wizard-footer" id="step-footer-1">
-        <button class="btn-tcs btn-white" id="wizard-back-nav-btn" onclick="window.location.href='exams.html'">← Go to Tests</button>
-        <button class="btn-wizard-next" id="instruction-next-action-btn" disabled onclick="goToWizardStageTwo()">Next</button>
+
+        <div>
+            <button
+                class="btn-tcs btn-white"
+                id="wizard-back-nav-btn"
+                onclick="window.location.href='exams.html'">
+                ← Go to Tests
+            </button>
+        </div>
+    
+        <div>
+            <button
+                class="btn-wizard-next"
+                id="instruction-next-action-btn"
+                disabled
+                onclick="goToWizardStageTwo()">
+                Next
+            </button>
+        </div>
+    
     </div>
+    
 
     <div style="display:none; flex-direction:column; flex:1; overflow:hidden;" id="stage-two-wrapper-node">
         <div class="wizard-container">
@@ -1441,34 +1459,6 @@
                 closeConcernReportModal();
             });
         }
-
-        function checkInstructionScrollProgress() {
-
-            const container = document.getElementById("instruction-scroll-pane");
-            const nextButton = document.getElementById("instruction-next-action-btn");
-        
-            if (!container || !nextButton) {
-                console.log("Container or button not found");
-                return;
-            }
-        
-            console.log(
-                "Scroll:",
-                container.scrollTop,
-                container.clientHeight,
-                container.scrollHeight
-            );
-        
-            const reachedBottom =
-                Math.ceil(container.scrollTop + container.clientHeight)
-                >= container.scrollHeight - 20;
-        
-            if (reachedBottom) {
-                console.log("Reached Bottom");
-                nextButton.disabled = false;
-            }
-        }
-
         function checkInstructionScrollProgress() {
 
             const container = document.getElementById("instruction-scroll-pane");
