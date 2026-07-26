@@ -17,6 +17,11 @@ export default async function handler(req, res) {
     if (topic === 'GI') targetFolder = 'gi';
     if (topic === 'GS') targetFolder = 'gs';
     if (topic === 'GACA' || topic === 'gaca') targetFolder = 'gaca';
+    // ADD THIS
+    const parser =
+        targetFolder === "math"
+            ? parseMathQuestionFile
+            : parseGeneralQuestionFile;
 
     try {
 
@@ -57,11 +62,10 @@ export default async function handler(req, res) {
 
             const filePath = path.join(folderPath, currentFile);
         
-            const parsedQuestions = parseQuestionFile(
+            const parsedQuestions = parser(
                 filePath,
                 targetFolder
             );
-        
             combinedQuestions.push(...parsedQuestions);
         
         }
