@@ -1624,6 +1624,7 @@
             const feedbackContainer = document.getElementById('review-feedback-container'); 
             container.innerHTML = ''; 
             feedbackContainer.innerHTML = ''; 
+            renderKatexInElement(feedbackContainer);
             
             const optArray =
                 currentLanguage === "EN"
@@ -1683,6 +1684,7 @@
 
                 if (userChoice === null) {
                     feedbackContainer.innerHTML = `
+                    renderKatexInElement(feedbackContainer);
             <div class="review-status-box">
                 <div class="review-card pink compact">
                     <div class="review-card-title">
@@ -1698,6 +1700,7 @@
                 } else if (userChoice === correctChoice) {
                     const userOptionText = getLocalizedText(optArray[userChoice]);
                     feedbackContainer.innerHTML = `
+                    renderKatexInElement(feedbackContainer);
             <div class="review-status-box">
                 <div class="review-card blue compact">
                     <div class="review-card-title">
