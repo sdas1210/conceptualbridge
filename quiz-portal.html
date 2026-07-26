@@ -1711,7 +1711,17 @@
                 shiftLabel.innerText = "";
             
             } 
-            document.getElementById('target-question-text').innerHTML = getLocalizedText(currentItem.text); 
+            document.getElementById('target-question-text').innerHTML = `
+                <div class="question-text">
+                    ${getLocalizedText(currentItem.text)}
+                </div>
+            
+                ${
+                    currentItem.equation
+                        ? `<div class="question-common">${getLocalizedText(currentItem.equation)}</div>`
+                        : ""
+                }
+            `;
             
             const container = document.getElementById('target-options-container'); 
             const feedbackContainer = document.getElementById('review-feedback-container'); 
