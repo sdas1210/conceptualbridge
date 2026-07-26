@@ -1739,18 +1739,24 @@
                 shiftLabel.innerText = "";
             
             } 
-            document.getElementById('target-question-text').innerHTML = `
+
+            const questionText =
+                currentLanguage === "EN"
+                    ? currentItem.questionEnglish
+                    : (currentItem.questionBengali || currentItem.questionEnglish);
+            
+            document.getElementById("target-question-text").innerHTML = `
                 <div class="question-text">
-                    ${getLocalizedText(currentItem.text)}
+                    ${questionText}
                 </div>
             
                 ${
                     currentItem.equation
-                        ? `<div class="question-common">${getLocalizedText(currentItem.equation)}</div>`
+                        ? `<div class="question-common">${currentItem.equation}</div>`
                         : ""
                 }
             `;
-            
+                        
             const container = document.getElementById('target-options-container'); 
             const feedbackContainer = document.getElementById('review-feedback-container'); 
             container.innerHTML = ''; 
