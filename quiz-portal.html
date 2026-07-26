@@ -1438,13 +1438,35 @@
             });
         }
 
-        function checkInstructionScrollProgress() { 
-            const container = document.getElementById('instruction-scroll-pane'); 
-            const nextButton = document.getElementById('instruction-next-action-btn'); 
-            const totalScrollHeight = container.scrollHeight; 
-            const currentPosition = container.scrollTop + container.clientHeight; 
-            if (totalScrollHeight - currentPosition <= 5) { nextButton.disabled = false; } 
+        function checkInstructionScrollProgress() {
+
+            const container = document.getElementById("instruction-scroll-pane");
+            const nextButton = document.getElementById("instruction-next-action-btn");
+        
+            if (!container || !nextButton) return;
+        
+            const reachedBottom =
+                Math.ceil(container.scrollTop + container.clientHeight)
+                >= container.scrollHeight - 20;
+        
+            if (reachedBottom || container.scrollHeight <= container.clientHeight) {
+                nextButton.disabled = false;
+            }
         }
+
+    const container = document.getElementById("instruction-scroll-pane");
+    const nextButton = document.getElementById("instruction-next-action-btn");
+
+    if (!container || !nextButton) return;
+
+    const reachedBottom =
+        Math.ceil(container.scrollTop + container.clientHeight)
+        >= container.scrollHeight - 20;
+
+    if (reachedBottom || container.scrollHeight <= container.clientHeight) {
+        nextButton.disabled = false;
+    }
+}
 
         function goToWizardStageTwo() { 
             document.getElementById('step-instructions-1').style.display = 'none'; 
