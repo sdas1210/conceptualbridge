@@ -264,7 +264,7 @@
 
             for (let fileNum of uploadedVideoFiles) {
                 try {
-                    const response = await fetch(`Video/${fileNum}.txt`);
+                    const response = await fetch(`Video/GACA/${fileNum}.txt`);
                     if (!response.ok) continue;
 
                     const rawText = await response.text();
