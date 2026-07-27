@@ -10,5 +10,5 @@ async function loadQuestions(source) {
 
     const payload = await response.json();
 
-    return payload.data || [];
+    return payload;
 }
