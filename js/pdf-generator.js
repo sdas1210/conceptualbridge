@@ -1,7 +1,4 @@
-const HEADER_HEIGHT = 30;
-const INFOBOX_HEIGHT = 45;
-const FOOTER_HEIGHT = 15;
-const questionStartY = contentStartY + INFOBOX_HEIGHT;
+
 
 async function generatePDF(questionArray, payload, mode) {
 
@@ -25,13 +22,14 @@ async function generatePDF(questionArray, payload, mode) {
     const margin = 15;
 
     // Header & Footer Reserved Areas
-    const headerHeight = 30;
-    const footerHeight = 15;
+    const HEADER_HEIGHT = 30;
+    const INFOBOX_HEIGHT = 45;
+    const FOOTER_HEIGHT = 15;
 
     // Printable Area
     const contentStartY = margin + headerHeight;
     const contentEndY = pageHeight - footerHeight - margin;
-    //const questionStartY = contentStartY + 45;
+    const questionStartY = contentStartY + INFOBOX_HEIGHT;
     // Default Font
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
