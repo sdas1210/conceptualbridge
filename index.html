@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/Resources/Favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/Resources/Favicon/favicon-16x16.png">
@@ -9,7 +8,6 @@
     <link rel="manifest" href="/Resources/Favicon/site.webmanifest">
 
     <meta name="theme-color" content="#0D1B2A">
-    <!-- Favicon -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conceptual Bridge</title>
@@ -27,10 +25,9 @@
             animation: gradientBG 15s ease infinite;
             padding: 20px;
             box-sizing: border-box;
-            position: relative; /* Crucial for positioning top-right and bottom-right absolute elements */
+            position: relative;
         }
 
-        /* Top Right Auth Action Header Button Container */
         .top-auth-navbar {
             position: absolute;
             top: 20px;
@@ -38,7 +35,6 @@
             z-index: 1000;
         }
 
-        /* Glassmorphic Log In Button with Flex layout for Icon alignment */
         .btn-auth-nav {
             display: flex;
             align-items: center;
@@ -65,12 +61,6 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .btn-auth-nav svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
         .header-container {
             text-align: center;
             margin-bottom: 30px;
@@ -81,7 +71,6 @@
             width: 100%;
         }
 
-        /* Integrated Glassmorphic Brand Logo */
         .main-brand-logo {
             width: 130px;
             height: 130px;
@@ -93,7 +82,7 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1.2s ease-out forwards;
-            background-color: #ffffff; /* Ensures contrast for black line arts */
+            background-color: #ffffff;
         }
 
         h1 {
@@ -115,7 +104,6 @@
             animation: fadeInUp 1.2s ease-out 0.4s forwards;
         }
 
-        /* NEW ATTENTION CARD: Glassmorphic YouTube Channel Banner Promo Element */
         .youtube-promo-banner {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
@@ -165,7 +153,7 @@
         }
 
         .yt-text-msg strong {
-            color: #fca5a5; /* Soft glowing variant red for emphasis highlights */
+            color: #fca5a5;
             font-weight: 700;
         }
 
@@ -192,7 +180,6 @@
             box-shadow: 0 6px 16px rgba(255, 0, 0, 0.45);
         }
 
-        /* Responsive Dashboard Grid Container */
         .portal-grid {
             display: flex;
             gap: 20px;
@@ -204,7 +191,6 @@
             animation: fadeInUp 1.2s ease-out 0.7s forwards;
         }
 
-        /* Glassmorphic Portal Navigation Cards */
         .portal-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -249,11 +235,9 @@
             line-height: 1.5;
         }
 
-        /* Glassmorphic Bottom-Right Counter badge */
-        .viewer-counter-badge {
+        .viewer-counter-badge, .last-updated-badge {
             position: fixed;
             bottom: 20px;
-            right: 20px;
             background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -268,35 +252,13 @@
             color: white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             z-index: 1000;
-            pointer-events: none; /* Keeps background clickable */
-            opacity: 0;
-            animation: fadeIn 1.5s ease forwards 1s;
-        }
-
-        /* Glassmorphic Bottom-Left "Last Updated On" badge - mirrors the
-           viewer-counter-badge styling on the opposite corner. */
-        .last-updated-badge {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 30px;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #e2e8f0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
             pointer-events: none;
             opacity: 0;
             animation: fadeIn 1.5s ease forwards 1s;
         }
+
+        .viewer-counter-badge { right: 20px; }
+        .last-updated-badge { left: 20px; font-size: 0.8rem; color: #e2e8f0; }
 
         .pulse-dot {
             width: 8px;
@@ -306,22 +268,15 @@
             box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
             animation: pulse 1.6s infinite;
         }
-        .icon{
-            width:20px;
-            height:20px;
-            display:block;
-            flex-shrink:0;
+
+        .nav-icon {
+            width: 25px;
+            height: 25px;
+            display: block;
+            flex-shrink: 0;
+            object-fit: contain;
         }
 
-        .nav-icon{
-            width:25px;
-            height:25px;
-            display:block;
-            flex-shrink:0;
-            object-fit:contain;
-        }
-
-        /* Animations mapping */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -329,10 +284,7 @@
         }
 
         @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeIn {
@@ -340,792 +292,478 @@
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
-            }
-            70% {
-                transform: scale(1);
-                box-shadow: 0 0 0 6px rgba(72, 187, 120, 0);
-            }
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
-            }
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(72, 187, 120, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(72, 187, 120, 0); }
         }
 
-        /* Responsive Breakpoint for Mobile Phones */
-        /* ===============================
-           LOGIN MODAL
-        ================================= */
-        
-        .login-modal{
-        
-            position:fixed;
-            inset:0;
-        
-            display:flex;
-            justify-content:center;
-            align-items:center;
-        
-            background:rgba(0,0,0,.45);
-        
-            backdrop-filter:blur(0px);
-            -webkit-backdrop-filter:blur(0px);
-        
-            opacity:0;
-        
-            visibility:hidden;
-        
-            transition:
-                opacity .35s ease,
-                backdrop-filter .35s ease,
-                visibility .35s;
-        
-            z-index:9999;
-        
+        .login-modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,.45);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .35s ease, backdrop-filter .35s ease, visibility .35s;
+            z-index: 9999;
         }
 
-        .login-modal.show{
-
-            opacity:1;
-        
-            visibility:visible;
-        
-            backdrop-filter:blur(8px);
-        
-            -webkit-backdrop-filter:blur(8px);
-        
+        .login-modal.show {
+            opacity: 1;
+            visibility: visible;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
-        .login-card{
-
-            width:420px;
-        
-            max-width:90%;
-        
-            padding:35px;
-        
-            border-radius:20px;
-        
-            background:rgba(255,255,255,.10);
-        
-            border:1px solid rgba(255,255,255,.20);
-        
-            backdrop-filter:blur(20px);
-        
-            -webkit-backdrop-filter:blur(20px);
-        
-            box-shadow:0 15px 40px rgba(0,0,0,.35);
-        
-            color:white;
-        
-            position:relative;
-        
-            text-align:center;
-        
-            transform:translateY(35px) scale(.96);
-        
-            opacity:0;
-        
-            transition:
-                transform .35s cubic-bezier(.175,.885,.32,1.2),
-                opacity .35s ease;
-            overflow:hidden;
-
-            isolation:isolate;
-            
-            position:relative;
-                    
+        .login-card {
+            width: 420px;
+            max-width: 90%;
+            padding: 35px;
+            border-radius: 20px;
+            background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.20);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 15px 40px rgba(0,0,0,.35);
+            color: white;
+            position: relative;
+            text-align: center;
+            transform: translateY(35px) scale(.96);
+            opacity: 0;
+            transition: transform .35s cubic-bezier(.175,.885,.32,1.2), opacity .35s ease;
+            overflow: hidden;
+            isolation: isolate;
         }
 
-        .glass-shine{
-
-            position:absolute;
-        
-            top:-40%;
-        
-            left:-120%;
-        
-            width:70%;
-        
-            height:180%;
-        
-            background:linear-gradient(
-        
-                110deg,
-        
-                transparent,
-        
-                rgba(255,255,255,.12),
-        
-                rgba(255,255,255,.28),
-        
-                rgba(255,255,255,.12),
-        
-                transparent
-        
-            );
-        
-            transform:rotate(20deg);
-        
-            animation:glassShine 5s ease-in-out infinite;
-        
-            pointer-events:none;
-        
+        .glass-shine {
+            position: absolute;
+            top: -40%;
+            left: -120%;
+            width: 70%;
+            height: 180%;
+            background: linear-gradient(110deg, transparent, rgba(255,255,255,.12), rgba(255,255,255,.28), rgba(255,255,255,.12), transparent);
+            transform: rotate(20deg);
+            animation: glassShine 5s ease-in-out infinite;
+            pointer-events: none;
         }
 
-        .login-modal.show .login-card{
-
-            transform:translateY(0) scale(1);
-        
-            opacity:1;
-        
-        }
-        /* ==============================
-           INPUT GROUP
-        ============================== */
-        
-        .input-group{
-        
-            margin-bottom:18px;
-        
-            text-align:left;
-        
-        }
-        
-        .input-group label{
-        
-            display:block;
-        
-            color:#f2f2f2;
-        
-            font-size:14px;
-        
-            margin-bottom:8px;
-        
-            font-weight:600;
-        
-        }
-        
-        .input-group input{
-        
-            width:100%;
-        
-            box-sizing:border-box;
-        
-            padding:14px 16px;
-        
-            border-radius:12px;
-        
-            border:1px solid rgba(255,255,255,.18);
-        
-            background:rgba(255,255,255,.08);
-        
-            color:white;
-        
-            font-size:15px;
-        
-            outline:none;
-        
-            transition:.25s;
-        
-            backdrop-filter:blur(10px);
-        
-        }
-        
-        .input-group input::placeholder{
-        
-            color:rgba(255,255,255,.55);
-        
-        }
-        
-        .input-group input:focus{
-        
-            border-color:#63b3ed;
-        
-            background:rgba(255,255,255,.12);
-        
-            box-shadow:0 0 15px rgba(99,179,237,.25);
-        
+        .login-modal.show .login-card {
+            transform: translateY(0) scale(1);
+            opacity: 1;
         }
 
-        .password-box{
-
-            position:relative;
-        
-        }
-        
-        .password-toggle{
-
-            position:absolute;
-        
-            top:50%;
-        
-            right:14px;
-        
-            transform:translateY(-50%);
-        
-            width:36px;
-        
-            height:36px;
-        
-            border:none;
-        
-            background:transparent;
-        
-            color:rgba(255,255,255,.75);
-        
-            border-radius:50%;
-        
-            display:flex;
-        
-            align-items:center;
-        
-            justify-content:center;
-        
-            cursor:pointer;
-        
-            transition:all .25s ease;
-        
-        }
-        
-        .password-toggle:hover{
-        
-            background:rgba(255,255,255,.08);
-        
-            color:#ffffff;
-        
-            transform:translateY(-50%) scale(1.08);
-        
-        }
-        
-        .password-toggle svg{
-        
-            transition:all .2s ease;
-
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
         }
 
-        .login-logo{
-
-            width:80px;
-        
-            height:80px;
-        
-            object-fit:cover;
-        
-            border-radius:50%;
-        
-            margin-bottom:20px;
-        
-            border:2px solid rgba(255,255,255,.25);
-        
-            box-shadow:0 8px 20px rgba(0,0,0,.25);
-        
+        .input-group label {
+            display: block;
+            color: #f2f2f2;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        .login-action{
-
-        width:100%;
-    
-        margin-top:10px;
-    
-        padding:14px;
-    
-        border:none;
-    
-        border-radius:14px;
-    
-        background:linear-gradient(135deg,#3182ce,#2b6cb0);
-    
-        color:white;
-    
-        font-size:16px;
-    
-        font-weight:700;
-    
-        cursor:pointer;
-    
-        transition:.3s;
-    
-    }
-    
-    .login-action:hover{
-    
-        transform:translateY(-2px);
-    
-        box-shadow:0 8px 20px rgba(49,130,206,.35);
-    
-    }
-
-        .close-btn{
-
-            position:absolute;
-
-            top:18px;
-        
-            right:18px;
-        
-            width:40px;
-        
-            height:40px;
-        
-            border:none;
-        
-            border-radius:50%;
-        
-            display:flex;
-        
-            justify-content:center;
-        
-            align-items:center;
-        
-            font-size:24px;
-        
-            font-weight:600;
-        
-            color:rgba(255,255,255,.85);
-        
-            background:rgba(255,255,255,.08);
-        
-            backdrop-filter:blur(12px);
-        
-            -webkit-backdrop-filter:blur(12px);
-        
-            border:1px solid rgba(255,255,255,.15);
-        
-            cursor:pointer;
-        
-            transition:all .25s ease;
-                
+        .input-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.08);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: .25s;
+            backdrop-filter: blur(10px);
         }
 
-        .close-btn:hover{
-
-            background:rgba(255,255,255,.15);
-        
-            color:white;
-        
-            transform:scale(1.08) rotate(90deg);
-        
-            box-shadow:0 8px 20px rgba(0,0,0,.25);
-        
+        .input-group input::placeholder {
+            color: rgba(255,255,255,.55);
         }
 
-        .close-btn:active{
-
-            transform:scale(.95);
-        
+        .input-group input:focus {
+            border-color: #63b3ed;
+            background: rgba(255,255,255,.12);
+            box-shadow: 0 0 15px rgba(99,179,237,.25);
         }
 
-        .login-card h2{
-
-            margin-top:5px;
-        
-            margin-bottom:10px;
-        
-            font-size:28px;
-        
-        }
-        
-        .login-card p{
-        
-            color:#d8d8d8;
-        
-            margin-bottom:30px;
-        
-        }
-        @keyframes glassShine{
-        
-            0%{
-        
-                left:-150%;
-        
-            }
-        
-            20%{
-        
-                left:140%;
-        
-            }
-        
-            100%{
-        
-                left:140%;
-        
-            }
-        
-        }
-        .forgot-password{
-
-            margin-top:16px;
-        
-            text-align:center;
-        
-        }
-        
-        .forgot-password a{
-        
-            color:rgba(255,255,255,.82);
-        
-            text-decoration:none;
-        
-            font-size:14px;
-        
-            transition:.25s;
-        
-        }
-        
-        .forgot-password a:hover{
-        
-            color:#ffffff;
-        
-            text-decoration:underline;
-        
-        }
-        
-        .reset-password-panel{
-
-            display:none;
-        
-            animation:fadeSlide .30s ease;
-        
-        }
-        .login-divider{
-
-            display:flex;
-        
-            align-items:center;
-        
-            margin:24px 0;
-        
-        }
-        
-        .login-divider::before,
-        .login-divider::after{
-        
-            content:"";
-        
-            flex:1;
-        
-            height:1px;
-        
-            background:rgba(255,255,255,.18);
-        
-        }
-        
-        .login-divider span{
-        
-            margin:0 14px;
-        
-            color:rgba(255,255,255,.75);
-        
-            font-size:13px;
-        
-            font-weight:600;
-        
-            letter-spacing:1px;
-        
+        .password-box {
+            position: relative;
         }
 
-        .google-login-btn{
-
-            width:100%;
-
-            display:flex;
-        
-            justify-content:center;
-        
-            align-items:center;
-        
-            gap:14px;
-        
-            padding:15px;
-        
-            border:none;
-        
-            border-radius:15px;
-        
-            background:rgba(255,255,255,.93);
-        
-            color:#202124;
-        
-            font-size:15px;
-        
-            font-weight:600;
-        
-            cursor:pointer;
-        
-            transition:all .28s ease;
-        
-            box-shadow:0 8px 20px rgba(0,0,0,.15);
-                        
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,.75);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all .25s ease;
         }
 
-        .google-left{
-
-            display:flex;
-        
-            align-items:center;
-        
-            gap:12px;
-        
-        }
-        
-        .google-arrow{
-        
-            opacity:0;
-        
-            transform:translateX(-8px);
-        
-            transition:.25s;
-        
-            font-size:18px;
-        
-            font-weight:bold;
-        
-        }
-        
-        .google-login-btn:hover{
-        
-             transform:translateY(-3px);
-
-            background:#ffffff;
-        
-            box-shadow:0 16px 35px rgba(0,0,0,.22);
-        
-        }
-        .google-icon{
-
-            transition:transform .35s ease;
-        
+        .password-toggle:hover {
+            background: rgba(255,255,255,.08);
+            color: #ffffff;
+            transform: translateY(-50%) scale(1.08);
         }
 
-        .google-login-btn:hover .google-icon{
-
-            transform:rotate(-10deg) scale(1.08);
-        
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255,255,255,.25);
+            box-shadow: 0 8px 20px rgba(0,0,0,.25);
         }
-        
-       /* 
-        
-        */
-        /* End of CSS*/
-        
-        @keyframes fadeSlide{
 
-            from{
-        
-                opacity:0;
-        
-                transform:translateY(10px);
-        
-            }
-        
-            to{
-        
-                opacity:1;
-        
-                transform:translateY(0);
-        
-            }
-        
+        .login-action {
+            width: 100%;
+            margin-top: 10px;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg,#3182ce,#2b6cb0);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        /* ==========================================
-           Premium Glass Autofill
-        ========================================== */
-        
+
+        .login-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(49,130,206,.35);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: rgba(255,255,255,.85);
+            background: rgba(255,255,255,.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,.15);
+            cursor: pointer;
+            transition: all .25s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,.15);
+            color: white;
+            transform: scale(1.08) rotate(90deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,.25);
+        }
+
+        .login-card h2 {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .login-card p {
+            color: #d8d8d8;
+            margin-bottom: 30px;
+        }
+
+        @keyframes glassShine {
+            0% { left: -150%; }
+            20% { left: 140%; }
+            100% { left: 140%; }
+        }
+
+        .forgot-password {
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .forgot-password a {
+            color: rgba(255,255,255,.82);
+            text-decoration: none;
+            font-size: 14px;
+            transition: .25s;
+        }
+
+        .forgot-password a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .reset-password-panel, .signup-form-panel, .verification-panel {
+            display: none;
+            animation: fadeSlide .30s ease;
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+        }
+
+        .login-divider::before, .login-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,.18);
+        }
+
+        .login-divider span {
+            margin: 0 14px;
+            color: rgba(255,255,255,.75);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .google-login-btn {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255,255,255,.93);
+            color: #202124;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .28s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        }
+
+        .google-login-btn:hover {
+            transform: translateY(-3px);
+            background: #ffffff;
+            box-shadow: 0 16px 35px rgba(0,0,0,.22);
+        }
+
+        .google-icon {
+            transition: transform .35s ease;
+        }
+
+        .google-login-btn:hover .google-icon {
+            transform: rotate(-10deg) scale(1.08);
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus{
-        
-            -webkit-text-fill-color:#ffffff !important;
-        
-            -webkit-box-shadow:
-                0 0 0 1000px rgba(255,255,255,.08) inset !important;
-        
-            border:1px solid rgba(255,255,255,.18) !important;
-        
-            transition:background-color 99999s ease-in-out;
-        
-            caret-color:white;
-        
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #ffffff !important;
+            -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,.08) inset !important;
+            border: 1px solid rgba(255,255,255,.18) !important;
+            transition: background-color 99999s ease-in-out;
+            caret-color: white;
         }
-        
-        .wave-hand{
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            transform-origin:70% 70%;
-        }
-        
-        .wave-hand.wave{
-            animation:waveHand .9s ease;
-        }
-        
-        .wave-svg{
-            width:25px;
-            height:25px;
-            display:block;
-        }
-        .profile-dropdown{
 
-            position:absolute;
-        
-            top:55px;
-        
-            right:0;
-        
-            width:220px;
-        
-            display:none;
-        
-            flex-direction:column;
-        
-            background:rgba(255,255,255,.12);
-        
-            backdrop-filter:blur(18px);
-        
-            -webkit-backdrop-filter:blur(18px);
-        
-            border:1px solid rgba(255,255,255,.18);
-        
-            border-radius:16px;
-        
-            padding:8px;
-        
-            box-shadow:0 15px 35px rgba(0,0,0,.25);
-        
-            z-index:1000;
-        
+        .wave-hand {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: 70% 70%;
         }
-        
-        .dropdown-item{
-        
-            border:none;
-        
-            background:transparent;
-        
-            color:white;
-        
-            text-align:left;
-        
-            padding:12px 15px;
-        
-            border-radius:10px;
-        
-            cursor:pointer;
-        
-            font-size:15px;
-        
-            transition:.25s;
-        
+
+        .wave-hand.wave { animation: waveHand .9s ease; }
+
+        .wave-svg { width: 25px; height: 25px; display: block; }
+
+        /* Class-based Dropdown Display Toggle */
+        .profile-dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 220px;
+            display: none;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,.25);
+            z-index: 1000;
         }
-        
-        .dropdown-item:hover{
-        
-            background:rgba(255,255,255,.12);
-        
+
+        .profile-dropdown.show {
+            display: flex;
         }
-        
-        .logout{
-        
-            color:#ffb3b3;
-        
+
+        .dropdown-item {
+            border: none;
+            background: transparent;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: .25s;
         }
-        
-        @keyframes waveHand{
-        
-            0%   { transform:rotate(0deg); }
-        
-            15%  { transform:rotate(18deg); }
-        
-            30%  { transform:rotate(-12deg); }
-        
-            45%  { transform:rotate(18deg); }
-        
-            60%  { transform:rotate(-8deg); }
-        
-            75%  { transform:rotate(12deg); }
-        
-            100% { transform:rotate(0deg); }
-        
+
+        .dropdown-item:hover { background: rgba(255,255,255,.12); }
+        .logout { color: #ffb3b3; }
+
+        @keyframes waveHand {
+            0% { transform: rotate(0deg); }
+            15% { transform: rotate(18deg); }
+            30% { transform: rotate(-12deg); }
+            45% { transform: rotate(18deg); }
+            60% { transform: rotate(-8deg); }
+            75% { transform: rotate(12deg); }
+            100% { transform: rotate(0deg); }
         }
-        
-        /* Mobile Media End OF CSS */
+
+        /* Toast Notification Styling */
+        .cb-toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 380px;
+            width: calc(100% - 48px);
+            pointer-events: none;
+        }
+
+        .cb-toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.35s ease;
+        }
+
+        .cb-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .cb-toast-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .cb-toast-message {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .cb-toast-close {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .cb-toast-close:hover { color: #ffffff; }
+
+        .cb-toast.success { border-left: 4px solid #48bb78; }
+        .cb-toast.error { border-left: 4px solid #f56565; }
+        .cb-toast.warning { border-left: 4px solid #ed8936; }
+        .cb-toast.info { border-left: 4px solid #4299e1; }
+
+        /* Loading Spinner Element */
+        @keyframes btnSpinner {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner-loader {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: btnSpinner 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
         @media (max-width: 900px) {
-            .portal-grid {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-            .portal-card {
-                width: 100%;
-                max-width: 400px;
-            }
+            .portal-grid { flex-direction: column; align-items: center; gap: 20px; }
+            .portal-card { width: 100%; max-width: 400px; }
         }
 
         @media (max-width: 650px) {
-            .top-auth-navbar {
-                position: static;
-                margin-bottom: 20px;
-                justify-content: center;
-                display: flex;
-            }
-            .youtube-promo-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px;
-            }
-            .yt-left-info {
-                flex-direction: column;
-                text-align: center;
-                gap: 8px;
-            }
+            .top-auth-navbar { position: static; margin-bottom: 20px; justify-content: center; display: flex; }
+            .youtube-promo-banner { flex-direction: column; text-align: center; padding: 20px; }
+            .yt-left-info { flex-direction: column; text-align: center; gap: 8px; }
             h1 { font-size: 2.3rem; }
-            .viewer-counter-badge {
-                position: static;
-                margin-top: 30px;
-                bottom: auto;
-                right: auto;
-            }
-            .last-updated-badge {
-                position: static;
-                margin-top: 10px;
-                bottom: auto;
-                left: auto;
-            }
+            .viewer-counter-badge, .last-updated-badge { position: static; margin-top: 10px; bottom: auto; right: auto; left: auto; }
+            .cb-toast-container { right: 16px; left: 16px; width: auto; }
         }
     </style>
 </head>
 <body>
+
+    <div id="toastContainer" class="cb-toast-container"></div>
 
     <div class="top-navigation-ribbon-wrapper">
         <div class="viewer-counter-badge" style="display:none;"></div> 
         <div class="top-auth-navbar">
 
             <button id="loginBtn" class="btn-auth-nav">
-                👤 Log In
+                <img src="/Resources/Icons/user.svg" class="nav-icon" alt="">
+                Log In
             </button>
         
             <div id="profileDropdown" class="profile-dropdown">
-        
-                <button class="dropdown-item">
-                    👤 My Profile
-                </button>
-        
-                <button class="dropdown-item">
-                    ⚙ Settings
-                </button>
-        
-                <button
-                    id="logoutBtn"
-                    class="dropdown-item logout">
-        
-                    🚪 Log Out
-        
-                </button>
-        
+                <button class="dropdown-item">👤 My Profile</button>
+                <button class="dropdown-item">⚙ Settings</button>
+                <button id="logoutBtn" class="dropdown-item logout">🚪 Log Out</button>
             </div>
         
         </div>
@@ -1136,7 +774,6 @@
         <h1>Welcome to Conceptual Bridge</h1>
         <p class="subtitle">Your ultimate preparation hub for competitive examinations</p>
         
-        <!-- ENGAGING YOUTUBE PROMO REDIRECT HUB BANNER -->
         <a href="https://www.youtube.com/channel/UC6i1deP1oy1RHAx3VYL7oJw" target="_blank" class="youtube-promo-banner">
             <div class="yt-left-info">
                 <div class="yt-icon-badge">📺</div>
@@ -1160,7 +797,6 @@
             <p>Stay updated with real-time official notifications, results announcement dates, and recruitment timelines.</p>
         </a>
 
-        <!-- UPDATED: BRAND NEW SEAMLESS GLASSMORPHIC NAVIGATION ENTRIES CARD FOR TUTORIALS -->
         <a href="tutorials.html" class="portal-card">
             <div class="icon-box">🎓</div>
             <h2>Free Tutorial Corner</h2>
@@ -1182,153 +818,118 @@
     <div class="last-updated-badge" id="last-updated-badge" style="display:none;">
         <span>Last Updated On: <span id="last-updated-text">...</span></span>
     </div>
-    <!-- Login Modal -->
+
     <div id="loginModal" class="login-modal">
-        
-           <div class="login-card">
-
-                <div class="glass-shine"></div>
-        
-                <button id="closeLogin" class="close-btn">&times;</button>
-        <div id="loginFormPanel">
+        <div class="login-card">
+            <div class="glass-shine"></div>
+            <button id="closeLogin" class="close-btn">&times;</button>
+            
+            <div id="loginFormPanel">
                 <img src="logo.jpg" class="login-logo" alt="Conceptual Bridge">
-
                 <h2>Welcome Back</h2>
-                
                 <p>Sign in to continue your preparation.</p>
                 
                 <div class="input-group">
-                
                     <label for="emailInput">Email Address</label>
-                
-                    <input
-                        type="email"
-                        id="emailInput"
-                        placeholder="Enter your email"
-                        autocomplete="email">
-                
+                    <input type="email" id="emailInput" placeholder="Enter your email" autocomplete="email">
                 </div>
                 
                 <div class="input-group">
-
-                <label for="passwordInput">Password</label>
-            
-                <div class="password-box">
-            
-                    <input
-                        type="password"
-                        id="passwordInput"
-                        placeholder="Enter your password"
-                        autocomplete="current-password">
-            
-                    <button
-                        type="button"
-                        id="togglePassword"
-                        class="password-toggle"
-                        aria-label="Show Password">
-                    
-                        <svg id="eyeIcon"
-                             width="20"
-                             height="20"
-                             viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             stroke-linecap="round"
-                             stroke-linejoin="round">
-                    
-                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
-                    
-                            <circle cx="12" cy="12" r="3"></circle>
-                    
-                        </svg>
-                    
-                    </button>
-            
+                    <label for="passwordInput">Password</label>
+                    <div class="password-box">
+                        <input type="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password">
+                        <button type="button" id="togglePassword" class="password-toggle" aria-label="Show Password">
+                            <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-            
-            </div>
                 
-                <button id="emailLoginBtn" class="login-action">
-
-                    Log In
-                
-                </button>
+                <button id="emailLoginBtn" class="login-action">Log In</button>
                 
                 <div class="forgot-password">
-                
-                    <a href="#" id="forgotPasswordLink">
-                
-                        Forgot Password?
-                
-                    </a>
-                
+                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
                 </div>
-                <div class="login-divider">
 
+                <div class="login-divider">
                     <span>OR</span>
-                
                 </div>
 
                 <button id="googleLoginBtn" class="google-login-btn">
-
                     <svg class="google-icon" width="20" height="20" viewBox="0 0 48 48">
-                
                         <path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.8 2.8 29.8 1 24 1 14.6 1 6.5 6.4 2.5 14.3l7.7 6C12 14.2 17.5 9.5 24 9.5z"/>
                         <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-2.8-.4-4H24v8.1h12.7c-.3 2-1.6 5-4.5 7l7 5.4c4.2-3.9 6.3-9.7 6.3-16.5z"/>
                         <path fill="#FBBC05" d="M9.9 28.3A14.4 14.4 0 0 1 9.1 24c0-1.5.3-3 .8-4.3l-7.7-6A22.7 22.7 0 0 0 1 24c0 3.7.9 7.1 2.5 10.3l6.4-6z"/>
                         <path fill="#34A853" d="M24 47c6.5 0 12-2.1 16-5.8l-7-5.4c-1.9 1.3-4.5 2.2-9 2.2-6.4 0-11.9-4.4-13.9-10.3l-7.6 5.9C6.5 41.6 14.6 47 24 47z"/>
-                
                     </svg>
-                
                     <span>Continue with Google</span>
-                
                 </button>
-            
-            </div>
-               <!-- Reset Password Panel -->
-                <div id="resetPasswordPanel" class="reset-password-panel">
-                
-                    <h2>Reset Password</h2>
-                
-                    <p>
-                        Enter your registered email address.
-                        We'll send you a password reset link.
-                    </p>
-                
-                    <div class="input-group">
-                
-                        <label for="resetEmailInput">Email Address</label>
-                
-                        <input
-                            type="email"
-                            id="resetEmailInput"
-                            placeholder="Enter your email"
-                            autocomplete="email">
-                
-                    </div>
-                
-                    <button id="sendResetBtn" class="login-action">
-                
-                        Send Reset Link
-                
-                    </button>
-                
-                    <div class="forgot-password">
-                
-                        <a href="#" id="backToLogin">
-                
-                            ← Back to Login
-                
-                        </a>
-                
-                    </div>
-                
+
+                <div class="forgot-password" style="margin-top:20px;">
+                    <a href="#" id="showSignupLink">Don't have an account? <strong style="color:#63b3ed;">Sign Up</strong></a>
                 </div>
-        
             </div>
-        
+
+            <div id="signupFormPanel" class="signup-form-panel">
+                <h2>Create Account</h2>
+                <p>Join Conceptual Bridge to start learning.</p>
+
+                <div class="input-group">
+                    <label for="signupNameInput">Full Name</label>
+                    <input type="text" id="signupNameInput" placeholder="Enter your full name" autocomplete="name">
+                </div>
+
+                <div class="input-group">
+                    <label for="signupEmailInput">Email Address</label>
+                    <input type="email" id="signupEmailInput" placeholder="Enter your email" autocomplete="email">
+                </div>
+
+                <div class="input-group">
+                    <label for="signupPasswordInput">Password</label>
+                    <input type="password" id="signupPasswordInput" placeholder="At least 6 characters" autocomplete="new-password">
+                </div>
+
+                <div class="input-group">
+                    <label for="signupConfirmPasswordInput">Confirm Password</label>
+                    <input type="password" id="signupConfirmPasswordInput" placeholder="Re-enter your password" autocomplete="new-password">
+                </div>
+
+                <button id="signupBtn" class="login-action">Create Account</button>
+
+                <div class="forgot-password">
+                    <a href="#" id="backToLoginFromSignup">← Already have an account? Log In</a>
+                </div>
+            </div>
+
+            <div id="resetPasswordPanel" class="reset-password-panel">
+                <h2>Reset Password</h2>
+                <p>Enter your registered email address. We'll send you a password reset link.</p>
+
+                <div class="input-group">
+                    <label for="resetEmailInput">Email Address</label>
+                    <input type="email" id="resetEmailInput" placeholder="Enter your email" autocomplete="email">
+                </div>
+
+                <button id="sendResetBtn" class="login-action">Send Reset Link</button>
+
+                <div class="forgot-password">
+                    <a href="#" id="backToLogin">← Back to Login</a>
+                </div>
+            </div>
+
+            <div id="verificationPanel" class="verification-panel">
+                <h2>Verify Your Email</h2>
+                <p style="margin-bottom:12px;">We've sent a verification link to<br><strong id="verificationEmailDisplay" style="color:#63b3ed;">your email</strong>.</p>
+                <p style="font-size:13px; color:rgba(255,255,255,.8); margin-bottom:24px; line-height:1.5;">Please check your inbox (and spam folder) and click the link to activate your account before logging in.</p>
+
+                <button id="resendVerificationBtn" class="login-action" style="background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); margin-bottom:12px;">Resend Verification Email</button>
+                <button id="continueToLoginBtn" class="login-action">Continue to Login</button>
+            </div>
+
         </div>
+    </div>
 
     <script>
         async function incrementCounter() {
@@ -1336,10 +937,8 @@
                 const namespace = "conceptualbridge.in";
                 const key = "homepage";
                 const url = `https://api.countapi.xyz/hit/${namespace}/${key}`;
-                
                 const response = await fetch(url);
                 const data = await response.json();
-                
                 if (data && data.value) {
                     document.getElementById('visit-count').innerText = data.value.toLocaleString();
                 } else {
@@ -1359,9 +958,6 @@
 
         incrementCounter();
 
-        // Fetches the current deployment's actual commit timestamp (set
-        // automatically by Vercel/GitHub on every push) and displays it in
-        // the format: 12th July, 2026 at 19:07:26 (IST).
         function getOrdinalSuffix(day) {
             const remainder10 = day % 10;
             const remainder100 = day % 100;
@@ -1393,10 +989,7 @@
             const minute = get('minute');
             const second = get('second');
 
-            // formatToParts with hour12:false can return "24" for midnight hour;
-            // normalize that to "00".
             if (hour === '24') hour = '00';
-
             return `${day}${getOrdinalSuffix(day)} ${month}, ${year} at ${hour}:${minute}:${second}`;
         }
 
@@ -1410,13 +1003,10 @@
                     document.getElementById('last-updated-text').innerText = formatLastUpdated(data.commitDate);
                     document.getElementById('last-updated-badge').style.display = 'flex';
                 }
-            } catch (err) {
-                // Silently do nothing if unavailable - badge just stays hidden.
-            }
+            } catch (err) {}
         }
 
         loadLastUpdated();
-        
     </script>
     <script type="module" src="js/auth.js"></script>
 </body>
