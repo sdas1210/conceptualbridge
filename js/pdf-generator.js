@@ -39,6 +39,8 @@ async function generatePDF(questionArray, payload, mode) {
     drawInformationBox(
         doc,
         payload,
+        questionArray,
+        mode,
         margin,
         contentStartY
     );
