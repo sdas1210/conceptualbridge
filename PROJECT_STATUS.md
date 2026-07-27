@@ -983,7 +983,6 @@ enable output download.
 
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 
 # Quiz Portal Progress Update (Added: 2026-07-27)
@@ -996,30 +995,35 @@ enable output download.
 
 #### Mathematics Rendering
 
-- ✅ KaTeX integrated into Mathematics Question rendering.
-- ✅ Dedicated Common/Equation section introduced.
-- ✅ Responsive equation sizing using `clamp()`.
-- ✅ Common section enlarged for better mathematical readability.
-- ✅ Common section kept independent from global KaTeX sizing.
+-   ✅ KaTeX integrated into Mathematics Question rendering.
+-   ✅ Dedicated Common/Equation section introduced.
+-   ✅ Responsive equation sizing using `clamp()`.
+-   ✅ Common section enlarged for better mathematical readability.
+-   ✅ Common section kept independent from global KaTeX sizing.
 
 #### KaTeX Expansion
 
-- ✅ KaTeX rendering extended to answer options.
-- ✅ Global KaTeX rendering strategy discussed for future-proof architecture.
-- ✅ Review mode KaTeX integration identified and partially implemented.
-- ✅ Rendering workflow documented for future cleanup into a centralized renderer.
+-   ✅ KaTeX rendering extended to answer options.
+-   ✅ Global KaTeX rendering strategy discussed for future-proof
+    architecture.
+-   ✅ Review mode KaTeX integration identified and partially
+    implemented.
+-   ✅ Rendering workflow documented for future cleanup into a
+    centralized renderer.
 
 #### UI Improvements
 
-- ✅ Mathematics common section now supports responsive scaling.
-- ✅ Horizontal scrolling enabled for exceptionally long equations instead of forcing undesirable wrapping.
-- ✅ Global KaTeX styling enlarged while allowing the Common section to preserve its own sizing rules.
+-   ✅ Mathematics common section now supports responsive scaling.
+-   ✅ Horizontal scrolling enabled for exceptionally long equations
+    instead of forcing undesirable wrapping.
+-   ✅ Global KaTeX styling enlarged while allowing the Common section
+    to preserve its own sizing rules.
 
 #### Instruction Flow
 
-- ✅ Instruction page scroll activation logic reviewed.
-- ✅ Footer layout reviewed.
-- ✅ Minor cleanup performed around duplicated scroll logic.
+-   ✅ Instruction page scroll activation logic reviewed.
+-   ✅ Footer layout reviewed.
+-   ✅ Minor cleanup performed around duplicated scroll logic.
 
 ------------------------------------------------------------------------
 
@@ -1029,25 +1033,27 @@ enable output download.
 
 ### 1. Mathematics Tutorial Corner (Highest Priority)
 
-- Activate the Tutorial Corner for the Mathematics section.
-- Ensure Math tutorial questions load using the Mathematics parser.
-- Verify bilingual rendering and KaTeX support.
+-   Activate the Tutorial Corner for the Mathematics section.
+-   Ensure Math tutorial questions load using the Mathematics parser.
+-   Verify bilingual rendering and KaTeX support.
 
 ### 2. Default Language Workflow
 
-- Redesign the default language selection behaviour.
-- Decide whether the language should be selected globally or remembered between sessions.
+-   Redesign the default language selection behaviour.
+-   Decide whether the language should be selected globally or
+    remembered between sessions.
 
 ### 3. JSON Driven Quiz Engine
 
-Replace the fixed 10-question selection with a JSON-driven configuration.
+Replace the fixed 10-question selection with a JSON-driven
+configuration.
 
 Planned capabilities:
 
-- Select questions by Topic.
-- Select questions by Sub-Topic.
-- Flexible question count.
-- Future support for weighted/randomized selection.
+-   Select questions by Topic.
+-   Select questions by Sub-Topic.
+-   Flexible question count.
+-   Future support for weighted/randomized selection.
 
 ### 4. Tutorial Download Module
 
@@ -1055,10 +1061,10 @@ Create the download section inside the Tutorial Corner.
 
 Planned features:
 
-- Download English version.
-- Download Bengali version.
-- Future PDF support.
-- Future Study / Practice workflow integration.
+-   Download English version.
+-   Download Bengali version.
+-   Future PDF support.
+-   Future Study / Practice workflow integration.
 
 ------------------------------------------------------------------------
 
@@ -1066,14 +1072,11 @@ Planned features:
 
 Current direction for the Mathematics module:
 
-Question
-↓
+Question ↓
 
-Common Equation
-↓
+Common Equation ↓
 
-Options
-↓
+Options ↓
 
 Review
 
@@ -1081,7 +1084,84 @@ Review
 
 Unified KaTeX Rendering Pipeline
 
-Future rendering will move toward a single centralized renderer so every new section (Solutions, Hints, Review, Tutorials, etc.) automatically supports KaTeX without duplicated rendering code.
+Future rendering will move toward a single centralized renderer so every
+new section (Solutions, Hints, Review, Tutorials, etc.) automatically
+supports KaTeX without duplicated rendering code.
 
 ------------------------------------------------------------------------
 
+------------------------------------------------------------------------
+
+# Quiz Portal Progress Update (Added: 2026-07-27 --- CSS Foundation Cleanup)
+
+## Current Status
+
+**Version:** Quiz Portal v0.7 (CSS Architecture Foundation)
+
+### Completed This Session
+
+#### Phase A --- CSS Foundation Cleanup
+
+-   ✅ Began a structured CSS architecture refactoring with **no
+    functional changes**.
+-   ✅ Introduced section-based organization across the stylesheet.
+-   ✅ Desktop and mobile logic preserved.
+-   ✅ JavaScript behaviour intentionally left untouched.
+-   ✅ Existing UI preserved while improving maintainability.
+
+#### CSS Architecture
+
+The stylesheet is now organized into logical sections:
+
+1.  Root Variables
+2.  Global Foundation
+3.  Header
+4.  Main Workspace
+5.  Question Panel
+6.  Review Mode
+7.  Action Bar
+8.  Dashboard
+9.  Wizard
+10. Report
+11. Mobile Foundation
+12. Mobile Layout
+13. Mobile Header
+
+#### Engineering Decisions
+
+-   ✅ Refactoring is documentation/organization only.
+-   ✅ No selector renaming.
+-   ✅ No CSS optimization yet.
+-   ✅ No visual redesign.
+-   ✅ Foundation prepared for future technical-debt cleanup.
+
+------------------------------------------------------------------------
+
+# Immediate Priority --- Next Development Session
+
+## Highest Priority
+
+### Phase B --- CSS Technical Debt Cleanup
+
+Planned work:
+
+1.  Remove duplicated CSS declarations.
+2.  Consolidate repeated styles.
+3.  Reduce safe inline styles by moving them into reusable classes.
+4.  Improve maintainability without changing UI or functionality.
+5.  Prepare the stylesheet for future mobile enhancements.
+
+### Engineering Principle
+
+Desktop behaviour must remain pixel-perfect.
+
+All future CSS cleanup must preserve:
+
+-   Existing UI
+-   Existing JavaScript
+-   Existing HTML structure
+-   Existing functionality
+
+Only internal CSS quality and maintainability should improve.
+
+------------------------------------------------------------------------
