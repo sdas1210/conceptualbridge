@@ -1,4 +1,5 @@
 async function loadQuestions(source) {
+
     const response = await fetch(
         `/api/fetch-tutorial-questions?source=${encodeURIComponent(source)}`
     );
@@ -7,5 +8,7 @@ async function loadQuestions(source) {
         throw new Error("Unable to load questions.");
     }
 
-    return await response.json();
+    const payload = await response.json();
+
+    return payload;
 }
