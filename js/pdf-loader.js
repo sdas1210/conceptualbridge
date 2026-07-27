@@ -1,5 +1,14 @@
 async function loadQuestions(source) {
 
-    throw new Error("pdf-loader.js is not implemented yet.");
+    const response = await fetch(
+        `/api/fetch-tutorial-questions?source=${encodeURIComponent(source)}`
+    );
 
+    if (!response.ok) {
+        throw new Error("Unable to load tutorial questions.");
+    }
+
+    const payload = await response.json();
+
+    return payload.data || [];
 }
