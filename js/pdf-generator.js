@@ -109,9 +109,16 @@ function drawHeader(doc, pageWidth, margin, mode) {
     );
 }
 
-function drawInformationBox(doc, payload, margin, startY) {
+function drawInformationBox(doc, payload, questionArray, mode, margin, startY) {
 
     const meta = payload.paperMeta || {};
+
+    // Generate today's date
+    const generatedDate = new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
 
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
@@ -122,7 +129,19 @@ function drawInformationBox(doc, payload, margin, startY) {
 
     doc.text(`Sub Topic : ${meta.subTopic || "-"}`, margin, startY + 14);
 
-    doc.text(`Questions : ${payload.data?.length || 0}`, margin, startY + 21);
+    doc.text(`Questions : ${questionArray.length}`, margin, startY + 21);
+
+    doc.text(
+        `Mode : ${mode === "study" ? "Study" : "Practice"}`,
+        margin,
+        startY + 28
+    );
+
+    doc.text(
+        `Generated : ${generatedDate}`,
+        margin,
+        startY + 35
+    );
 }
 
 function drawFooter(doc, pageWidth, pageHeight, margin) {
