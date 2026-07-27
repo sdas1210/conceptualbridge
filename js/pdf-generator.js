@@ -26,7 +26,7 @@ async function generatePDF(questionArray, payload, mode) {
     // Printable Area
     const contentStartY = margin + headerHeight;
     const contentEndY = pageHeight - footerHeight - margin;
-
+    const questionStartY = contentStartY + 45;
     // Default Font
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
@@ -61,13 +61,13 @@ async function generatePDF(questionArray, payload, mode) {
         margin,
         contentStartY + 35,
         pageWidth - (margin * 2),
-        contentEndY - (contentStartY + 35)
+        contentEndY - questionStartY
     );
 
     doc.text(
         "Question Area (Reserved)",
         margin + 5,
-        contentStartY + 45
+        questionStartY + 10
     );
 
     // -----------------------------
