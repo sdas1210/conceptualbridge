@@ -1238,3 +1238,76 @@ Authentication is now treated as a stable foundation.
 
 Milestone 2 will extend functionality without redesigning the completed
 authentication workflow.
+
+------------------------------------------------------------------------
+
+# Developer Workspace Progress Update (Added: 2026-07-27 --- Question ID Foundation)
+
+## Current Status
+
+**Version:** Developer Engine v0.3 (Question ID Infrastructure)
+
+### Completed This Session
+
+#### Parser Foundation
+
+-   ✅ Reviewed `questionParser.js` and `mathParser.js`.
+-   ✅ Confirmed Mathematics parser already supports `QuestionID`.
+-   ✅ Added `QuestionID` support to the shared GACA parser.
+-   ✅ GACA parser now exposes `QuestionID` consistently with the
+    Mathematics parser.
+-   ✅ Parser architecture intentionally preserved with no functional
+    refactoring.
+
+### Engineering Review
+
+-   No validation logic changed.
+-   No rendering logic changed.
+-   No API behaviour changed.
+-   Student Portal and Exam Corner remain unaffected by this parser-only
+    update.
+-   This session establishes the backend foundation for future Developer
+    Workspace features.
+
+------------------------------------------------------------------------
+
+# Next Deployment Session (Developer Workspace)
+
+## Session 2 --- Developer API Integration
+
+### Objective
+
+Expose `QuestionID` from the Developer API to the Developer Workspace.
+
+### Planned Files
+
+-   `api/developer/questions.js`
+-   Any developer-only API helper required for question loading.
+
+### Planned Tasks
+
+1.  Verify `QuestionID` is returned in the API response.
+2.  Preserve existing API response structure.
+3.  Avoid any changes to Student Portal APIs.
+4.  Verify compatibility with both GACA and Mathematics parsers.
+
+### Expected Outcome
+
+Developer Workspace receives `QuestionID` together with all existing
+metadata, preparing the Metadata Inspector for live Question ID display.
+
+------------------------------------------------------------------------
+
+# Engineering Principle
+
+Developer Workspace enhancements must remain isolated from
+Student-facing functionality.
+
+Architecture:
+
+TXT File ↓ Subject Parser ↓ Developer API ↓ Developer Workspace ↓
+Developer Inspector
+
+Each deployment session should introduce one isolated functional
+enhancement and complete verification before proceeding to the next
+session.
