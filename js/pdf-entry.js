@@ -14,6 +14,8 @@ async function generateTutorialPDF(source, mode) {
 
     const questionArray = payload.data || [];
 
+    generatePDF(questionArray, payload, mode);
+
     console.log("Questions Loaded :", questionArray.length);
 
     console.log(questionArray);
