@@ -1311,3 +1311,53 @@ Developer Inspector
 Each deployment session should introduce one isolated functional
 enhancement and complete verification before proceeding to the next
 session.
+
+
+------------------------------------------------------------------------
+
+# PDF Generation Engine Progress Update (Added: 2026-07-28)
+
+## Current Status
+
+**Version:** PDF Engine v0.1 (Framework Foundation Complete)
+
+### Completed This Session
+
+- ✅ Modular PDF architecture established (`pdf-entry.js`, `pdf-loader.js`, `pdf-generator.js`).
+- ✅ Unified Entry → Loader → Generator pipeline completed.
+- ✅ Study and Practice buttons use the same PDF workflow.
+- ✅ Tutorial API integrated with the PDF loader.
+- ✅ jsPDF successfully integrated.
+- ✅ First downloadable PDF generated.
+- ✅ Reusable Header, Information Block and Footer functions created.
+- ✅ Dynamic Question Count implemented using `questionArray.length`.
+- ✅ Dynamic Mode (Study / Practice) added.
+- ✅ Dynamic Generated Date added.
+- ✅ Layout constants (`HEADER_HEIGHT`, `INFOBOX_HEIGHT`, `FOOTER_HEIGHT`) introduced.
+- ✅ `questionStartY` and `currentY` prepared for future rendering.
+
+### Engineering Decisions
+
+- PDF loading remains isolated inside `pdf-loader.js`.
+- `pdf-generator.js` focuses only on rendering.
+- Layout foundation is completed before question rendering.
+
+## Next Development Session
+
+### Phase 3.4 — Question Rendering Engine
+
+1. Fine-tune the document layout.
+2. Render Question 1.
+3. Introduce reusable `drawQuestion()`.
+4. Add automatic text wrapping.
+5. Begin page-break handling.
+6. Preserve reusable header and footer for all pages.
+
+### Future Roadmap
+
+- Render all questions.
+- Study vs Practice formatting.
+- Automatic page numbering.
+- Logo integration.
+- Watermark support.
+- Mathematics / KaTeX compatible PDF rendering.
