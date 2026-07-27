@@ -77,3 +77,75 @@ async function generatePDF(questionArray, payload, mode) {
             : "ConceptualBridge_Practice.pdf"
     );
 }
+
+function drawHeader(doc, pageWidth, margin, mode) {
+
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+
+    doc.text(
+        "CONCEPTUAL BRIDGE",
+        pageWidth / 2,
+        18,
+        { align: "center" }
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+        mode === "study"
+            ? "Study Material"
+            : "Practice Material",
+        pageWidth / 2,
+        25,
+        { align: "center" }
+    );
+
+    doc.line(
+        margin,
+        30,
+        pageWidth - margin,
+        30
+    );
+}
+
+function drawInformationBox(doc, payload, margin, startY) {
+
+    const meta = payload.paperMeta || {};
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+
+    doc.text(`Subject : ${meta.subject || "-"}`, margin, startY);
+
+    doc.text(`Topic : ${meta.topic || "-"}`, margin, startY + 7);
+
+    doc.text(`Sub Topic : ${meta.subTopic || "-"}`, margin, startY + 14);
+
+    doc.text(`Questions : ${payload.data?.length || 0}`, margin, startY + 21);
+}
+
+function drawFooter(doc, pageWidth, pageHeight, margin) {
+
+    doc.line(
+        margin,
+        pageHeight - 12,
+        pageWidth - margin,
+        pageHeight - 12
+    );
+
+    doc.setFontSize(9);
+
+    doc.text(
+        "Conceptual Bridge",
+        margin,
+        pageHeight - 6
+    );
+
+    doc.text(
+        "Page 1",
+        pageWidth - margin,
+        pageHeight - 6,
+        { align: "right" }
+    );
+}
