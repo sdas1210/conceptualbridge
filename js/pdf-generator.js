@@ -1,3 +1,8 @@
+const HEADER_HEIGHT = 30;
+const INFOBOX_HEIGHT = 45;
+const FOOTER_HEIGHT = 15;
+const questionStartY = contentStartY + INFOBOX_HEIGHT;
+
 async function generatePDF(questionArray, payload, mode) {
 
     const { jsPDF } = window.jspdf;
@@ -26,7 +31,7 @@ async function generatePDF(questionArray, payload, mode) {
     // Printable Area
     const contentStartY = margin + headerHeight;
     const contentEndY = pageHeight - footerHeight - margin;
-    const questionStartY = contentStartY + 45;
+    //const questionStartY = contentStartY + 45;
     // Default Font
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
@@ -45,6 +50,16 @@ async function generatePDF(questionArray, payload, mode) {
         contentStartY
     );
 
+    doc.setDrawColor(180);
+
+    doc.line(
+        margin,
+        questionStartY - 5,
+        pageWidth - margin,
+        questionStartY - 5
+    );
+    let currentY = questionStartY;
+
     drawFooter(
         doc,
         pageWidth,
@@ -57,18 +72,7 @@ async function generatePDF(questionArray, payload, mode) {
     // -----------------------------
     doc.setDrawColor(220);
 
-    doc.rect(
-        margin,
-        contentStartY + 35,
-        pageWidth - (margin * 2),
-        contentEndY - questionStartY
-    );
-
-    doc.text(
-        "Question Area (Reserved)",
-        margin + 5,
-        questionStartY + 10
-    );
+    
 
     // -----------------------------
     // Download
