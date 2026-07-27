@@ -2,12 +2,21 @@ async function generatePDF(questionArray, payload, mode) {
 
     console.clear();
 
-    console.log("==============================");
+    console.log("==========================");
     console.log("PDF Generator Started");
-    console.log("==============================");
+    console.log("==========================");
 
     console.log("Mode :", mode);
-    console.log("Questions :", questionArray.length);
-    console.log("Paper Meta :", payload.paperMeta);
+
+    if (mode === "study") {
+
+        console.log("Study PDF Selected");
+
+    }
+    else if (mode === "practice") {
+
+        console.log("Practice PDF Selected");
+
+    }
 
 }
