@@ -1,22 +1,14 @@
 async function generatePDF(questionArray, payload, mode) {
 
-    console.clear();
+    const { jsPDF } = window.jspdf;
 
-    console.log("==========================");
-    console.log("PDF Generator Started");
-    console.log("==========================");
+    const doc = new jsPDF();
 
-    console.log("Mode :", mode);
+    doc.text("Conceptual Bridge", 20, 20);
 
     if (mode === "study") {
-
-        console.log("Study PDF Selected");
-
+        doc.save("ConceptualBridge_Study.pdf");
+    } else {
+        doc.save("ConceptualBridge_Practice.pdf");
     }
-    else if (mode === "practice") {
-
-        console.log("Practice PDF Selected");
-
-    }
-
 }
