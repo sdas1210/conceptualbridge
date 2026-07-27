@@ -27,8 +27,8 @@ async function generatePDF(questionArray, payload, mode) {
     const FOOTER_HEIGHT = 15;
 
     // Printable Area
-    const contentStartY = margin + headerHeight;
-    const contentEndY = pageHeight - footerHeight - margin;
+    const contentStartY = margin + HEADER_HEIGHT;
+    const contentEndY = pageHeight - FOOTER_HEIGHT - margin;
     const questionStartY = contentStartY + INFOBOX_HEIGHT;
     // Default Font
     doc.setFont("helvetica", "normal");
