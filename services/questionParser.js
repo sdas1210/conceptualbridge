@@ -96,6 +96,8 @@ export function parseQuestionFile(filePath, folder = "") {
                 shift: "",
             
                 image: "",
+
+                QuestionID: "",
             
                 exam: globalMetadata.exam,
             
@@ -255,6 +257,17 @@ export function parseQuestionFile(filePath, folder = "") {
         if (!currentQuestion)
             continue;
 
+        // ---------- QUESTION ID ----------
+
+        if (line.startsWith("QuestionID|")) {
+
+            currentQuestion.QuestionID =
+                line.substring(11).trim();
+
+            continue;
+
+        }
+
         // ---------- OPTIONS ----------
 
         if (line.startsWith("A|")) {
@@ -343,6 +356,7 @@ export function parseQuestionFile(filePath, folder = "") {
             continue;
 
         }
+
         if (line.startsWith("Image|")) {
 
             const value = line.substring(6).trim();
@@ -373,12 +387,7 @@ export function parseQuestionFile(filePath, folder = "") {
         
         }
 
-        
-        
-
     }
-
-    
 
     saveCurrentQuestion();
 
