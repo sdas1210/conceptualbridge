@@ -17,6 +17,11 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 
     <style>
+        
+        /* =========================================================
+           01. ROOT VARIABLES
+           ========================================================= */
+        
         :root {
             --tcs-blue: #1e3a8a;
             --tcs-light-bg: #f3f4f6;
@@ -29,6 +34,9 @@
             --status-wrong: #ed8936; 
         }
 
+        /* =========================================================
+           02. GLOBAL FOUNDATION
+           ========================================================= */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -41,6 +49,9 @@
             user-select: none;
         }
 
+        /* =========================================================
+           03. HEADER
+           ========================================================= */
         .tcs-header {
             background-color: var(--tcs-blue);
             color: white;
@@ -371,6 +382,10 @@
         .btn-orange { background: #ed8936; color: white; border: none; }
         .btn-orange:hover { background: #dd6b20; }
 
+        
+    /* =========================================================
+       08. DASHBOARD
+       ========================================================= */
         .dashboard-panel {
             flex: 1;
             min-width: 280px;
@@ -476,6 +491,10 @@
         }
         .legend.answered-review{ background:#8b5cf6; }
         .legend.not-answered{ background:#ef4444; }
+
+        /* =========================================================
+           09. WIZARD
+           ========================================================= */
 
         .wizard-container {
             flex: 1;
@@ -736,9 +755,9 @@
         @media (max-width:768px){
 
            /* =========================================================
-               01. ROOT VARIABLES
+               11.1 MOBILE VARIABLES
                ========================================================= */
-            
+                        
             :root{
                 --mobile-gap:16px;
                 --mobile-radius:12px;
