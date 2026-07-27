@@ -1,44 +1,13 @@
-/*
-=========================================================
-Conceptual Bridge
-PDF Generation System
-File : pdf-generator.js
-=========================================================
+async function generatePDF(questionArray, payload, mode) {
 
-PURPOSE
--------
-Generate printable PDF documents.
+    console.clear();
 
-INPUT
------
-Question Array
+    console.log("==============================");
+    console.log("PDF Generator Started");
+    console.log("==============================");
 
-OUTPUT
-------
-Study PDF
-Practice PDF
+    console.log("Mode :", mode);
+    console.log("Questions :", questionArray.length);
+    console.log("Paper Meta :", payload.paperMeta);
 
-Future Responsibilities
------------------------
-- Page Layout
-- Question Rendering
-- Answer Rendering
-- Images
-- Mathematical Formula Support
-- Bengali Font Support
-- Pagination
-- Headers / Footers
-- Page Numbers
-- Watermark
-- Answer Key
-- Premium Features
-
-IMPORTANT
----------
-This file NEVER loads questions.
-
-It only renders whatever question array
-it receives.
-
-=========================================================
-*/
+}
