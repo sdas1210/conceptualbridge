@@ -1312,7 +1312,6 @@ Each deployment session should introduce one isolated functional
 enhancement and complete verification before proceeding to the next
 session.
 
-
 ------------------------------------------------------------------------
 
 # PDF Generation Engine Progress Update (Added: 2026-07-28)
@@ -1323,45 +1322,46 @@ session.
 
 ### Completed This Session
 
-- ✅ Modular PDF architecture established (`pdf-entry.js`, `pdf-loader.js`, `pdf-generator.js`).
-- ✅ Unified Entry → Loader → Generator pipeline completed.
-- ✅ Study and Practice buttons use the same PDF workflow.
-- ✅ Tutorial API integrated with the PDF loader.
-- ✅ jsPDF successfully integrated.
-- ✅ First downloadable PDF generated.
-- ✅ Reusable Header, Information Block and Footer functions created.
-- ✅ Dynamic Question Count implemented using `questionArray.length`.
-- ✅ Dynamic Mode (Study / Practice) added.
-- ✅ Dynamic Generated Date added.
-- ✅ Layout constants (`HEADER_HEIGHT`, `INFOBOX_HEIGHT`, `FOOTER_HEIGHT`) introduced.
-- ✅ `questionStartY` and `currentY` prepared for future rendering.
+-   ✅ Modular PDF architecture established (`pdf-entry.js`,
+    `pdf-loader.js`, `pdf-generator.js`).
+-   ✅ Unified Entry → Loader → Generator pipeline completed.
+-   ✅ Study and Practice buttons use the same PDF workflow.
+-   ✅ Tutorial API integrated with the PDF loader.
+-   ✅ jsPDF successfully integrated.
+-   ✅ First downloadable PDF generated.
+-   ✅ Reusable Header, Information Block and Footer functions created.
+-   ✅ Dynamic Question Count implemented using `questionArray.length`.
+-   ✅ Dynamic Mode (Study / Practice) added.
+-   ✅ Dynamic Generated Date added.
+-   ✅ Layout constants (`HEADER_HEIGHT`, `INFOBOX_HEIGHT`,
+    `FOOTER_HEIGHT`) introduced.
+-   ✅ `questionStartY` and `currentY` prepared for future rendering.
 
 ### Engineering Decisions
 
-- PDF loading remains isolated inside `pdf-loader.js`.
-- `pdf-generator.js` focuses only on rendering.
-- Layout foundation is completed before question rendering.
+-   PDF loading remains isolated inside `pdf-loader.js`.
+-   `pdf-generator.js` focuses only on rendering.
+-   Layout foundation is completed before question rendering.
 
 ## Next Development Session
 
-### Phase 3.4 — Question Rendering Engine
+### Phase 3.4 --- Question Rendering Engine
 
-1. Fine-tune the document layout.
-2. Render Question 1.
-3. Introduce reusable `drawQuestion()`.
-4. Add automatic text wrapping.
-5. Begin page-break handling.
-6. Preserve reusable header and footer for all pages.
+1.  Fine-tune the document layout.
+2.  Render Question 1.
+3.  Introduce reusable `drawQuestion()`.
+4.  Add automatic text wrapping.
+5.  Begin page-break handling.
+6.  Preserve reusable header and footer for all pages.
 
 ### Future Roadmap
 
-- Render all questions.
-- Study vs Practice formatting.
-- Automatic page numbering.
-- Logo integration.
-- Watermark support.
-- Mathematics / KaTeX compatible PDF rendering.
-
+-   Render all questions.
+-   Study vs Practice formatting.
+-   Automatic page numbering.
+-   Logo integration.
+-   Watermark support.
+-   Mathematics / KaTeX compatible PDF rendering.
 
 ------------------------------------------------------------------------
 
@@ -1375,39 +1375,217 @@ session.
 
 #### Full Mock Availability
 
-- ✅ Added dedicated `api/full-mock-status.js`.
-- ✅ Server-side readiness validation introduced.
-- ✅ Full Mock now requires a minimum of **30 questions** in each required subject bank.
-- ✅ `exams.html` automatically enables/disables the **Launch Full Mock Simulator** button based on API status.
-- ✅ No question counts are exposed to students.
+-   ✅ Added dedicated `api/full-mock-status.js`.
+-   ✅ Server-side readiness validation introduced.
+-   ✅ Full Mock now requires a minimum of **30 questions** in each
+    required subject bank.
+-   ✅ `exams.html` automatically enables/disables the **Launch Full
+    Mock Simulator** button based on API status.
+-   ✅ No question counts are exposed to students.
 
 #### Backend Protection
 
-- ✅ Added backend validation in `fetch-questions.js`.
-- ✅ Direct `topic=ALL` requests are blocked until all required subject banks are ready.
-- ✅ Introduced reusable `hasMinimumQuestions()` helper.
-- ✅ Manual URL bypass protection implemented.
+-   ✅ Added backend validation in `fetch-questions.js`.
+-   ✅ Direct `topic=ALL` requests are blocked until all required
+    subject banks are ready.
+-   ✅ Introduced reusable `hasMinimumQuestions()` helper.
+-   ✅ Manual URL bypass protection implemented.
 
 ### Engineering Decisions
 
-- Full Mock availability is enforced by the backend.
-- The UI only reflects server readiness.
-- Current implementation intentionally keeps the Full Mock locked because the GI and GS repositories are not yet populated.
-- The architecture is prepared for future expansion without modifying the Student Portal workflow.
+-   Full Mock availability is enforced by the backend.
+-   The UI only reflects server readiness.
+-   Current implementation intentionally keeps the Full Mock locked
+    because the GI and GS repositories are not yet populated.
+-   The architecture is prepared for future expansion without modifying
+    the Student Portal workflow.
 
 ## Deferred Work
 
-- Implement the CBT-1 **3:3:1:3** subject distribution after GI and GS question banks are available.
-- Refine combined paper generation once all four repositories are populated.
+-   Implement the CBT-1 **3:3:1:3** subject distribution after GI and GS
+    question banks are available.
+-   Refine combined paper generation once all four repositories are
+    populated.
 
 ------------------------------------------------------------------------
 
-# Immediate Priority — Next Development Session
+# Immediate Priority --- Next Development Session
 
 ## Full Mock Generation Phase
 
-1. Create GI and GS question repositories.
-2. Populate each repository with validated questions.
-3. Implement fixed CBT-1 3:3:1:3 question distribution.
-4. Verify combined paper generation.
-5. Perform end-to-end Full Mock testing.
+1.  Create GI and GS question repositories.
+2.  Populate each repository with validated questions.
+3.  Implement fixed CBT-1 3:3:1:3 question distribution.
+4.  Verify combined paper generation.
+5.  Perform end-to-end Full Mock testing.
+
+------------------------------------------------------------------------
+
+# PDF Engine Progress Update (Added: 2026-07-29 --- Browser Compatibility Investigation)
+
+## Current Status
+
+**Version:** PDF Engine v0.2 (Architecture Frozen / Browser
+Compatibility Investigation)
+
+### Completed This Session
+
+#### PDF Engine V2
+
+-   ✅ Rebuilt the PDF generator into a cursor-based rendering engine.
+-   ✅ Modular rendering pipeline preserved:
+    -   `createNewPage()`
+    -   `checkRemainingSpace()`
+    -   `drawHeader()`
+    -   `drawInformationBox()`
+    -   `drawQuestion()`
+    -   `drawFooter()`
+-   ✅ Dynamic page-break logic implemented.
+-   ✅ Dynamic text wrapping implemented.
+-   ✅ Study and Practice modes share the same rendering pipeline.
+-   ✅ Layout constants centralized.
+
+#### Unicode Migration
+
+-   ✅ Migration from jsPDF to pdf-lib completed.
+-   ✅ Noto Sans Bengali TrueType fonts integrated.
+-   ✅ Browser font loading using `FontFace` explored.
+-   ✅ Canvas-based text measurement implemented to eliminate dependency
+    on `widthOfTextAtSize()`.
+
+#### Root Cause Investigation
+
+The original assumption was that `font.widthOfTextAtSize()` triggered
+the browser compatibility issue.
+
+After refactoring:
+
+-   ✅ All layout measurements now use HTML5 Canvas.
+-   ✅ `widthOfTextAtSize()` removed from rendering calculations.
+
+However, testing proved that the error still occurs during actual PDF
+text rendering.
+
+Verified call chain:
+
+`PDFPage.drawText()` ↓ `PDFFont.encodeText()` ↓
+`CustomFontEmbedder.encodeText()` ↓ `fontkit.layout()` ↓
+`ReferenceError: regeneratorRuntime is not defined`
+
+### Engineering Conclusion
+
+This session confirmed that the PDF Engine architecture is **not** the
+source of the problem.
+
+Current evidence indicates that the browser UMD build of
+**@pdf-lib/fontkit** is incompatible with the current browser-only
+deployment environment when encoding custom Unicode fonts.
+
+### Decisions
+
+-   ✅ Freeze PDF Engine V2 architecture.
+-   ✅ Do not redesign the rendering engine.
+-   ✅ Do not return to jsPDF.
+-   ✅ Stop debugging layout code.
+-   ✅ Shift investigation to the browser compatibility of
+    pdf-lib/fontkit.
+
+------------------------------------------------------------------------
+
+# Next Development Session --- PDF Browser Compatibility
+
+## Immediate Starting Point
+
+Resume directly from the font compatibility investigation.
+
+Do **not** revisit layout, wrapping, pagination or rendering
+architecture.
+
+### Phase 1
+
+Create a minimal standalone browser test:
+
+1.  Load pdf-lib.
+2.  Load fontkit.
+3.  Register fontkit.
+4.  Embed Noto Sans Bengali.
+5.  Draw a single Bengali string.
+6.  Save the PDF.
+
+Objective:
+
+Determine whether the failure exists independently of the Conceptual
+Bridge codebase.
+
+### Phase 2
+
+If the minimal test fails:
+
+-   Compare browser-compatible versions of `pdf-lib` and
+    `@pdf-lib/fontkit`.
+-   Investigate alternative browser-safe fontkit builds.
+-   Verify whether the issue is version-specific.
+
+### Phase 3
+
+Once Unicode rendering is stable:
+
+-   Reconnect the existing PDF Engine V2.
+-   End-to-end testing.
+-   Final UI polishing.
+-   Freeze PDF Engine v1.0.
+
+------------------------------------------------------------------------
+
+# PDF Download Module Roadmap
+
+## Milestone 1 --- Foundation
+
+-   ✅ Entry / Loader / Generator architecture
+-   ✅ Tutorial integration
+-   ✅ Dynamic layout engine
+
+## Milestone 2 --- Browser Compatibility
+
+-   🔄 Resolve Unicode custom font rendering in browser.
+-   🔄 Validate browser compatibility.
+
+## Milestone 3 --- Rendering Completion
+
+-   Render all questions.
+-   Correct answer highlighting in Study mode.
+-   Practice mode formatting.
+-   Automatic pagination.
+
+## Milestone 4 --- Mathematics Support
+
+-   KaTeX / Mathematics compatibility.
+-   Equation rendering verification.
+
+## Milestone 5 --- Professional Output
+
+-   Conceptual Bridge branding.
+-   Logo.
+-   Watermark.
+-   Metadata.
+-   Print optimization.
+
+## Milestone 6 --- Release Candidate
+
+-   Cross-browser testing.
+-   Large document testing.
+-   Performance optimization.
+-   Production release.
+
+------------------------------------------------------------------------
+
+# Session Resume Marker
+
+When the next development session begins, start **only** from:
+
+**PDF Engine v0.2 --- Browser Compatibility Investigation**
+
+The rendering engine is considered architecturally stable.
+
+The next objective is to identify and resolve the browser-compatible
+Unicode font embedding issue before adding any new PDF features.
