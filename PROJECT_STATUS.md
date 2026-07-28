@@ -1361,3 +1361,53 @@ session.
 - Logo integration.
 - Watermark support.
 - Mathematics / KaTeX compatible PDF rendering.
+
+
+------------------------------------------------------------------------
+
+# Exam Corner Progress Update (Added: 2026-07-28)
+
+## Current Status
+
+**Version:** Exam Corner v0.2 (Full Mock Availability Foundation)
+
+### Completed This Session
+
+#### Full Mock Availability
+
+- ✅ Added dedicated `api/full-mock-status.js`.
+- ✅ Server-side readiness validation introduced.
+- ✅ Full Mock now requires a minimum of **30 questions** in each required subject bank.
+- ✅ `exams.html` automatically enables/disables the **Launch Full Mock Simulator** button based on API status.
+- ✅ No question counts are exposed to students.
+
+#### Backend Protection
+
+- ✅ Added backend validation in `fetch-questions.js`.
+- ✅ Direct `topic=ALL` requests are blocked until all required subject banks are ready.
+- ✅ Introduced reusable `hasMinimumQuestions()` helper.
+- ✅ Manual URL bypass protection implemented.
+
+### Engineering Decisions
+
+- Full Mock availability is enforced by the backend.
+- The UI only reflects server readiness.
+- Current implementation intentionally keeps the Full Mock locked because the GI and GS repositories are not yet populated.
+- The architecture is prepared for future expansion without modifying the Student Portal workflow.
+
+## Deferred Work
+
+- Implement the CBT-1 **3:3:1:3** subject distribution after GI and GS question banks are available.
+- Refine combined paper generation once all four repositories are populated.
+
+------------------------------------------------------------------------
+
+# Immediate Priority — Next Development Session
+
+## Full Mock Generation Phase
+
+1. Create GI and GS question repositories.
+2. Populate each repository with validated questions.
+3. Implement fixed CBT-1 3:3:1:3 question distribution.
+4. Verify combined paper generation.
+5. Perform end-to-end Full Mock testing.
