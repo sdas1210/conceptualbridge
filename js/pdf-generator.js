@@ -185,6 +185,11 @@ function drawQuestion(doc, question, startY, margin, pageWidth) {
         question.text,
         pageWidth - (margin * 2)
     );
+    doc.text(
+        questionLines,
+        margin,
+        startY + 8
+    );
 
     // Return the next available Y position
     return startY + 8 + (questionLines.length * 6);
