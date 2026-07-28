@@ -35,7 +35,8 @@ async function generatePDF(questionArray, payload, mode) {
     drawHeader(doc, pageWidth, margin, mode);
 
     drawInformationBox(
-        doc,
+        page,
+        font,
         payload,
         questionArray,
         mode,
@@ -43,20 +44,14 @@ async function generatePDF(questionArray, payload, mode) {
         contentStartY
     );
 
-    doc.setDrawColor(180);
-
-    doc.line(
-        margin,
-        questionStartY - 5,
-        pageWidth - margin,
-        questionStartY - 5
-    );
+    
     let currentY = questionStartY;
 
     if (questionArray.length > 0) {
         console.log(questionArray[0]);
         currentY = drawQuestion(
-            doc,
+            page,
+            font,
             questionArray[0],
             currentY,
             margin,
@@ -75,7 +70,7 @@ async function generatePDF(questionArray, payload, mode) {
     // -----------------------------
     // Reserved Question Area
     // -----------------------------
-    doc.setDrawColor(220);
+    
 
     
 
@@ -116,75 +111,102 @@ function drawHeader(page, font, pageWidth, margin, mode) {
 
 }
 
-function drawInformationBox(doc, payload, questionArray, mode, margin, startY) {
+function drawInformationBox(
+    page,
+    font,
+    payload,
+    questionArray,
+    mode,
+    margin,
+    startY
+) {
 
     const meta = payload.paperMeta || {};
 
-    // Generate today's date
     const generatedDate = new Date().toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
         year: "numeric"
     });
 
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "normal");
+    const baseY = 740;
+    const lineGap = 18;
 
-    doc.text(`Subject : ${meta.subject || "-"}`, margin, startY);
+    page.drawText(`Subject : ${meta.subject || "-"}`, {
+        x: margin,
+        y: baseY,
+        size: 11,
+        font
+    });
 
-    doc.text(`Topic : ${meta.topic || "-"}`, margin, startY + 7);
+    page.drawText(`Topic : ${meta.topic || "-"}`, {
+        x: margin,
+        y: baseY - lineGap,
+        size: 11,
+        font
+    });
 
-    doc.text(`Sub Topic : ${meta.subTopic || "-"}`, margin, startY + 14);
+    page.drawText(`Sub Topic : ${meta.subTopic || "-"}`, {
+        x: margin,
+        y: baseY - (lineGap * 2),
+        size: 11,
+        font
+    });
 
-    doc.text(`Questions : ${questionArray.length}`, margin, startY + 21);
+    page.drawText(`Questions : ${questionArray.length}`, {
+        x: margin,
+        y: baseY - (lineGap * 3),
+        size: 11,
+        font
+    });
 
-    doc.text(
+    page.drawText(
         `Mode : ${mode === "study" ? "Study" : "Practice"}`,
-        margin,
-        startY + 28
+        {
+            x: margin,
+            y: baseY - (lineGap * 4),
+            size: 11,
+            font
+        }
     );
 
-    doc.text(
-        `Generated : ${generatedDate}`,
-        margin,
-        startY + 35
-    );
+    page.drawText(`Generated : ${generatedDate}`, {
+        x: margin,
+        y: baseY - (lineGap * 5),
+        size: 11,
+        font
+    });
+
 }
 
-function drawQuestion(doc, question, startY, margin, pageWidth) {
+function drawQuestion(
+    page,
+    font,
+    question,
+    startY,
+    margin,
+    pageWidth
+) {
 
-    // Heading
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
+    // Question Number
+    page.drawText("Question 1", {
+        x: margin,
+        y: startY,
+        size: 12,
+        font
+    });
 
-    doc.text(
-        "Question 1",
-        margin,
-        startY
-    );
+    // Temporary single-line rendering
+    page.drawText(question.text || "", {
+        x: margin,
+        y: startY - 20,
+        size: 11,
+        font
+    });
 
-    // Question Text
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-
-    console.log(question);
-
-    console.log(question.text);
-    
-    console.log(typeof question.text);
-    const questionLines = doc.splitTextToSize(
-        question.text,
-        pageWidth - (margin * 2)
-    );
-    doc.text(
-        questionLines,
-        margin,
-        startY + 8
-    );
-
-    // Return the next available Y position
-    return startY + 8 + (questionLines.length * 6);
+    return startY - 40;
 }
+
 
 function drawFooter(doc, pageWidth, pageHeight, margin) {
 
