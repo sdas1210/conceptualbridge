@@ -32,7 +32,13 @@ async function generatePDF(questionArray, payload, mode) {
     // -----------------------------
     // Draw Template
     // -----------------------------
-    drawHeader(doc, pageWidth, margin, mode);
+    drawHeader(
+        page,
+        font,
+        pageWidth,
+        margin,
+        mode
+    );
 
     drawInformationBox(
         page,
@@ -61,7 +67,8 @@ async function generatePDF(questionArray, payload, mode) {
     }
 
     drawFooter(
-        doc,
+        page,
+        font,
         pageWidth,
         pageHeight,
         margin
@@ -208,27 +215,37 @@ function drawQuestion(
 }
 
 
-function drawFooter(doc, pageWidth, pageHeight, margin) {
+function drawFooter(
+    page,
+    font,
+    pageWidth,
+    pageHeight,
+    margin
+) {
 
-    doc.line(
-        margin,
-        pageHeight - 12,
-        pageWidth - margin,
-        pageHeight - 12
-    );
+    page.drawLine({
+        start: {
+            x: margin,
+            y: 30
+        },
+        end: {
+            x: pageWidth - margin,
+            y: 30
+        }
+    });
 
-    doc.setFontSize(9);
+    page.drawText("Conceptual Bridge", {
+        x: margin,
+        y: 15,
+        size: 9,
+        font
+    });
 
-    doc.text(
-        "Conceptual Bridge",
-        margin,
-        pageHeight - 6
-    );
+    page.drawText("Page 1", {
+        x: pageWidth - 50,
+        y: 15,
+        size: 9,
+        font
+    });
 
-    doc.text(
-        "Page 1",
-        pageWidth - margin,
-        pageHeight - 6,
-        { align: "right" }
-    );
 }
