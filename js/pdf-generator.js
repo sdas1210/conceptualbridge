@@ -2,12 +2,18 @@
 
 async function generatePDF(questionArray, payload, mode) {
 
-    
-    // -----------------------------
-    // Global Layout Configuration
-    // -----------------------------
-    let pageWidth;
-    let pageHeight;
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+
+    const pdfDoc = await PDFDocument.create();
+
+    const page = pdfDoc.addPage();
+
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+    const { width, height } = page.getSize();
+
+    const pageWidth = width;
+    const pageHeight = height;
     
 
     const margin = 15;
