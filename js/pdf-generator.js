@@ -58,6 +58,18 @@ async function generatePDF(questionArray, payload, mode) {
     );
     let currentY = questionStartY;
 
+    if (questionArray.length > 0) {
+
+        currentY = drawQuestion(
+            doc,
+            questionArray[0],
+            currentY,
+            margin,
+            pageWidth
+        );
+    
+    }
+
     drawFooter(
         doc,
         pageWidth,
@@ -146,6 +158,37 @@ function drawInformationBox(doc, payload, questionArray, mode, margin, startY) {
         margin,
         startY + 35
     );
+}
+
+function drawQuestion(doc, question, startY, margin, pageWidth) {
+
+    // Heading
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+
+    doc.text(
+        "Question 1",
+        margin,
+        startY
+    );
+
+    // Question Text
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+
+    const questionLines = doc.splitTextToSize(
+        question.question,
+        pageWidth - (margin * 2)
+    );
+
+    doc.text(
+        questionLines,
+        margin,
+        startY + 8
+    );
+
+    // Return the next available Y position
+    return startY + 8 + (questionLines.length * 6);
 }
 
 function drawFooter(doc, pageWidth, pageHeight, margin) {
