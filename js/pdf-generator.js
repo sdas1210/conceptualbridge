@@ -2,22 +2,13 @@
 
 async function generatePDF(questionArray, payload, mode) {
 
-    const { jsPDF } = window.jspdf;
-
-    // -----------------------------
-    // Create PDF
-    // -----------------------------
-    const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4"
-    });
-
+    
     // -----------------------------
     // Global Layout Configuration
     // -----------------------------
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
+    let pageWidth;
+    let pageHeight;
+    
 
     const margin = 15;
 
@@ -30,9 +21,7 @@ async function generatePDF(questionArray, payload, mode) {
     const contentStartY = margin + HEADER_HEIGHT;
     const contentEndY = pageHeight - FOOTER_HEIGHT - margin;
     const questionStartY = contentStartY + INFOBOX_HEIGHT;
-    // Default Font
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
+    
 
     // -----------------------------
     // Draw Template
@@ -84,14 +73,7 @@ async function generatePDF(questionArray, payload, mode) {
 
     
 
-    // -----------------------------
-    // Download
-    // -----------------------------
-    doc.save(
-        mode === "study"
-            ? "ConceptualBridge_Study.pdf"
-            : "ConceptualBridge_Practice.pdf"
-    );
+    
 }
 
 function drawHeader(doc, pageWidth, margin, mode) {
