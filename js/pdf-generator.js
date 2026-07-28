@@ -176,6 +176,11 @@ function drawQuestion(doc, question, startY, margin, pageWidth) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
 
+    console.log(question);
+
+    console.log(question.text);
+    
+    console.log(typeof question.text);
     const questionLines = doc.splitTextToSize(
         question.text,
         pageWidth - (margin * 2)
