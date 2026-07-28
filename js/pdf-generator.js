@@ -5,10 +5,14 @@ async function generatePDF(questionArray, payload, mode) {
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
     const pdfDoc = await PDFDocument.create();
+    pdfDoc.registerFontkit(fontkit);
 
     const page = pdfDoc.addPage();
 
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontBytes = await fetch("fonts/NotoSansBengali-Regular.ttf")
+        .then(response => response.arrayBuffer());
+    
+    const font = await pdfDoc.embedFont(fontBytes);
 
     const { width, height } = page.getSize();
 
