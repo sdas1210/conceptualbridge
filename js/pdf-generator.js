@@ -1,6 +1,6 @@
 /**
  * Conceptual Bridge - PDF Engine Version 2
- * Professional, dynamic, cursor-based PDF generation using pdf-lib and fontkit.
+ * Browser-Native, Cursor-based PDF engine using pdf-lib and Canvas FontFace metrics.
  */
 
 const LAYOUT = {
@@ -38,30 +38,45 @@ const LAYOUT = {
   COLOR_BORDER: { r: 0.82, g: 0.85, b: 0.88 }    // Light border
 };
 
+// HTML5 Canvas 2D context for browser-native text measurement
+const measureCanvas = document.createElement("canvas");
+const measureCtx = measureCanvas.getContext("2d");
+
+/**
+ * Browser-native text width measurement using HTML5 Canvas.
+ * Completely bypasses fontkit.layout() and avoids regeneratorRuntime errors.
+ */
+function getTextWidth(text, isBold, fontSize) {
+  if (!text) return 0;
+  const fontFamily = isBold ? "NotoSansBengali-Bold" : "NotoSansBengali-Regular";
+  measureCtx.font = `${fontSize}px "${fontFamily}", sans-serif`;
+  return measureCtx.measureText(String(text)).width;
+}
+
 /**
  * Text Wrapping Helper
- * Measures and wraps text based on font width calculation without clipping.
+ * Measures and wraps Bengali, English, and mixed Unicode text accurately.
  */
-function wrapText(text, font, fontSize, maxWidth) {
+function wrapText(text, isBold, fontSize, maxWidth) {
   if (!text) return [];
-  const normalizedText = String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const paragraphs = normalizedText.split('\n');
+  const normalizedText = String(text).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  const paragraphs = normalizedText.split("\n");
   const lines = [];
 
   for (let p = 0; p < paragraphs.length; p++) {
     const paragraph = paragraphs[p];
-    if (paragraph.trim() === '') {
-      lines.push('');
+    if (paragraph.trim() === "") {
+      lines.push("");
       continue;
     }
 
-    const words = paragraph.split(' ');
-    let currentLine = '';
+    const words = paragraph.split(" ");
+    let currentLine = "";
 
     for (let w = 0; w < words.length; w++) {
       const word = words[w];
       const testLine = currentLine ? `${currentLine} ${word}` : word;
-      const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+      const testWidth = getTextWidth(testLine, isBold, fontSize);
 
       if (testWidth <= maxWidth) {
         currentLine = testLine;
@@ -70,12 +85,12 @@ function wrapText(text, font, fontSize, maxWidth) {
           lines.push(currentLine);
           currentLine = word;
         } else {
-          // Single word longer than maxWidth: break character by character
-          let subWord = '';
+          // Break words longer than maxWidth character by character
+          let subWord = "";
           for (let c = 0; c < word.length; c++) {
             const char = word[c];
             const testSub = subWord + char;
-            if (font.widthOfTextAtSize(testSub, fontSize) <= maxWidth) {
+            if (getTextWidth(testSub, isBold, fontSize) <= maxWidth) {
               subWord = testSub;
             } else {
               if (subWord) lines.push(subWord);
@@ -95,13 +110,13 @@ function wrapText(text, font, fontSize, maxWidth) {
 }
 
 /**
- * Draw Wrapped Text helper block
+ * Draw Wrapped Text helper
  */
 function drawWrappedText(page, lines, x, startY, font, fontSize, color, lineHeight) {
   let y = startY;
   const rgbColor = PDFLib.rgb(color.r, color.g, color.b);
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i] !== '') {
+    if (lines[i] !== "") {
       page.drawText(lines[i], {
         x: x,
         y: y,
@@ -116,7 +131,7 @@ function drawWrappedText(page, lines, x, startY, font, fontSize, color, lineHeig
 }
 
 /**
- * Create a new page and render common header
+ * Create a new page and render header
  */
 function createNewPage(pdfDoc, fontBold, fontRegular, mode, state) {
   const page = pdfDoc.addPage([LAYOUT.PAGE_WIDTH, LAYOUT.PAGE_HEIGHT]);
@@ -129,7 +144,7 @@ function createNewPage(pdfDoc, fontBold, fontRegular, mode, state) {
 }
 
 /**
- * Check remaining space on current page, spawn new page if space is insufficient
+ * Check remaining space on current page
  */
 function checkRemainingSpace(pdfDoc, fontBold, fontRegular, mode, state, requiredHeight) {
   const minAllowedY = LAYOUT.MARGIN_BOTTOM + LAYOUT.FOOTER_HEIGHT;
@@ -145,7 +160,7 @@ function drawHeader(page, fontBold, fontRegular, mode, startY) {
   let y = startY;
 
   const title = "CONCEPTUAL BRIDGE";
-  const titleWidth = fontBold.widthOfTextAtSize(title, LAYOUT.FONT_SIZE_TITLE);
+  const titleWidth = getTextWidth(title, true, LAYOUT.FONT_SIZE_TITLE);
   page.drawText(title, {
     x: (LAYOUT.PAGE_WIDTH - titleWidth) / 2,
     y: y,
@@ -156,7 +171,7 @@ function drawHeader(page, fontBold, fontRegular, mode, startY) {
   y -= 16;
 
   const subTitle = mode === "study" ? "Study Material & Concept Series" : "Practice Question Paper";
-  const subTitleWidth = fontRegular.widthOfTextAtSize(subTitle, LAYOUT.FONT_SIZE_SUBTITLE);
+  const subTitleWidth = getTextWidth(subTitle, false, LAYOUT.FONT_SIZE_SUBTITLE);
   page.drawText(subTitle, {
     x: (LAYOUT.PAGE_WIDTH - subTitleWidth) / 2,
     y: y,
@@ -166,7 +181,7 @@ function drawHeader(page, fontBold, fontRegular, mode, startY) {
   });
   y -= 12;
 
-  // Divider Line
+  // Horizontal Divider Line
   page.drawLine({
     start: { x: LAYOUT.MARGIN_LEFT, y: y },
     end: { x: LAYOUT.PAGE_WIDTH - LAYOUT.MARGIN_RIGHT, y: y },
@@ -188,19 +203,20 @@ function drawInformationBox(page, fontBold, fontRegular, payload, totalQuestions
   const subject = paperMeta.subject || payload.subject || "General Studies";
   const topic = paperMeta.topic || payload.topic || "Comprehensive Assessment";
   const subTopic = paperMeta.subTopic || payload.subTopic || "All Subtopics";
-  const dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const dateStr = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 
   const infoLines = [
     `Subject: ${subject}`,
-    `Topic: ${topic}${subTopic ? ' | ' + subTopic : ''}`,
-    `Total Questions: ${totalQuestions}   |   Mode: ${mode === 'study' ? 'Study' : 'Practice'}   |   Date: ${dateStr}`
+    `Topic: ${topic}${subTopic ? " | " + subTopic : ""}`,
+    `Total Questions: ${totalQuestions}   |   Mode: ${mode === "study" ? "Study" : "Practice"}   |   Date: ${dateStr}`
   ];
 
   let calculatedHeight = LAYOUT.INFOBOX_PADDING * 2;
   const lineHeights = [];
 
   for (let i = 0; i < infoLines.length; i++) {
-    const wrapped = wrapText(infoLines[i], fontRegular, LAYOUT.FONT_SIZE_SMALL, LAYOUT.CONTENT_WIDTH - (LAYOUT.INFOBOX_PADDING * 2));
+    const isBold = i === 0;
+    const wrapped = wrapText(infoLines[i], isBold, LAYOUT.FONT_SIZE_SMALL, LAYOUT.CONTENT_WIDTH - (LAYOUT.INFOBOX_PADDING * 2));
     lineHeights.push(wrapped);
     calculatedHeight += wrapped.length * (LAYOUT.LINE_HEIGHT_BODY - 2);
   }
@@ -243,40 +259,40 @@ function drawInformationBox(page, fontBold, fontRegular, payload, totalQuestions
  */
 function drawQuestion(pdfDoc, fontBold, fontRegular, question, index, mode, state) {
   const qNumText = `Q${index + 1}. `;
-  const qNumWidth = fontBold.widthOfTextAtSize(qNumText, LAYOUT.FONT_SIZE_BODY);
+  const qNumWidth = getTextWidth(qNumText, true, LAYOUT.FONT_SIZE_BODY);
   const qTextWidth = LAYOUT.CONTENT_WIDTH - qNumWidth;
 
   const questionText = question.text || "";
-  const qLines = wrapText(questionText, fontRegular, LAYOUT.FONT_SIZE_BODY, qTextWidth);
+  const qLines = wrapText(questionText, false, LAYOUT.FONT_SIZE_BODY, qTextWidth);
   const qTextHeight = Math.max(1, qLines.length) * LAYOUT.LINE_HEIGHT_BODY;
 
   // Calculate options
-  const optionKeys = ['a', 'b', 'c', 'd'];
-  const optionLabels = ['A', 'B', 'C', 'D'];
+  const optionKeys = ["a", "b", "c", "d"];
+  const optionLabels = ["A", "B", "C", "D"];
   const preparedOptions = [];
   let totalOptionsHeight = 0;
 
   for (let i = 0; i < optionKeys.length; i++) {
     const key = optionKeys[i];
     const optValue = question[key];
-    if (optValue !== undefined && optValue !== null && String(optValue).trim() !== '') {
+    if (optValue !== undefined && optValue !== null && String(optValue).trim() !== "") {
       const labelStr = `(${optionLabels[i]}) `;
-      const labelWidth = fontBold.widthOfTextAtSize(labelStr, LAYOUT.FONT_SIZE_BODY);
+      const labelWidth = getTextWidth(labelStr, true, LAYOUT.FONT_SIZE_BODY);
       const optTextWidth = LAYOUT.CONTENT_WIDTH - LAYOUT.INDENT_OPTION - labelWidth;
       
-      const wrappedOpt = wrapText(String(optValue), fontRegular, LAYOUT.FONT_SIZE_BODY, optTextWidth);
-      const optHeight = wrappedOpt.length * LAYOUT.LINE_HEIGHT_BODY;
-
       let isCorrect = false;
-      if (mode === 'study') {
-        if (typeof question.correct === 'number' && question.correct === i) {
+      if (mode === "study") {
+        if (typeof question.correct === "number" && question.correct === i) {
           isCorrect = true;
-        } else if (typeof question.correct === 'string' && question.correct.toUpperCase() === optionLabels[i]) {
+        } else if (typeof question.correct === "string" && question.correct.toUpperCase() === optionLabels[i]) {
           isCorrect = true;
         } else if (question.answer && String(question.answer).trim().toUpperCase() === optionLabels[i]) {
           isCorrect = true;
         }
       }
+
+      const wrappedOpt = wrapText(String(optValue), isCorrect, LAYOUT.FONT_SIZE_BODY, optTextWidth);
+      const optHeight = wrappedOpt.length * LAYOUT.LINE_HEIGHT_BODY;
 
       preparedOptions.push({
         label: labelStr,
@@ -293,8 +309,8 @@ function drawQuestion(pdfDoc, fontBold, fontRegular, question, index, mode, stat
   // Explanation block for study mode
   let expLines = [];
   let expHeight = 0;
-  if (mode === 'study' && question.explanation && String(question.explanation).trim() !== '') {
-    expLines = wrapText(`Explanation: ${question.explanation}`, fontRegular, LAYOUT.FONT_SIZE_SMALL, LAYOUT.CONTENT_WIDTH - LAYOUT.INDENT_OPTION);
+  if (mode === "study" && question.explanation && String(question.explanation).trim() !== "") {
+    expLines = wrapText(`Explanation: ${question.explanation}`, false, LAYOUT.FONT_SIZE_SMALL, LAYOUT.CONTENT_WIDTH - LAYOUT.INDENT_OPTION);
     expHeight = (expLines.length * (LAYOUT.LINE_HEIGHT_BODY - 2)) + 6;
   }
 
@@ -376,7 +392,7 @@ function drawQuestion(pdfDoc, fontBold, fontRegular, question, index, mode, stat
 }
 
 /**
- * Footer Renderer across all generated pages
+ * Footer Renderer
  */
 function drawFooter(pdfDoc, fontRegular) {
   const pages = pdfDoc.getPages();
@@ -402,7 +418,7 @@ function drawFooter(pdfDoc, fontRegular) {
     });
 
     const pageNumText = `Page ${i + 1} of ${totalPages}`;
-    const pageNumWidth = fontRegular.widthOfTextAtSize(pageNumText, LAYOUT.FONT_SIZE_SMALL);
+    const pageNumWidth = getTextWidth(pageNumText, false, LAYOUT.FONT_SIZE_SMALL);
 
     page.drawText(pageNumText, {
       x: LAYOUT.PAGE_WIDTH - LAYOUT.MARGIN_RIGHT - pageNumWidth,
@@ -431,7 +447,7 @@ async function savePDF(pdfDoc, filename) {
 
 /**
  * Main Exported Entry Point
- * Signature must match existing project API: generatePDF(questionArray, payload, mode)
+ * Signature: generatePDF(questionArray, payload, mode)
  */
 async function generatePDF(questionArray, payload, mode) {
   try {
@@ -440,7 +456,7 @@ async function generatePDF(questionArray, payload, mode) {
     const pdfDoc = await PDFDocument.create();
     pdfDoc.registerFontkit(fontkit);
 
-    // Fetch and embed Bengali TrueType fonts
+    // 1. Fetch Bengali TrueType fonts
     const [regularFontBytes, boldFontBytes] = await Promise.all([
       fetch("fonts/NotoSansBengali-Regular.ttf").then(res => {
         if (!res.ok) throw new Error("Failed to load NotoSansBengali-Regular.ttf");
@@ -452,6 +468,16 @@ async function generatePDF(questionArray, payload, mode) {
       })
     ]);
 
+    // 2. Register FontFaces into browser document.fonts for HTML5 Canvas measurement
+    const fontRegularFace = new FontFace("NotoSansBengali-Regular", regularFontBytes);
+    const fontBoldFace = new FontFace("NotoSansBengali-Bold", boldFontBytes);
+
+    await Promise.all([fontRegularFace.load(), fontBoldFace.load()]);
+
+    document.fonts.add(fontRegularFace);
+    document.fonts.add(fontBoldFace);
+
+    // 3. Embed fonts into pdf-lib for vector text drawing
     const fontRegular = await pdfDoc.embedFont(regularFontBytes);
     const fontBold = await pdfDoc.embedFont(boldFontBytes);
 
