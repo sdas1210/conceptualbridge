@@ -63,7 +63,13 @@ async function generatePDF(questionArray, payload, mode) {
     let currentY = questionStartY;
 
     if (questionArray.length > 0) {
-        console.log(questionArray[0]);
+        console.log(
+            JSON.stringify(questionArray[0], null, 2)
+        );
+        
+        console.log(
+            JSON.stringify(payload, null, 2)
+        );
         currentY = drawQuestion(
             page,
             font,
