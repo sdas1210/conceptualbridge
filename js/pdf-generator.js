@@ -78,6 +78,36 @@ async function generatePDF(questionArray, payload, mode) {
         margin
     );
 
+    // ---------------------------------
+    // Save PDF
+    // ---------------------------------
+    const pdfBytes = await pdfDoc.save();
+    
+    // ---------------------------------
+    // Download PDF
+    // ---------------------------------
+    const blob = new Blob([pdfBytes], {
+        type: "application/pdf"
+    });
+    
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    
+    a.href = url;
+    
+    a.download =
+        mode === "study"
+            ? "ConceptualBridge_Study.pdf"
+            : "ConceptualBridge_Practice.pdf";
+    
+    document.body.appendChild(a);
+    
+    a.click();
+    
+    document.body.removeChild(a);
+    
+    URL.revokeObjectURL(url);
     // -----------------------------
     // Reserved Question Area
     // -----------------------------
