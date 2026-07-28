@@ -59,7 +59,7 @@ async function generatePDF(questionArray, payload, mode) {
     let currentY = questionStartY;
 
     if (questionArray.length > 0) {
-
+        console.log(questionArray[0]);
         currentY = drawQuestion(
             doc,
             questionArray[0],
