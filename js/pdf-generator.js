@@ -177,11 +177,8 @@ function drawQuestion(doc, question, startY, margin, pageWidth) {
     doc.setFontSize(11);
 
     const questionLines = doc.splitTextToSize(
-
-    doc.text(
-        questionLines,
-        margin,
-        startY + 8
+        question.text,
+        pageWidth - (margin * 2)
     );
 
     // Return the next available Y position
