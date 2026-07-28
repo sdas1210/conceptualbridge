@@ -2,6 +2,11 @@
 
 async function generatePDF(questionArray, payload, mode) {
 
+    console.log("Question Array:", questionArray);
+    console.log("First Question:", questionArray[0]);
+    console.log("Payload:", payload);
+    console.log("Mode:", mode);
+
     const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
     const pdfDoc = await PDFDocument.create();
