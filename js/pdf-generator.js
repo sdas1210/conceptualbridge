@@ -82,35 +82,38 @@ async function generatePDF(questionArray, payload, mode) {
     
 }
 
-function drawHeader(doc, pageWidth, margin, mode) {
+function drawHeader(page, font, pageWidth, margin, mode) {
 
-    doc.setFontSize(20);
-    doc.setFont("helvetica", "bold");
+    page.drawText("CONCEPTUAL BRIDGE", {
+        x: pageWidth / 2 - 90,
+        y: 815,
+        size: 20,
+        font
+    });
 
-    doc.text(
-        "CONCEPTUAL BRIDGE",
-        pageWidth / 2,
-        18,
-        { align: "center" }
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
+    page.drawText(
         mode === "study"
             ? "Study Material"
             : "Practice Material",
-        pageWidth / 2,
-        25,
-        { align: "center" }
+        {
+            x: pageWidth / 2 - 45,
+            y: 795,
+            size: 12,
+            font
+        }
     );
 
-    doc.line(
-        margin,
-        30,
-        pageWidth - margin,
-        30
-    );
+    page.drawLine({
+        start: {
+            x: margin,
+            y: 785
+        },
+        end: {
+            x: pageWidth - margin,
+            y: 785
+        }
+    });
+
 }
 
 function drawInformationBox(doc, payload, questionArray, mode, margin, startY) {
