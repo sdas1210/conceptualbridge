@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { parseQuestionFile as parseGeneralQuestionFile } from "../services/questionParser.js";
 import { parseQuestionFile as parseMathQuestionFile } from "../services/mathParser.js";
+const MINIMUM_FULL_MOCK_QUESTIONS = 30;
 export default async function handler(req, res) {
 
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,6 +18,32 @@ export default async function handler(req, res) {
     if (topic === 'GI') targetFolder = 'gi';
     if (topic === 'GS') targetFolder = 'gs';
     if (topic === 'GACA' || topic === 'gaca') targetFolder = 'gaca';
+    if (topic === "ALL") {
+
+        const fullMockReady =
+    
+            hasMinimumQuestions("math", parseMathQuestionFile) &&
+    
+            hasMinimumQuestions("gi", parseGeneralQuestionFile) &&
+    
+            hasMinimumQuestions("gs", parseGeneralQuestionFile) &&
+    
+            hasMinimumQuestions("gaca", parseGeneralQuestionFile);
+    
+        if (!fullMockReady) {
+    
+            return res.status(403).json({
+    
+                status: "locked",
+    
+                message: "Full Mock Simulator is not yet available."
+    
+            });
+    
+        }
+    
+    }
+    
     // ADD THIS
     const parser =
         targetFolder === "math"
@@ -57,18 +84,85 @@ export default async function handler(req, res) {
 
         let combinedQuestions = [];
         let globalMetadata = {};
-
-       for (const currentFile of txtFiles) {
-
-            const filePath = path.join(folderPath, currentFile);
         
-            const parsedQuestions = parser(
-                filePath,
-                targetFolder
-            );
-            combinedQuestions.push(...parsedQuestions);
+        if (topic === "ALL") {
+        
+            const subjectConfigs = [
+        
+                {
+                    folder: "math",
+                    parser: parseMathQuestionFile
+                },
+        
+                {
+                    folder: "gi",
+                    parser: parseGeneralQuestionFile
+                },
+        
+                {
+                    folder: "gs",
+                    parser: parseGeneralQuestionFile
+                },
+        
+                {
+                    folder: "gaca",
+                    parser: parseGeneralQuestionFile
+                }
+        
+            ];
+        
+            for (const subject of subjectConfigs) {
+        
+                const subjectFolder = path.join(
+                    process.cwd(),
+                    "questions",
+                    subject.folder
+                );
+        
+                const files = fs.readdirSync(subjectFolder)
+        
+                    .filter(file => file.toLowerCase().endsWith(".txt"))
+        
+                    .sort((a, b) =>
+                        a.localeCompare(b, undefined, { numeric: true })
+                    );
+        
+                for (const currentFile of files) {
+        
+                    const parsedQuestions = subject.parser(
+        
+                        path.join(subjectFolder, currentFile),
+        
+                        subject.folder
+        
+                    );
+        
+                    combinedQuestions.push(...parsedQuestions);
+        
+                }
+        
+            }
         
         }
+        
+        else {
+        
+            for (const currentFile of txtFiles) {
+        
+                const filePath = path.join(folderPath, currentFile);
+        
+                const parsedQuestions = parser(
+                    filePath,
+                    targetFolder
+                );
+        
+                combinedQuestions.push(...parsedQuestions);
+        
+            }
+        
+        }
+        
+        
 
         combinedQuestions = combinedQuestions.map(q => ({
 
@@ -188,5 +282,43 @@ export default async function handler(req, res) {
 function shuffleArray(arr) {
 
     return arr.sort(() => Math.random() - 0.5);
+
+}
+
+function hasMinimumQuestions(folderName, parser) {
+
+    const folderPath = path.join(
+        process.cwd(),
+        "questions",
+        folderName
+    );
+
+    if (!fs.existsSync(folderPath)) {
+        return false;
+    }
+
+    const txtFiles = fs.readdirSync(folderPath)
+        .filter(file => file.toLowerCase().endsWith(".txt"))
+        .sort((a, b) =>
+            a.localeCompare(b, undefined, { numeric: true })
+        );
+
+    let totalQuestions = 0;
+
+    for (const currentFile of txtFiles) {
+
+        const parsedQuestions = parser(
+            path.join(folderPath, currentFile),
+            folderName
+        );
+
+        totalQuestions += parsedQuestions.length;
+
+        if (totalQuestions >= MINIMUM_FULL_MOCK_QUESTIONS) {
+            return true;
+        }
+    }
+
+    return false;
 
 }
