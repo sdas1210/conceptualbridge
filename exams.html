@@ -133,7 +133,10 @@
             transition: background 0.2s;
         }
         .start-btn:hover { background: #2b6cb0; }
-
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .badge-free { background: #48bb78; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; }
         .badge-premium { background: #ed8936; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; }
 
@@ -187,7 +190,14 @@
                 </div>
                 <div class="exam-card" style="grid-column: 1 / -1;">
                     <h3 class="exam-title">🔥 ALL SUBJECTS COMBINED (3:3:1:3 CBT-1 Composite Ratio)</h3>
-                    <button class="start-btn" style="background:#0070f3;" onclick="launchFreeTest('ALL')">Launch Full Mock Simulator</button>
+                    <button
+                    id="full-mock-btn"
+                    class="start-btn"
+                    style="background:#0070f3;"
+                    onclick="launchFreeTest('ALL')"
+                    disabled>
+                    Launch Full Mock Simulator
+                </button>
                 </div>
             </div>
         </div>
@@ -204,6 +214,34 @@
     </div>
    
     <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            const fullMockButton = document.getElementById("full-mock-btn");
+        
+            try {
+        
+                const response = await fetch("/api/fullmockstatus");
+        
+                if (!response.ok) return;
+        
+                const result = await response.json();
+        
+                if (result.status === "ok" && result.fullMockReady) {
+        
+                    fullMockButton.disabled = false;
+        
+                }
+        
+            }
+        
+            catch (error) {
+        
+                console.error("Unable to determine Full Mock status.", error);
+        
+            }
+        
+        });
+        
         function launchFreeTest(topicCode) {
             const size = document.getElementById('question-count-select').value;
             // Passes configuration setup parameters directly through browser URL query lines safely
