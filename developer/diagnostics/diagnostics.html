@@ -36,9 +36,9 @@
             --status-active-border: rgba(34, 197, 94, 0.4);
             --status-active-text: #4ade80;
             
-            --status-soon-bg: rgba(249, 115, 22, 0.15);
-            --status-soon-border: rgba(249, 115, 22, 0.4);
-            --status-soon-text: #fb923c;
+            --status-soon-bg: rgba(245, 158, 11, 0.15);
+            --status-soon-border: rgba(245, 158, 11, 0.45);
+            --status-soon-text: #fbbf24;
 
             /* Layout */
             --container-max-width: 1200px;
@@ -198,6 +198,50 @@
             font-size:.9rem;
         
             color:var(--text-muted);
+        
+        }
+
+        /* ==========================================================================
+           DESCRIPTION BANNER
+           ========================================================================== */
+        
+        .description-banner{
+        
+            margin-bottom:40px;
+        
+            padding:22px 26px;
+        
+            background:var(--glass-bg);
+        
+            border:1px solid var(--glass-border);
+        
+            border-left:5px solid var(--accent-blue);
+        
+            border-radius:16px;
+        
+            backdrop-filter:blur(16px);
+        
+            -webkit-backdrop-filter:blur(16px);
+        
+            box-shadow:var(--glass-shadow);
+        
+        }
+        
+        .description-banner h2{
+        
+            font-size:1.25rem;
+        
+            margin-bottom:10px;
+        
+            color:var(--text-main);
+        
+        }
+        
+        .description-banner p{
+        
+            color:var(--text-muted);
+        
+            line-height:1.7;
         
         }
 
@@ -485,6 +529,18 @@
                 </div>
             
             </section>
+            <section class="description-banner">
+    
+                <h2>Diagnostics Overview</h2>
+            
+                <p>
+                    This workspace allows developers to test individual subsystems independently before deployment.
+                    Each diagnostic module verifies a specific component such as PDF generation, parsers,
+                    browser compatibility, fonts and future maintenance tools.
+                </p>
+            
+            </section>
+        
 
         <main>
 
