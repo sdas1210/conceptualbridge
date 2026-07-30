@@ -350,6 +350,48 @@
         }
 
         /* ==========================================================================
+           PROGRESS CARD
+           ========================================================================== */
+        
+        .progress-container{
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+        }
+        
+        .progress-bar{
+            width:100%;
+            height:12px;
+            background:rgba(255,255,255,0.08);
+            border-radius:999px;
+            overflow:hidden;
+        }
+        
+        .progress-fill{
+            width:0%;
+            height:100%;
+            background:linear-gradient(90deg,#3b82f6,#60a5fa);
+            border-radius:999px;
+            transition:width .4s ease;
+        }
+        
+        .progress-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            font-size:.9rem;
+        }
+        
+        #progress-percent{
+            font-weight:700;
+            color:#ffffff;
+        }
+        
+        #progress-stage{
+            color:var(--text-muted);
+        }
+
+        /* ==========================================================================
            7. ENVIRONMENT INFORMATION GRID
            ========================================================================== */
         .info-grid {
@@ -534,6 +576,27 @@
             </aside>
 
             <main class="right-column">
+                <div class="glass-card">
+
+                    <div class="card-header">
+                        <h2>Overall Progress</h2>
+                        <p>Diagnostic execution status</p>
+                    </div>
+                
+                    <div class="progress-container">
+                
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                
+                        <div class="progress-footer">
+                            <span id="progress-percent">0%</span>
+                            <span id="progress-stage">Waiting to start...</span>
+                        </div>
+                
+                    </div>
+                
+                </div>
                 
                 <div class="glass-card">
                     <div class="card-header">
