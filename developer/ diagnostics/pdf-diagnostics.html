@@ -603,11 +603,26 @@
                         <h2>Diagnostic Console</h2>
                         <p>Live execution log</p>
                     </div>
+                <div id="console-output" class="console-container">
 
-                    <div id="console-output" class="console-container">
-                        <div class="console-line muted">Ready.</div>
-                        <div class="console-line muted">Press "Run Diagnostic" to begin.</div>
+                    <div class="console-line muted">
+                        ==================================================
                     </div>
+                
+                    <div class="console-line">
+                        <strong>[SYSTEM]</strong> PDF Diagnostics Laboratory
+                    </div>
+                
+                    <div class="console-line">
+                        <strong>[STATUS]</strong> Waiting for diagnostic...
+                    </div>
+                
+                    <div class="console-line muted">
+                        ==================================================
+                    </div>
+                
+                </div>
+                    
                 </div>
 
                 <div class="button-bar">
@@ -626,8 +641,47 @@
                     <div class="card-header">
                         <h2>Diagnostic Summary</h2>
                     </div>
-                    <div id="summary-content" class="summary-text">
-                        No diagnostic has been executed.
+                    <div id="summary-content">
+
+                        <div class="info-grid">
+                    
+                            <div class="info-item">
+                                <div class="info-label">Overall Status</div>
+                                <div id="summary-status" class="info-value">
+                                    Waiting
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Executed Steps</div>
+                                <div id="summary-steps" class="info-value">
+                                    0 / 7
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Failed Step</div>
+                                <div id="summary-failed" class="info-value">
+                                    None
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Elapsed Time</div>
+                                <div id="summary-time" class="info-value">
+                                    --
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Recommendation</div>
+                                <div id="summary-recommendation" class="info-value">
+                                    Run Diagnostic
+                                </div>
+                            </div>
+                    
+                        </div>
+                    
                     </div>
                 </div>
 
@@ -660,6 +714,35 @@
                         <div class="info-item">
                             <div class="info-label">Time</div>
                             <div id="env-time" class="info-value">Unknown</div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    Operating System
+                                </div>
+                            
+                                <div id="env-os" class="info-value">
+                                    Unknown
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-label">
+                                    Screen Resolution
+                                </div>
+                            
+                                <div id="env-screen" class="info-value">
+                                    Unknown
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-label">
+                                    User Agent
+                                </div>
+                            
+                                <div id="env-user-agent" class="info-value">
+                                    Unknown
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
