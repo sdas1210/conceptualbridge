@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PDF Font Test</title>
+</head>
+
+<body>
+
+<button id="btn">
+Generate Test PDF
+</button>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+
+<script>
+
+document.getElementById("btn").onclick = async () => {
+
+    const pdfDoc = await PDFLib.PDFDocument.create();
+
+    pdfDoc.registerFontkit(fontkit);
+
+    const bytes = await fetch("fonts/NotoSansBengali-Regular.ttf")
+        .then(r => r.arrayBuffer());
+
+    const font = await pdfDoc.embedFont(bytes);
+
+    const page = pdfDoc.addPage();
+
+    page.drawText("বাংলা পরীক্ষা", {
+        x: 50,
+        y: 700,
+        size: 20,
+        font
+    });
+
+    const pdfBytes = await pdfDoc.save();
+
+    const blob = new Blob([pdfBytes], {
+        type:"application/pdf"
+    });
+
+    const a = document.createElement("a");
+
+    a.href = URL.createObjectURL(blob);
+
+    a.download = "test.pdf";
+
+    a.click();
+
+};
+
+</script>
+
+</body>
+</html>
