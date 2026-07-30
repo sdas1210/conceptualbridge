@@ -1,11 +1,39 @@
 <script>
-        function runDiagnostic() {
+        async function runDiagnostic() {
             const consoleBox = document.getElementById("console-output");
             const newLine = document.createElement("div");
             newLine.className = "console-line";
             newLine.textContent = "Starting diagnostic...";
             consoleBox.appendChild(newLine);
             consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        async function testPdfLibrary() {
+
+        }
+        
+        async function testFontKit() {
+        
+        }
+        
+        async function testFontFile() {
+        
+        }
+        
+        async function testBrowserCompatibility() {
+        
+        }
+        
+        async function testUnicodeRendering() {
+        
+        }
+        
+        async function testPdfGeneration() {
+        
+        }
+        
+        async function testDownloadEngine() {
+        
         }
 
         function clearConsole() {
