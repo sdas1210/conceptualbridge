@@ -181,8 +181,8 @@
         updateBadge('status-font-file', 'RUNNING');
         await delay();
 
-        const regularFontPath = 'fonts/NotoSansBengali-Regular.ttf';
-        const boldFontPath = 'fonts/NotoSansBengali-Bold.ttf';
+        const regularFontPath = '/fonts/NotoSansBengali-Regular.ttf';
+        const boldFontPath = '/fonts/NotoSansBengali-Bold.ttf';
 
         try {
             logToConsole(`Fetching: ${regularFontPath}`, 'info');
