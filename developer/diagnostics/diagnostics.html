@@ -113,6 +113,95 @@
         }
 
         /* ==========================================================================
+           4. DEVELOPER STATISTICS
+           ========================================================================== */
+        
+        .stats-section{
+            margin-bottom:40px;
+        }
+        
+        .stats-title{
+            font-size:1.2rem;
+            margin-bottom:18px;
+            color:var(--text-main);
+            font-weight:600;
+        }
+        
+        .stats-grid{
+        
+            display:grid;
+        
+            grid-template-columns:repeat(5,1fr);
+        
+            gap:18px;
+        
+        }
+        
+        .stat-card{
+        
+            background:var(--glass-bg);
+        
+            border:1px solid var(--glass-border);
+        
+            border-radius:16px;
+        
+            backdrop-filter:blur(16px);
+        
+            -webkit-backdrop-filter:blur(16px);
+        
+            padding:22px;
+        
+            text-align:center;
+        
+            transition:.3s;
+        
+            box-shadow:var(--glass-shadow);
+        
+        }
+        
+        .stat-card:hover{
+        
+            transform:translateY(-4px);
+        
+            background:var(--glass-bg-hover);
+        
+            border-color:var(--glass-border-hover);
+        
+            box-shadow:
+                0 14px 32px rgba(0,0,0,.45),
+                0 0 18px var(--accent-blue-glow);
+        
+        }
+        
+        .stat-icon{
+        
+            font-size:28px;
+        
+            margin-bottom:10px;
+        
+        }
+        
+        .stat-number{
+        
+            font-size:1.8rem;
+        
+            font-weight:700;
+        
+            color:var(--text-main);
+        
+        }
+        
+        .stat-label{
+        
+            margin-top:6px;
+        
+            font-size:.9rem;
+        
+            color:var(--text-muted);
+        
+        }
+
+        /* ==========================================================================
            4. DIAGNOSTICS GRID
            ========================================================================== */
         .diagnostics-grid {
@@ -283,6 +372,11 @@
             .diagnostics-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+            .stats-grid{
+
+                grid-template-columns:repeat(3,1fr);
+            
+            }
         }
 
         @media (max-width: 640px) {
@@ -301,6 +395,11 @@
             .header p {
                 font-size: 0.95rem;
             }
+            .stats-grid{
+
+                grid-template-columns:repeat(2,1fr);
+            
+            }
         }
     </style>
 </head>
@@ -317,6 +416,49 @@
             </div>
             <p>Verify every subsystem independently before deploying changes.</p>
         </header>
+        <!-- ==========================================================
+                 Developer Statistics
+            =========================================================== -->
+            
+            <section class="stats-section">
+            
+                <h2 class="stats-title">Developer Statistics</h2>
+            
+                <div class="stats-grid">
+            
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-number" id="stat-total">7</div>
+                        <div class="stat-label">Diagnostics</div>
+                    </div>
+            
+                    <div class="stat-card">
+                        <div class="stat-icon">🟢</div>
+                        <div class="stat-number" id="stat-active">1</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+            
+                    <div class="stat-card">
+                        <div class="stat-icon">🚧</div>
+                        <div class="stat-number" id="stat-coming">6</div>
+                        <div class="stat-label">Coming Soon</div>
+                    </div>
+            
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-number" id="stat-progress">14%</div>
+                        <div class="stat-label">Completion</div>
+                    </div>
+            
+                    <div class="stat-card">
+                        <div class="stat-icon">🏷️</div>
+                        <div class="stat-number" id="stat-version">v1.0.0</div>
+                        <div class="stat-label">Version</div>
+                    </div>
+            
+                </div>
+            
+            </section>
 
         <main class="diagnostics-grid">
 
