@@ -355,7 +355,7 @@
         if (isRunning) return;
         isRunning = true;
 
-        const primaryBtn = document.querySelector('.btn-primary');
+        const primaryBtn = document.getElementById('runDiagnosticBtn');
         if (primaryBtn) {
             primaryBtn.disabled = true;
             primaryBtn.style.opacity = '0.5';
