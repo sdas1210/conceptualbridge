@@ -37,11 +37,29 @@
         }
 
         function clearConsole() {
+
             const consoleBox = document.getElementById("console-output");
+        
             consoleBox.innerHTML = `
-                <div class="console-line muted">Ready.</div>
-                <div class="console-line muted">Press "Run Diagnostic" to begin.</div>
+                <div class="console-line muted">
+                    ==================================================
+                </div>
+        
+                <div class="console-line">
+                    <strong>[SYSTEM]</strong> PDF Diagnostics Laboratory
+                </div>
+        
+                <div class="console-line">
+                    <strong>[STATUS]</strong> Waiting for diagnostic...
+                </div>
+        
+                <div class="console-line muted">
+                    ==================================================
+                </div>
             `;
+        
+            consoleBox.scrollTop = 0;
+        
         }
 
         function goBack() {
