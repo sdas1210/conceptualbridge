@@ -1,1 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Diagnostics - Conceptual Bridge</title>
+    
+    <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
 
+    <style>
+        /* ==========================================================================
+           1. DESIGN SYSTEM & CSS VARIABLES
+           ========================================================================== */
+        :root {
+            /* Color Palette */
+            --bg-gradient-start: #0a1128;
+            --bg-gradient-end: #000411;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg-hover: rgba(255, 255, 255, 0.09);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-border-hover: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            
+            /* Text Colors */
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+
+            /* Accent Colors */
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            
+            /* Status Badge Colors */
+            --status-active-bg: rgba(34, 197, 94, 0.15);
+            --status-active-border: rgba(34, 197, 94, 0.4);
+            --status-active-text: #4ade80;
+            
+            --status-soon-bg: rgba(249, 115, 22, 0.15);
+            --status-soon-border: rgba(249, 115, 22, 0.4);
+            --status-soon-text: #fb923c;
+
+            /* Layout */
+            --container-max-width: 1200px;
+            --border-radius-card: 16px;
+            --border-radius-badge: 20px;
+            --border-radius-btn: 10px;
+            --transition-speed: 0.3s;
+        }
+
+        /* ==========================================================================
+           2. BASE & RESET STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        /* ==========================================================================
+           3. CONTAINER & HEADER
+           ========================================================================== */
+        .container {
+            width: 100%;
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            color: var(--accent-blue);
+            filter: drop-shadow(0 0 10px var(--accent-blue-glow));
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #ffffff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* ==========================================================================
+           4. DIAGNOSTICS GRID
+           ========================================================================== */
+        .diagnostics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        /* ==========================================================================
+           5. CARD DESIGN & HOVER EFFECTS
+           ========================================================================== */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-card);
+            padding: 28px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform var(--transition-speed) ease, 
+                        border-color var(--transition-speed) ease, 
+                        box-shadow var(--transition-speed) ease,
+                        background-color var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5), 0 0 20px 0 var(--accent-blue-glow);
+        }
+
+        .card-top {
+            margin-bottom: 24px;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--accent-blue);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           6. STATUS BADGES
+           ========================================================================== */
+        .status-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 12px;
+            border-radius: var(--border-radius-badge);
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .status-badge.active {
+            background-color: var(--status-active-bg);
+            border-color: var(--status-active-border);
+            color: var(--status-active-text);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+        }
+
+        .status-badge.coming-soon {
+            background-color: var(--status-soon-bg);
+            border-color: var(--status-soon-border);
+            color: var(--status-soon-text);
+        }
+
+        /* ==========================================================================
+           7. BUTTONS & INTERACTION
+           ========================================================================== */
+        .card-bottom {
+            margin-top: auto;
+        }
+
+        .btn-launch {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: var(--border-radius-btn);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color var(--transition-speed) ease, 
+                        transform var(--transition-speed) ease, 
+                        box-shadow var(--transition-speed) ease,
+                        opacity var(--transition-speed) ease;
+        }
+
+        .btn-launch.active {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 14px var(--accent-blue-glow);
+        }
+
+        .btn-launch.active:hover {
+            background-color: var(--accent-blue-hover);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-launch.active:active {
+            transform: scale(0.98);
+        }
+
+        .btn-launch:disabled {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+            border: 1px solid var(--glass-border);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* ==========================================================================
+           8. FOOTER
+           ========================================================================== */
+        .footer {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-dim);
+            font-size: 0.88rem;
+        }
+
+        .footer-highlight {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ==========================================================================
+           9. MEDIA QUERIES & RESPONSIVENESS
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .diagnostics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 24px 16px;
+            }
+
+            .diagnostics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .header p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header class="header">
+            <div class="header-title-wrapper">
+                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                </svg>
+                <h1>Developer Diagnostics</h1>
+            </div>
+            <p>Verify every subsystem independently before deploying changes.</p>
+        </header>
+
+        <main class="diagnostics-grid">
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="status-badge active">Active</span>
+                    </div>
+                    <h2>PDF Diagnostics</h2>
+                    <p>Verify PDF generation, Unicode rendering, Font loading, browser compatibility and download engine.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch active" onclick="openPDFDiagnostics()">
+                        <span>Open Diagnostics</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                    <h2>Parser Diagnostics</h2>
+                    <p>Validate parser behaviour, metadata extraction and question loading.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch" disabled>
+                        <span>Disabled</span>
+                    </button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                    <h2>API Diagnostics</h2>
+                    <p>Verify API endpoints, responses and backend communication.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch" disabled>
+                        <span>Disabled</span>
+                    </button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                        </svg>
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                    <h2>Browser Diagnostics</h2>
+                    <p>Check browser compatibility, feature support and runtime environment.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch" disabled>
+                        <span>Disabled</span>
+                    </button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 5v14m0 0h2m-2 0H7m11-7h4m-2 0v7m0 0h1.5m-1.5 0H18"></path>
+                        </svg>
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                    <h2>Font Diagnostics</h2>
+                    <p>Verify custom font loading, Unicode support and embedding.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch" disabled>
+                        <span>Disabled</span>
+                    </button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                    <h2>KaTeX Diagnostics</h2>
+                    <p>Verify mathematical rendering and equation compatibility.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch" disabled>
+                        <span>Disabled</span>
+                    </button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-top">
+                    <div class="card-header-row">
+                        <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                    <h2>Performance Diagnostics</h2>
+                    <p>Measure loading performance, memory usage and rendering efficiency.</p>
+                </div>
+                <div class="card-bottom">
+                    <button class="btn-launch" disabled>
+                        <span>Disabled</span>
+                    </button>
+                </div>
+            </article>
+
+        </main>
+
+        <footer class="footer">
+            <p><span class="footer-highlight">Conceptual Bridge Developer Workspace</span> &bull; Diagnostics Suite</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function openPDFDiagnostics() {
+            window.location.href = "pdf-diagnostics.html";
+        }
+    </script>
+</body>
+</html>

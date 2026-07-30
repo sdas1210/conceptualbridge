@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Diagnostics Laboratory - Conceptual Bridge</title>
+    
+    <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
+
+    <style>
+        /* ==========================================================================
+           1. DESIGN SYSTEM & CSS VARIABLES
+           ========================================================================== */
+        :root {
+            /* Color Palette */
+            --bg-gradient-start: #0a1128;
+            --bg-gradient-end: #000411;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg-hover: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-border-hover: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            
+            /* Text Colors */
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+
+            /* Accent Colors */
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            --accent-gray: #334155;
+            --accent-gray-hover: #475569;
+
+            /* Console Specifics */
+            --console-bg: rgba(2, 6, 23, 0.85);
+            --console-border: rgba(51, 65, 85, 0.6);
+            --console-text: #38bdf8;
+            --console-dim: #475569;
+            
+            /* Status Badge Colors */
+            --status-waiting-bg: rgba(148, 163, 184, 0.12);
+            --status-waiting-border: rgba(148, 163, 184, 0.3);
+            --status-waiting-text: #94a3b8;
+            
+            --status-pass-bg: rgba(34, 197, 94, 0.15);
+            --status-pass-border: rgba(34, 197, 94, 0.4);
+            --status-pass-text: #4ade80;
+
+            --status-fail-bg: rgba(239, 68, 68, 0.15);
+            --status-fail-border: rgba(239, 68, 68, 0.4);
+            --status-fail-text: #f87171;
+
+            /* Layout */
+            --container-max-width: 1200px;
+            --border-radius-card: 16px;
+            --border-radius-badge: 20px;
+            --border-radius-btn: 10px;
+            --transition-speed: 0.3s;
+        }
+
+        /* ==========================================================================
+           2. BASE & RESET STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            padding: 30px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        /* ==========================================================================
+           3. HEADER & NAVIGATION
+           ========================================================================== */
+        .top-nav {
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: var(--border-radius-btn);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+            border-color: var(--glass-border-hover);
+        }
+
+        .header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 6px;
+        }
+
+        .header-icon {
+            width: 36px;
+            height: 36px;
+            color: var(--accent-blue);
+            filter: drop-shadow(0 0 10px var(--accent-blue-glow));
+        }
+
+        .header h1 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #ffffff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* ==========================================================================
+           4. TWO-COLUMN LAYOUT
+           ========================================================================== */
+        .main-layout {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .left-column {
+            flex: 0 0 35%;
+            width: 35%;
+        }
+
+        .right-column {
+            flex: 0 0 65%;
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ==========================================================================
+           5. GLASS CARDS & STATUS ROWS
+           ========================================================================== */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-card);
+            padding: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--glass-shadow);
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .glass-card:hover {
+            border-color: var(--glass-border-hover);
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .card-header p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        /* Status Rows */
+        .status-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            transition: background var(--transition-speed);
+        }
+
+        .status-row:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .row-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .row-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        /* Status Badges */
+        .badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 10px;
+            border-radius: var(--border-radius-badge);
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .badge.waiting {
+            background-color: var(--status-waiting-bg);
+            border-color: var(--status-waiting-border);
+            color: var(--status-waiting-text);
+        }
+
+        .badge.pass {
+            background-color: var(--status-pass-bg);
+            border-color: var(--status-pass-border);
+            color: var(--status-pass-text);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+        }
+
+        .badge.fail {
+            background-color: var(--status-fail-bg);
+            border-color: var(--status-fail-border);
+            color: var(--status-fail-text);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+
+        /* ==========================================================================
+           6. CONSOLE & BUTTON BAR
+           ========================================================================== */
+        .console-container {
+            background: var(--console-bg);
+            border: 1px solid var(--console-border);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 350px;
+            max-height: 450px;
+            overflow-y: auto;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-size: 0.88rem;
+            color: var(--console-text);
+            line-height: 1.6;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .console-line {
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .console-line.muted {
+            color: var(--console-dim);
+        }
+
+        .button-bar {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: var(--border-radius-btn);
+            font-size: 0.92rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 14px var(--accent-blue-glow);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-blue-hover);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-gray);
+            color: #ffffff;
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-gray-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==========================================================================
+           PROGRESS CARD
+           ========================================================================== */
+        
+        .progress-container{
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+        }
+        
+        .progress-bar{
+            width:100%;
+            height:12px;
+            background:rgba(255,255,255,0.08);
+            border-radius:999px;
+            overflow:hidden;
+        }
+        
+        .progress-fill{
+            width:0%;
+            height:100%;
+            background:linear-gradient(90deg,#3b82f6,#60a5fa);
+            border-radius:999px;
+            transition:width .4s ease;
+        }
+        
+        .progress-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            font-size:.9rem;
+        }
+        
+        #progress-percent{
+            font-weight:700;
+            color:#ffffff;
+        }
+        
+        #progress-stage{
+            color:var(--text-muted);
+        }
+
+        /* ==========================================================================
+           7. ENVIRONMENT INFORMATION GRID
+           ========================================================================== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 14px;
+            border-radius: 10px;
+        }
+
+        .info-label {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        /* Summary Output Text */
+        .summary-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================================================
+           8. RESPONSIVENESS & MEDIA QUERIES
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .left-column, .right-column {
+                width: 100%;
+                flex: none;
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 20px 14px;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-bar {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <nav class="top-nav">
+            <button class="btn-back" onclick="goBack()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <span>Back to Diagnostics</span>
+            </button>
+        </nav>
+
+        <header class="header">
+            <div class="header-title-wrapper">
+                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <h1>PDF Diagnostics</h1>
+            </div>
+            <p>Diagnose PDF rendering, Unicode support and browser compatibility.</p>
+        </header>
+
+        <div class="main-layout">
+            
+            <aside class="left-column">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Environment Status</h2>
+                        <p>Subsystem readiness overview</p>
+                    </div>
+
+                    <div class="status-list">
+                        
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                <span class="row-title">
+                                    PDF Library
+                                </span>
+                            </div>
+                            <span id="status-pdf-lib" class="badge waiting">Waiting</span>
+                        </div>
+
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 01-2 2 2 2 0 01-2-2V4zM4 7a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7z"></path></svg>
+                                <span class="row-title">FontKit</span>
+                            </div>
+                            <span id="status-fontkit" class="badge waiting">Waiting</span>
+                        </div>
+
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span class="row-title">Font File</span>
+                            </div>
+                            <span id="status-font-file" class="badge waiting">Waiting</span>
+                        </div>
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     viewBox="0 0 24 24"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3v7l5 3">
+                                    </path>
+                                </svg>
+                        
+                                <span class="row-title">
+                                    Browser Compatibility
+                                </span>
+                            </div>
+                        
+                            <span id="status-browser"
+                                  class="badge waiting">
+                                Waiting
+                            </span>
+                        </div>
+
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 5v14m0 0h2m-2 0H7m11-7h4m-2 0v7m0 0h1.5m-1.5 0H18"></path></svg>
+                                <span class="row-title">Unicode Rendering</span>
+                            </div>
+                            <span id="status-unicode" class="badge waiting">Waiting</span>
+                        </div>
+
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <span class="row-title">PDF Generation</span>
+                            </div>
+                            <span id="status-generation" class="badge waiting">Waiting</span>
+                        </div>
+
+                        <div class="status-row">
+                            <div class="status-info">
+                                <svg class="row-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span class="row-title">Download Engine</span>
+                            </div>
+                            <span id="status-download" class="badge waiting">Waiting</span>
+                        </div>
+
+                    </div>
+                </div>
+            </aside>
+
+            <main class="right-column">
+                <div class="glass-card">
+
+                    <div class="card-header">
+                        <h2>Overall Progress</h2>
+                        <p>Diagnostic execution status</p>
+                    </div>
+                
+                    <div class="progress-container">
+                
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                
+                        <div class="progress-footer">
+                            <span id="progress-percent">0%</span>
+                            <span id="progress-stage">Waiting to start...</span>
+                        </div>
+                
+                    </div>
+                
+                </div>
+                
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Diagnostic Console</h2>
+                        <p>Live execution log</p>
+                    </div>
+                <div id="console-output" class="console-container">
+
+                    <div class="console-line muted">
+                        ==================================================
+                    </div>
+                
+                    <div class="console-line">
+                        <strong>[SYSTEM]</strong> PDF Diagnostics Laboratory
+                    </div>
+                
+                    <div class="console-line">
+                        <strong>[STATUS]</strong> Waiting for diagnostic...
+                    </div>
+                
+                    <div class="console-line muted">
+                        ==================================================
+                    </div>
+                
+                </div>
+                    
+                </div>
+
+                <div class="button-bar">
+                    <button class="btn btn-primary" onclick="runDiagnostic()">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Run Diagnostic</span>
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="clearConsole()">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        <span>Clear Console</span>
+                    </button>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Diagnostic Summary</h2>
+                    </div>
+                    <div id="summary-content">
+
+                        <div class="info-grid">
+                    
+                            <div class="info-item">
+                                <div class="info-label">Overall Status</div>
+                                <div id="summary-status" class="info-value">
+                                    Waiting
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Executed Steps</div>
+                                <div id="summary-steps" class="info-value">
+                                    0 / 7
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Failed Step</div>
+                                <div id="summary-failed" class="info-value">
+                                    None
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Elapsed Time</div>
+                                <div id="summary-time" class="info-value">
+                                    --
+                                </div>
+                            </div>
+                    
+                            <div class="info-item">
+                                <div class="info-label">Recommendation</div>
+                                <div id="summary-recommendation" class="info-value">
+                                    Run Diagnostic
+                                </div>
+                            </div>
+                    
+                        </div>
+                    
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Environment Information</h2>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Browser</div>
+                            <div id="env-browser" class="info-value">Unknown</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Platform</div>
+                            <div id="env-platform" class="info-value">Unknown</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Viewport</div>
+                            <div id="env-viewport" class="info-value">Unknown</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Language</div>
+                            <div id="env-language" class="info-value">Unknown</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Time</div>
+                            <div id="env-time" class="info-value">
+                                Unknown
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">
+                                Operating System
+                            </div>
+                        
+                            <div id="env-os" class="info-value">
+                                Unknown
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">
+                                Screen Resolution
+                            </div>
+                        
+                            <div id="env-screen" class="info-value">
+                                Unknown
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">
+                                User Agent
+                            </div>
+                        
+                            <div id="env-user-agent" class="info-value">
+                                Unknown
+                            </div>
+</div>
+                        
+                    </div>
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    
+</body>
+</html>
