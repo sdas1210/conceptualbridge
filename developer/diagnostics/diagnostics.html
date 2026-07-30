@@ -202,6 +202,32 @@
         }
 
         /* ==========================================================================
+           DIAGNOSTIC CATEGORY
+           ========================================================================== */
+        
+        .category-title{
+        
+            margin:40px 0 20px;
+        
+            font-size:1.35rem;
+        
+            font-weight:600;
+        
+            color:var(--text-main);
+        
+            padding-bottom:10px;
+        
+            border-bottom:1px solid var(--glass-border);
+        
+        }
+        
+        .category-title:first-of-type{
+        
+            margin-top:0;
+        
+        }
+
+        /* ==========================================================================
            4. DIAGNOSTICS GRID
            ========================================================================== */
         .diagnostics-grid {
@@ -461,6 +487,7 @@
             </section>
 
         <main class="diagnostics-grid">
+            <h2 class="category-title">Rendering Diagnostics</h2>
 
             <article class="card">
                 <div class="card-top">
