@@ -1561,10 +1561,12 @@
             if (examDataMatrix.length === 0) return; 
             const currentItem = examDataMatrix[activeIndex]; 
             
-            if (questionStates[activeIndex] === QUESTION_STATE.NOT_VISITED) && !isReviewModeActive) { 
-                questionStates[activeIndex] =     QUESTION_STATE.NOT_ANSWERED; 
-            } 
-
+            if (
+                questionStates[activeIndex] === QUESTION_STATE.NOT_VISITED &&
+                !isReviewModeActive
+            ) {
+                questionStates[activeIndex] = QUESTION_STATE.NOT_ANSWERED;
+            }
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
             const shiftLabel = document.getElementById('shift-label-view');
 
