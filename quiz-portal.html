@@ -1381,95 +1381,7 @@
         }
 
         // ADVANCED TUTORIAL PARSER WITH AUTOMATIC OPTION SCRAMBLING
-        async function parseTutorialTextFileMatrix(filePath) {
-            try {
-                const response = await fetch(filePath);
-                if (!response.ok) { showMissingFileScreen(); return; }
-
-                const rawText = await response.text();
-                const lines = rawText.split('\n').map(l => l.trim());
-
-                let parsedList = [];
-                let currentBlock = null;
-                let activePropertyKey = null;
-
-                lines.forEach(line => {
-                    if (!line) return;
-
-                    let cleanLine = line.replace(/\\/g, '').trim();
-                    if (!cleanLine) return;
-
-                    const pipeIdx = cleanLine.indexOf('|');
-
-                    if (pipeIdx !== -1) {
-                        const key = cleanLine.substring(0, pipeIdx).trim().toUpperCase();
-                        const value = cleanLine.substring(pipeIdx + 1).trim();
-
-                        if (key === 'Q') {
-                            activePropertyKey = 'text';
-                            currentBlock = { text: value, a: '', b: '', c: '', d: '', correctLetter: '', exam: 'GACA Tutorial Series', shift: '' };
-                        } else if (currentBlock) {
-                            if (key === 'A' || key === 'B' || key === 'C' || key === 'D') {
-                                activePropertyKey = key.toLowerCase();
-                                currentBlock[activePropertyKey] = value;
-                            } else if (key === 'SHIFT') {
-                                activePropertyKey = null;
-                                currentBlock.shift = value;
-                            } else if (key === 'CORRECT') {
-                                activePropertyKey = null;
-                                currentBlock.correctLetter = value.toUpperCase();
-                                
-                                if (currentBlock.text && currentBlock.a && currentBlock.b && currentBlock.c && currentBlock.d) {
-                                    const correctText = currentBlock[currentBlock.correctLetter.toLowerCase()];
-                                    
-                                    let optionsArray = [
-                                        { originalKey: 'a', text: currentBlock.a },
-                                        { originalKey: 'b', text: currentBlock.b },
-                                        { originalKey: 'c', text: currentBlock.c },
-                                        { originalKey: 'd', text: currentBlock.d }
-                                    ];
-
-                                    for (let i = optionsArray.length - 1; i > 0; i--) {
-                                        const j = Math.floor(Math.random() * (i + 1));
-                                        [optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
-                                    }
-
-                                    currentBlock.a = optionsArray[0].text;
-                                    currentBlock.b = optionsArray[1].text;
-                                    currentBlock.c = optionsArray[2].text;
-                                    currentBlock.d = optionsArray[3].text;
-
-                                    let newCorrectIndex = optionsArray.findIndex(opt => opt.text === correctText);
-                                    currentBlock.correct = newCorrectIndex !== -1 ? newCorrectIndex : 0;
-
-                                    parsedList.push(currentBlock);
-                                }
-                            }
-                        }
-                    } else {
-                        if (currentBlock && activePropertyKey) {
-                            currentBlock[activePropertyKey] += (currentBlock[activePropertyKey] ? ' ' : '') + cleanLine;
-                        }
-                    }
-                });
-
-                if (parsedList.length > 0) {
-                    for (let i = parsedList.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [parsedList[i], parsedList[j]] = [parsedList[j], parsedList[i]];
-                    }
-                    
-                    examDataMatrix = parsedList.slice(0, questionLimit);
-
-                    document.getElementById('wizard-back-nav-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('wizard-back-nav-btn').innerText = '← Go to Tutorials';
-                    document.getElementById('exit-dashboard-action-btn').onclick = () => window.location.href = 'tutorials.html';
-                    document.getElementById('exit-dashboard-action-btn').innerText = 'Return to Tutorial Corner';
-
-                    setupGlobalExamMetrics('GACA Short Assessment');
-                } else { showMissingFileScreen(); }
-            } catch (err) { console.error(err); showMissingFileScreen(); }
-        }
+        
 
         function setupGlobalExamMetrics(topicName) { 
             selectedAnswers = new Array(examDataMatrix.length).fill(null); 
@@ -1650,9 +1562,10 @@
 
             let questionText;
             if (typeof currentItem.textBn !== "undefined") {
-                questionText = currentLanguage === "EN"
-                    ? currentItem.text
-                    : (currentItem.textBn || currentItem.text);
+                questionText =
+                    currentLanguage === "EN"
+                        ? currentItem.text
+                        : currentItem.textBn;
             } else {
                 questionText = getLocalizedText(currentItem.text);
             }
@@ -1690,10 +1603,10 @@
                         currentItem.d
                     ]
                     : [
-                        currentItem.aBn || currentItem.a,
-                        currentItem.bBn || currentItem.b,
-                        currentItem.cBn || currentItem.c,
-                        currentItem.dBn || currentItem.d
+                        currentItem.aBn,
+                        currentItem.bBn,
+                        currentItem.cBn,
+                        currentItem.dBn
                     ];
             const userChoice = selectedAnswers[activeIndex]; 
             const correctChoice = currentItem.correct; 
