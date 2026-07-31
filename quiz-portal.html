@@ -1798,13 +1798,27 @@
                 const hasAnswer = selectedAnswers[index] !== null;
                switch(state){
 
-                    case QUESTION_STATE.NOT_VISITED:
+                case QUESTION_STATE.NOT_VISITED:
+                    notVisited++;
+                    break;
                 
-                    case QUESTION_STATE.NOT_ANSWERED:
+                case QUESTION_STATE.NOT_ANSWERED:
+                    notAnswered++;
+                    break;
                 
-                    case QUESTION_STATE.ANSWERED:
+                case QUESTION_STATE.ANSWERED:
+                    answered++;
+                    break;
                 
-                    case QUESTION_STATE.REVIEW:
+                case QUESTION_STATE.REVIEW:
+                
+                    if(hasAnswer){
+                        markedAnswered++;
+                    }else{
+                        marked++;
+                    }
+                
+                    break;
                 
                 }
             });
