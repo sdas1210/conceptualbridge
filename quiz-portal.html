@@ -1250,6 +1250,8 @@
 
     <div id="fallback-screen-holder"></div>
 
+    
+
     <script>
         /**
          * Reusable KaTeX Renderer Helper Function
@@ -1289,6 +1291,9 @@
         const activeTopic = urlParams.get('topic') || 'Mathematics';
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
+
+
+        
         let examDataMatrix = [];
         let paperMeta = {};
 
@@ -1302,6 +1307,18 @@
             photo: "",
             membership: "Free"
         };
+
+        const QUESTION_STATE = {
+
+            NOT_VISITED: 0,
+        
+            NOT_ANSWERED: 1,
+        
+            ANSWERED: 2,
+        
+            REVIEW: 3
+        
+        };
         
         let paperDifficulty = 5;
         let dynamicPassMark = 0;
@@ -1314,6 +1331,8 @@
         let timeRemainingSeconds = questionLimit * 60;
         let timerEngine = null;
         let isReviewModeActive = false; 
+
+        
 
         async function initializeQuizEngine() {
             if (sourceFile) {
@@ -1385,8 +1404,8 @@
 
         function setupGlobalExamMetrics(topicName) { 
             selectedAnswers = new Array(examDataMatrix.length).fill(null); 
-            questionStates = new Array(examDataMatrix.length).fill(0); 
-            questionStates[0] = 1; 
+            questionStates = new Array(examDataMatrix.length)     .fill(QUESTION_STATE.NOT_VISITED); 
+            questionStates[0] = QUESTION_STATE.NOT_ANSWERED;
 
             let formattedSectionTitle = topicName; 
             if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; 
@@ -1543,7 +1562,7 @@
             const currentItem = examDataMatrix[activeIndex]; 
             
             if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
-                questionStates[activeIndex] = 1; 
+                questionStates[activeIndex] =     QUESTION_STATE.NOT_ANSWERED; 
             } 
 
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
@@ -1730,7 +1749,7 @@
         function clearResponse() { 
             if (isReviewModeActive) return; 
             selectedAnswers[activeIndex] = null; 
-            questionStates[activeIndex] = 1; 
+            questionStates[activeIndex] =     QUESTION_STATE.NOT_ANSWERED; 
             renderExamWindow(); 
         } 
 
@@ -1740,16 +1759,16 @@
                 return; 
             } 
             if (selectedAnswers[activeIndex] !== null) { 
-                questionStates[activeIndex] = 2; 
+                questionStates[activeIndex] =     QUESTION_STATE.ANSWERED; 
             } else { 
-                questionStates[activeIndex] = 1; 
+                questionStates[activeIndex] =     QUESTION_STATE.NOT_ANSWERED; 
             } 
             moveToNextOrWrap(); 
         } 
 
         function markForReview() { 
             if (isReviewModeActive) return; 
-            questionStates[activeIndex] = 3; 
+            questionStates[activeIndex] =     QUESTION_STATE.REVIEW; 
             moveToNextOrWrap(); 
         } 
 
@@ -1777,23 +1796,16 @@
         
             questionStates.forEach((state, index) => {
                 const hasAnswer = selectedAnswers[index] !== null;
-                switch (state) {
-                    case 0:
-                        notVisited++;
-                        break;
-                    case 1:
-                        notAnswered++;
-                        break;
-                    case 2:
-                        answered++;
-                        break;
-                    case 3:
-                        if (hasAnswer) {
-                            markedAnswered++;
-                        } else {
-                            marked++;
-                        }
-                        break;
+               switch(state){
+
+                    case QUESTION_STATE.NOT_VISITED:
+                
+                    case QUESTION_STATE.NOT_ANSWERED:
+                
+                    case QUESTION_STATE.ANSWERED:
+                
+                    case QUESTION_STATE.REVIEW:
+                
                 }
             });
 
