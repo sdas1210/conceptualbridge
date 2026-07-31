@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { parseQuestionFile } from "../services/questionParser.js";
+import { parseQuestionFile } from "../services/bilingualQuestionParser.js";
 export default async function handler(req, res) {
     // 1. Get the file path sent from the frontend (e.g., questions/gaca/1.txt)
     const { source } = req.query;
