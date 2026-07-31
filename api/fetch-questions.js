@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { parseQuestionFile as parseGeneralQuestionFile } from "../services/questionParser.js";
-import { parseQuestionFile as parseMathQuestionFile } from "../services/mathParser.js";
+import { parseQuestionFile } from "../services/bilingualQuestionParser.js";
 const MINIMUM_FULL_MOCK_QUESTIONS = 30;
 export default async function handler(req, res) {
 
@@ -22,13 +21,13 @@ export default async function handler(req, res) {
 
         const fullMockReady =
     
-            hasMinimumQuestions("math", parseMathQuestionFile) &&
+            hasMinimumQuestions("math", parseQuestionFile) &&
     
-            hasMinimumQuestions("gi", parseGeneralQuestionFile) &&
+            hasMinimumQuestions("gi", parseQuestionFile) &&
     
-            hasMinimumQuestions("gs", parseGeneralQuestionFile) &&
+            hasMinimumQuestions("gs", parseQuestionFile) &&
     
-            hasMinimumQuestions("gaca", parseGeneralQuestionFile);
+            hasMinimumQuestions("gaca", parseQuestionFile);
     
         if (!fullMockReady) {
     
@@ -45,10 +44,7 @@ export default async function handler(req, res) {
     }
     
     // ADD THIS
-    const parser =
-        targetFolder === "math"
-            ? parseMathQuestionFile
-            : parseGeneralQuestionFile;
+    const parser = parseQuestionFile;
 
     try {
 
@@ -91,22 +87,22 @@ export default async function handler(req, res) {
         
                 {
                     folder: "math",
-                    parser: parseMathQuestionFile
+                    parser: parseQuestionFile
                 },
         
                 {
                     folder: "gi",
-                    parser: parseGeneralQuestionFile
+                    parser: parseQuestionFile
                 },
         
                 {
                     folder: "gs",
-                    parser: parseGeneralQuestionFile
+                    parser: parseQuestionFile
                 },
         
                 {
                     folder: "gaca",
-                    parser: parseGeneralQuestionFile
+                    parser: parseQuestionFile
                 }
         
             ];
