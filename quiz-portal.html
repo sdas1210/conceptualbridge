@@ -1561,7 +1561,7 @@
             if (examDataMatrix.length === 0) return; 
             const currentItem = examDataMatrix[activeIndex]; 
             
-            if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
+            if (questionStates[activeIndex] === QUESTION_STATE.NOT_VISITED) && !isReviewModeActive) { 
                 questionStates[activeIndex] =     QUESTION_STATE.NOT_ANSWERED; 
             } 
 
@@ -1824,7 +1824,10 @@
                 const isActive = idx === activeIndex; 
                 let computedStateClass = `state-${stateValue}`;
 
-                if (isReviewModeActive && stateValue === 2) {
+                if (
+                    isReviewModeActive &&
+                    stateValue === QUESTION_STATE.ANSWERED
+                ) {
                     const userSelection = selectedAnswers[idx];
                     const officialCorrectAnswer = examDataMatrix[idx].correct;
 
