@@ -1590,7 +1590,6 @@ The rendering engine is considered architecturally stable.
 The next objective is to identify and resolve the browser-compatible
 Unicode font embedding issue before adding any new PDF features.
 
-
 ------------------------------------------------------------------------
 
 # PDF Engine Progress Update (Added: 2026-07-31 --- Browser Diagnostics Completed)
@@ -1603,28 +1602,30 @@ Unicode font embedding issue before adding any new PDF features.
 
 #### PDF Diagnostics Workspace
 
-- ✅ Created dedicated browser diagnostics page for the PDF subsystem.
-- ✅ Verified runtime loading of `pdf-lib` browser UMD library.
-- ✅ Verified runtime loading of `fontkit` browser UMD library.
-- ✅ Confirmed download engine initialization.
+-   ✅ Created dedicated browser diagnostics page for the PDF subsystem.
+-   ✅ Verified runtime loading of `pdf-lib` browser UMD library.
+-   ✅ Verified runtime loading of `fontkit` browser UMD library.
+-   ✅ Confirmed download engine initialization.
 
 #### Dependency Verification
 
-- ✅ Identified missing third-party browser libraries during architecture review.
-- ✅ Added browser UMD builds:
-  - `vendor/pdf-lib/pdf-lib.min.js`
-  - `vendor/pdf-lib/fontkit.umd.min.js`
-- ✅ Connected diagnostics page to the required libraries through script tags.
+-   ✅ Identified missing third-party browser libraries during
+    architecture review.
+-   ✅ Added browser UMD builds:
+    -   `vendor/pdf-lib/pdf-lib.min.js`
+    -   `vendor/pdf-lib/fontkit.umd.min.js`
+-   ✅ Connected diagnostics page to the required libraries through
+    script tags.
 
 #### Font Resource Resolution
 
 Initial diagnostics reported:
 
-- PDF Library → PASS
-- FontKit → PASS
-- Font File → FAIL
-- Unicode Rendering → FAIL
-- PDF Generation → FAIL
+-   PDF Library → PASS
+-   FontKit → PASS
+-   Font File → FAIL
+-   Unicode Rendering → FAIL
+-   PDF Generation → FAIL
 
 Root cause:
 
@@ -1653,21 +1654,24 @@ Updated the font paths to root-relative URLs:
 
 Browser diagnostics now report:
 
-- ✅ PDF Library
-- ✅ FontKit
-- ✅ Font File
-- ✅ Unicode Rendering
-- ✅ PDF Generation
-- ✅ Download Engine
+-   ✅ PDF Library
+-   ✅ FontKit
+-   ✅ Font File
+-   ✅ Unicode Rendering
+-   ✅ PDF Generation
+-   ✅ Download Engine
 
 This validates the complete browser-side Unicode PDF pipeline.
 
 ### Engineering Decisions
 
-- The PDF engine architecture remains unchanged.
-- The issue was confirmed to be resource path resolution rather than the rendering engine.
-- Diagnostics page retained as a permanent developer maintenance utility.
-- Future PDF features should be implemented on this validated foundation.
+-   The PDF engine architecture remains unchanged.
+-   The issue was confirmed to be resource path resolution rather than
+    the rendering engine.
+-   Diagnostics page retained as a permanent developer maintenance
+    utility.
+-   Future PDF features should be implemented on this validated
+    foundation.
 
 ------------------------------------------------------------------------
 
@@ -1675,7 +1679,122 @@ This validates the complete browser-side Unicode PDF pipeline.
 
 ## PDF Engine Integration
 
-1. Integrate the validated PDF pipeline into the production Quiz Portal.
-2. Create a reusable PDF service for Study and Practice downloads.
-3. Connect the renderer to live quiz data.
-4. Extend the diagnostics page with Browser Compatibility detection so the final pending status becomes PASS/FAIL automatically.
+1.  Integrate the validated PDF pipeline into the production Quiz
+    Portal.
+2.  Create a reusable PDF service for Study and Practice downloads.
+3.  Connect the renderer to live quiz data.
+4.  Extend the diagnostics page with Browser Compatibility detection so
+    the final pending status becomes PASS/FAIL automatically.
+
+------------------------------------------------------------------------
+
+# Quiz Portal Progress Update (Added: 2026-07-31 --- QUESTION_STATE Refactoring)
+
+## Current Status
+
+**Version:** Quiz Portal v0.8 (JavaScript Readability & State
+Management)
+
+### Completed This Session
+
+#### QUESTION_STATE Migration
+
+-   ✅ Introduced centralized `QUESTION_STATE` constants.
+-   ✅ Replaced hard-coded numeric question states with named constants.
+-   ✅ Updated initialization logic to use `QUESTION_STATE`.
+-   ✅ Updated question state transitions (Not Visited, Not Answered,
+    Answered, Review).
+-   ✅ Updated palette rendering to use named state constants.
+-   ✅ Restored and verified `updateQuestionStatistics()` after
+    refactoring.
+-   ✅ Preserved existing desktop behaviour while improving code
+    readability.
+
+#### Review Mode
+
+-   ✅ Review palette continues to distinguish incorrectly answered
+    questions.
+-   ✅ Review-mode rendering remains compatible with the new state
+    constants.
+
+#### Engineering Notes
+
+-   This refactoring was intentionally limited to readability and
+    maintainability.
+-   No functional changes were introduced to the quiz workflow.
+-   Desktop architecture remains unchanged.
+
+### Issues Identified
+
+-   ⚠️ Mobile instruction-page scroll activation requires further
+    refinement after the responsive layout changes.
+-   ⚠️ The "Next" button activation is affected because the current
+    mobile scrolling behaviour differs from the original
+    scroll-container design.
+-   ⚠️ This issue has been isolated to the mobile instruction workflow
+    and is unrelated to the `QUESTION_STATE` migration.
+
+------------------------------------------------------------------------
+
+# Immediate Priority --- Next Development Session
+
+## Mobile Instruction Flow Stabilization
+
+1.  Restore reliable instruction-page scroll detection.
+2.  Ensure the "Next" button activates correctly after reaching the
+    bottom of the instructions.
+3.  Verify consistent behaviour across desktop and mobile layouts.
+4.  Preserve desktop functionality while refining the mobile scrolling
+    architecture.
+
+### Engineering Principle
+
+The `QUESTION_STATE` refactoring is considered complete.
+
+The next development session should focus on stabilizing the mobile
+instruction workflow before proceeding with additional UI refactoring.
+
+
+------------------------------------------------------------------------
+
+# Developer Maintenance Suite Progress Update (Added: 2026-08-01 --- Global Metadata Tagger Production Release)
+
+## Current Status
+
+**Version:** Developer Maintenance Suite v1.0 (Global Metadata Tagger Stable)
+
+### Completed This Session
+
+- ✅ Mathematics Topic/SubTopic now use `math.json` correctly.
+- ✅ Dynamic Topic → SubTopic dependency verified.
+- ✅ Existing metadata preservation verified.
+- ✅ Guided metadata creation finalized.
+- ✅ Blank Topic/SubTopic supported for both GACA and Mathematics.
+- ✅ All remaining metadata fields remain mandatory.
+- ✅ TXT reconstruction verified.
+- ✅ Duplicate `<main>` HTML removed.
+- ✅ Trim-based duplicate detection implemented.
+- ✅ Alphabetical `metadata.json` export implemented.
+- ✅ Case-insensitive sorting using `localeCompare(b, undefined, { sensitivity: "base" })`.
+- ✅ `_updated.txt` download naming implemented.
+- ✅ Production regression review completed.
+
+### Engineering Decision
+
+The Global Metadata Tagger is considered production-ready and frozen except for future feature enhancements.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated)
+
+| Date | Milestone |
+|------|-----------|
+| 2026-08-01 | Global Metadata Tagger Production Release |
+| Next | Mathematics Parser Development |
+
+------------------------------------------------------------------------
+
+# Current Continuation Point
+
+Begin Mathematics Parser development using the finalized Global Metadata Tagger architecture as the reference implementation.
+
