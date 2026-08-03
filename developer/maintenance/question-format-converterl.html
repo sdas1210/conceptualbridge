@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Format Converter - Conceptual Bridge Developer Workspace</title>
+    <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
+    <link rel="stylesheet" href="question-format-converter.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <header class="header">
+            <div class="header-title-wrapper">
+                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                </svg>
+                <h1>Question Format Converter</h1>
+            </div>
+            <p>Convert legacy question text files into the universal bilingual schema format (QEN| / QBN|).</p>
+        </header>
+
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">Parsed Questions</span>
+                <span id="metric-questions-count" class="metric-value">0</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Slash-Separated Translations</span>
+                <span id="metric-translations-count" class="metric-value">0</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Global Metadata Fields</span>
+                <span id="metric-metadata-count" class="metric-value">0</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Conversion Status</span>
+                <span id="metric-status-badge" class="badge waiting">Ready</span>
+            </div>
+        </section>
+
+        <main class="workspace-grid">
+
+            <section class="glass-card panel-section">
+                <div class="panel-header">
+                    <h2>Source Input (Legacy / Raw TXT)</h2>
+                    <span class="panel-subtitle">Paste TXT content or drop a file</span>
+                </div>
+
+                <div id="drop-zone" class="drop-zone">
+                    <svg class="drop-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                    <p class="drop-text">Drag & drop source <strong>.txt</strong> file here or <label for="file-input" class="file-label">Browse File</label></p>
+                    <input type="file" id="file-input" accept=".txt" class="file-input-hidden">
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea id="raw-source-input" class="code-textarea" placeholder="Or paste your raw question text blocks here...&#10;&#10;Exam| RRB GROUP-D&#10;Subject| GACA&#10;&#10;Q| What is the capital of India? / ভারতের রাজধানী কোনটি?&#10;A| New Delhi / নয়াদিল্লি&#10;B| Kolkata / কলকাতা&#10;C| Mumbai / মুম্বাই&#10;D| Chennai / চেন্নাই&#10;Correct| A&#10;Difficulty| 3.5&#10;Shift| 19/12/2025 9:00 AM"></textarea>
+                </div>
+
+                <div class="button-row">
+                    <button id="btn-convert" class="btn btn-primary">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span>Convert Format</span>
+                    </button>
+                    <button id="btn-clear" class="btn btn-secondary">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        <span>Clear All</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="glass-card panel-section">
+                <div class="panel-header">
+                    <h2>Converted Output (Universal Schema)</h2>
+                    <span class="panel-subtitle">Formatted for bilingualQuestionParser.js</span>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea id="converted-output" class="code-textarea readonly-textarea" readonly placeholder="Converted universal bilingual question output will appear here..."></textarea>
+                </div>
+
+                <div class="button-row">
+                    <button id="btn-copy" class="btn btn-secondary">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>Copy Output</span>
+                    </button>
+                    <button id="btn-download" class="btn btn-success">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        <span>Download .txt</span>
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <section class="glass-card log-section">
+            <div class="panel-header">
+                <h2>Conversion Execution Log</h2>
+                <span class="panel-subtitle">Detailed structural validation messages</span>
+            </div>
+            <div id="console-log-box" class="console-box">
+                <div class="console-line muted">[00:00:00] Converter engine initialized. Ready for source content...</div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p><span class="footer-highlight">Conceptual Bridge Developer Workspace</span> &bull; Question Format Converter Utility</p>
+        </footer>
+
+    </div>
+
+    <script src="question-format-converter.js"></script>
+</body>
+</html>

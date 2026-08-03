@@ -1,0 +1,441 @@
+/* ==========================================================================
+   1. DESIGN SYSTEM & CSS VARIABLES
+   ========================================================================== */
+:root {
+    /* Color Palette */
+    --bg-gradient-start: #0a1128;
+    --bg-gradient-end: #000411;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg-hover: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-hover: rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+    /* Text Colors */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    /* Accent Colors */
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-blue-glow: rgba(59, 130, 246, 0.3);
+
+    --accent-green: #22c55e;
+    --accent-green-hover: #16a34a;
+    --accent-green-glow: rgba(34, 197, 94, 0.3);
+
+    --accent-gray: #334155;
+    --accent-gray-hover: #475569;
+
+    /* Status Colors */
+    --status-waiting-bg: rgba(148, 163, 184, 0.12);
+    --status-waiting-border: rgba(148, 163, 184, 0.3);
+    --status-waiting-text: #94a3b8;
+
+    --status-pass-bg: rgba(34, 197, 94, 0.15);
+    --status-pass-border: rgba(34, 197, 94, 0.4);
+    --status-pass-text: #4ade80;
+
+    --status-fail-bg: rgba(239, 68, 68, 0.15);
+    --status-fail-border: rgba(239, 68, 68, 0.4);
+    --status-fail-text: #f87171;
+
+    /* Console Specifics */
+    --console-bg: rgba(2, 6, 23, 0.85);
+    --console-border: rgba(51, 65, 85, 0.6);
+
+    /* Layout */
+    --container-max-width: 1300px;
+    --border-radius-card: 16px;
+    --border-radius-badge: 20px;
+    --border-radius-btn: 10px;
+    --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   2. BASE & RESET STYLES
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+    padding: 30px 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    flex: 1;
+}
+
+/* ==========================================================================
+   3. HEADER
+   ========================================================================== */
+.header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.header-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 6px;
+}
+
+.header-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--accent-blue);
+    filter: drop-shadow(0 0 10px var(--accent-blue-glow));
+}
+
+.header h1 {
+    font-size: 2.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right, #ffffff, var(--text-muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   4. METRICS DASHBOARD
+   ========================================================================== */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-card);
+    padding: 16px 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.metric-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Badges */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-badge);
+    border: 1px solid;
+    width: fit-content;
+}
+
+.badge.waiting {
+    background-color: var(--status-waiting-bg);
+    border-color: var(--status-waiting-border);
+    color: var(--status-waiting-text);
+}
+
+.badge.pass {
+    background-color: var(--status-pass-bg);
+    border-color: var(--status-pass-border);
+    color: var(--status-pass-text);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+}
+
+.badge.fail {
+    background-color: var(--status-fail-bg);
+    border-color: var(--status-fail-border);
+    color: var(--status-fail-text);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+/* ==========================================================================
+   5. WORKSPACE PANELS & CARDS
+   ========================================================================== */
+.workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-card);
+    padding: 24px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--glass-shadow);
+    transition: border-color var(--transition-speed);
+}
+
+.glass-card:hover {
+    border-color: var(--glass-border-hover);
+}
+
+.panel-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panel-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.panel-header h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.panel-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   6. FILE DROP ZONE & TEXTAREAS
+   ========================================================================== */
+.drop-zone {
+    border: 2px dashed var(--glass-border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background var(--transition-speed), border-color var(--transition-speed);
+    cursor: pointer;
+}
+
+.drop-zone.dragover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-blue);
+}
+
+.drop-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--accent-blue);
+    margin-bottom: 6px;
+}
+
+.drop-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.file-label {
+    color: var(--accent-blue);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+.input-wrapper {
+    flex: 1;
+    display: flex;
+}
+
+.code-textarea {
+    width: 100%;
+    min-height: 380px;
+    background: var(--console-bg);
+    border: 1px solid var(--console-border);
+    border-radius: 12px;
+    padding: 16px;
+    color: #e2e8f0;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.code-textarea:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 12px var(--accent-blue-glow);
+}
+
+.readonly-textarea {
+    background: rgba(2, 6, 23, 0.95);
+    color: #38bdf8;
+}
+
+/* ==========================================================================
+   7. BUTTONS & ACTIONS
+   ========================================================================== */
+.button-row {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: var(--border-radius-btn);
+    font-size: 0.92rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.btn-primary {
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--accent-blue-glow);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-blue-hover);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+}
+
+.btn-success {
+    background-color: var(--accent-green);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--accent-green-glow);
+}
+
+.btn-success:hover {
+    background-color: var(--accent-green-hover);
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+}
+
+.btn-secondary {
+    background-color: var(--accent-gray);
+    color: #ffffff;
+    border: 1px solid var(--glass-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-gray-hover);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   8. CONSOLE LOG & FOOTER
+   ========================================================================== */
+.log-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.console-box {
+    background: var(--console-bg);
+    border: 1px solid var(--console-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    min-height: 140px;
+    max-height: 220px;
+    overflow-y: auto;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.console-line {
+    margin-bottom: 4px;
+    word-break: break-all;
+}
+
+.console-line.muted {
+    color: var(--text-dim);
+}
+
+.footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+}
+
+.footer-highlight {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   9. RESPONSIVENESS
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .workspace-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 16px 12px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+
+    .header h1 {
+        font-size: 1.6rem;
+    }
+}
