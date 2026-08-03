@@ -1,6 +1,6 @@
 /**
  * Conceptual Bridge - Developer Maintenance Suite
- * Module: Question Format Converter Engine (Version 2)
+ * Module: Question Format Converter Engine (Version 2 - Step 3)
  * Completely offline browser-native logic for converting legacy question formats to universal schema.
  */
 
@@ -82,7 +82,8 @@
     // ==========================================================================
 
     /**
-     * Helper to parse slash-separated strings ("English / Bengali")
+     * Helper to parse slash-separated strings ("English / Bengali / Extra")
+     * Splits strictly on the FIRST slash.
      */
     function splitSlashValue(rawStr) {
         if (!rawStr) return { eng: "", bng: "" };
@@ -271,7 +272,8 @@
     }
 
     /**
-     * Parses source raw text into structured metadata and block arrays
+     * Parses source raw text into structured metadata and block arrays.
+     * Enforces the Conceptual Bridge Standard Question Format for all converted blocks.
      */
     function parseAndConvertFormat(rawContent) {
         if (!rawContent || !rawContent.trim()) {
@@ -399,28 +401,36 @@
                 }
             }
 
-            // Construct Clean Standard Output String Block
+            // Construct Clean Standard Output String Block following strict order rules
             let formattedBlock = [];
+            
+            // Rule 1: QEN| and QBN|
             formattedBlock.push(`QEN| ${blockObj.qEn}`);
-            if (blockObj.qBn) {
-                formattedBlock.push(`QBN| ${blockObj.qBn}`);
+            formattedBlock.push(`QBN| ${blockObj.qBn}`);
+
+            // Rule 2: Common| (Always output immediately after QBN|)
+            formattedBlock.push(`Common| ${blockObj.common}`);
+
+            // Rule 3: Image| (Always output immediately after Common|)
+            formattedBlock.push(`Image| ${blockObj.image}`);
+
+            // Rule 4: A|, B|, C|, D|, Shift|, Correct|, Difficulty| (Keep unchanged)
+            formattedBlock.push(`A| ${blockObj.a}`);
+            formattedBlock.push(`B| ${blockObj.b}`);
+            formattedBlock.push(`C| ${blockObj.c}`);
+            formattedBlock.push(`D| ${blockObj.d}`);
+            formattedBlock.push(`Shift| ${blockObj.shift}`);
+            formattedBlock.push(`Correct| ${blockObj.correct}`);
+            formattedBlock.push(`Difficulty| ${blockObj.difficulty}`);
+
+            // Rule 5: Topic| and SubTopic| (Always output immediately after Difficulty|)
+            formattedBlock.push(`Topic| ${blockObj.topic}`);
+            formattedBlock.push(`SubTopic| ${blockObj.subTopic}`);
+
+            // Rule 6: QuestionID| (Output AFTER SubTopic| ONLY IF originally present)
+            if (blockObj.questionId) {
+                formattedBlock.push(`QuestionID| ${blockObj.questionId}`);
             }
-            if (blockObj.common) {
-                formattedBlock.push(`Common| ${blockObj.common}`);
-            }
-            if (blockObj.image) {
-                formattedBlock.push(`Image| ${blockObj.image}`);
-            }
-            if (blockObj.a) formattedBlock.push(`A| ${blockObj.a}`);
-            if (blockObj.b) formattedBlock.push(`B| ${blockObj.b}`);
-            if (blockObj.c) formattedBlock.push(`C| ${blockObj.c}`);
-            if (blockObj.d) formattedBlock.push(`D| ${blockObj.d}`);
-            if (blockObj.shift) formattedBlock.push(`Shift| ${blockObj.shift}`);
-            if (blockObj.correct) formattedBlock.push(`Correct| ${blockObj.correct}`);
-            if (blockObj.difficulty) formattedBlock.push(`Difficulty| ${blockObj.difficulty}`);
-            if (blockObj.topic) formattedBlock.push(`Topic| ${blockObj.topic}`);
-            if (blockObj.subTopic) formattedBlock.push(`SubTopic| ${blockObj.subTopic}`);
-            if (blockObj.questionId) formattedBlock.push(`QuestionID| ${blockObj.questionId}`);
 
             convertedBlocks.push(formattedBlock.join('\n'));
         }
