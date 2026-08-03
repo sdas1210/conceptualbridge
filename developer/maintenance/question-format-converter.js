@@ -1,6 +1,6 @@
 /**
  * Conceptual Bridge - Developer Maintenance Suite
- * Module: Question Format Converter Engine (Version 2 - Step 3)
+ * Module: Question Format Converter Engine (Version 2 - Step 4)
  * Completely offline browser-native logic for converting legacy question formats to universal schema.
  */
 
@@ -273,7 +273,7 @@
 
     /**
      * Parses source raw text into structured metadata and block arrays.
-     * Enforces the Conceptual Bridge Standard Question Format for all converted blocks.
+     * Enforces idempotent conversion to the Conceptual Bridge Standard Question Format.
      */
     function parseAndConvertFormat(rawContent) {
         if (!rawContent || !rawContent.trim()) {
@@ -353,7 +353,8 @@
                 difficulty: "",
                 topic: "",
                 subTopic: "",
-                questionId: ""
+                questionId: "",
+                hasQuestionId: false
             };
 
             for (let l = 0; l < blockLines.length; l++) {
@@ -398,23 +399,22 @@
                     blockObj.subTopic = line.substring(9).trim();
                 } else if (line.startsWith('QuestionID|')) {
                     blockObj.questionId = line.substring(11).trim();
+                    blockObj.hasQuestionId = true;
                 }
             }
 
-            // Construct Clean Standard Output String Block following strict order rules
+            // Construct Clean Standard Output String Block following strict order & idempotency rules
             let formattedBlock = [];
             
-            // Rule 1: QEN| and QBN|
+            // QEN| & QBN|
             formattedBlock.push(`QEN| ${blockObj.qEn}`);
             formattedBlock.push(`QBN| ${blockObj.qBn}`);
 
-            // Rule 2: Common| (Always output immediately after QBN|)
+            // Common| & Image|
             formattedBlock.push(`Common| ${blockObj.common}`);
-
-            // Rule 3: Image| (Always output immediately after Common|)
             formattedBlock.push(`Image| ${blockObj.image}`);
 
-            // Rule 4: A|, B|, C|, D|, Shift|, Correct|, Difficulty| (Keep unchanged)
+            // A|, B|, C|, D|, Shift|, Correct|, Difficulty|
             formattedBlock.push(`A| ${blockObj.a}`);
             formattedBlock.push(`B| ${blockObj.b}`);
             formattedBlock.push(`C| ${blockObj.c}`);
@@ -423,12 +423,12 @@
             formattedBlock.push(`Correct| ${blockObj.correct}`);
             formattedBlock.push(`Difficulty| ${blockObj.difficulty}`);
 
-            // Rule 5: Topic| and SubTopic| (Always output immediately after Difficulty|)
+            // Topic| & SubTopic|
             formattedBlock.push(`Topic| ${blockObj.topic}`);
             formattedBlock.push(`SubTopic| ${blockObj.subTopic}`);
 
-            // Rule 6: QuestionID| (Output AFTER SubTopic| ONLY IF originally present)
-            if (blockObj.questionId) {
+            // QuestionID| (Only if originally present in source input)
+            if (blockObj.hasQuestionId) {
                 formattedBlock.push(`QuestionID| ${blockObj.questionId}`);
             }
 
@@ -602,7 +602,7 @@
         dropZone.classList.remove('dragover');
 
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFileUpload(e.dataTransfer.files[0]);
+            handleFileUpload(e.target.files[0]);
         }
     });
 
