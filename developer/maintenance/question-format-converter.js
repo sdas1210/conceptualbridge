@@ -154,16 +154,51 @@
                 break;
             }
 
-            if (const tag = line.split("|")[0].trim().toLowerCase();) requiredMetadata.Exam = true;
-            else if (line.startsWith("Subject|")) requiredMetadata.Subject = true;
-            else if (line.startsWith("Topic|")) requiredMetadata.Topic = true;
-            else if (line.startsWith("SubTopic|")) requiredMetadata.SubTopic = true;
-            else if (line.startsWith("Level|")) requiredMetadata.Level = true;
-            else if (line.startsWith("Notification|") || line.startsWith("Notificaiton|")) requiredMetadata.Notification = true;
-            else if (line.startsWith("Type|")) requiredMetadata.Type = true;
-            else if (line.startsWith("Marks|")) requiredMetadata.Marks = true;
-            else if (line.startsWith("QType|") || line.startsWith("QuestionType|")) requiredMetadata.QType = true;
-            else if (line.startsWith("ImageFolder|")) requiredMetadata.ImageFolder = true;
+            const tag = line.split("|")[0].trim().toLowerCase();
+
+            switch (tag) {
+                case "exam":
+                    requiredMetadata.Exam = true;
+                    break;
+            
+                case "subject":
+                    requiredMetadata.Subject = true;
+                    break;
+            
+                case "topic":
+                    requiredMetadata.Topic = true;
+                    break;
+            
+                case "subtopic":
+                    requiredMetadata.SubTopic = true;
+                    break;
+            
+                case "level":
+                    requiredMetadata.Level = true;
+                    break;
+            
+                case "notification":
+                case "notificaiton":   // backward compatibility
+                    requiredMetadata.Notification = true;
+                    break;
+            
+                case "type":
+                    requiredMetadata.Type = true;
+                    break;
+            
+                case "marks":
+                    requiredMetadata.Marks = true;
+                    break;
+            
+                case "qtype":
+                case "questiontype":
+                    requiredMetadata.QType = true;
+                    break;
+            
+                case "imagefolder":
+                    requiredMetadata.ImageFolder = true;
+                    break;
+            }
         }
 
         let metaPassed = 0;
