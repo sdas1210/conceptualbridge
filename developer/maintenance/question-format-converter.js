@@ -1,6 +1,6 @@
 /**
  * Conceptual Bridge - Developer Maintenance Suite
- * Module: Question Format Converter Engine
+ * Module: Question Format Converter Engine (Version 2)
  * Completely offline browser-native logic for converting legacy question formats to universal schema.
  */
 
@@ -96,25 +96,215 @@
     }
 
     /**
+     * Step 1: Validates required global metadata tags prior to question block scanning
+     * @param {Array<string>} lines 
+     * @returns {{ metaPassed: number, metaFailed: number, allPassed: boolean }}
+     */
+    function validateGlobalMetadata(lines) {
+        const requiredMetadata = {
+            Exam: false,
+            Subject: false,
+            Topic: false,
+            SubTopic: false,
+            Level: false,
+            Notification: false,
+            Type: false,
+            Marks: false,
+            QType: false,
+            ImageFolder: false
+        };
+
+        log("--- Starting Global Metadata Tag Audit ---", "info");
+
+        // Scan lines up until the first question block starts
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            if (line.startsWith("Q|") || line.startsWith("QEN|")) {
+                break;
+            }
+
+            if (line.startsWith("Exam|")) requiredMetadata.Exam = true;
+            else if (line.startsWith("Subject|")) requiredMetadata.Subject = true;
+            else if (line.startsWith("Topic|")) requiredMetadata.Topic = true;
+            else if (line.startsWith("SubTopic|")) requiredMetadata.SubTopic = true;
+            else if (line.startsWith("Level|")) requiredMetadata.Level = true;
+            else if (line.startsWith("Notification|") || line.startsWith("Notificaiton|")) requiredMetadata.Notification = true;
+            else if (line.startsWith("Type|")) requiredMetadata.Type = true;
+            else if (line.startsWith("Marks|")) requiredMetadata.Marks = true;
+            else if (line.startsWith("QType|") || line.startsWith("QuestionType|")) requiredMetadata.QType = true;
+            else if (line.startsWith("ImageFolder|")) requiredMetadata.ImageFolder = true;
+        }
+
+        let metaPassed = 0;
+        let metaFailed = 0;
+
+        for (const [key, isPresent] of Object.entries(requiredMetadata)) {
+            if (isPresent) {
+                metaPassed++;
+                log(`✓ ${key}`, "success");
+            } else {
+                metaFailed++;
+                log(`✗ ${key}`, "error");
+            }
+        }
+
+        const allPassed = metaFailed === 0;
+        log(`Metadata Audit Result: ${metaPassed} Passed, ${metaFailed} Failed. Status: ${allPassed ? "PASS" : "FAIL"}`, allPassed ? "success" : "warn");
+
+        return { metaPassed, metaFailed, allPassed };
+    }
+
+    /**
+     * Step 2: Validates question blocks for presence and uniqueness of required tags
+     * @param {Array<string>} lines 
+     * @returns {{ blocksPassed: number, blocksFailed: number, totalBlocks: number, allPassed: boolean }}
+     */
+    function validateQuestionBlocks(lines) {
+        log("--- Starting Question Block Validation ---", "info");
+
+        // Extract raw blocks with their metadata (block number, line number, and lines)
+        const rawBlocks = [];
+        let currentBlock = null;
+        let blockCounter = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+            const rawLine = lines[i];
+            const line = rawLine.trim();
+            if (!line) continue;
+
+            const isStart = line.startsWith('Q|') || line.startsWith('QEN|');
+
+            if (isStart) {
+                if (currentBlock) {
+                    rawBlocks.push(currentBlock);
+                }
+                blockCounter++;
+                currentBlock = {
+                    number: blockCounter,
+                    startLine: i + 1,
+                    lines: [line]
+                };
+            } else if (currentBlock) {
+                currentBlock.lines.push(line);
+            }
+        }
+
+        if (currentBlock) {
+            rawBlocks.push(currentBlock);
+        }
+
+        let blocksPassed = 0;
+        let blocksFailed = 0;
+
+        // Tags to validate in each block
+        const requiredTagKeys = ['QuestionTag', 'A|', 'B|', 'C|', 'D|', 'Shift|', 'Correct|', 'Difficulty|'];
+
+        for (let i = 0; i < rawBlocks.length; i++) {
+            const block = rawBlocks[i];
+            const tagCounts = {
+                'QuestionTag': 0,
+                'A|': 0,
+                'B|': 0,
+                'C|': 0,
+                'D|': 0,
+                'Shift|': 0,
+                'Correct|': 0,
+                'Difficulty|': 0
+            };
+
+            for (let j = 0; j < block.lines.length; j++) {
+                const l = block.lines[j];
+                if (l.startsWith('Q|') || l.startsWith('QEN|')) tagCounts['QuestionTag']++;
+                else if (l.startsWith('A|')) tagCounts['A|']++;
+                else if (l.startsWith('B|')) tagCounts['B|']++;
+                else if (l.startsWith('C|')) tagCounts['C|']++;
+                else if (l.startsWith('D|')) tagCounts['D|']++;
+                else if (l.startsWith('Shift|')) tagCounts['Shift|']++;
+                else if (l.startsWith('Correct|')) tagCounts['Correct|']++;
+                else if (l.startsWith('Difficulty|')) tagCounts['Difficulty|']++;
+            }
+
+            const missingTags = [];
+            const duplicateTags = [];
+
+            for (const key of requiredTagKeys) {
+                const count = tagCounts[key];
+                const displayName = key === 'QuestionTag' ? 'Q| (or QEN|)' : key;
+
+                if (count === 0) {
+                    missingTags.push(displayName);
+                } else if (count > 1) {
+                    duplicateTags.push(displayName);
+                }
+            }
+
+            const isBlockValid = missingTags.length === 0 && duplicateTags.length === 0;
+
+            if (isBlockValid) {
+                blocksPassed++;
+                log(`Checking Block ${block.number} - PASS`, "success");
+            } else {
+                blocksFailed++;
+                log(`Checking Block ${block.number} - FAIL`, "error");
+                log(`   Block ${block.number} | Question ${block.number} | Line ${block.startLine}`, "warn");
+
+                if (missingTags.length > 0) {
+                    log(`   Missing: ${missingTags.join(', ')}`, "error");
+                }
+                if (duplicateTags.length > 0) {
+                    log(`   Duplicate: ${duplicateTags.join(', ')}`, "error");
+                }
+            }
+        }
+
+        const allPassed = blocksFailed === 0 && rawBlocks.length > 0;
+        log(`Question Block Validation Result: ${blocksPassed} Passed, ${blocksFailed} Failed (Total: ${rawBlocks.length}). Status: ${allPassed ? "PASS" : "FAIL"}`, allPassed ? "success" : "warn");
+
+        return {
+            blocksPassed,
+            blocksFailed,
+            totalBlocks: rawBlocks.length,
+            allPassed
+        };
+    }
+
+    /**
      * Parses source raw text into structured metadata and block arrays
      */
     function parseAndConvertFormat(rawContent) {
         if (!rawContent || !rawContent.trim()) {
-            return { convertedText: "", questionsCount: 0, translationsCount: 0, metadataCount: 0 };
+            return {
+                convertedText: "",
+                questionsCount: 0,
+                translationsCount: 0,
+                metaPassed: 0,
+                metaFailed: 0,
+                allMetaPassed: false,
+                blocksPassed: 0,
+                blocksFailed: 0,
+                allBlocksPassed: false
+            };
         }
 
         const normalized = rawContent.replace(/\r\n/g, '\n');
         const lines = normalized.split('\n');
+
+        // Step 1: Global Metadata Tag Audit
+        const { metaPassed, metaFailed, allPassed: allMetaPassed } = validateGlobalMetadata(lines);
+
+        // Step 2: Question Block Validation
+        const { blocksPassed, blocksFailed, totalBlocks, allPassed: allBlocksPassed } = validateQuestionBlocks(lines);
 
         let globalMetadataLines = [];
         let rawBlocks = [];
         let currentBlockLines = [];
         let inQuestionBlock = false;
 
-        let globalMetaCount = 0;
         let translationsCount = 0;
 
-        // Step 1: Line by Line Scan for Global Metadata and Question Blocks
+        // Step 3: Line by Line Scan for Global Metadata and Question Blocks for Conversion
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
@@ -124,7 +314,6 @@
 
             if (isGlobalMeta && !inQuestionBlock) {
                 globalMetadataLines.push(line);
-                globalMetaCount++;
                 continue;
             }
 
@@ -143,7 +332,7 @@
             rawBlocks.push(currentBlockLines);
         }
 
-        // Step 2: Convert Each Block into Universal Bilingual Schema
+        // Step 4: Convert Each Block into Universal Bilingual Schema
         let convertedBlocks = [];
 
         for (let b = 0; b < rawBlocks.length; b++) {
@@ -165,7 +354,7 @@
                 questionId: ""
             };
 
-            for (let l = 0; b < blockLines.length && l < blockLines.length; l++) {
+            for (let l = 0; l < blockLines.length; l++) {
                 const line = blockLines[l];
 
                 if (line.startsWith('Q|')) {
@@ -247,7 +436,12 @@
             convertedText: resultText,
             questionsCount: rawBlocks.length,
             translationsCount: translationsCount,
-            metadataCount: globalMetaCount
+            metaPassed: metaPassed,
+            metaFailed: metaFailed,
+            allMetaPassed: allMetaPassed,
+            blocksPassed: blocksPassed,
+            blocksFailed: blocksFailed,
+            allBlocksPassed: allBlocksPassed
         };
     }
 
@@ -261,9 +455,9 @@
             log("Conversion warning: Input textarea is empty.", "warn");
             updateBadgeStatus("waiting", "Empty");
             outputTextarea.value = "";
-            metricQuestions.textContent = "0";
+            metricQuestions.textContent = "0 (P: 0 | F: 0)";
             metricTranslations.textContent = "0";
-            metricMetadata.textContent = "0";
+            metricMetadata.textContent = "P: 0 | F: 0";
             return;
         }
 
@@ -272,13 +466,18 @@
             const res = parseAndConvertFormat(rawContent);
 
             outputTextarea.value = res.convertedText;
-            metricQuestions.textContent = res.questionsCount;
+            metricQuestions.textContent = `${res.questionsCount} (P: ${res.blocksPassed} | F: ${res.blocksFailed})`;
             metricTranslations.textContent = res.translationsCount;
-            metricMetadata.textContent = res.metadataCount;
+            metricMetadata.textContent = `P: ${res.metaPassed} | F: ${res.metaFailed}`;
 
-            if (res.questionsCount > 0) {
+            const overallPassed = res.allMetaPassed && res.allBlocksPassed;
+
+            if (res.questionsCount > 0 && overallPassed) {
                 log(`Successfully converted ${res.questionsCount} question block(s) with ${res.translationsCount} translations.`, "success");
-                updateBadgeStatus("pass", "Success");
+                updateBadgeStatus("pass", "PASS");
+            } else if (res.questionsCount > 0 && !overallPassed) {
+                log(`Converted ${res.questionsCount} question block(s), but validation warnings exist (Meta Pass: ${res.allMetaPassed}, Blocks Pass: ${res.allBlocksPassed}).`, "warn");
+                updateBadgeStatus("fail", "FAIL");
             } else {
                 log("Warning: No valid question blocks (Q| or QEN|) detected in input.", "warn");
                 updateBadgeStatus("fail", "No Blocks");
