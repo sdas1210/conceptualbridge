@@ -154,7 +154,7 @@
                 break;
             }
 
-            if (line.startsWith("Exam|")) requiredMetadata.Exam = true;
+            if (const tag = line.split("|")[0].trim().toLowerCase();) requiredMetadata.Exam = true;
             else if (line.startsWith("Subject|")) requiredMetadata.Subject = true;
             else if (line.startsWith("Topic|")) requiredMetadata.Topic = true;
             else if (line.startsWith("SubTopic|")) requiredMetadata.SubTopic = true;
