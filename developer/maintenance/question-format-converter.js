@@ -1,7 +1,7 @@
 /**
  * Conceptual Bridge - Developer Maintenance Suite
- * Module: Question Format Converter Engine (Version 2 - Step 4)
- * Completely offline browser-native logic for converting legacy question formats to universal schema.
+ * Module: Question Format Converter Engine (Version 2 - Step 5 Production Polish)
+ * Offline browser-native logic for converting legacy question formats to universal schema.
  */
 
 (function () {
@@ -64,17 +64,45 @@
         consoleLogBox.scrollTop = consoleLogBox.scrollHeight;
     }
 
-    function updateBadgeStatus(status, text) {
+    /**
+     * Updates the status badge UI element for a test row.
+     * @param {'READY' | 'READING' | 'VALIDATING' | 'CONVERTING' | 'PASS' | 'FAIL' | 'ERROR'} status 
+     */
+    function updateBadgeStatus(status) {
         if (!metricStatusBadge) return;
         metricStatusBadge.className = 'badge';
-        if (status === 'pass') {
-            metricStatusBadge.classList.add('pass');
-        } else if (status === 'fail') {
-            metricStatusBadge.classList.add('fail');
-        } else {
-            metricStatusBadge.classList.add('waiting');
+
+        switch (status) {
+            case 'PASS':
+                metricStatusBadge.classList.add('pass');
+                metricStatusBadge.textContent = 'PASS';
+                break;
+            case 'FAIL':
+            case 'ERROR':
+                metricStatusBadge.classList.add('fail');
+                metricStatusBadge.textContent = status;
+                break;
+            case 'READING':
+            case 'VALIDATING':
+            case 'CONVERTING':
+            case 'READY':
+            default:
+                metricStatusBadge.classList.add('waiting');
+                metricStatusBadge.textContent = status;
+                break;
         }
-        metricStatusBadge.textContent = text;
+    }
+
+    /**
+     * Controls button disabled states dynamically based on input and output state.
+     */
+    function updateButtonStates() {
+        const hasInput = sourceTextarea && sourceTextarea.value.trim().length > 0;
+        const hasOutput = outputTextarea && outputTextarea.value.trim().length > 0;
+
+        if (btnConvert) btnConvert.disabled = !hasInput;
+        if (btnCopy) btnCopy.disabled = !hasOutput;
+        if (btnDownload) btnDownload.disabled = !hasOutput;
     }
 
     // ==========================================================================
@@ -115,7 +143,7 @@
             ImageFolder: false
         };
 
-        log("--- Starting Global Metadata Tag Audit ---", "info");
+        log("Checking Global Metadata...", "info");
 
         // Scan lines up until the first question block starts
         for (let i = 0; i < lines.length; i++) {
@@ -163,7 +191,7 @@
      * @returns {{ blocksPassed: number, blocksFailed: number, totalBlocks: number, allPassed: boolean }}
      */
     function validateQuestionBlocks(lines) {
-        log("--- Starting Question Block Validation ---", "info");
+        log("Checking Question Blocks...", "info");
 
         // Extract raw blocks with their metadata (block number, line number, and lines)
         const rawBlocks = [];
@@ -286,7 +314,11 @@
                 allMetaPassed: false,
                 blocksPassed: 0,
                 blocksFailed: 0,
-                allBlocksPassed: false
+                allBlocksPassed: false,
+                qIdPresentCount: 0,
+                qIdMissingCount: 0,
+                legacyBlocksCount: 0,
+                alreadyConvertedBlocksCount: 0
             };
         }
 
@@ -294,10 +326,14 @@
         const lines = normalized.split('\n');
 
         // Step 1: Global Metadata Tag Audit
+        updateBadgeStatus("VALIDATING");
         const { metaPassed, metaFailed, allPassed: allMetaPassed } = validateGlobalMetadata(lines);
 
         // Step 2: Question Block Validation
         const { blocksPassed, blocksFailed, totalBlocks, allPassed: allBlocksPassed } = validateQuestionBlocks(lines);
+
+        updateBadgeStatus("CONVERTING");
+        log("Converting Question Blocks...", "info");
 
         let globalMetadataLines = [];
         let rawBlocks = [];
@@ -305,6 +341,10 @@
         let inQuestionBlock = false;
 
         let translationsCount = 0;
+        let qIdPresentCount = 0;
+        let qIdMissingCount = 0;
+        let legacyBlocksCount = 0;
+        let alreadyConvertedBlocksCount = 0;
 
         // Step 3: Line by Line Scan for Global Metadata and Question Blocks for Conversion
         for (let i = 0; i < lines.length; i++) {
@@ -357,10 +397,13 @@
                 hasQuestionId: false
             };
 
+            let isLegacyBlock = false;
+
             for (let l = 0; l < blockLines.length; l++) {
                 const line = blockLines[l];
 
                 if (line.startsWith('Q|')) {
+                    isLegacyBlock = true;
                     const val = line.substring(2).trim();
                     const { eng, bng } = splitSlashValue(val);
                     blockObj.qEn = eng;
@@ -403,6 +446,18 @@
                 }
             }
 
+            if (isLegacyBlock) {
+                legacyBlocksCount++;
+            } else {
+                alreadyConvertedBlocksCount++;
+            }
+
+            if (blockObj.hasQuestionId) {
+                qIdPresentCount++;
+            } else {
+                qIdMissingCount++;
+            }
+
             // Construct Clean Standard Output String Block following strict order & idempotency rules
             let formattedBlock = [];
             
@@ -435,6 +490,8 @@
             convertedBlocks.push(formattedBlock.join('\n'));
         }
 
+        log("Generating Output...", "info");
+
         // Combine Global Metadata and Formatted Question Blocks
         let resultText = "";
         if (globalMetadataLines.length > 0) {
@@ -451,7 +508,11 @@
             allMetaPassed: allMetaPassed,
             blocksPassed: blocksPassed,
             blocksFailed: blocksFailed,
-            allBlocksPassed: allBlocksPassed
+            allBlocksPassed: allBlocksPassed,
+            qIdPresentCount: qIdPresentCount,
+            qIdMissingCount: qIdMissingCount,
+            legacyBlocksCount: legacyBlocksCount,
+            alreadyConvertedBlocksCount: alreadyConvertedBlocksCount
         };
     }
 
@@ -462,18 +523,27 @@
     function handleConversion() {
         const rawContent = sourceTextarea.value;
         if (!rawContent || !rawContent.trim()) {
-            log("Conversion warning: Input textarea is empty.", "warn");
-            updateBadgeStatus("waiting", "Empty");
+            log("Conversion warning: Input content is empty.", "warn");
+            updateBadgeStatus("READY");
             outputTextarea.value = "";
             metricQuestions.textContent = "0 (P: 0 | F: 0)";
             metricTranslations.textContent = "0";
             metricMetadata.textContent = "P: 0 | F: 0";
+            updateButtonStates();
             return;
         }
 
         try {
             log("Starting format conversion pass...", "info");
             const res = parseAndConvertFormat(rawContent);
+
+            if (res.questionsCount === 0) {
+                log("File rejected: TXT contains zero question blocks.", "error");
+                updateBadgeStatus("FAIL");
+                outputTextarea.value = "";
+                updateButtonStates();
+                return;
+            }
 
             outputTextarea.value = res.convertedText;
             metricQuestions.textContent = `${res.questionsCount} (P: ${res.blocksPassed} | F: ${res.blocksFailed})`;
@@ -482,41 +552,65 @@
 
             const overallPassed = res.allMetaPassed && res.allBlocksPassed;
 
-            if (res.questionsCount > 0 && overallPassed) {
+            log(`Detailed Metrics Breakdown: Total Blocks: ${res.questionsCount} (Converted: ${res.questionsCount}, Legacy: ${res.legacyBlocksCount}, Already Converted: ${res.alreadyConvertedBlocksCount}) | QuestionID Present: ${res.qIdPresentCount}, Missing: ${res.qIdMissingCount} | Blocks Passed: ${res.blocksPassed}, Failed: ${res.blocksFailed} | Metadata Passed: ${res.metaPassed}, Failed: ${res.metaFailed}`, "info");
+
+            if (overallPassed) {
                 log(`Successfully converted ${res.questionsCount} question block(s) with ${res.translationsCount} translations.`, "success");
-                updateBadgeStatus("pass", "PASS");
-            } else if (res.questionsCount > 0 && !overallPassed) {
-                log(`Converted ${res.questionsCount} question block(s), but validation warnings exist (Meta Pass: ${res.allMetaPassed}, Blocks Pass: ${res.allBlocksPassed}).`, "warn");
-                updateBadgeStatus("fail", "FAIL");
+                log("Ready for Download.", "success");
+                updateBadgeStatus("PASS");
             } else {
-                log("Warning: No valid question blocks (Q| or QEN|) detected in input.", "warn");
-                updateBadgeStatus("fail", "No Blocks");
+                log(`Converted ${res.questionsCount} question block(s), but validation warnings exist (Meta Pass: ${res.allMetaPassed}, Blocks Pass: ${res.allBlocksPassed}).`, "warn");
+                log("Ready for Download.", "warn");
+                updateBadgeStatus("FAIL");
             }
+
+            updateButtonStates();
         } catch (err) {
             log(`Conversion Error: ${err.message}`, "error");
-            updateBadgeStatus("fail", "Error");
+            updateBadgeStatus("ERROR");
+            updateButtonStates();
         }
     }
 
     function handleFileUpload(file) {
         if (!file) return;
-        if (!file.name.endsWith('.txt')) {
+
+        log("Reading file...", "info");
+        updateBadgeStatus("READING");
+
+        if (!file.name.toLowerCase().endsWith('.txt')) {
             log(`File rejected: '${file.name}' is not a .txt file.`, "error");
+            updateBadgeStatus("FAIL");
             alert("Only .txt files are supported.");
             return;
         }
 
-        currentConvertedFileName = file.name.replace('.txt', '_converted.txt');
-        log(`Reading file '${file.name}'...`, "info");
+        if (file.size === 0) {
+            log(`File rejected: '${file.name}' is empty (0 bytes).`, "error");
+            updateBadgeStatus("FAIL");
+            alert("The selected file is empty.");
+            return;
+        }
+
+        currentConvertedFileName = file.name.replace(/\.txt$/i, '_converted.txt');
 
         const reader = new FileReader();
         reader.onload = function (e) {
-            sourceTextarea.value = e.target.result;
+            const content = e.target.result;
+            if (!content || !content.trim()) {
+                log(`File rejected: '${file.name}' contains no readable content.`, "error");
+                updateBadgeStatus("FAIL");
+                alert("The selected file contains no text.");
+                return;
+            }
+            sourceTextarea.value = content;
             log(`File '${file.name}' loaded into source pane. Triggering conversion...`, "info");
+            updateButtonStates();
             handleConversion();
         };
         reader.onerror = function () {
             log(`Failed to read file '${file.name}'.`, "error");
+            updateBadgeStatus("ERROR");
         };
         reader.readAsText(file, "UTF-8");
     }
@@ -526,15 +620,23 @@
         outputTextarea.value = "";
         fileInput.value = "";
         currentConvertedFileName = "converted_questions.txt";
+
         metricQuestions.textContent = "0";
         metricTranslations.textContent = "0";
         metricMetadata.textContent = "0";
-        updateBadgeStatus("waiting", "Ready");
+
+        updateBadgeStatus("READY");
+
+        if (consoleLogBox) {
+            consoleLogBox.innerHTML = '';
+        }
+
+        updateButtonStates();
         log("Workspace reset. Ready for new input.", "info");
     }
 
     function handleCopy() {
-        if (!outputTextarea.value) {
+        if (!outputTextarea.value || !outputTextarea.value.trim()) {
             log("Copy failed: Output pane is empty.", "warn");
             return;
         }
@@ -550,7 +652,7 @@
 
     function handleDownload() {
         const text = outputTextarea.value;
-        if (!text) {
+        if (!text || !text.trim()) {
             log("Download failed: Output pane is empty.", "warn");
             alert("No converted content available to download.");
             return;
@@ -570,13 +672,15 @@
     }
 
     // ==========================================================================
-    // 5. INITIALIZATION & DRAG-AND-DROP BINDINGS
+    // 5. INITIALIZATION & BINDINGS
     // ==========================================================================
 
     btnConvert.addEventListener('click', handleConversion);
     btnClear.addEventListener('click', handleClear);
     btnCopy.addEventListener('click', handleCopy);
     btnDownload.addEventListener('click', handleDownload);
+
+    sourceTextarea.addEventListener('input', updateButtonStates);
 
     fileInput.addEventListener('change', function (e) {
         if (e.target.files && e.target.files[0]) {
@@ -602,10 +706,13 @@
         dropZone.classList.remove('dragover');
 
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFileUpload(e.target.files[0]);
+            handleFileUpload(e.dataTransfer.files[0]);
         }
     });
 
-    log("Question Format Converter Engine loaded successfully.", "success");
+    // Initial startup state setup
+    updateBadgeStatus("READY");
+    updateButtonStates();
+    log("Question Format Converter Engine initialized.", "success");
 
 })();
