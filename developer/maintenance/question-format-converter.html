@@ -1,125 +1,469 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Format Converter - Conceptual Bridge Developer Workspace</title>
-    <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
-    <link rel="stylesheet" href="question-format-converter.css">
-</head>
-<body>
+/**
+ * Conceptual Bridge - Developer Maintenance Suite
+ * Module: Question Format Converter Engine
+ * Completely offline browser-native logic for converting legacy question formats to universal schema.
+ */
 
-    <div class="container">
-        
-        <header class="header">
-            <div class="header-title-wrapper">
-                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                </svg>
-                <h1>Question Format Converter</h1>
-            </div>
-            <p>Convert legacy question text files into the universal bilingual schema format (QEN| / QBN|).</p>
-        </header>
+(function () {
+    'use strict';
 
-        <section class="metrics-grid">
-            <div class="metric-card">
-                <span class="metric-label">Parsed Questions</span>
-                <span id="metric-questions-count" class="metric-value">0</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Slash-Separated Translations</span>
-                <span id="metric-translations-count" class="metric-value">0</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Global Metadata Fields</span>
-                <span id="metric-metadata-count" class="metric-value">0</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Conversion Status</span>
-                <span id="metric-status-badge" class="badge waiting">Ready</span>
-            </div>
-        </section>
+    // ==========================================================================
+    // 1. STATE & DOM ELEMENT CACHE
+    // ==========================================================================
+    let currentConvertedFileName = "converted_questions.txt";
 
-        <main class="workspace-grid">
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const sourceTextarea = document.getElementById('raw-source-input');
+    const outputTextarea = document.getElementById('converted-output');
+    const consoleLogBox = document.getElementById('console-log-box');
 
-            <section class="glass-card panel-section">
-                <div class="panel-header">
-                    <h2>Source Input (Legacy / Raw TXT)</h2>
-                    <span class="panel-subtitle">Paste TXT content or drop a file</span>
-                </div>
+    const btnConvert = document.getElementById('btn-convert');
+    const btnClear = document.getElementById('btn-clear');
+    const btnCopy = document.getElementById('btn-copy');
+    const btnDownload = document.getElementById('btn-download');
 
-                <div id="drop-zone" class="drop-zone">
-                    <svg class="drop-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                    </svg>
-                    <p class="drop-text">Drag & drop source <strong>.txt</strong> file here or <label for="file-input" class="file-label">Browse File</label></p>
-                    <input type="file" id="file-input" accept=".txt" class="file-input-hidden">
-                </div>
+    const metricQuestions = document.getElementById('metric-questions-count');
+    const metricTranslations = document.getElementById('metric-translations-count');
+    const metricMetadata = document.getElementById('metric-metadata-count');
+    const metricStatusBadge = document.getElementById('metric-status-badge');
 
-                <div class="input-wrapper">
-                    <textarea id="raw-source-input" class="code-textarea" placeholder="Or paste your raw question text blocks here...&#10;&#10;Exam| RRB GROUP-D&#10;Subject| GACA&#10;&#10;Q| What is the capital of India? / ভারতের রাজধানী কোনটি?&#10;A| New Delhi / নয়াদিল্লি&#10;B| Kolkata / কলকাতা&#10;C| Mumbai / মুম্বাই&#10;D| Chennai / চেন্নাই&#10;Correct| A&#10;Difficulty| 3.5&#10;Shift| 19/12/2025 9:00 AM"></textarea>
-                </div>
+    // ==========================================================================
+    // 2. LOGGING & METRIC UTILITIES
+    // ==========================================================================
+    function getTimestamp() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+        return `[${h}:${m}:${s}]`;
+    }
 
-                <div class="button-row">
-                    <button id="btn-convert" class="btn btn-primary">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                        <span>Convert Format</span>
-                    </button>
-                    <button id="btn-clear" class="btn btn-secondary">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        <span>Clear All</span>
-                    </button>
-                </div>
-            </section>
+    function log(msg, level = 'info') {
+        if (!consoleLogBox) return;
+        const line = document.createElement('div');
+        line.className = 'console-line';
 
-            <section class="glass-card panel-section">
-                <div class="panel-header">
-                    <h2>Converted Output (Universal Schema)</h2>
-                    <span class="panel-subtitle">Formatted for bilingualQuestionParser.js</span>
-                </div>
+        switch (level) {
+            case 'success':
+                line.style.color = '#4ade80';
+                break;
+            case 'error':
+                line.style.color = '#f87171';
+                break;
+            case 'warn':
+                line.style.color = '#fb923c';
+                break;
+            default:
+                line.style.color = '#38bdf8';
+                break;
+        }
 
-                <div class="input-wrapper">
-                    <textarea id="converted-output" class="code-textarea readonly-textarea" readonly placeholder="Converted universal bilingual question output will appear here..."></textarea>
-                </div>
+        line.textContent = `${getTimestamp()} ${msg}`;
+        consoleLogBox.appendChild(line);
+        consoleLogBox.scrollTop = consoleLogBox.scrollHeight;
+    }
 
-                <div class="button-row">
-                    <button id="btn-copy" class="btn btn-secondary">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                        <span>Copy Output</span>
-                    </button>
-                    <button id="btn-download" class="btn btn-success">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        <span>Download .txt</span>
-                    </button>
-                </div>
-            </section>
+    function updateBadgeStatus(status, text) {
+        if (!metricStatusBadge) return;
+        metricStatusBadge.className = 'badge';
+        if (status === 'pass') {
+            metricStatusBadge.classList.add('pass');
+        } else if (status === 'fail') {
+            metricStatusBadge.classList.add('fail');
+        } else {
+            metricStatusBadge.classList.add('waiting');
+        }
+        metricStatusBadge.textContent = text;
+    }
 
-        </main>
+    // ==========================================================================
+    // 3. CORE PARSING & CONVERSION ENGINE
+    // ==========================================================================
 
-        <section class="glass-card log-section">
-            <div class="panel-header">
-                <h2>Conversion Execution Log</h2>
-                <span class="panel-subtitle">Detailed structural validation messages</span>
-            </div>
-            <div id="console-log-box" class="console-box">
-                <div class="console-line muted">[00:00:00] Converter engine initialized. Ready for source content...</div>
-            </div>
-        </section>
+    /**
+     * Helper to parse slash-separated strings ("English / Bengali")
+     */
+    function splitSlashValue(rawStr) {
+        if (!rawStr) return { eng: "", bng: "" };
+        if (rawStr.includes("/")) {
+            const idx = rawStr.indexOf("/");
+            const eng = rawStr.substring(0, idx).trim();
+            const bng = rawStr.substring(idx + 1).trim();
+            return { eng, bng };
+        }
+        return { eng: rawStr.trim(), bng: "" };
+    }
 
-        <footer class="footer">
-            <p><span class="footer-highlight">Conceptual Bridge Developer Workspace</span> &bull; Question Format Converter Utility</p>
-        </footer>
+    /**
+     * Validates required global metadata tags prior to question block scanning
+     * @param {Array<string>} lines 
+     * @returns {{ metaPassed: number, metaFailed: number, allPassed: boolean }}
+     */
+    function validateGlobalMetadata(lines) {
+        const requiredMetadata = {
+            Exam: false,
+            Subject: false,
+            Topic: false,
+            SubTopic: false,
+            Level: false,
+            Notification: false,
+            Type: false,
+            Marks: false,
+            QType: false,
+            ImageFolder: false
+        };
 
-    </div>
+        log("--- Starting Metadata Tag Audit ---", "info");
 
-    <script src="question-format-converter.js"></script>
-</body>
-</html>
+        // Scan lines up until the first question block starts
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            if (line.startsWith("Q|") || line.startsWith("QEN|")) {
+                break;
+            }
+
+            if (line.startsWith("Exam|")) requiredMetadata.Exam = true;
+            else if (line.startsWith("Subject|")) requiredMetadata.Subject = true;
+            else if (line.startsWith("Topic|")) requiredMetadata.Topic = true;
+            else if (line.startsWith("SubTopic|")) requiredMetadata.SubTopic = true;
+            else if (line.startsWith("Level|")) requiredMetadata.Level = true;
+            else if (line.startsWith("Notification|") || line.startsWith("Notificaiton|")) requiredMetadata.Notification = true;
+            else if (line.startsWith("Type|")) requiredMetadata.Type = true;
+            else if (line.startsWith("Marks|")) requiredMetadata.Marks = true;
+            else if (line.startsWith("QType|") || line.startsWith("QuestionType|")) requiredMetadata.QType = true;
+            else if (line.startsWith("ImageFolder|")) requiredMetadata.ImageFolder = true;
+        }
+
+        let metaPassed = 0;
+        let metaFailed = 0;
+
+        for (const [key, isPresent] of Object.entries(requiredMetadata)) {
+            if (isPresent) {
+                metaPassed++;
+                log(`✓ ${key}`, "success");
+            } else {
+                metaFailed++;
+                log(`✗ ${key}`, "error");
+            }
+        }
+
+        const allPassed = metaFailed === 0;
+        log(`Metadata Audit Result: ${metaPassed} Passed, ${metaFailed} Failed. Status: ${allPassed ? "PASS" : "FAIL"}`, allPassed ? "success" : "warn");
+
+        return { metaPassed, metaFailed, allPassed };
+    }
+
+    /**
+     * Parses source raw text into structured metadata and block arrays
+     */
+    function parseAndConvertFormat(rawContent) {
+        if (!rawContent || !rawContent.trim()) {
+            return { convertedText: "", questionsCount: 0, translationsCount: 0, metaPassed: 0, metaFailed: 0, allMetaPassed: false };
+        }
+
+        const normalized = rawContent.replace(/\r\n/g, '\n');
+        const lines = normalized.split('\n');
+
+        // Step 1: Pre-validation of Global Metadata Tags
+        const { metaPassed, metaFailed, allPassed: allMetaPassed } = validateGlobalMetadata(lines);
+
+        let globalMetadataLines = [];
+        let rawBlocks = [];
+        let currentBlockLines = [];
+        let inQuestionBlock = false;
+
+        let translationsCount = 0;
+
+        // Step 2: Line by Line Scan for Global Metadata and Question Blocks
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            const isNewQuestion = line.startsWith('Q|') || line.startsWith('QEN|');
+            const isGlobalMeta = /^(Exam|Subject|Topic|SubTopic|Level|Notification|Notificaiton|Type|Marks|QType|QuestionType|ImageFolder)\|/i.test(line);
+
+            if (isGlobalMeta && !inQuestionBlock) {
+                globalMetadataLines.push(line);
+                continue;
+            }
+
+            if (isNewQuestion) {
+                if (currentBlockLines.length > 0) {
+                    rawBlocks.push(currentBlockLines);
+                }
+                currentBlockLines = [line];
+                inQuestionBlock = true;
+            } else if (inQuestionBlock) {
+                currentBlockLines.push(line);
+            }
+        }
+
+        if (currentBlockLines.length > 0) {
+            rawBlocks.push(currentBlockLines);
+        }
+
+        // Step 3: Convert Each Block into Universal Bilingual Schema
+        let convertedBlocks = [];
+
+        for (let b = 0; b < rawBlocks.length; b++) {
+            const blockLines = rawBlocks[b];
+            let blockObj = {
+                qEn: "",
+                qBn: "",
+                common: "",
+                image: "",
+                a: "",
+                b: "",
+                c: "",
+                d: "",
+                shift: "",
+                correct: "",
+                difficulty: "",
+                topic: "",
+                subTopic: "",
+                questionId: ""
+            };
+
+            for (let l = 0; l < blockLines.length; l++) {
+                const line = blockLines[l];
+
+                if (line.startsWith('Q|')) {
+                    const val = line.substring(2).trim();
+                    const { eng, bng } = splitSlashValue(val);
+                    blockObj.qEn = eng;
+                    blockObj.qBn = bng;
+                    if (bng) translationsCount++;
+                } else if (line.startsWith('QEN|')) {
+                    blockObj.qEn = line.substring(4).trim();
+                } else if (line.startsWith('QBN|')) {
+                    blockObj.qBn = line.substring(4).trim();
+                    if (blockObj.qBn) translationsCount++;
+                } else if (line.startsWith('Common|') || line.startsWith('Equation|')) {
+                    blockObj.common = line.substring(line.indexOf('|') + 1).trim();
+                } else if (line.startsWith('Image|')) {
+                    blockObj.image = line.substring(6).trim();
+                } else if (line.startsWith('A|')) {
+                    blockObj.a = line.substring(2).trim();
+                    if (blockObj.a.includes('/')) translationsCount++;
+                } else if (line.startsWith('B|')) {
+                    blockObj.b = line.substring(2).trim();
+                    if (blockObj.b.includes('/')) translationsCount++;
+                } else if (line.startsWith('C|')) {
+                    blockObj.c = line.substring(2).trim();
+                    if (blockObj.c.includes('/')) translationsCount++;
+                } else if (line.startsWith('D|')) {
+                    blockObj.d = line.substring(2).trim();
+                    if (blockObj.d.includes('/')) translationsCount++;
+                } else if (line.startsWith('Shift|')) {
+                    blockObj.shift = line.substring(6).trim();
+                } else if (line.startsWith('Correct|')) {
+                    blockObj.correct = line.substring(8).trim();
+                } else if (line.startsWith('Difficulty|')) {
+                    blockObj.difficulty = line.substring(11).trim();
+                } else if (line.startsWith('Topic|')) {
+                    blockObj.topic = line.substring(6).trim();
+                } else if (line.startsWith('SubTopic|')) {
+                    blockObj.subTopic = line.substring(9).trim();
+                } else if (line.startsWith('QuestionID|')) {
+                    blockObj.questionId = line.substring(11).trim();
+                }
+            }
+
+            // Construct Clean Standard Output String Block
+            let formattedBlock = [];
+            formattedBlock.push(`QEN| ${blockObj.qEn}`);
+            if (blockObj.qBn) {
+                formattedBlock.push(`QBN| ${blockObj.qBn}`);
+            }
+            if (blockObj.common) {
+                formattedBlock.push(`Common| ${blockObj.common}`);
+            }
+            if (blockObj.image) {
+                formattedBlock.push(`Image| ${blockObj.image}`);
+            }
+            if (blockObj.a) formattedBlock.push(`A| ${blockObj.a}`);
+            if (blockObj.b) formattedBlock.push(`B| ${blockObj.b}`);
+            if (blockObj.c) formattedBlock.push(`C| ${blockObj.c}`);
+            if (blockObj.d) formattedBlock.push(`D| ${blockObj.d}`);
+            if (blockObj.shift) formattedBlock.push(`Shift| ${blockObj.shift}`);
+            if (blockObj.correct) formattedBlock.push(`Correct| ${blockObj.correct}`);
+            if (blockObj.difficulty) formattedBlock.push(`Difficulty| ${blockObj.difficulty}`);
+            if (blockObj.topic) formattedBlock.push(`Topic| ${blockObj.topic}`);
+            if (blockObj.subTopic) formattedBlock.push(`SubTopic| ${blockObj.subTopic}`);
+            if (blockObj.questionId) formattedBlock.push(`QuestionID| ${blockObj.questionId}`);
+
+            convertedBlocks.push(formattedBlock.join('\n'));
+        }
+
+        // Combine Global Metadata and Formatted Question Blocks
+        let resultText = "";
+        if (globalMetadataLines.length > 0) {
+            resultText += globalMetadataLines.join('\n') + '\n\n';
+        }
+        resultText += convertedBlocks.join('\n\n');
+
+        return {
+            convertedText: resultText,
+            questionsCount: rawBlocks.length,
+            translationsCount: translationsCount,
+            metaPassed: metaPassed,
+            metaFailed: metaFailed,
+            allMetaPassed: allMetaPassed
+        };
+    }
+
+    // ==========================================================================
+    // 4. EVENT HANDLERS & WORKFLOW
+    // ==========================================================================
+
+    function handleConversion() {
+        const rawContent = sourceTextarea.value;
+        if (!rawContent || !rawContent.trim()) {
+            log("Conversion warning: Input textarea is empty.", "warn");
+            updateBadgeStatus("waiting", "Empty");
+            outputTextarea.value = "";
+            metricQuestions.textContent = "0";
+            metricTranslations.textContent = "0";
+            metricMetadata.textContent = "0 / 0";
+            return;
+        }
+
+        try {
+            log("Starting format conversion pass...", "info");
+            const res = parseAndConvertFormat(rawContent);
+
+            outputTextarea.value = res.convertedText;
+            metricQuestions.textContent = res.questionsCount;
+            metricTranslations.textContent = res.translationsCount;
+            metricMetadata.textContent = `P: ${res.metaPassed} | F: ${res.metaFailed}`;
+
+            if (res.questionsCount > 0 && res.allMetaPassed) {
+                log(`Successfully converted ${res.questionsCount} question block(s) with ${res.translationsCount} translations.`, "success");
+                updateBadgeStatus("pass", "PASS");
+            } else if (res.questionsCount > 0 && !res.allMetaPassed) {
+                log(`Converted ${res.questionsCount} question block(s), but global metadata validation FAILED.`, "warn");
+                updateBadgeStatus("fail", "FAIL");
+            } else {
+                log("Warning: No valid question blocks (Q| or QEN|) detected in input.", "warn");
+                updateBadgeStatus("fail", "No Blocks");
+            }
+        } catch (err) {
+            log(`Conversion Error: ${err.message}`, "error");
+            updateBadgeStatus("fail", "Error");
+        }
+    }
+
+    function handleFileUpload(file) {
+        if (!file) return;
+        if (!file.name.endsWith('.txt')) {
+            log(`File rejected: '${file.name}' is not a .txt file.`, "error");
+            alert("Only .txt files are supported.");
+            return;
+        }
+
+        currentConvertedFileName = file.name.replace('.txt', '_converted.txt');
+        log(`Reading file '${file.name}'...`, "info");
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            sourceTextarea.value = e.target.result;
+            log(`File '${file.name}' loaded into source pane. Triggering conversion...`, "info");
+            handleConversion();
+        };
+        reader.onerror = function () {
+            log(`Failed to read file '${file.name}'.`, "error");
+        };
+        reader.readAsText(file, "UTF-8");
+    }
+
+    function handleClear() {
+        sourceTextarea.value = "";
+        outputTextarea.value = "";
+        fileInput.value = "";
+        currentConvertedFileName = "converted_questions.txt";
+        metricQuestions.textContent = "0";
+        metricTranslations.textContent = "0";
+        metricMetadata.textContent = "0";
+        updateBadgeStatus("waiting", "Ready");
+        log("Workspace reset. Ready for new input.", "info");
+    }
+
+    function handleCopy() {
+        if (!outputTextarea.value) {
+            log("Copy failed: Output pane is empty.", "warn");
+            return;
+        }
+        navigator.clipboard.writeText(outputTextarea.value)
+            .then(() => {
+                log("Converted output copied to clipboard successfully.", "success");
+                alert("Converted text copied to clipboard!");
+            })
+            .catch(err => {
+                log(`Clipboard write failed: ${err.message}`, "error");
+            });
+    }
+
+    function handleDownload() {
+        const text = outputTextarea.value;
+        if (!text) {
+            log("Download failed: Output pane is empty.", "warn");
+            alert("No converted content available to download.");
+            return;
+        }
+
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = currentConvertedFileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        log(`Downloaded converted file: '${currentConvertedFileName}'`, "success");
+    }
+
+    // ==========================================================================
+    // 5. INITIALIZATION & DRAG-AND-DROP BINDINGS
+    // ==========================================================================
+
+    btnConvert.addEventListener('click', handleConversion);
+    btnClear.addEventListener('click', handleClear);
+    btnCopy.addEventListener('click', handleCopy);
+    btnDownload.addEventListener('click', handleDownload);
+
+    fileInput.addEventListener('change', function (e) {
+        if (e.target.files && e.target.files[0]) {
+            handleFileUpload(e.target.files[0]);
+        }
+    });
+
+    dropZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('dragover');
+
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleFileUpload(e.dataTransfer.files[0]);
+        }
+    });
+
+    log("Question Format Converter Engine loaded successfully.", "success");
+
+})();
