@@ -242,14 +242,33 @@
     </div>
 
     <script>
-        fetch("/api/tutorial-files?subject=GACA") 
+        let uploadedVideoFiles = [];
         let cachedLoadedData = {};
 
-        function openSubjectFolder(subjectType) {
+        async function loadTutorialList(subject) {
+            try {
+                const response = await fetch(`/api/tutorial-files?subject=${encodeURIComponent(subject)}`);
+                if (!response.ok) return false;
+                const data = await response.json();
+                if (data && data.success === true && Array.isArray(data.files)) {
+                    uploadedVideoFiles = data.files;
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error("Error loading tutorial file list:", e);
+                return false;
+            }
+        }
+
+        async function openSubjectFolder(subjectType) {
             document.querySelectorAll('.hub-card').forEach(c => c.classList.remove('active-hub'));
             document.getElementById('ga-table-section').style.display = 'none';
 
             if (subjectType === 'ga') {
+                const loaded = await loadTutorialList("GACA");
+                if (!loaded) return;
+
                 document.getElementById('card-ga').classList.add('active-hub');
                 document.getElementById('ga-table-section').style.display = 'block';
                 generateStudioTableLayout();
@@ -262,9 +281,10 @@
             const tbody = document.getElementById('studio-table-body');
             tbody.innerHTML = '';
 
-            for (let fileNum of uploadedVideoFiles) {
+            for (const fileInfo of uploadedVideoFiles) {
+                const fileNum = fileInfo.id;
                 try {
-                    const response = await fetch(`Video/GACA/${fileNum}.txt`);
+                    const response = await fetch(fileInfo.path);
                     if (!response.ok) continue;
 
                     const rawText = await response.text();
