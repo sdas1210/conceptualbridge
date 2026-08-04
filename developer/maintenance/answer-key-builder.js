@@ -239,9 +239,15 @@ let activeEditSide = null;
     "bengali"
 */
 
+let singleFileModified = false;
 
+let englishFileModified = false;
+
+let bengaliFileModified = false;
 let builderMode =
     "gaca";
+
+
 // =========================================
 // EVENT LISTENERS
 // =========================================
@@ -389,6 +395,7 @@ singleSaveBtn.addEventListener(
     "click",
     () => saveBlockEdit("single")
 );
+singleFileModified = true;
 
 
 englishEditBtn.addEventListener(
@@ -400,6 +407,7 @@ englishSaveBtn.addEventListener(
     "click",
     () => saveBlockEdit("english")
 );
+englishFileModified = true;
 
 
 bengaliEditBtn.addEventListener(
@@ -411,6 +419,7 @@ bengaliSaveBtn.addEventListener(
     "click",
     () => saveBlockEdit("bengali")
 );
+bengaliFileModified = true;
 
 gacaModeBtn.addEventListener(
     "click",
@@ -1913,8 +1922,10 @@ function startNewSession() {
 
     completionLogged =
         false;
-
-
+    singleFileModified = false;
+    englishFileModified = false;
+    bengaliFileModified = false;
+    
     // Restore default configuration
 
     totalQuestionsInput.disabled =
