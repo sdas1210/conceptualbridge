@@ -939,10 +939,6 @@ function showCurrentQuestion() {
 // SELECT ANSWER
 // =========================================
 
-// =========================================
-// SELECT ANSWER
-// =========================================
-
 function selectAnswer(answer) {
 
     if (!sessionActive) {
@@ -1454,17 +1450,6 @@ function validateOutput() {
         selectedCount;
 
 
-    /*
-        DEVELOPMENT FORMAT
-
-        ACBDA...
-
-        One character per answer
-    */
-
-    
-
-
     document.getElementById(
         "requiredAnswers"
     ).textContent =
@@ -1501,9 +1486,6 @@ function validateOutput() {
                 .includes(answer)
     );
     
-
-    
-
 
    if (valid) {
 
@@ -1610,25 +1592,6 @@ requestAnimationFrame(
 
 function createStandardOutput() {
 
-    /*
-        IMPORTANT:
-
-        This preserves the original
-        Python format:
-
-        A
-
-        C
-
-        B
-
-        D
-
-        Equivalent:
-
-        A\n\nC\n\nB\n\nD\n\n
-    */
-
     return (
         answers.join("\n\n") +
         "\n\n"
@@ -1650,20 +1613,6 @@ function createNumberedOutput() {
         i++
     ) {
 
-        /*
-            IMPORTANT:
-
-            Numbering always starts from Q1.
-
-            It is intentionally independent
-            of Initial Question No.
-
-            answers[0] → Q1
-            answers[1] → Q2
-            answers[2] → Q3
-            etc.
-        */
-
         const questionNumber =
             i + 1;
 
@@ -1684,20 +1633,10 @@ function createNumberedOutput() {
         "\n\n"
     );
 }
-// =========================================
-// DEVELOPMENT OUTPUT
-// AnsDev.txt
-// =========================================
-
-
 
 
 // =========================================
 // DOWNLOAD STANDARD FILE
-// =========================================
-
-// =========================================
-// DOWNLOAD BOTH ANSWER FILES
 // =========================================
 
 function downloadStandardFile() {
@@ -1754,8 +1693,11 @@ function downloadStandardFile() {
 
     /*
         Small delay helps browsers process
-        two consecutive file downloads.
+        consecutive file downloads.
     */
+
+    let currentDelay = 300;
+
 
     setTimeout(
         () => {
@@ -1766,19 +1708,88 @@ function downloadStandardFile() {
             );
 
         },
-        300
+        currentDelay
     );
+
+
+    /*
+        FILE 3 & 4
+        Edited source files (only if modified)
+    */
+
+    if (sourceMode === 1) {
+
+        if (singleFileModified && singleTxtFile) {
+
+            currentDelay += 300;
+
+            setTimeout(
+                () => {
+
+                    downloadTextFile(
+                        singleTxtText,
+                        singleTxtFile.name
+                    );
+
+                },
+                currentDelay
+            );
+
+            log(
+                `Edited source file downloaded: ${singleTxtFile.name}`
+            );
+        }
+
+    } else {
+
+        if (englishFileModified && englishTxtFile) {
+
+            currentDelay += 300;
+
+            setTimeout(
+                () => {
+
+                    downloadTextFile(
+                        englishTxtText,
+                        englishTxtFile.name
+                    );
+
+                },
+                currentDelay
+            );
+
+            log(
+                `Edited English file downloaded: ${englishTxtFile.name}`
+            );
+        }
+
+        if (bengaliFileModified && bengaliTxtFile) {
+
+            currentDelay += 300;
+
+            setTimeout(
+                () => {
+
+                    downloadTextFile(
+                        bengaliTxtText,
+                        bengaliTxtFile.name
+                    );
+
+                },
+                currentDelay
+            );
+
+            log(
+                `Edited Bengali file downloaded: ${bengaliTxtFile.name}`
+            );
+        }
+    }
 
 
     log(
         "Ansopt1.txt and Ansopt.txt downloaded."
     );
 }
-
-
-// =========================================
-// DOWNLOAD DEVELOPMENT FILE
-// =========================================
 
 
 // =========================================
@@ -3153,7 +3164,7 @@ function saveBlockEdit(side) {
             extractQuestionOptionLines(
                 block.originalText
             );
-    
+
 
         bengaliBlockEditor.value =
             block.displayText;
@@ -3321,9 +3332,6 @@ function rebuildEditedSourceTexts() {
 
 
 
-// =========================================
-// SOURCE ↔ ANSWER SYNCHRONIZATION
-// =========================================
 // =========================================
 // SOURCE ↔ ANSWER SYNCHRONIZATION
 // =========================================
