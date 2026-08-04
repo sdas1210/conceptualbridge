@@ -395,7 +395,7 @@ singleSaveBtn.addEventListener(
     "click",
     () => saveBlockEdit("single")
 );
-singleFileModified = true;
+
 
 
 englishEditBtn.addEventListener(
@@ -407,7 +407,7 @@ englishSaveBtn.addEventListener(
     "click",
     () => saveBlockEdit("english")
 );
-englishFileModified = true;
+
 
 
 bengaliEditBtn.addEventListener(
@@ -419,7 +419,7 @@ bengaliSaveBtn.addEventListener(
     "click",
     () => saveBlockEdit("bengali")
 );
-bengaliFileModified = true;
+
 
 gacaModeBtn.addEventListener(
     "click",
@@ -3085,7 +3085,8 @@ function saveBlockEdit(side) {
         block.originalText =
             singleBlockEditor.value;
 
-
+        singleFileModified = true;
+        
         singleBlockEditor.readOnly =
             true;
 
@@ -3109,7 +3110,8 @@ function saveBlockEdit(side) {
                 block.originalText,
                 updatedVisible
             );
-
+        
+        englishFileModified = true;
 
         block.displayText =
             extractQuestionOptionLines(
@@ -3144,13 +3146,14 @@ function saveBlockEdit(side) {
                 block.originalText,
                 updatedVisible
             );
-
-
+        
+        bengaliFileModified = true;
+        
         block.displayText =
             extractQuestionOptionLines(
                 block.originalText
             );
-
+    
 
         bengaliBlockEditor.value =
             block.displayText;
