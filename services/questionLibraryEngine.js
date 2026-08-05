@@ -3,18 +3,18 @@ import path from "path";
 
 /**
  * Conceptual Bridge - Question Library Engine
- * Phase 1 & 2: File Discovery & Metadata Extraction Engine
+ * Phase 1, 2 & 3: File Discovery, Metadata Extraction & Topic Aggregation Engine
  * 
- * Dynamically discovers, validates, and sorts subject-specific question TXT files,
- * extracting global metadata headers and counting question blocks per file.
+ * Dynamically discovers, validates, and reads question TXT files, extracting metadata,
+ * detecting question format, and aggregating statistics by Topic.
  */
 
 /**
- * Reads global metadata header and counts total question blocks in a question TXT file.
+ * Reads global metadata header, detects question format (Q vs QEN), and counts total question blocks in a TXT file.
  * Stops scanning metadata immediately upon encountering the first question block marker (Q| or QEN|).
  * 
  * @param {string} fullFilePath - Absolute or relative file path to read
- * @returns {Promise<Object>} Object containing extracted metadata fields and questionCount
+ * @returns {Promise<Object>} Object containing extracted metadata fields, questionCount, and questionFormat
  */
 async function extractFileMetadata(fullFilePath) {
     const metadata = {
@@ -27,7 +27,8 @@ async function extractFileMetadata(fullFilePath) {
         type: null,
         marks: null,
         qtype: null,
-        questionCount: 0
+        questionCount: 0,
+        questionFormat: null
     };
 
     try {
@@ -40,10 +41,15 @@ async function extractFileMetadata(fullFilePath) {
             const line = rawLine.trim();
             if (!line) continue;
 
-            const isQuestionMarker = line.startsWith("Q|") || line.startsWith("QEN|");
+            const isQTag = line.startsWith("Q|");
+            const isQENTag = line.startsWith("QEN|");
+            const isQuestionMarker = isQTag || isQENTag;
 
             if (isQuestionMarker) {
-                firstQuestionReached = true;
+                if (!firstQuestionReached) {
+                    firstQuestionReached = true;
+                    metadata.questionFormat = isQENTag ? "QEN" : "Q";
+                }
                 metadata.questionCount++;
                 continue;
             }
@@ -95,10 +101,77 @@ async function extractFileMetadata(fullFilePath) {
 }
 
 /**
- * Discovers, parses metadata, and returns all sorted .txt question files for a given subject.
+ * Groups processed question file objects by Topic and aggregates metadata metrics.
+ * 
+ * @param {Array<Object>} processedFiles - List of file metadata objects
+ * @returns {Array<Object>} Sorted list of aggregated Topic objects
+ */
+function aggregateTopics(processedFiles) {
+    const topicMap = new Map();
+
+    for (const file of processedFiles) {
+        const topicName = file.topic || "Uncategorized";
+
+        if (!topicMap.has(topicName)) {
+            topicMap.set(topicName, {
+                topic: topicName,
+                totalFiles: 0,
+                totalQuestions: 0,
+                files: [],
+                subTopicsSet: new Set(),
+                levelsSet: new Set(),
+                examsSet: new Set()
+            });
+        }
+
+        const topicEntry = topicMap.get(topicName);
+
+        topicEntry.totalFiles += 1;
+        topicEntry.totalQuestions += file.questionCount || 0;
+
+        // Push numeric file ID (or filename if non-numeric)
+        topicEntry.files.push(file.numericId);
+
+        // Collect unique metadata attributes
+        if (file.subTopic) topicEntry.subTopicsSet.add(file.subTopic);
+        if (file.level) topicEntry.levelsSet.add(String(file.level));
+        if (file.exam) topicEntry.examsSet.add(file.exam);
+    }
+
+    // Transform Map entries into final JSON structures and apply required sorting
+    const aggregatedTopics = Array.from(topicMap.values()).map(entry => {
+        // Sort files numerically if numeric, otherwise alphabetically
+        entry.files.sort((a, b) => {
+            const isANum = typeof a === "number";
+            const isBNum = typeof b === "number";
+            if (isANum && isBNum) return a - b;
+            if (isANum && !isBNum) return -1;
+            if (!isANum && isBNum) return 1;
+            return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
+        });
+
+        return {
+            topic: entry.topic,
+            totalFiles: entry.totalFiles,
+            totalQuestions: entry.totalQuestions,
+            files: entry.files,
+            subTopics: Array.from(entry.subTopicsSet).sort((a, b) => a.localeCompare(b)),
+            levels: Array.from(entry.levelsSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
+            exams: Array.from(entry.examsSet).sort((a, b) => a.localeCompare(b))
+        };
+    });
+
+    // Sort Topics alphabetically
+    aggregatedTopics.sort((a, b) => a.topic.localeCompare(b.topic));
+
+    return aggregatedTopics;
+}
+
+/**
+ * Discovers, parses metadata, aggregates topics, and returns both raw file metadata and aggregated topics.
  * 
  * @param {string} subject - The subject key (e.g., 'math', 'gaca', 'gi', 'gs')
- * @returns {Promise<Object>} Status object containing success state, subject, totalFiles, and files array
+ * @returns {Promise<Object>} Status object containing success state, subject, totalFiles, totalTopics, files, and topics arrays
  */
 export async function discoverQuestionFiles(subject) {
     try {
@@ -156,6 +229,7 @@ export async function discoverQuestionFiles(subject) {
                 filename: filename,
                 numericId: numericId,
                 fullPath: path.join(targetDir, filename),
+                relativePath: `questions/${normalizedSubject}/${filename}`,
                 isNumeric: /^\d+$/.test(nameWithoutExt) && !isNaN(parsedId)
             });
         }
@@ -191,6 +265,8 @@ export async function discoverQuestionFiles(subject) {
             processedFiles.push({
                 filename: fileItem.filename,
                 numericId: fileItem.numericId,
+                relativePath: fileItem.relativePath,
+                questionFormat: meta.questionFormat,
                 exam: meta.exam,
                 subject: meta.subject,
                 topic: meta.topic,
@@ -204,12 +280,17 @@ export async function discoverQuestionFiles(subject) {
             });
         }
 
-        // Step 8: Return structured success payload
+        // Step 8: Aggregate files into topic groups
+        const topics = aggregateTopics(processedFiles);
+
+        // Step 9: Return both file-level metadata and topic-level aggregated payload
         return {
             success: true,
             subject: normalizedSubject,
             totalFiles: processedFiles.length,
-            files: processedFiles
+            totalTopics: topics.length,
+            files: processedFiles,
+            topics: topics
         };
 
     } catch (error) {
