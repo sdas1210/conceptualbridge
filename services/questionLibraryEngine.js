@@ -2,12 +2,82 @@ import fs from "fs/promises";
 import path from "path";
 
 /**
- * Conceptual Bridge - Question Library Engine
- * Phase 1, 2 & 3: File Discovery, Metadata Extraction & Topic Aggregation Engine
+ * Conceptual Bridge - Question Library Engine (v1.0)
+ * Phase 1: File Discovery, Metadata Extraction, Topic Aggregation & Curriculum Validation
  * 
  * Dynamically discovers, validates, and reads question TXT files, extracting metadata,
- * detecting question format, and aggregating statistics by Topic.
+ * detecting question format, aggregating statistics by Topic, and validating against curriculum standards.
  */
+
+/**
+ * Normalizes any supported curriculum JSON structure into a standard internal map.
+ * 
+ * Supported Formats:
+ * - Format A: { "topics": [ { "topic": "Name", "subTopics": [...] } ] }
+ * - Format B: [ { "topic": "Name", "subTopics": [...] } ]
+ * - Format C: Flexible / dictionary objects or raw lists
+ * 
+ * @param {Object|Array} rawCurriculum - Parsed JSON object or array from curriculum file
+ * @returns {Map<string, Set<string>>} Normalized Map where key is topicName and value is a Set of subTopics
+ */
+function parseCurriculumStructure(rawCurriculum) {
+    const validTopicsMap = new Map();
+
+    if (!rawCurriculum) {
+        return validTopicsMap;
+    }
+
+    let topicsList = [];
+
+    if (Array.isArray(rawCurriculum)) {
+        // Format B
+        topicsList = rawCurriculum;
+    } else if (typeof rawCurriculum === "object") {
+        if (Array.isArray(rawCurriculum.topics)) {
+            // Format A
+            topicsList = rawCurriculum.topics;
+        } else {
+            // Format C / Dictionary Fallback
+            topicsList = Object.keys(rawCurriculum).map(key => {
+                const val = rawCurriculum[key];
+                if (typeof val === "object" && val !== null) {
+                    return {
+                        topic: val.topic || key,
+                        subTopics: Array.isArray(val.subTopics) ? val.subTopics : []
+                    };
+                }
+                return {
+                    topic: key,
+                    subTopics: Array.isArray(val) ? val : []
+                };
+            });
+        }
+    }
+
+    for (const item of topicsList) {
+        if (item && typeof item === "object" && item.topic) {
+            const topicName = String(item.topic).trim();
+            const subTopicsSet = new Set(
+                Array.isArray(item.subTopics)
+                    ? item.subTopics.map(st => String(subTopicName(st)).trim())
+                    : []
+            );
+            validTopicsMap.set(topicName, subTopicsSet);
+        }
+    }
+
+    return validTopicsMap;
+}
+
+/**
+ * Helper to safely resolve subTopic string name from array elements
+ */
+function subTopicName(st) {
+    if (typeof st === "string") return st;
+    if (st && typeof st === "object" && st.name) return st.name;
+    if (st && typeof st === "object" && st.subTopic) return st.subTopic;
+    return String(st);
+}
 
 /**
  * Reads global metadata header, detects question format (Q vs QEN), and counts total question blocks in a TXT file.
@@ -168,10 +238,145 @@ function aggregateTopics(processedFiles) {
 }
 
 /**
- * Discovers, parses metadata, aggregates topics, and returns both raw file metadata and aggregated topics.
+ * Validates extracted file metadata against normalized standard curriculum structures.
+ * 
+ * @param {Array<Object>} processedFiles - Array of clean file metadata objects
+ * @param {string} subject - Subject identifier
+ * @returns {Promise<Object>} Curriculum validation payload containing summary, fileResults, unknownTopics, unknownSubTopics, and unusedCurriculum
+ */
+async function validateCurriculum(processedFiles, subject) {
+    const summary = {
+        totalFiles: processedFiles.length,
+        validFiles: 0,
+        invalidFiles: 0,
+        warnings: 0
+    };
+
+    const unknownTopicsSet = new Set();
+    const unknownSubTopicsMap = new Map(); // "topic|subTopic" -> { topic, subTopic }
+    const usedSubTopicsMap = new Map(); // topicName -> Set of subTopics used
+    const fileResults = [];
+
+    const curriculumPath = path.join(process.cwd(), "developer", "maintenance", `${subject}.json`);
+    let validTopicsMap = new Map();
+
+    try {
+        const rawCurriculumText = await fs.readFile(curriculumPath, "utf8");
+        const rawCurriculum = JSON.parse(rawCurriculumText);
+        validTopicsMap = parseCurriculumStructure(rawCurriculum);
+    } catch (e) {
+        // Curriculum file missing or unreadable
+        validTopicsMap = new Map();
+    }
+
+    for (const file of processedFiles) {
+        let topicStatus = "PASS";
+        let subTopicStatus = "PASS";
+        const messages = [];
+
+        const hasTopic = file.topic !== null && file.topic.trim() !== "";
+        const hasSubTopic = file.subTopic !== null && file.subTopic.trim() !== "";
+
+        // Check Blank Topic
+        if (!hasTopic) {
+            topicStatus = "FAIL";
+            messages.push("Blank Topic");
+        }
+
+        // Check Blank SubTopic
+        if (!hasSubTopic) {
+            subTopicStatus = "WARNING";
+            messages.push("Blank SubTopic");
+        }
+
+        if (validTopicsMap.size > 0) {
+            if (hasTopic) {
+                if (!validTopicsMap.has(file.topic)) {
+                    topicStatus = "FAIL";
+                    messages.push("Unknown Topic");
+                    unknownTopicsSet.add(file.topic);
+                } else {
+                    const validSubSet = validTopicsMap.get(file.topic);
+
+                    if (hasSubTopic) {
+                        if (!validSubSet.has(file.subTopic)) {
+                            subTopicStatus = "FAIL";
+                            messages.push("SubTopic does not belong to Topic");
+                            const key = `${file.topic}|${file.subTopic}`;
+                            if (!unknownSubTopicsMap.has(key)) {
+                                unknownSubTopicsMap.set(key, {
+                                    topic: file.topic,
+                                    subTopic: file.subTopic
+                                });
+                            }
+                        } else {
+                            // Record usage for unused curriculum detection
+                            if (!usedSubTopicsMap.has(file.topic)) {
+                                usedSubTopicsMap.set(file.topic, new Set());
+                            }
+                            usedSubTopicsMap.get(file.topic).add(file.subTopic);
+                        }
+                    }
+                }
+            }
+        }
+
+        fileResults.push({
+            filename: file.filename,
+            numericId: file.numericId,
+            topicStatus: topicStatus,
+            subTopicStatus: subTopicStatus,
+            validationMessage: messages.length > 0 ? messages.join(", ") : "PASS"
+        });
+
+        // Tally summary counts
+        if (topicStatus === "FAIL" || subTopicStatus === "FAIL") {
+            summary.invalidFiles++;
+        } else if (subTopicStatus === "WARNING") {
+            summary.validFiles++;
+            summary.warnings++;
+        } else {
+            summary.validFiles++;
+        }
+    }
+
+    // Determine unused curriculum from standard validTopicsMap
+    const unusedCurriculum = [];
+    for (const [topName, subSet] of validTopicsMap.entries()) {
+        const usedSubs = usedSubTopicsMap.get(topName) || new Set();
+
+        for (const subName of subSet) {
+            if (!usedSubs.has(subName)) {
+                unusedCurriculum.push({
+                    topic: topName,
+                    subTopic: subName
+                });
+            }
+        }
+    }
+
+    // Format unknown subtopics list
+    const unknownSubTopics = Array.from(unknownSubTopicsMap.values()).sort((a, b) => {
+        const comp = a.topic.localeCompare(b.topic);
+        if (comp !== 0) return comp;
+        return a.subTopic.localeCompare(b.subTopic);
+    });
+
+    return {
+        summary,
+        fileResults,
+        unknownTopics: Array.from(unknownTopicsSet).sort(),
+        unknownSubTopics,
+        unusedCurriculum
+    };
+}
+
+/**
+ * Discovers, parses metadata, aggregates topics, validates curriculum, and returns knowledge index payload.
+ * Orchestrates all modular engine steps.
  * 
  * @param {string} subject - The subject key (e.g., 'math', 'gaca', 'gi', 'gs')
- * @returns {Promise<Object>} Status object containing success state, subject, totalFiles, totalTopics, files, and topics arrays
+ * @returns {Promise<Object>} Final structured payload containing success state, metadata, topics, and separate validation payload
  */
 export async function discoverQuestionFiles(subject) {
     try {
@@ -283,14 +488,18 @@ export async function discoverQuestionFiles(subject) {
         // Step 8: Aggregate files into topic groups
         const topics = aggregateTopics(processedFiles);
 
-        // Step 9: Return both file-level metadata and topic-level aggregated payload
+        // Step 9: Validate Curriculum against maintenance JSON
+        const validationPayload = await validateCurriculum(processedFiles, normalizedSubject);
+
+        // Step 10: Return clean files array, topics array, and isolated validation payload
         return {
             success: true,
             subject: normalizedSubject,
             totalFiles: processedFiles.length,
             totalTopics: topics.length,
             files: processedFiles,
-            topics: topics
+            topics: topics,
+            validation: validationPayload
         };
 
     } catch (error) {
