@@ -37,8 +37,13 @@ export default async function handler(req, res) {
                         const content = fs.readFileSync(filePath, 'utf8');
                         
                         const standardized = content.replace(/\r\n/g, '\n');
-                        const blocks = standardized.split('\n\n').filter(b => b.trim().startsWith('Q|'));
-                        
+                        const blocks = standardized
+                            .split('\n\n')
+                            .filter(block => {
+                                const firstLine = block.trim().split('\n')[0].trim();
+                                return firstLine.startsWith('Q|') || firstLine.startsWith('QEN|');
+                            });
+                                                
                         stats.sections[folder.toUpperCase()] += blocks.length;
                         stats.totalQuestions += blocks.length;
                     }
