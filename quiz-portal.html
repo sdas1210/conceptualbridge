@@ -1573,7 +1573,7 @@
             if (isReviewModeActive) {
                 let meta = [];
                 if (paperMeta.exam) meta.push(paperMeta.exam);
-                if (paperMeta.notification) meta.push(`CEN ${paperMeta.notification}`);
+                if (paperMeta.notification) meta.push(`${paperMeta.notification}`);
                 if (paperMeta.type) meta.push(paperMeta.type);
                 if (currentItem.shift) meta.push(currentItem.shift);
                 shiftLabel.innerText = meta.join(" | ");
