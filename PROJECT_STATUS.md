@@ -1846,3 +1846,77 @@ The Question Format Converter is considered production-ready and frozen except f
 
 Begin Mathematics Parser development using the finalized Global Metadata Tagger and Question Format Converter as the preprocessing pipeline.
 
+
+
+------------------------------------------------------------------------
+
+# Knowledge Index Engine Progress Update (Added: 2026-08-06)
+
+## Current Status
+
+**Version:** Knowledge Index Engine v1.0 (Architecture Frozen)
+
+### Completed This Session
+
+#### Phase 1.1 — File Discovery
+- ✅ Dynamic discovery of question repositories.
+- ✅ Numeric filename sorting with stable fallback ordering.
+- ✅ Relative path generation.
+
+#### Phase 1.2 — Metadata Reader
+- ✅ Global metadata extraction.
+- ✅ Supports both `Q|` and `QEN|` formats.
+- ✅ Question counting and format detection.
+
+#### Phase 1.3 — Topic Aggregator
+- ✅ Topic-wise aggregation.
+- ✅ Total files and questions.
+- ✅ Unique Exams, Levels and SubTopics.
+
+#### Phase 1.4 — Curriculum Validator
+- ✅ `parseCurriculumStructure()` introduced.
+- ✅ Multiple curriculum JSON formats supported.
+- ✅ Validation separated from file metadata.
+- ✅ Structured validation payload.
+- ✅ Unknown Topics detection.
+- ✅ Structured Unknown SubTopics.
+- ✅ Unused Curriculum detection.
+- ✅ Validation summary and per-file results.
+
+### Architecture Decisions
+
+The engine is now organized into:
+
+- `extractFileMetadata()`
+- `aggregateTopics()`
+- `parseCurriculumStructure()`
+- `validateCurriculum()`
+- `discoverQuestionFiles()` (orchestrator)
+
+Returned payload:
+
+- `files`
+- `topics`
+- `validation`
+
+### Engineering Decision
+
+Knowledge Index Engine v1.0 is considered architecturally frozen.
+Future enhancements should be implemented in new modules, not by extending the engine.
+
+------------------------------------------------------------------------
+
+# Development Timeline (Updated)
+
+| Date | Milestone |
+|------|-----------|
+| 2026-08-01 | Global Metadata Tagger Production Release |
+| 2026-08-04 | Question Format Converter Production Release |
+| 2026-08-06 | Knowledge Index Engine v1.0 (Architecture Frozen) |
+| Next | Knowledge Index Builder (questionLibrary.json Generator) |
+
+------------------------------------------------------------------------
+
+# Current Continuation Point
+
+Begin implementation of the Knowledge Index Builder maintenance tool, which will consume the frozen Knowledge Index Engine and generate `questionLibrary.json`.
