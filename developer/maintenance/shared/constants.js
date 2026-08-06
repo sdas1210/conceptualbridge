@@ -3,6 +3,10 @@
  * Centralized registry for application icons, metadata tags, supported modes, and UI settings.
  */
 
+import { ICONS } from './icons.js';
+
+export { ICONS };
+
 export const MODES = Object.freeze({
   GACA: 'GACA',
   MATH: 'MATH',
@@ -29,21 +33,6 @@ export const METADATA_KEYS = Object.freeze({
   TOPIC: 'Topic',
   SUB_TOPIC: 'Sub-Topic',
   LEVEL: 'Level'
-});
-
-export const ICONS = Object.freeze({
-  SUCCESS: '✓',
-  ERROR: '✕',
-  WARNING: '⚠',
-  INFO: 'ℹ',
-  LOCK: '🔒',
-  UNLOCK: '🔓',
-  PLAY: '▶',
-  DOWNLOAD: '💾',
-  COPY: '📋',
-  DUPLICATE: '👯',
-  RESET: '🔄',
-  LOAD: '📂'
 });
 
 export const ANIMATION_TIMINGS = Object.freeze({
