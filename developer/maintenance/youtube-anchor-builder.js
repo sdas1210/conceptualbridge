@@ -1,8 +1,10 @@
 /**
- * Conceptual Bridge - YouTube Anchor Builder
- * Application Entry Point & Controller
+ * Conceptual Bridge - YouTube Anchor Builder (v2.1.0)
+ * Updated to integrate framework logger and initialization services.
  */
 
+import { framework } from './shared/framework.js';
+import { logger } from './shared/logger.js';
 import { MODES, MODE_STATUS } from './shared/constants.js';
 import { TITLE_TEMPLATES, TAG_TEMPLATES, MODE_CONFIGURATION } from './shared/config.js';
 import { validateRequired, validateNumeric, validateFilename, validateYouTubeField } from './shared/validator.js';
@@ -14,7 +16,12 @@ import { show, hide, enable, disable, lockStepCard, unlockStepCard, completeStep
 import { toast } from './shared/toast.js';
 import { showConfirmDialog } from './shared/dialog.js';
 
+const TOOL_NAME = 'YouTube Anchor Builder';
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Shared Framework
+  framework.init(TOOL_NAME);
+
   // =========================================================================
   // STATE MODEL (Single Source of Truth)
   // =========================================================================
@@ -96,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderModeCards();
     populateSelectOptions(anchorData.mode);
     rebuildPreview();
+    logger.success(TOOL_NAME, 'Application initialized successfully.');
   }
 
   function renderModeCards() {
@@ -130,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function populateSelectOptions(mode) {
-    // Populate Titles
     elements.titleTemplateSelect.innerHTML = '<option value="">-- Select Template --</option>';
     const titles = TITLE_TEMPLATES[mode] || [];
     titles.forEach((t) => {
@@ -140,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.titleTemplateSelect.appendChild(opt);
     });
 
-    // Populate Tags
     elements.tagsTemplateSelect.innerHTML = '<option value="">-- Select Tags --</option>';
     const tags = TAG_TEMPLATES[mode] || [];
     tags.forEach((tg) => {
@@ -172,13 +178,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // DISPATCHED SAVE HANDLERS (Modular Save Logic)
+  // DISPATCHED SAVE HANDLERS
   // =========================================================================
   const saveHandlers = {
     saveMode() {
       completeStepCard(elements.steps[1]);
       applyModeAdaptations();
       setNextStepActive(2);
+      logger.debug(TOOL_NAME, `Saved Mode: ${anchorData.mode}`);
       return true;
     },
 
@@ -346,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
       completeStepCard(elements.steps[13]);
       enable(elements.btnDownload);
       toast.success('Anchor file compilation complete! Ready for export.');
+      logger.info(TOOL_NAME, 'Completed wizard steps, output file ready.');
       return true;
     }
   };
@@ -474,6 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isDirty = false;
     rebuildPreview();
     toast.success(`Exported ${filename} successfully!`);
+    logger.info(TOOL_NAME, `Exported file: ${filename}`);
   });
 
   elements.btnCopyPreview.addEventListener('click', () => {
@@ -527,6 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
     disable(elements.btnDownload);
     rebuildPreview();
     toast.info('Wizard reset to clean state.');
+    logger.info(TOOL_NAME, 'Wizard reset.');
   }
 
   // Load Existing Anchor
@@ -541,8 +551,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const parsed = parseAnchorTXT(content, file.name);
       loadParsedDataIntoWizard(parsed);
       toast.success(`Successfully imported ${file.name}`);
+      logger.info(TOOL_NAME, `Successfully loaded file: ${file.name}`);
     } catch (err) {
       toast.error(`Import Failed: ${err.message}`);
+      logger.error(TOOL_NAME, `Import error on file: ${file.name}`, err);
     }
   });
 
@@ -585,6 +597,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Start Application
   init();
 });
