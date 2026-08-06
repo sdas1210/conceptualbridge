@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Index Builder - Developer Suite</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
+    <link rel="stylesheet" href="knowledge-index-builder.css">
+</head>
+<body>
+    <div class="container">
+        <a href="maintenance.html" class="back-home">← Maintenance Home</a>
+        
+        <h1>Knowledge Index Builder</h1>
+        <p class="subtitle">Automated Curriculum Discovery &amp; Knowledge Graph Compiler</p>
+
+        <!-- SUBJECT SELECTION -->
+        <div class="card">
+            <h2>Select Subject Module</h2>
+            <div class="subject-grid">
+                <button type="button" class="subject-btn active" data-subject="math">
+                    <strong>Mathematics</strong>
+                    <span>ACTIVE</span>
+                </button>
+                <button type="button" class="subject-btn disabled" disabled data-subject="gi">
+                    <strong>General Intelligence</strong>
+                    <span>DISABLED</span>
+                </button>
+                <button type="button" class="subject-btn disabled" disabled data-subject="gs">
+                    <strong>General Science</strong>
+                    <span>DISABLED</span>
+                </button>
+                <button type="button" class="subject-btn disabled" disabled data-subject="gaca">
+                    <strong>GA &amp; Current Affairs</strong>
+                    <span>DISABLED</span>
+                </button>
+            </div>
+            
+            <div class="build-action-row">
+                <button type="button" id="btnBuildIndex" class="btn-primary">
+                    Build Knowledge Index
+                </button>
+            </div>
+        </div>
+
+        <!-- METRICS / SUMMARY CARDS -->
+        <div class="card">
+            <div class="metrics-header-row">
+                <h2>Build Metrics &amp; Summary</h2>
+                <span id="metricStatusBadge" class="badge waiting">READY</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-label">Total Files</span>
+                    <strong id="metricFiles" class="metric-value">0</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Total Topics</span>
+                    <strong id="metricTopics" class="metric-value">0</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Total SubTopics</span>
+                    <strong id="metricSubTopics" class="metric-value">0</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Total Questions</span>
+                    <strong id="metricQuestions" class="metric-value">0</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Warnings</span>
+                    <strong id="metricWarnings" class="metric-value warning">0</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Errors</span>
+                    <strong id="metricErrors" class="metric-value error">0</strong>
+                </div>
+                <div class="metric-card full-width">
+                    <span class="metric-label">Build Execution Time</span>
+                    <strong id="metricBuildTime" class="metric-value">0 ms</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUILD CONSOLE -->
+        <div class="card">
+            <h2>Compilation Console</h2>
+            <div id="consoleLogBox" class="console-box"></div>
+        </div>
+
+        <!-- DOWNLOAD CONTROL -->
+        <div class="buttons-row">
+            <button type="button" id="btnDownloadJson" class="btn-success" disabled>
+                Download JSON
+            </button>
+        </div>
+    </div>
+
+    <!-- ES Module Script Import -->
+    <script type="module" src="knowledge-index-builder.js"></script>
+</body>
+</html>
