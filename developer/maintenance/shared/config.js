@@ -1,52 +1,13 @@
 /**
  * Conceptual Bridge - Configuration Framework
- * Configuration-driven declarations for modes, title templates, tag groups, and metadata orders.
+ * Refactored to import title and tag templates from modular template files.
  */
 
 import { MODES } from './constants.js';
+import { TITLE_TEMPLATES } from './templates/titleTemplates.js';
+import { TAG_TEMPLATES } from './templates/tagTemplates.js';
 
-export const TITLE_TEMPLATES = Object.freeze({
-  [MODES.GACA]: [
-    {
-      id: 'gaca-live-100',
-      label: '100 Most Important GK/GA Live Question Analysis',
-      template: '100 Most Important GK/GA Live Question Analysis'
-    }
-  ],
-  [MODES.MATH]: [
-    {
-      id: 'math-live-analysis',
-      label: 'Complete Mathematics Chapter Live Analysis',
-      template: 'Complete Mathematics Chapter Live Analysis'
-    },
-    {
-      id: 'math-top-50',
-      label: '50 Most Important Quantitative Aptitude Questions',
-      template: '50 Most Important Quantitative Aptitude Questions'
-    }
-  ],
-  [MODES.GS]: [],
-  [MODES.GI]: []
-});
-
-export const TAG_TEMPLATES = Object.freeze({
-  [MODES.GACA]: [
-    {
-      id: 'rrb-group-d-2024',
-      label: 'RRB Group D 2024',
-      tags: 'RRB Group D, 10, GACA, 100-Series, CEN 08/2024'
-    }
-  ],
-  [MODES.MATH]: [
-    {
-      id: 'rrb-math-standard',
-      label: 'RRB Mathematics Standard 2024',
-      tags: 'RRB Math, Quantitative Aptitude, CBT-1, 2024'
-    }
-  ],
-  [MODES.GS]: [],
-  [MODES.GI]: []
-});
+export { TITLE_TEMPLATES, TAG_TEMPLATES };
 
 export const MODE_CONFIGURATION = Object.freeze({
   [MODES.GACA]: {
@@ -85,7 +46,7 @@ export const MODE_CONFIGURATION = Object.freeze({
     metadataOrder: [
       'title',
       'tags',
-      'english', // Represents Video| for MATH
+      'english', // Maps to Video| in MATH mode
       'pdfEnglish',
       'pdfBengali',
       'testSource',
