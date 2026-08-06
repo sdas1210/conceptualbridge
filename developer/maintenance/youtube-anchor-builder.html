@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Anchor Builder - Maintenance Suite</title>
+    <link rel="stylesheet" href="youtube-anchor-builder.css">
+</head>
+<body>
+    <div class="app-header">
+        <div class="header-left">
+            <a href="maintenance.html" class="back-link">← Maintenance Hub</a>
+            <span class="divider">/</span>
+            <h1>🎬 YouTube Anchor Builder</h1>
+        </div>
+        <div class="header-actions">
+            <button id="btnLoadFile" class="btn btn-secondary">
+                <span>📂</span> Load Existing Anchor
+            </button>
+            <input type="file" id="fileInput" accept=".txt" hidden>
+            <button id="btnReset" class="btn btn-danger">
+                <span>🔄</span> Reset Wizard
+            </button>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <!-- LEFT COLUMN: Wizard Controls -->
+        <main class="wizard-container">
+            
+            <!-- STEP 1: Mode Selection -->
+            <section id="step1" class="wizard-step active">
+                <div class="step-header">
+                    <span class="step-badge">1</span>
+                    <h2>Select Operation Mode</h2>
+                    <span class="status-icon" id="statusStep1"></span>
+                </div>
+                <div class="step-body">
+                    <div class="mode-grid">
+                        <div class="mode-card glassmorphism active" data-mode="GACA">
+                            <div class="mode-badge active">ACTIVE</div>
+                            <h3>GACA</h3>
+                            <p>General Awareness & Current Affairs</p>
+                        </div>
+                        <div class="mode-card glassmorphism" data-mode="MATH">
+                            <div class="mode-badge active">ACTIVE</div>
+                            <h3>MATH</h3>
+                            <p>Mathematics Quantitative Suite</p>
+                        </div>
+                        <div class="mode-card glassmorphism disabled" data-mode="GS">
+                            <div class="mode-badge coming-soon">COMING SOON</div>
+                            <h3>GS</h3>
+                            <p>General Science</p>
+                        </div>
+                        <div class="mode-card glassmorphism disabled" data-mode="GI">
+                            <div class="mode-badge coming-soon">COMING SOON</div>
+                            <h3>GI</h3>
+                            <p>General Intelligence & Reasoning</p>
+                        </div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="1">Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="1">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 2: Title Template -->
+            <section id="step2" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">2</span>
+                    <h2>Title Template</h2>
+                    <span class="status-icon" id="statusStep2"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="titleTemplateSelect">Select Base Template <span class="required">*</span></label>
+                        <select id="titleTemplateSelect" class="form-control" disabled>
+                            <option value="">-- Select Template --</option>
+                            <option value="100 Most Important GK/GA Live Question Analysis">100 Most Important GK/GA Live Question Analysis</option>
+                        </select>
+                        <span class="error-text" id="errTitleTemplate"></span>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="2" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="2">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 3: Set Number -->
+            <section id="step3" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">3</span>
+                    <h2>Set Number</h2>
+                    <span class="status-icon" id="statusStep3"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputSetNumber">Numeric Set Index <span class="required">*</span></label>
+                        <input type="text" id="inputSetNumber" class="form-control" placeholder="e.g. 01, 12, 105" disabled>
+                        <span class="error-text" id="errSetNumber"></span>
+                    </div>
+                    <div class="preview-computed">
+                        <label>Computed Title Output:</label>
+                        <div id="computedTitle" class="computed-box">--</div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="3" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="3">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 4: Tags Template -->
+            <section id="step4" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">4</span>
+                    <h2>Tags Template</h2>
+                    <span class="status-icon" id="statusStep4"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="tagsTemplateSelect">Select Tag Group <span class="required">*</span></label>
+                        <select id="tagsTemplateSelect" class="form-control" disabled>
+                            <option value="">-- Select Tags --</option>
+                            <option value="RRB Group D 2024">RRB Group D 2024</option>
+                        </select>
+                        <span class="error-text" id="errTagsTemplate"></span>
+                    </div>
+                    <div class="preview-computed">
+                        <label>Computed Tags Output:</label>
+                        <div id="computedTags" class="computed-box">--</div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="4" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="4">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 5: English / Primary Video YouTube -->
+            <section id="step5" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">5</span>
+                    <h2 id="titleStep5">English YouTube Video</h2>
+                    <span class="status-icon" id="statusStep5"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputVideoEnglish">YouTube Video ID or URL <span class="optional">(Optional)</span></label>
+                        <div class="input-with-action">
+                            <input type="text" id="inputVideoEnglish" class="form-control" placeholder="URL or ID (e.g. H8yBPnB30Is)" disabled>
+                            <a id="linkCheckEnglish" href="#" target="_blank" class="btn btn-outline hidden">Check Link ↗</a>
+                        </div>
+                        <span class="error-text" id="errVideoEnglish"></span>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="5" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="5">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 6: Bengali YouTube Video (GACA Mode Only) -->
+            <section id="step6" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">6</span>
+                    <h2>Bengali YouTube Video</h2>
+                    <span class="status-icon" id="statusStep6"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputVideoBengali">YouTube Video ID or URL <span class="optional">(Optional)</span></label>
+                        <div class="input-with-action">
+                            <input type="text" id="inputVideoBengali" class="form-control" placeholder="URL or ID (e.g. H8yBPnB30Is)" disabled>
+                            <a id="linkCheckBengali" href="#" target="_blank" class="btn btn-outline hidden">Check Link ↗</a>
+                        </div>
+                        <span class="error-text" id="errVideoBengali"></span>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="6" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="6">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 7: PDF English -->
+            <section id="step7" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">7</span>
+                    <h2>PDF English Reference</h2>
+                    <span class="status-icon" id="statusStep7"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputPdfEnglish">PDF Filename <span class="optional">(Optional)</span></label>
+                        <input type="text" id="inputPdfEnglish" class="form-control" placeholder="e.g. 54logs or 54logs.pdf" disabled>
+                        <span class="hint-text">Auto-appends .pdf if missing. Leave blank for "none".</span>
+                        <span class="error-text" id="errPdfEnglish"></span>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="7" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="7">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 8: PDF Bengali -->
+            <section id="step8" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">8</span>
+                    <h2>PDF Bengali Reference</h2>
+                    <span class="status-icon" id="statusStep8"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputPdfBengali">PDF Filename <span class="optional">(Optional)</span></label>
+                        <input type="text" id="inputPdfBengali" class="form-control" placeholder="e.g. 54logs or 54logs.pdf" disabled>
+                        <span class="hint-text">Auto-appends .pdf if missing. Leave blank for "none".</span>
+                        <span class="error-text" id="errPdfBengali"></span>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="8" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="8">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 9: Test Source -->
+            <section id="step9" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">9</span>
+                    <h2>Test Source File</h2>
+                    <span class="status-icon" id="statusStep9"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputTestSource">Question Bank Reference Code <span class="required">*</span></label>
+                        <input type="text" id="inputTestSource" class="form-control" placeholder="e.g. 1, abc, k5" disabled>
+                        <span class="error-text" id="errTestSource"></span>
+                    </div>
+                    <div class="preview-computed">
+                        <label>Computed Path:</label>
+                        <div id="computedTestSource" class="computed-box">--</div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="9" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="9">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 10: Topic -->
+            <section id="step10" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">10</span>
+                    <h2>Topic Metadata</h2>
+                    <span class="status-icon" id="statusStep10"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputTopic">Topic Name <span class="optional">(Optional)</span></label>
+                        <input type="text" id="inputTopic" class="form-control" placeholder="e.g. Trigonometry" disabled>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="10" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="10">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 11: Sub Topic -->
+            <section id="step11" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">11</span>
+                    <h2>Sub Topic Metadata</h2>
+                    <span class="status-icon" id="statusStep11"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputSubTopic">Sub-Topic Name <span class="optional">(Optional)</span></label>
+                        <input type="text" id="inputSubTopic" class="form-control" placeholder="e.g. Heights and Distances" disabled>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="11" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="11">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 12: Level -->
+            <section id="step12" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">12</span>
+                    <h2>Level Metadata</h2>
+                    <span class="status-icon" id="statusStep12"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputLevel">Difficulty Level <span class="optional">(Optional)</span></label>
+                        <input type="text" id="inputLevel" class="form-control" placeholder="e.g. Level-1, Advanced" disabled>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="12" disabled>Save & Next</button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="12">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 13: Export & Output Filename -->
+            <section id="step13" class="wizard-step locked">
+                <div class="step-header">
+                    <span class="step-badge">13</span>
+                    <h2>Target Output File</h2>
+                    <span class="status-icon" id="statusStep13"></span>
+                </div>
+                <div class="step-body">
+                    <div class="form-group">
+                        <label for="inputOutputFilename">Filename Identifier <span class="required">*</span></label>
+                        <div class="input-append">
+                            <input type="text" id="inputOutputFilename" class="form-control" placeholder="e.g. 4" disabled>
+                            <span class="append-text">.txt</span>
+                        </div>
+                        <span class="error-text" id="errOutputFilename"></span>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-success" id="btnDownload" disabled>
+                            <span>💾</span> Download Anchor File (.txt)
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- RIGHT COLUMN: Permanent Live Preview -->
+        <aside class="preview-container glassmorphism">
+            <div class="preview-header">
+                <div class="preview-title">
+                    <h3>📄 Live Anchor TXT Preview</h3>
+                    <span class="char-counter" id="charCounter">0 Chars | 0 Lines</span>
+                </div>
+                <div class="preview-actions">
+                    <button id="btnCopyPreview" class="btn btn-sm btn-outline" title="Copy to Clipboard">📋 Copy</button>
+                    <button id="btnDuplicate" class="btn btn-sm btn-outline" title="Duplicate Anchor State">👯 Duplicate</button>
+                </div>
+            </div>
+            <div class="preview-body">
+                <pre id="previewArea" class="preview-code"><code>// Configure wizard steps to build TXT file...</code></pre>
+            </div>
+            <div class="preview-footer">
+                <span class="encoding-badge">UTF-8 Standard</span>
+                <span id="unsavedBadge" class="unsaved-badge hidden">Unsaved Changes</span>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="youtube-anchor-builder.js"></script>
+</body>
+</html>
