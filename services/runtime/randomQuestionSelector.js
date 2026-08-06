@@ -100,14 +100,19 @@ export function selectRandomQuestions(pool, count) {
         mode: pool.mode,
         sourceFiles: [...pool.sourceFiles],
         totalSourceFiles: pool.totalSourceFiles ?? pool.sourceFiles.length,
+    
         totalQuestions: pool.totalQuestions,
+        selectedQuestions: selectedQuestions.length,
+    
         generatedAt: pool.generatedAt,
+    
         selectionMetadata: {
             requested: count,
             available: available,
             algorithm: "FISHER_YATES",
             selectedAt: new Date().toISOString()
         },
+    
         questions: selectedQuestions
     };
 }
