@@ -197,47 +197,7 @@
         }
         
         
-        /* Stagger card animations */
         
-        .tool-card:nth-of-type(1) {
-            animation-delay: .15s;
-        }
-        
-        .tool-card:nth-of-type(2) {
-            animation-delay: .25s;
-        }
-        
-        .tool-card:nth-of-type(3) {
-            animation-delay: .35s;
-        }
-        
-        .tool-card:nth-of-type(4) {
-            animation-delay: .45s;
-        }
-        
-        .tool-card:nth-of-type(5) {
-            animation-delay: .55s;
-        }
-        
-        .tool-card:nth-of-type(6) {
-            animation-delay: .65s;
-        }
-
-        .tool-card:nth-of-type(7) {
-            animation-delay: .75s;
-        }
-
-        .tool-card:nth-of-type(8) {
-            animation-delay: .85s;
-        }
-
-        .tool-card:nth-of-type(9) {
-            animation-delay: .95s;
-        }
-
-        .tool-card:nth-of-type(10) {
-            animation-delay: 1.05s;
-        }
                         
         /* -----------------------*/
        
@@ -459,9 +419,10 @@
             
             /* Hardware-accelerated sweep animation */
             animation: glassShineV2 7s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            animation-delay: var(--shine-delay, 1.5s);
             pointer-events: none;
             will-change: transform;
-        }
+            }
 
         /* =========================================================
            STAGGERED SHINE DELAYS
@@ -469,17 +430,8 @@
            Fade-in completes at (card delay + 0.8s).
            Shine delays start at ~1.5s and stagger cleanly across cards.
         ========================================================= */
-        .tool-card:nth-of-type(1)::before { animation-delay: 1.50s; }
-        .tool-card:nth-of-type(2)::before { animation-delay: 1.85s; }
-        .tool-card:nth-of-type(3)::before { animation-delay: 2.20s; }
-        .tool-card:nth-of-type(4)::before { animation-delay: 2.55s; }
-        .tool-card:nth-of-type(5)::before { animation-delay: 2.90s; }
-        .tool-card:nth-of-type(6)::before { animation-delay: 3.25s; }
-        .tool-card:nth-of-type(7)::before { animation-delay: 3.60s; }
-        .tool-card:nth-of-type(8)::before { animation-delay: 3.95s; }
-        .tool-card:nth-of-type(9)::before { animation-delay: 4.30s; }
-
-        .tool-card:nth-of-type(10)::before { animation-delay: 4.65s; }
+        
+        
 
         /* 
          * Premium Hover Enhancement:
@@ -938,7 +890,22 @@
 
 </div>
 
+<script>
+const fadeStart = 0.15;
+const fadeStep = 0.10;
 
+const shineStart = 1.50;
+const shineStep = 0.35;
+
+document.querySelectorAll('.tool-card').forEach((card, index) => {
+    card.style.animationDelay = `${fadeStart + index * fadeStep}s`;
+    card.style.setProperty(
+        '--shine-delay',
+        `${shineStart + index * shineStep}s`
+    );
+});
+</script>
+    
 </body>
 
 </html>
