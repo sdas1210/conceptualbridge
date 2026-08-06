@@ -1,6 +1,6 @@
 /**
  * Conceptual Bridge - Developer Maintenance Suite
- * Module: Knowledge Index Builder (v1.0)
+ * Module: Knowledge Index Builder (v1.1)
  * Visual Compiler Interface for the Knowledge Index Engine
  */
 
@@ -108,27 +108,238 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
     }
 
     /**
-     * Computes unique SubTopics across all topics in the engine payload
+     * Helper to sort array numerically if items are numbers, else alphabetically
      */
-    function countTotalSubTopics(topics) {
-        if (!Array.isArray(topics)) return 0;
-        const uniqueSubTopics = new Set();
-        for (const top of topics) {
-            if (Array.isArray(top.subTopics)) {
-                for (const st of top.subTopics) {
-                    uniqueSubTopics.add(st);
-                }
+    function sortList(list) {
+        return Array.from(list).sort((a, b) => {
+            const numA = Number(a);
+            const numB = Number(b);
+            if (!isNaN(numA) && !isNaN(numB)) {
+                return numA - numB;
             }
-        }
-        return uniqueSubTopics.size;
+            return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
+        });
     }
 
     /**
-     * Computes total question count across all files in the engine payload
+     * Sorts filenames numerically.
+     * Example:
+     * 1.txt
+     * 2.txt
+     * 10.txt
+     * 354.txt
      */
-    function countTotalQuestions(files) {
-        if (!Array.isArray(files)) return 0;
-        return files.reduce((sum, file) => sum + (file.questionCount || 0), 0);
+    function sortFileNames(files) {
+        return Array.from(files).sort((a, b) => {
+            const numA = parseInt(String(a), 10);
+            const numB = parseInt(String(b), 10);
+    
+            if (!isNaN(numA) && !isNaN(numB)) {
+                return numA - numB;
+            }
+    
+            return String(a).localeCompare(String(b), undefined, {
+                numeric: true,
+                sensitivity: "base"
+            });
+        });
+    }
+
+    
+
+    /**
+     * Compiles the complete v1.1.0 schema for questionLibrary.<subject>.json
+     * 
+     * @param {Array} rawFiles - File objects from engine
+     * @param {Array} rawTopics - Topic objects from engine
+     * @returns {Object} Complete runtime-ready JSON schema
+     */
+    function compileLibrarySchema(rawFiles, rawTopics) {
+        const generatedAt = new Date().toISOString();
+        const totalFiles = rawFiles.length;
+
+        // --- 1. CLEAN FILES BUILD ---
+        const cleanFiles = [...rawFiles]
+            .sort((a, b) => {
+                const na = parseInt(a.filename, 10);
+                const nb = parseInt(b.filename, 10);
+                return na - nb;
+            })
+            .map(file => ({
+            filename: file.filename || null,
+            relativePath: file.relativePath || null,
+            subject: file.subject || selectedSubject,
+            questionFormat: file.questionFormat || null,
+            questionCount: file.questionCount || 0,
+            topic: file.topic || null,
+            subTopic: file.subTopic || null,
+            level: file.level !== null && file.level !== undefined ? String(file.level) : null,
+            exam: file.exam || null,
+            notification: file.notification || null
+        }));
+
+        // --- 2. GLOBAL METADATA ARRAYS ---
+        const topicsSet = new Set();
+        const subTopicsSet = new Set();
+        const levelsSet = new Set();
+        const examsSet = new Set();
+        const notificationsSet = new Set();
+
+        cleanFiles.forEach(file => {
+            if (file.topic) topicsSet.add(file.topic);
+            if (file.subTopic) subTopicsSet.add(file.subTopic);
+            if (file.level) levelsSet.add(file.level);
+            if (file.exam) examsSet.add(file.exam);
+            if (file.notification) notificationsSet.add(file.notification);
+        });
+
+        const globalMetadata = {
+            topics: sortList(topicsSet),
+            subTopics: sortList(subTopicsSet),
+            levels: sortList(levelsSet),
+            exams: sortList(examsSet),
+            notifications: sortList(notificationsSet)
+        };
+
+        // --- 3. TOPICS & SUBTOPICS STRUCTURE BUILD ---
+        // Group clean files by Topic and SubTopic to build deep tree
+        const topicMap = new Map();
+
+        cleanFiles.forEach(file => {
+            const topicName = file.topic || "Uncategorized";
+
+            if (!topicMap.has(topicName)) {
+                topicMap.set(topicName, {
+                    name: topicName,
+                    questionCount: 0,
+                    sourceFilesSet: new Set(),
+                    levelsSet: new Set(),
+                    examsSet: new Set(),
+                    subTopicMap: new Map()
+                });
+            }
+
+            const tEntry = topicMap.get(topicName);
+            tEntry.questionCount += file.questionCount;
+            if (file.filename) tEntry.sourceFilesSet.add(file.filename);
+            if (file.level) tEntry.levelsSet.add(file.level);
+            if (file.exam) tEntry.examsSet.add(file.exam);
+
+            const subTopicName = file.subTopic || "Uncategorized";
+            if (!tEntry.subTopicMap.has(subTopicName)) {
+                tEntry.subTopicMap.set(subTopicName, {
+                    name: subTopicName,
+                    questionCount: 0,
+                    sourceFilesSet: new Set(),
+                    levelsSet: new Set()
+                });
+            }
+
+            const stEntry = tEntry.subTopicMap.get(subTopicName);
+            stEntry.questionCount += file.questionCount;
+            if (file.filename) stEntry.sourceFilesSet.add(file.filename);
+            if (file.level) stEntry.levelsSet.add(file.level);
+        });
+
+        const compiledTopics = Array.from(topicMap.values()).map(t => {
+            // Build subTopics array
+            const compiledSubTopics = Array.from(t.subTopicMap.values()).map(st => ({
+                name: st.name,
+                questionCount: st.questionCount,
+                fileCount: st.sourceFilesSet.size,
+                levels: sortList(st.levelsSet)
+            }));
+
+            // Sort subTopics alphabetically
+            compiledSubTopics.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+            return {
+                name: t.name,
+                questionCount: t.questionCount,
+                fileCount: t.sourceFilesSet.size,
+                subTopicCount: compiledSubTopics.length,
+                levels: sortList(t.levelsSet),
+                exams: sortList(t.examsSet),
+                sourceFiles: sortFileNames(t.sourceFilesSet),
+                subTopics: compiledSubTopics
+            };
+        });
+
+        // Sort topics alphabetically
+        compiledTopics.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+        // --- 4. SUMMARY & STATISTICS CALCULATIONS ---
+        const totalQuestions = cleanFiles.reduce((sum, f) => sum + f.questionCount, 0);
+        const totalTopics = compiledTopics.length;
+        const totalSubTopics = globalMetadata.subTopics.length;
+        const averageQuestionsPerFile = totalFiles > 0 ? parseFloat((totalQuestions / totalFiles).toFixed(2)) : 0;
+
+        let largestTopic = null;
+        let largestTopicQuestions = 0;
+
+        compiledTopics.forEach(t => {
+            if (t.questionCount > largestTopicQuestions) {
+                largestTopicQuestions = t.questionCount;
+                largestTopic = t.name;
+            }
+        });
+
+        let largestFile = null;
+        let largestFileQuestions = 0;
+        let smallestFile = null;
+        let smallestFileQuestions = totalFiles > 0 ? Infinity : 0;
+
+        cleanFiles.forEach(f => {
+            if (f.questionCount > largestFileQuestions) {
+                largestFileQuestions = f.questionCount;
+                largestFile = f.filename;
+            }
+            if (f.questionCount < smallestFileQuestions) {
+                smallestFileQuestions = f.questionCount;
+                smallestFile = f.filename;
+            }
+        });
+
+        if (smallestFileQuestions === Infinity) {
+            smallestFileQuestions = 0;
+        }
+
+        const averageTopicSize = totalTopics > 0 ? parseFloat((totalQuestions / totalTopics).toFixed(2)) : 0;
+        const averageSubTopicSize = totalSubTopics > 0 ? parseFloat((totalQuestions / totalSubTopics).toFixed(2)) : 0;
+
+        // --- 5. ASSEMBLE FINAL JSON SCHEMA ---
+        return {
+            build: {
+                builder: "Knowledge Index Builder",
+                builderVersion: "1.1.0",
+                engineVersion: "1.0.0",
+                schemaVersion: "1.0.0",
+                generatedBy: "Knowledge Index Builder",
+                subject: selectedSubject,
+                curriculum: `${selectedSubject}.json`,
+                generatedAt: generatedAt
+            },
+            summary: {
+                totalFiles: totalFiles,
+                totalTopics: totalTopics,
+                totalSubTopics: totalSubTopics,
+                totalQuestions: totalQuestions,
+                averageQuestionsPerFile: averageQuestionsPerFile,
+                largestTopic: largestTopic,
+                largestTopicQuestions: largestTopicQuestions
+            },
+            metadata: globalMetadata,
+            topics: compiledTopics,
+            files: cleanFiles,
+            statistics: {
+                largestFile: largestFile,
+                largestFileQuestions: largestFileQuestions,
+                smallestFile: smallestFile,
+                smallestFileQuestions: smallestFileQuestions,
+                averageTopicSize: averageTopicSize,
+                averageSubTopicSize: averageSubTopicSize
+            }
+        };
     }
 
     /**
@@ -190,45 +401,18 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
                 return;
             }
 
-            // Lifecycle Step 4: JSON Generation
+            // Lifecycle Step 4: Schema v1.1.0 JSON Compilation
             log("Generating JSON...", "info");
 
-            const totalSubTopicsCount = countTotalSubTopics(topics);
-            const totalQuestionsCount = countTotalQuestions(files);
-
-            // Construct standard questionLibrary.json object without validation node
-            compiledLibraryJson = {
-                build: {
-                    builder: "Knowledge Index Builder",
-                    builderVersion: "1.0.0",
-                    engineVersion: "1.0.0",
-                    schemaVersion: "1.0.0",
-                    generatedBy: "Knowledge Index Builder",
-                    curriculum: `${selectedSubject}.json`,
-                    generatedAt: new Date().toISOString(),
-                    subject: selectedSubject
-                },
-                summary: {
-                  totalFiles: files.length,
-                  totalTopics: topics.length,
-                  totalSubTopics: totalSubTopicsCount,
-                  totalQuestions: totalQuestionsCount,
-              
-                  validFiles: valSummary.validFiles || 0,
-                  invalidFiles: valSummary.invalidFiles || 0,
-                  warnings: valSummary.warnings || 0
-              }
-                topics: topics,
-                files: files
-            };
+            compiledLibraryJson = compileLibrarySchema(files, topics);
 
             const buildDuration = Math.round(performance.now() - buildStartTime);
 
             // Populate Metrics UI
-            metricFiles.textContent = files.length;
-            metricTopics.textContent = topics.length;
-            metricSubTopics.textContent = totalSubTopicsCount;
-            metricQuestions.textContent = totalQuestionsCount;
+            metricFiles.textContent = compiledLibraryJson.summary.totalFiles;
+            metricTopics.textContent = compiledLibraryJson.summary.totalTopics;
+            metricSubTopics.textContent = compiledLibraryJson.summary.totalSubTopics;
+            metricQuestions.textContent = compiledLibraryJson.summary.totalQuestions;
             metricWarnings.textContent = valSummary.warnings || 0;
             metricErrors.textContent = valSummary.invalidFiles || 0;
             metricBuildTime.textContent = `${buildDuration} ms`;
@@ -256,7 +440,7 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
     }
 
     /**
-     * Triggers browser file download of questionLibrary.json
+     * Triggers browser file download of questionLibrary.<subject>.json
      */
     function handleDownloadJson() {
         if (!compiledLibraryJson) {
@@ -264,18 +448,19 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
             return;
         }
 
+        const jsonFileName = `questionLibrary.${selectedSubject}.json`;
         const jsonString = JSON.stringify(compiledLibraryJson, null, 4);
         const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${selectedSubject}.questionLibrary.json`;
+        a.download = jsonFileName;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        log("Downloaded compiled artifact: 'questionLibrary.json'", "success");
+        log(`Downloaded compiled artifact: '${jsonFileName}'`, "success");
     }
 
     // Event Bindings
@@ -283,6 +468,6 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
     btnDownloadJson.addEventListener("click", handleDownloadJson);
 
     // Initial Startup Log
-    log("Knowledge Index Builder initialized.", "success");
+    log("Knowledge Index Builder v1.1 initialized.", "success");
 
 })();
