@@ -84,10 +84,10 @@ export function buildRuntimeMathAnchor(anchorData) {
 
         resolution: {
             testSource: testSource,
-            topic: topic,
-            subTopic: subTopic,
-            level: level
-        },
+            topic: anchorData.topic || "",
+            subTopic: anchorData.subTopic || "",
+            level: anchorData.level || ""
+        }
         extraMetadata: anchorData.extraMetadata && typeof anchorData.extraMetadata === "object"
             ? { ...anchorData.extraMetadata }
             : {}
