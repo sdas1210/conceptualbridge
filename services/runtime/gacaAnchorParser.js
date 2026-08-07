@@ -76,6 +76,13 @@ export function buildRuntimeGacaAnchor(anchorData) {
             testSource: testSource,
             outputFilename: anchorData.outputFilename || ""
         },
+
+        resolution: {
+            testSource: testSource,
+            topic: topic,
+            subTopic: subTopic,
+            level: level
+        },
         extraMetadata: anchorData.extraMetadata && typeof anchorData.extraMetadata === "object"
             ? { ...anchorData.extraMetadata }
             : {}
