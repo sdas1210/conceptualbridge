@@ -87,7 +87,7 @@ export function buildRuntimeMathAnchor(anchorData) {
             topic: anchorData.topic || "",
             subTopic: anchorData.subTopic || "",
             level: anchorData.level || ""
-        }
+        },
         extraMetadata: anchorData.extraMetadata && typeof anchorData.extraMetadata === "object"
             ? { ...anchorData.extraMetadata }
             : {}
