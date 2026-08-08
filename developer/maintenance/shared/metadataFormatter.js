@@ -37,10 +37,15 @@ export function compileMetadataText(anchorData) {
     const outputKey = config.fieldKeyMap[fieldKey];
     const value = anchorData[fieldKey];
 
-    if (value !== undefined && value !== null && value !== '') {
-      lines.push(`${outputKey}| ${value}`);
+    const preserveEmpty =
+      fieldKey === 'topic' ||
+      fieldKey === 'subTopic' ||
+      fieldKey === 'level';
+    
+    if (preserveEmpty || (value !== undefined && value !== null && value !== '')) {
+      lines.push(`${outputKey}| ${value || ''}`);
     }
-  });
+      });
 
   return lines.join('\n');
 }
