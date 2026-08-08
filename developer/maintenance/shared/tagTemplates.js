@@ -3,7 +3,7 @@
  * Subject-specific tag templates.
  */
 
-import { MODES } from '../constants.js';
+import { MODES } from './constants.js';
 
 export const TAG_TEMPLATES = Object.freeze({
   [MODES.GACA]: [
