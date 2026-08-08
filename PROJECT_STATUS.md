@@ -146,274 +146,197 @@ Resume development from:
 Focus exclusively on completing and validating the GACA and Mathematics
 Anchor Builders before beginning Runtime Integration.
 
+---
 
-# Master Project Status Update — 2026-08-08
-## Knowledge Runtime v1.0 and API Integration Progress
+# Project Status Update — 2026-08-09
+## Anchor Builder Stabilization Completed
 
-> **Master-file preservation note:** This update is appended to the existing master status document. Previous status history and roadmap entries are intentionally preserved rather than overwritten.
+### Session Outcome
 
-### Repository Verification
+The YouTube Anchor Builder was tested and the previously identified Level-1 initialization and wizard workflow issues were resolved.
 
-The uploaded project archive was checked before updating this master file.
+The Anchor Builder is now considered **functionally operational and frozen for the current phase**.
 
-The current repository contains the expected Runtime and Maintenance integration files, including:
+### Issues Resolved During This Phase
 
-- `services/runtime/runtimeEngine.js`
-- `services/runtime/gacaAnchorParser.js`
-- `services/runtime/mathAnchorParser.js`
-- `services/runtime/knowledgeLibraryLoader.js`
-- `services/runtime/candidateResolver.js`
-- `services/runtime/questionPoolBuilder.js`
-- `services/runtime/randomQuestionSelector.js`
-- `services/runtime/apiResponseBuilder.js`
-- `developer/maintenance/shared/anchorImporter.js`
-- `developer/maintenance/youtube-anchor-builder.html`
-- `developer/maintenance/youtube-anchor-builder.js`
-- `api/fetch-questions.js`
+#### 1. Operation Mode Rendering
 
-Repository verification result: **all expected files listed above are present in the uploaded project archive.**
+The initial Operation Mode screen was not displaying the available modes.
 
-### Knowledge Runtime v1.0 — Current Status
+The underlying cause was traced through the ES-module dependency chain and corrected.
 
-The Runtime architecture has progressed beyond the roadmap recorded in the earlier section of this master file.
+The builder now correctly exposes:
 
-Completed Runtime components:
+- GACA — Active
+- MATH — Active
+- GS — Inactive / Coming Soon
+- GI — Inactive / Coming Soon
 
-1. `gacaAnchorParser.js` — implemented.
-2. `mathAnchorParser.js` — implemented.
-3. `knowledgeLibraryLoader.js` — implemented and present.
-4. `candidateResolver.js` — implemented and present.
-5. `questionPoolBuilder.js` — implemented and present.
-6. `randomQuestionSelector.js` — implemented and present.
-7. `apiResponseBuilder.js` — implemented and present.
-8. `runtimeEngine.js` — implemented as the central Runtime orchestrator.
+#### 2. Sequential Metadata Preview
 
-### Runtime Architecture Decision
+Topic, Sub-Topic and Level were initially being emitted during preview initialization even though their wizard stages had not yet been completed.
 
-`runtimeEngine.js` is now the single orchestration layer for the Knowledge Runtime.
+The metadata compilation logic was refined to use wizard completion state.
 
-The intended pipeline is:
+Current behavior:
 
 ```text
-Anchor Input
-    ↓
-anchorImporter
-    ↓
-GACA / MATH Runtime Adapter
-    ↓
-Knowledge Library Loader
-    ↓
-Candidate Resolver
-    ↓
-Question Pool Builder
-    ↓
-Random Question Selector
-    ↓
-API Response Builder
+Before Step 10:
+Topic|             not shown
+Sub-Topic|         not shown
+Level|             not shown
+
+After Step 10 is saved:
+Topic|             shown
+
+After Step 11 is saved:
+Topic|
+Sub-Topic|
+
+After Step 12 is saved:
+Topic|
+Sub-Topic|
+Level|
 ```
 
-The Runtime Engine does not duplicate parsing, candidate resolution, question-pool construction, random selection, or API-response construction.
+Blank values are intentionally preserved once their corresponding stages have been saved.
 
-### Runtime Adapter Refinement
+#### 3. Step 13 Output / Download Workflow
 
-The Runtime adapters now expose a dedicated `resolution` object for downstream candidate resolution.
+The output filename stage previously lacked a functional save action, preventing the download workflow from becoming active.
 
-The Runtime Engine consumes:
+Step 13 now provides:
 
-```javascript
-context.runtimeAnchor.resolution
+```text
+Filename Identifier
+[ value ] .txt
+
+[ Save & Prepare Download ]
+
+[ Download Anchor File (.txt) ]
 ```
 
-instead of rebuilding a separate canonical anchor inside the engine.
+The expected workflow is:
 
-This preserves separation of responsibilities:
+```text
+Enter filename identifier
+        ↓
+Save & Prepare Download
+        ↓
+Validate filename
+        ↓
+Complete Step 13
+        ↓
+Enable Download
+        ↓
+Download Anchor File
+```
 
-- Runtime adapters prepare normalized downstream runtime data.
-- Candidate Resolver consumes the prepared resolution object.
-- Runtime Engine remains an orchestrator.
+For example:
 
-### Runtime Architecture Status
+```text
+4
+```
 
-**Knowledge Runtime v1.0 — Architecturally Complete / Frozen**
+produces:
 
-Future work should focus on integration, testing, compatibility and feature additions rather than unnecessary Runtime architectural redesign.
+```text
+4.txt
+```
+
+The existing download mechanism was preserved rather than redesigned.
+
+### Current Anchor Builder Status
+
+The complete wizard flow is now operational:
+
+```text
+GACA / MATH Selection
+        ↓
+Title
+        ↓
+Set Number
+        ↓
+Tags
+        ↓
+English / Primary YouTube
+        ↓
+Bengali YouTube (where applicable)
+        ↓
+PDF English
+        ↓
+PDF Bengali
+        ↓
+Test Source
+        ↓
+Topic
+        ↓
+Sub-Topic
+        ↓
+Level
+        ↓
+Output Filename
+        ↓
+Save & Prepare Download
+        ↓
+Download Anchor TXT
+```
+
+### Freeze Decision
+
+**Anchor Builder current implementation: FROZEN**
+
+No further architectural refactoring should be performed on the Builder at this stage.
+
+Only verified bug fixes, required compatibility fixes, and narrowly scoped feature additions should be made.
 
 ---
 
-# Phase 3 — API Integration
+# Revised Next Development Step
 
-## Phase 3.1 — `fetch-questions.js`
+The Anchor Builder has now reached the required operational checkpoint.
 
-**Status: INTEGRATED — MIGRATION BRIDGE**
+The next task is **not immediate API integration**.
 
-`api/fetch-questions.js` has been updated to import and invoke:
+The next task is:
 
-```javascript
-runRuntime(...)
-```
+## Anchor → Runtime Integration Validation
 
-A feature flag is currently present:
+Before continuing Phase 3 API integration, validate the real artifact produced by the Builder.
 
-```javascript
-const USE_RUNTIME_ENGINE = true;
-```
-
-The legacy question-generation pipeline remains in the file as a rollback fallback.
-
-### Current Phase 3.1 Architecture
+Required validation chain:
 
 ```text
-HTTP Request
-    ↓
-fetch-questions.js
-    ↓
+Anchor Builder
+      ↓
+Generated Anchor TXT
+      ↓
+Anchor Importer
+      ↓
+GACA Anchor Parser / Math Anchor Parser
+      ↓
 Runtime Engine
-    ↓
-Knowledge Runtime
-    ↓
-API-compatible response
+      ↓
+Knowledge Library
+      ↓
+Candidate Resolution
+      ↓
+Question Pool
+      ↓
+Question Selection
 ```
 
-The legacy implementation remains temporarily available for rollback and comparison.
+### Required Tests
 
-### Important Current Limitation
-
-The current Phase 3.1 bridge constructs a minimal `anchorData` object inside `fetch-questions.js`.
-
-This is considered a **temporary migration bridge**, not the desired final architecture.
-
-The long-term goal is:
-
-```text
-API Request
-    ↓
-Anchor Source / Anchor Repository
-    ↓
-Runtime Engine
-    ↓
-Response
-```
-
-The API should ultimately stop manufacturing runtime anchor data itself.
-
-### Remaining Phase 3.1 Validation
-
-Before removing the legacy fallback, verify:
-
-- Runtime response compatibility with the Quiz Portal.
-- Question count behavior.
-- Paper metadata.
-- Difficulty calculation.
-- Pass-mark calculation.
-- GACA behavior.
-- Mathematics behavior.
-- Error handling.
-- Full Mock / `topic=ALL` behavior.
-- No regression in existing API consumers.
-
----
-
-# Newly Identified Architectural Opportunity — Anchor Repository
-
-During Phase 3.1 review, a missing architectural layer was identified:
-
-```text
-services/runtime/anchorRepository.js
-```
-
-### Purpose
-
-The future Anchor Repository should provide a clean mechanism for locating/loading standardized anchor artifacts without requiring API endpoints to manufacture `anchorData`.
-
-Proposed responsibility:
-
-```text
-Anchor Identifier / Source
-        ↓
-Anchor Repository
-        ↓
-Raw / normalized Anchor
-        ↓
-Runtime Engine
-```
-
-### Status
-
-**NOT CREATED YET.**
-
-This is a proposed next-stage component, not an existing repository file.
-
-Do not claim it as implemented until it is actually created and verified.
-
----
-
-# Revised Development Roadmap
-
-## Completed
-
-- Developer Maintenance Framework v2.1
-- Shared Maintenance Framework
-- YouTube Anchor Builder architecture
-- GACA Runtime Adapter
-- Mathematics Runtime Adapter
-- Knowledge Library Loader
-- Candidate Resolver
-- Question Pool Builder
-- Random Question Selector
-- API Response Builder
-- Runtime Engine v1.0
-- Initial `fetch-questions.js` Runtime integration
-
-## Current
-
-### Phase 3.1 — Runtime Integration Bridge
-
-Validate the new `fetch-questions.js` Runtime path before removing legacy code.
-
-## Next
-
-### Phase 2.5 / Integration Support — Anchor Repository Design
-
-Before extending API integration broadly, decide and implement the proper mechanism for obtaining standardized anchor files.
-
-Target:
-
-```text
-services/runtime/anchorRepository.js
-```
-
-Only create this file after its contract has been designed and approved.
-
-## Then
-
-### Phase 3.2 — Tutorial API Integration
-
-Target:
-
-```text
-api/fetch-tutorial-questions.js
-```
-
-## Then
-
-### Phase 3.3 — Developer API Integration
-
-Target:
-
-```text
-api/developer/questions.js
-```
-
-## Then
-
-### Phase 3.4 — Legacy Runtime Removal
-
-After successful validation:
-
-- Remove obsolete duplicate question-generation logic.
-- Remove temporary migration fallback.
-- Keep API endpoints thin.
-- Route production question generation through the Runtime Engine.
+1. Generate a complete GACA anchor TXT.
+2. Generate a complete Mathematics anchor TXT.
+3. Verify the downloaded TXT contents.
+4. Verify the TXT can be imported through `anchorImporter.js`.
+5. Verify GACA anchor normalization.
+6. Verify Math anchor normalization.
+7. Verify Runtime Engine accepts the standardized anchor artifact.
+8. Verify the Runtime produces the expected question pool.
+9. Only after successful validation, resume API integration.
 
 ---
 
@@ -421,29 +344,37 @@ After successful validation:
 
 Resume from:
 
-**Phase 3.1 — `fetch-questions.js` Runtime Integration Validation**
+**Anchor → Runtime Integration Validation**
 
-Do **not** immediately redesign `fetch-questions.js`.
+Do not restart Anchor Builder development unless a regression is discovered.
 
-First validate the current migration bridge.
+Do not remove the legacy API pipeline yet.
 
-After validation, proceed to the Anchor Repository design before broadening Runtime integration to additional API endpoints.
+The next milestone is to prove that a real standardized Anchor TXT produced by the frozen Maintenance Builder can successfully travel through the Runtime pipeline.
 
 ---
 
-# Master Engineering Rule
+# Updated Development Timeline
 
-The Runtime architecture is frozen.
+| Date | Milestone |
+|---|---|
+| 2026-08-01 | Global Metadata Tagger Production Release |
+| 2026-08-04 | Question Format Converter Production Release |
+| 2026-08-06 | Knowledge Index Engine v1.0 — Architecture Frozen |
+| 2026-08-07 | Maintenance Framework v2.1 — Architecture Frozen |
+| 2026-08-07 | YouTube Anchor Builder Architecture Completed |
+| 2026-08-09 | Anchor Builder Functional Stabilization Completed |
+| Next | Anchor → Runtime Integration Validation |
+| Later | API Runtime Integration |
 
-Do not introduce new architectural changes merely for cleanup.
+---
 
-When a new layer is genuinely required, first document:
+# Session End Checkpoint — 2026-08-09
 
-1. Why it is required.
-2. What responsibility it owns.
-3. What existing responsibility it replaces or centralizes.
-4. Which existing modules remain unchanged.
-5. How it will be tested.
+**Status: Stable checkpoint reached.**
 
-Only then implement it.
+The current Anchor Builder implementation is working smoothly and should be treated as the frozen baseline for the next development session.
 
+Continue from:
+
+> **Anchor → Runtime Integration Validation**
