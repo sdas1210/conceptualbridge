@@ -26,7 +26,7 @@ export function generateMetadataLine(key, value) {
   return `${key}| ${value}`;
 }
 
-export function compileMetadataText(anchorData) {
+export function compileMetadataText(anchorData, completedSteps = {}) {
   const mode = anchorData.mode || 'GACA';
   const config = MODE_CONFIGURATION[mode];
   if (!config) return '';
@@ -37,15 +37,23 @@ export function compileMetadataText(anchorData) {
     const outputKey = config.fieldKeyMap[fieldKey];
     const value = anchorData[fieldKey];
 
-    const preserveEmpty =
-      fieldKey === 'topic' ||
-      fieldKey === 'subTopic' ||
-      fieldKey === 'level';
-    
-    if (preserveEmpty || (value !== undefined && value !== null && value !== '')) {
+    // Check if step-based optional metadata fields have been saved
+    let shouldInclude = false;
+
+    if (fieldKey === 'topic') {
+      shouldInclude = Boolean(completedSteps[10]);
+    } else if (fieldKey === 'subTopic') {
+      shouldInclude = Boolean(completedSteps[11]);
+    } else if (fieldKey === 'level') {
+      shouldInclude = Boolean(completedSteps[12]);
+    } else {
+      shouldInclude = value !== undefined && value !== null && value !== '';
+    }
+
+    if (shouldInclude) {
       lines.push(`${outputKey}| ${value || ''}`);
     }
-      });
+  });
 
   return lines.join('\n');
 }
