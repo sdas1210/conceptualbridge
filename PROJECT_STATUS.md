@@ -145,3 +145,305 @@ Resume development from:
 
 Focus exclusively on completing and validating the GACA and Mathematics
 Anchor Builders before beginning Runtime Integration.
+
+
+# Master Project Status Update — 2026-08-08
+## Knowledge Runtime v1.0 and API Integration Progress
+
+> **Master-file preservation note:** This update is appended to the existing master status document. Previous status history and roadmap entries are intentionally preserved rather than overwritten.
+
+### Repository Verification
+
+The uploaded project archive was checked before updating this master file.
+
+The current repository contains the expected Runtime and Maintenance integration files, including:
+
+- `services/runtime/runtimeEngine.js`
+- `services/runtime/gacaAnchorParser.js`
+- `services/runtime/mathAnchorParser.js`
+- `services/runtime/knowledgeLibraryLoader.js`
+- `services/runtime/candidateResolver.js`
+- `services/runtime/questionPoolBuilder.js`
+- `services/runtime/randomQuestionSelector.js`
+- `services/runtime/apiResponseBuilder.js`
+- `developer/maintenance/shared/anchorImporter.js`
+- `developer/maintenance/youtube-anchor-builder.html`
+- `developer/maintenance/youtube-anchor-builder.js`
+- `api/fetch-questions.js`
+
+Repository verification result: **all expected files listed above are present in the uploaded project archive.**
+
+### Knowledge Runtime v1.0 — Current Status
+
+The Runtime architecture has progressed beyond the roadmap recorded in the earlier section of this master file.
+
+Completed Runtime components:
+
+1. `gacaAnchorParser.js` — implemented.
+2. `mathAnchorParser.js` — implemented.
+3. `knowledgeLibraryLoader.js` — implemented and present.
+4. `candidateResolver.js` — implemented and present.
+5. `questionPoolBuilder.js` — implemented and present.
+6. `randomQuestionSelector.js` — implemented and present.
+7. `apiResponseBuilder.js` — implemented and present.
+8. `runtimeEngine.js` — implemented as the central Runtime orchestrator.
+
+### Runtime Architecture Decision
+
+`runtimeEngine.js` is now the single orchestration layer for the Knowledge Runtime.
+
+The intended pipeline is:
+
+```text
+Anchor Input
+    ↓
+anchorImporter
+    ↓
+GACA / MATH Runtime Adapter
+    ↓
+Knowledge Library Loader
+    ↓
+Candidate Resolver
+    ↓
+Question Pool Builder
+    ↓
+Random Question Selector
+    ↓
+API Response Builder
+```
+
+The Runtime Engine does not duplicate parsing, candidate resolution, question-pool construction, random selection, or API-response construction.
+
+### Runtime Adapter Refinement
+
+The Runtime adapters now expose a dedicated `resolution` object for downstream candidate resolution.
+
+The Runtime Engine consumes:
+
+```javascript
+context.runtimeAnchor.resolution
+```
+
+instead of rebuilding a separate canonical anchor inside the engine.
+
+This preserves separation of responsibilities:
+
+- Runtime adapters prepare normalized downstream runtime data.
+- Candidate Resolver consumes the prepared resolution object.
+- Runtime Engine remains an orchestrator.
+
+### Runtime Architecture Status
+
+**Knowledge Runtime v1.0 — Architecturally Complete / Frozen**
+
+Future work should focus on integration, testing, compatibility and feature additions rather than unnecessary Runtime architectural redesign.
+
+---
+
+# Phase 3 — API Integration
+
+## Phase 3.1 — `fetch-questions.js`
+
+**Status: INTEGRATED — MIGRATION BRIDGE**
+
+`api/fetch-questions.js` has been updated to import and invoke:
+
+```javascript
+runRuntime(...)
+```
+
+A feature flag is currently present:
+
+```javascript
+const USE_RUNTIME_ENGINE = true;
+```
+
+The legacy question-generation pipeline remains in the file as a rollback fallback.
+
+### Current Phase 3.1 Architecture
+
+```text
+HTTP Request
+    ↓
+fetch-questions.js
+    ↓
+Runtime Engine
+    ↓
+Knowledge Runtime
+    ↓
+API-compatible response
+```
+
+The legacy implementation remains temporarily available for rollback and comparison.
+
+### Important Current Limitation
+
+The current Phase 3.1 bridge constructs a minimal `anchorData` object inside `fetch-questions.js`.
+
+This is considered a **temporary migration bridge**, not the desired final architecture.
+
+The long-term goal is:
+
+```text
+API Request
+    ↓
+Anchor Source / Anchor Repository
+    ↓
+Runtime Engine
+    ↓
+Response
+```
+
+The API should ultimately stop manufacturing runtime anchor data itself.
+
+### Remaining Phase 3.1 Validation
+
+Before removing the legacy fallback, verify:
+
+- Runtime response compatibility with the Quiz Portal.
+- Question count behavior.
+- Paper metadata.
+- Difficulty calculation.
+- Pass-mark calculation.
+- GACA behavior.
+- Mathematics behavior.
+- Error handling.
+- Full Mock / `topic=ALL` behavior.
+- No regression in existing API consumers.
+
+---
+
+# Newly Identified Architectural Opportunity — Anchor Repository
+
+During Phase 3.1 review, a missing architectural layer was identified:
+
+```text
+services/runtime/anchorRepository.js
+```
+
+### Purpose
+
+The future Anchor Repository should provide a clean mechanism for locating/loading standardized anchor artifacts without requiring API endpoints to manufacture `anchorData`.
+
+Proposed responsibility:
+
+```text
+Anchor Identifier / Source
+        ↓
+Anchor Repository
+        ↓
+Raw / normalized Anchor
+        ↓
+Runtime Engine
+```
+
+### Status
+
+**NOT CREATED YET.**
+
+This is a proposed next-stage component, not an existing repository file.
+
+Do not claim it as implemented until it is actually created and verified.
+
+---
+
+# Revised Development Roadmap
+
+## Completed
+
+- Developer Maintenance Framework v2.1
+- Shared Maintenance Framework
+- YouTube Anchor Builder architecture
+- GACA Runtime Adapter
+- Mathematics Runtime Adapter
+- Knowledge Library Loader
+- Candidate Resolver
+- Question Pool Builder
+- Random Question Selector
+- API Response Builder
+- Runtime Engine v1.0
+- Initial `fetch-questions.js` Runtime integration
+
+## Current
+
+### Phase 3.1 — Runtime Integration Bridge
+
+Validate the new `fetch-questions.js` Runtime path before removing legacy code.
+
+## Next
+
+### Phase 2.5 / Integration Support — Anchor Repository Design
+
+Before extending API integration broadly, decide and implement the proper mechanism for obtaining standardized anchor files.
+
+Target:
+
+```text
+services/runtime/anchorRepository.js
+```
+
+Only create this file after its contract has been designed and approved.
+
+## Then
+
+### Phase 3.2 — Tutorial API Integration
+
+Target:
+
+```text
+api/fetch-tutorial-questions.js
+```
+
+## Then
+
+### Phase 3.3 — Developer API Integration
+
+Target:
+
+```text
+api/developer/questions.js
+```
+
+## Then
+
+### Phase 3.4 — Legacy Runtime Removal
+
+After successful validation:
+
+- Remove obsolete duplicate question-generation logic.
+- Remove temporary migration fallback.
+- Keep API endpoints thin.
+- Route production question generation through the Runtime Engine.
+
+---
+
+# Current Continuation Point
+
+Resume from:
+
+**Phase 3.1 — `fetch-questions.js` Runtime Integration Validation**
+
+Do **not** immediately redesign `fetch-questions.js`.
+
+First validate the current migration bridge.
+
+After validation, proceed to the Anchor Repository design before broadening Runtime integration to additional API endpoints.
+
+---
+
+# Master Engineering Rule
+
+The Runtime architecture is frozen.
+
+Do not introduce new architectural changes merely for cleanup.
+
+When a new layer is genuinely required, first document:
+
+1. Why it is required.
+2. What responsibility it owns.
+3. What existing responsibility it replaces or centralizes.
+4. Which existing modules remain unchanged.
+5. How it will be tested.
+
+Only then implement it.
+
