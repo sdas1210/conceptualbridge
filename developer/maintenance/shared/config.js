@@ -4,8 +4,8 @@
  */
 
 import { MODES } from './constants.js';
-import { TITLE_TEMPLATES } from './templates/titleTemplates.js';
-import { TAG_TEMPLATES } from './templates/tagTemplates.js';
+import { TITLE_TEMPLATES } from './titleTemplates.js';
+import { TAG_TEMPLATES } from './tagTemplates.js';
 
 export { TITLE_TEMPLATES, TAG_TEMPLATES };
 
