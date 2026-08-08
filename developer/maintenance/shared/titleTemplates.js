@@ -3,7 +3,7 @@
  * Subject-specific title templates.
  */
 
-import { MODES } from '../constants.js';
+import { MODES } from './constants.js';
 
 export const TITLE_TEMPLATES = Object.freeze({
   [MODES.GACA]: [
