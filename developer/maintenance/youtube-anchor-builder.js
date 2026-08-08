@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     outputFilename: ''
   };
 
+  const completedSteps = {};
   let currentUnlockedStep = 1;
   let isDirty = false;
 
@@ -161,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // PREVIEW SYNTHESIS ENGINE
   // =========================================================================
   function rebuildPreview() {
-    const generatedText = compileMetadataText(anchorData);
+    const generatedText = compileMetadataText(anchorData, completedSteps);
     elements.previewArea.textContent = generatedText || '// Configure wizard steps to build TXT file...';
 
     const chars = generatedText.length;
@@ -177,12 +178,22 @@ document.addEventListener('DOMContentLoaded', () => {
     return generatedText;
   }
 
+  function markStepCompleted(stepNum) {
+    completedSteps[stepNum] = true;
+    completeStepCard(elements.steps[stepNum]);
+  }
+
+  function markStepUncompleted(stepNum) {
+    completedSteps[stepNum] = false;
+    unlockStepCard(elements.steps[stepNum]);
+  }
+
   // =========================================================================
   // DISPATCHED SAVE HANDLERS
   // =========================================================================
   const saveHandlers = {
     saveMode() {
-      completeStepCard(elements.steps[1]);
+      markStepCompleted(1);
       applyModeAdaptations();
       setNextStepActive(2);
       logger.debug(TOOL_NAME, `Saved Mode: ${anchorData.mode}`);
@@ -200,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
       err.textContent = '';
       anchorData.titleTemplate = val;
       updateTitleComputation();
-      completeStepCard(elements.steps[2]);
+      markStepCompleted(2);
       setNextStepActive(3);
       return true;
     },
@@ -216,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       err.textContent = '';
       anchorData.setNumber = val;
       updateTitleComputation();
-      completeStepCard(elements.steps[3]);
+      markStepCompleted(3);
       setNextStepActive(4);
       return true;
     },
@@ -232,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       err.textContent = '';
       anchorData.tagsTemplate = val;
       updateTagsComputation();
-      completeStepCard(elements.steps[4]);
+      markStepCompleted(4);
       setNextStepActive(5);
       return true;
     },
@@ -256,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hide(elements.linkCheckEnglish);
       }
 
-      completeStepCard(elements.steps[5]);
+      markStepCompleted(5);
       setNextStepActive(6);
       return true;
     },
@@ -280,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hide(elements.linkCheckBengali);
       }
 
-      completeStepCard(elements.steps[6]);
+      markStepCompleted(6);
       setNextStepActive(7);
       return true;
     },
@@ -289,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const val = elements.inputPdfEnglish.value;
       anchorData.pdfEnglish = formatPdfFilename(val);
       elements.inputPdfEnglish.value = anchorData.pdfEnglish === 'none' ? '' : anchorData.pdfEnglish;
-      completeStepCard(elements.steps[7]);
+      markStepCompleted(7);
       setNextStepActive(8);
       return true;
     },
@@ -298,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const val = elements.inputPdfBengali.value;
       anchorData.pdfBengali = formatPdfFilename(val);
       elements.inputPdfBengali.value = anchorData.pdfBengali === 'none' ? '' : anchorData.pdfBengali;
-      completeStepCard(elements.steps[8]);
+      markStepCompleted(8);
       setNextStepActive(9);
       return true;
     },
@@ -314,28 +325,28 @@ document.addEventListener('DOMContentLoaded', () => {
       err.textContent = '';
       anchorData.testSourceRaw = val;
       updateTestSourceComputation(val);
-      completeStepCard(elements.steps[9]);
+      markStepCompleted(9);
       setNextStepActive(10);
       return true;
     },
 
     saveTopic() {
       anchorData.topic = elements.inputTopic.value.trim();
-      completeStepCard(elements.steps[10]);
+      markStepCompleted(10);
       setNextStepActive(11);
       return true;
     },
 
     saveSubTopic() {
       anchorData.subTopic = elements.inputSubTopic.value.trim();
-      completeStepCard(elements.steps[11]);
+      markStepCompleted(11);
       setNextStepActive(12);
       return true;
     },
 
     saveLevel() {
       anchorData.level = elements.inputLevel.value.trim();
-      completeStepCard(elements.steps[12]);
+      markStepCompleted(12);
       setNextStepActive(13);
       return true;
     },
@@ -350,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       err.textContent = '';
       anchorData.outputFilename = val;
-      completeStepCard(elements.steps[13]);
+      markStepCompleted(13);
       enable(elements.btnDownload);
       toast.success('Anchor file compilation complete! Ready for export.');
       logger.info(TOOL_NAME, 'Completed wizard steps, output file ready.');
@@ -461,7 +472,11 @@ document.addEventListener('DOMContentLoaded', () => {
       executeStepSave(stepNum);
     } else if (e.target.classList.contains('btn-edit')) {
       const stepNum = parseInt(e.target.getAttribute('data-step'), 10);
-      unlockStepCard(elements.steps[stepNum]);
+      if (stepNum === 13) {
+        disable(elements.btnDownload);
+      }
+      markStepUncompleted(stepNum);
+      rebuildPreview();
     }
   });
 
@@ -496,7 +511,9 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.inputSetNumber.value = '';
     elements.inputOutputFilename.value = '';
     updateTitleComputation();
-    unlockStepCard(elements.steps[3]);
+    disable(elements.btnDownload);
+    markStepUncompleted(3);
+    markStepUncompleted(13);
     toast.info('Duplicated anchor. Specify new Set Number and Output Filename.');
   });
 
@@ -515,6 +532,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function resetWizardState() {
     Object.keys(anchorData).forEach((key) => (anchorData[key] = ''));
+    Object.keys(completedSteps).forEach((key) => (completedSteps[key] = false));
+
     anchorData.mode = MODES.GACA;
 
     document.querySelectorAll('.form-control').forEach((i) => (i.value = ''));
@@ -548,8 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const content = await readTextFile(file);
-      const parsed = parseAnchorTXT(content, file.name);
-      loadParsedDataIntoWizard(parsed);
+      const parsedResult = parseAnchorTXT(content, file.name);
+      loadParsedDataIntoWizard(parsedResult.anchor || parsedResult);
       toast.success(`Successfully imported ${file.name}`);
       logger.info(TOOL_NAME, `Successfully loaded file: ${file.name}`);
     } catch (err) {
@@ -580,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTagsComputation();
 
     for (let i = 1; i <= 13; i++) {
-      completeStepCard(elements.steps[i]);
+      markStepCompleted(i);
     }
 
     unlockStepCard(elements.steps[13]);
