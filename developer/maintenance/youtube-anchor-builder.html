@@ -284,7 +284,6 @@
                     </div>
                 </div>
             </section>
-
             <!-- STEP 13: Export & Output Filename -->
             <section id="step13" class="wizard-step locked">
                 <div class="step-header">
@@ -302,13 +301,16 @@
                         <span class="error-text" id="errOutputFilename"></span>
                     </div>
                     <div class="step-actions">
+                        <button class="btn btn-primary btn-save" data-step="13" disabled>
+                            Save &amp; Prepare Download
+                        </button>
+                        <button class="btn btn-secondary btn-edit hidden" data-step="13">Edit</button>
                         <button class="btn btn-success" id="btnDownload" disabled>
                             <span>💾</span> Download Anchor File (.txt)
                         </button>
                     </div>
                 </div>
             </section>
-
         </main>
 
         <!-- RIGHT COLUMN: Permanent Live Preview -->
