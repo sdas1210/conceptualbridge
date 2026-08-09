@@ -82,6 +82,25 @@
             font-size: 1.1rem;
         }
 
+        .timer-warning {
+            color: #ef4444;
+        }
+
+        .timer-flashing {
+            animation: timerFlash 1s steps(1, end) infinite;
+        }
+
+        @keyframes timerFlash {
+            0%, 100% {
+                color: #ef4444;
+                opacity: 1;
+            }
+            50% {
+                color: #ef4444;
+                opacity: 0.2;
+            }
+        }
+
         .section-bar {
             background-color: #e5e7eb;
             border-bottom: 1px solid var(--tcs-border);
@@ -1295,7 +1314,20 @@
         const activeTopic = urlParams.get('topic') || 'Mathematics';
         const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
+        // =========================================================
+        // TIMER TEST MODE & VISUAL THRESHOLDS CONFIGURATION
+        // =========================================================
+        const TIMER_TEST_MODE = false;
 
+        const TIMER_THRESHOLDS = TIMER_TEST_MODE ? {
+            FIVE_MIN_INTERVAL: 5,   // Test mode: 5-second interval equivalent
+            FINAL_RED: 5,           // Test mode: 5-second threshold
+            FLASHING: 2            // Test mode: 2-second threshold
+        } : {
+            FIVE_MIN_INTERVAL: 300, // Production mode: 300 seconds (5 minutes)
+            FINAL_RED: 59,          // Production mode: 59 seconds threshold
+            FLASHING: 10            // Production mode: 10 seconds threshold
+        };
 
         
         let examDataMatrix = [];
@@ -1541,16 +1573,49 @@
             `; 
         }
 
+        function updateTimerVisuals(secondsRemaining) {
+            const clockDisplay = document.getElementById('clock-display');
+            if (!clockDisplay) return;
+
+            // Reset visual state classes
+            clockDisplay.classList.remove('timer-warning', 'timer-flashing');
+
+            // 00:00 completion state -> SOLID RED
+            if (secondsRemaining === 0) {
+                clockDisplay.classList.add('timer-warning');
+            }
+            // Rule 3: Final threshold flashing (<= 10 seconds in prod, <= 2 seconds in test mode)
+            else if (secondsRemaining <= TIMER_THRESHOLDS.FLASHING) {
+                clockDisplay.classList.add('timer-flashing');
+            }
+            // Rule 2: Final threshold continuous red (<= 59 seconds in prod, <= 5 seconds in test mode)
+            else if (secondsRemaining <= TIMER_THRESHOLDS.FINAL_RED) {
+                clockDisplay.classList.add('timer-warning');
+            }
+            // Rule 1: Exact 5-minute boundaries (every 300s in prod, every 5s in test mode)
+            else if (secondsRemaining % TIMER_THRESHOLDS.FIVE_MIN_INTERVAL === 0) {
+                clockDisplay.classList.add('timer-warning');
+            }
+        }
+
         function startClockCountdown() { 
+            // Display initial timer string and initial visual state
+            const initialMins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0');
+            const initialSecs = (timeRemainingSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('clock-display').innerText = `${initialMins}:${initialSecs}`;
+            updateTimerVisuals(timeRemainingSeconds);
+
             timerEngine = setInterval(() => { 
                 if (timeRemainingSeconds <= 0) { 
                     clearInterval(timerEngine); 
+                    updateTimerVisuals(0);
                     triggerExamSubmission(); 
                 } else { 
                     timeRemainingSeconds--; 
                     const mins = Math.floor(timeRemainingSeconds / 60).toString().padStart(2, '0'); 
                     const secs = (timeRemainingSeconds % 60).toString().padStart(2, '0'); 
                     document.getElementById('clock-display').innerText = `${mins}:${secs}`; 
+                    updateTimerVisuals(timeRemainingSeconds);
                 } 
             }, 1000); 
         }
