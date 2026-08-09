@@ -1059,7 +1059,7 @@
                             <option value="BN">Bengali</option>
                         </select>
                     </div>
-                    <p style="font-size: 0.8rem; color: #4b5563; margin-top: -6px; margin-bottom: 14px; font-style: italic;">
+                    <p id="default-language-notice" style="font-size: 0.8rem; color: #dc2626; margin-top: -6px; margin-bottom: 14px; font-style: italic;">
                         Please note all questions will appear in your default language. This language can be changed for a particular question later on.
                     </p>
                     <h4 style="margin: 12px 0 8px 0; font-size: 0.95rem; color: #1e3a8a;">Declaration:</h4>
@@ -1512,6 +1512,10 @@
         function toggleReadyToBeginButtonState() { 
             const isChecked = document.getElementById('declaration-checkbox').checked; 
             document.getElementById('ready-begin-action-btn').disabled = !isChecked; 
+            const noticeEl = document.getElementById('default-language-notice');
+            if (noticeEl) {
+                noticeEl.style.color = isChecked ? '#16a34a' : '#dc2626';
+            }
         }
 
         function launchExamMatrixWorkspace() { 
