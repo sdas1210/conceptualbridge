@@ -1442,7 +1442,6 @@
         function setupGlobalExamMetrics(topicName) { 
             selectedAnswers = new Array(examDataMatrix.length).fill(null); 
             questionStates = new Array(examDataMatrix.length).fill(QUESTION_STATE.NOT_VISITED); 
-            questionStates[0] = QUESTION_STATE.NOT_ANSWERED;
             questionLanguages = new Array(examDataMatrix.length).fill(defaultLanguage);
 
             let formattedSectionTitle = topicName; 
@@ -1639,12 +1638,6 @@
             const activeQuestionLanguage = questionLanguages[activeIndex] || defaultLanguage;
             document.getElementById('view-lang-select').value = activeQuestionLanguage;
             
-            if (
-                questionStates[activeIndex] === QUESTION_STATE.NOT_VISITED &&
-                !isReviewModeActive
-            ) {
-                questionStates[activeIndex] = QUESTION_STATE.NOT_ANSWERED;
-            }
             document.getElementById('question-number-title').innerText = `Question No. ${activeIndex + 1}`; 
             const shiftLabel = document.getElementById('shift-label-view');
 
@@ -1848,7 +1841,11 @@
 
         function markForReview() { 
             if (isReviewModeActive) return; 
-            questionStates[activeIndex] =     QUESTION_STATE.REVIEW; 
+            if (selectedAnswers[activeIndex] !== null) {
+                questionStates[activeIndex] = QUESTION_STATE.REVIEW;
+            } else {
+                questionStates[activeIndex] = QUESTION_STATE.REVIEW;
+            }
             moveToNextOrWrap(); 
         } 
 
@@ -1863,6 +1860,9 @@
         } 
 
         function jumpToQuestion(idx) { 
+            if (!isReviewModeActive && questionStates[activeIndex] === QUESTION_STATE.NOT_VISITED) {
+                questionStates[activeIndex] = QUESTION_STATE.NOT_ANSWERED;
+            }
             activeIndex = idx; 
             renderExamWindow(); 
         } 
