@@ -146,41 +146,49 @@ Resume development from:
 Focus exclusively on completing and validating the GACA and Mathematics
 Anchor Builders before beginning Runtime Integration.
 
----
+------------------------------------------------------------------------
 
-# Project Status Update — 2026-08-09
+# Project Status Update --- 2026-08-09
+
 ## Anchor Builder Stabilization Completed
 
 ### Session Outcome
 
-The YouTube Anchor Builder was tested and the previously identified Level-1 initialization and wizard workflow issues were resolved.
+The YouTube Anchor Builder was tested and the previously identified
+Level-1 initialization and wizard workflow issues were resolved.
 
-The Anchor Builder is now considered **functionally operational and frozen for the current phase**.
+The Anchor Builder is now considered **functionally operational and
+frozen for the current phase**.
 
 ### Issues Resolved During This Phase
 
 #### 1. Operation Mode Rendering
 
-The initial Operation Mode screen was not displaying the available modes.
+The initial Operation Mode screen was not displaying the available
+modes.
 
-The underlying cause was traced through the ES-module dependency chain and corrected.
+The underlying cause was traced through the ES-module dependency chain
+and corrected.
 
 The builder now correctly exposes:
 
-- GACA — Active
-- MATH — Active
-- GS — Inactive / Coming Soon
-- GI — Inactive / Coming Soon
+-   GACA --- Active
+-   MATH --- Active
+-   GS --- Inactive / Coming Soon
+-   GI --- Inactive / Coming Soon
 
 #### 2. Sequential Metadata Preview
 
-Topic, Sub-Topic and Level were initially being emitted during preview initialization even though their wizard stages had not yet been completed.
+Topic, Sub-Topic and Level were initially being emitted during preview
+initialization even though their wizard stages had not yet been
+completed.
 
-The metadata compilation logic was refined to use wizard completion state.
+The metadata compilation logic was refined to use wizard completion
+state.
 
 Current behavior:
 
-```text
+``` text
 Before Step 10:
 Topic|             not shown
 Sub-Topic|         not shown
@@ -199,15 +207,17 @@ Sub-Topic|
 Level|
 ```
 
-Blank values are intentionally preserved once their corresponding stages have been saved.
+Blank values are intentionally preserved once their corresponding stages
+have been saved.
 
 #### 3. Step 13 Output / Download Workflow
 
-The output filename stage previously lacked a functional save action, preventing the download workflow from becoming active.
+The output filename stage previously lacked a functional save action,
+preventing the download workflow from becoming active.
 
 Step 13 now provides:
 
-```text
+``` text
 Filename Identifier
 [ value ] .txt
 
@@ -218,7 +228,7 @@ Filename Identifier
 
 The expected workflow is:
 
-```text
+``` text
 Enter filename identifier
         ↓
 Save & Prepare Download
@@ -234,13 +244,13 @@ Download Anchor File
 
 For example:
 
-```text
+``` text
 4
 ```
 
 produces:
 
-```text
+``` text
 4.txt
 ```
 
@@ -250,7 +260,7 @@ The existing download mechanism was preserved rather than redesigned.
 
 The complete wizard flow is now operational:
 
-```text
+``` text
 GACA / MATH Selection
         ↓
 Title
@@ -286,11 +296,13 @@ Download Anchor TXT
 
 **Anchor Builder current implementation: FROZEN**
 
-No further architectural refactoring should be performed on the Builder at this stage.
+No further architectural refactoring should be performed on the Builder
+at this stage.
 
-Only verified bug fixes, required compatibility fixes, and narrowly scoped feature additions should be made.
+Only verified bug fixes, required compatibility fixes, and narrowly
+scoped feature additions should be made.
 
----
+------------------------------------------------------------------------
 
 # Revised Next Development Step
 
@@ -302,11 +314,12 @@ The next task is:
 
 ## Anchor → Runtime Integration Validation
 
-Before continuing Phase 3 API integration, validate the real artifact produced by the Builder.
+Before continuing Phase 3 API integration, validate the real artifact
+produced by the Builder.
 
 Required validation chain:
 
-```text
+``` text
 Anchor Builder
       ↓
 Generated Anchor TXT
@@ -328,17 +341,17 @@ Question Selection
 
 ### Required Tests
 
-1. Generate a complete GACA anchor TXT.
-2. Generate a complete Mathematics anchor TXT.
-3. Verify the downloaded TXT contents.
-4. Verify the TXT can be imported through `anchorImporter.js`.
-5. Verify GACA anchor normalization.
-6. Verify Math anchor normalization.
-7. Verify Runtime Engine accepts the standardized anchor artifact.
-8. Verify the Runtime produces the expected question pool.
-9. Only after successful validation, resume API integration.
+1.  Generate a complete GACA anchor TXT.
+2.  Generate a complete Mathematics anchor TXT.
+3.  Verify the downloaded TXT contents.
+4.  Verify the TXT can be imported through `anchorImporter.js`.
+5.  Verify GACA anchor normalization.
+6.  Verify Math anchor normalization.
+7.  Verify Runtime Engine accepts the standardized anchor artifact.
+8.  Verify the Runtime produces the expected question pool.
+9.  Only after successful validation, resume API integration.
 
----
+------------------------------------------------------------------------
 
 # Current Continuation Point
 
@@ -346,35 +359,79 @@ Resume from:
 
 **Anchor → Runtime Integration Validation**
 
-Do not restart Anchor Builder development unless a regression is discovered.
+Do not restart Anchor Builder development unless a regression is
+discovered.
 
 Do not remove the legacy API pipeline yet.
 
-The next milestone is to prove that a real standardized Anchor TXT produced by the frozen Maintenance Builder can successfully travel through the Runtime pipeline.
+The next milestone is to prove that a real standardized Anchor TXT
+produced by the frozen Maintenance Builder can successfully travel
+through the Runtime pipeline.
 
----
+------------------------------------------------------------------------
 
 # Updated Development Timeline
 
-| Date | Milestone |
-|---|---|
-| 2026-08-01 | Global Metadata Tagger Production Release |
-| 2026-08-04 | Question Format Converter Production Release |
-| 2026-08-06 | Knowledge Index Engine v1.0 — Architecture Frozen |
-| 2026-08-07 | Maintenance Framework v2.1 — Architecture Frozen |
-| 2026-08-07 | YouTube Anchor Builder Architecture Completed |
-| 2026-08-09 | Anchor Builder Functional Stabilization Completed |
-| Next | Anchor → Runtime Integration Validation |
-| Later | API Runtime Integration |
+  Date         Milestone
+  ------------ -----------------------------------------------------
+  2026-08-01   Global Metadata Tagger Production Release
+  2026-08-04   Question Format Converter Production Release
+  2026-08-06   Knowledge Index Engine v1.0 --- Architecture Frozen
+  2026-08-07   Maintenance Framework v2.1 --- Architecture Frozen
+  2026-08-07   YouTube Anchor Builder Architecture Completed
+  2026-08-09   Anchor Builder Functional Stabilization Completed
+  Next         Anchor → Runtime Integration Validation
+  Later        API Runtime Integration
 
----
+------------------------------------------------------------------------
 
-# Session End Checkpoint — 2026-08-09
+# Session End Checkpoint --- 2026-08-09
 
 **Status: Stable checkpoint reached.**
 
-The current Anchor Builder implementation is working smoothly and should be treated as the frozen baseline for the next development session.
+The current Anchor Builder implementation is working smoothly and should
+be treated as the frozen baseline for the next development session.
 
 Continue from:
 
-> **Anchor → Runtime Integration Validation**
+## \> **Anchor → Runtime Integration Validation**
+
+# Session Update --- 2026-08-10
+
+## Quiz Portal --- Initial Question Status Correction
+
+### Completed
+
+The initial question-palette state behavior in `quiz-portal.html` has
+been corrected.
+
+At the beginning of an examination:
+
+-   **Not Visited** = Total number of questions
+-   **Answered** = 0
+-   **Marked** = 0
+-   **Marked & Answered** = 0
+-   **Not Answered** = 0
+
+The previous behavior where the first question was automatically
+converted to **Not Answered** has been corrected.
+
+The existing later-state behavior remains unchanged: a question becomes
+**Not Answered** when the candidate actually navigates away from an
+unattempted question, while answered and review states continue to
+operate normally.
+
+### Scope Control
+
+This change applies specifically to the **Quiz Portal
+(`quiz-portal.html`)**.
+
+No unrelated project architecture, roadmap, or development direction has
+been changed.
+
+### Status
+
+**✅ Completed and verified**
+
+The corrected behavior should be treated as the current Quiz Portal
+baseline.
