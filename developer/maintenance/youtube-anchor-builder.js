@@ -17,6 +17,8 @@ import { toast } from './shared/toast.js';
 import { showConfirmDialog } from './shared/dialog.js';
 
 const TOOL_NAME = 'YouTube Anchor Builder';
+const MATH_TAG_COMPONENTS = ['RRB', 'Group D', 'CEN - 08/2024', 'Mathematics', '10', '12', '12+'];
+let mathCurriculum = { topics: [] };
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Shared Framework
@@ -28,6 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const anchorData = {
     mode: MODES.GACA,
     titleTemplate: '',
+    mathTitleSourceURL: '',
+    mathFetchedTitle: '',
+    mathManualTitle: '',
+    mathPrimaryVideoId: '',
+    mathTagSelections: [],
+    mathTopic: '',
+    mathSubTopicSelections: [],
     setNumber: '',
     title: '',
     tagsTemplate: '',
@@ -56,15 +65,30 @@ document.addEventListener('DOMContentLoaded', () => {
     modeGrid: document.getElementById('modeGrid'),
 
     titleTemplateSelect: document.getElementById('titleTemplateSelect'),
+    mathTitleSourcePanel: document.getElementById('mathTitleSourcePanel'),
+    standardTitleTemplatePanel: document.getElementById('standardTitleTemplatePanel'),
+    inputMathTitleYouTube: document.getElementById('inputMathTitleYouTube'),
+    mathManualTitlePanel: document.getElementById('mathManualTitlePanel'),
+    mathFetchedTitlePanel: document.getElementById('mathFetchedTitlePanel'),
+    inputMathManualTitle: document.getElementById('inputMathManualTitle'),
+    mathFetchedTitle: document.getElementById('mathFetchedTitle'),
     inputSetNumber: document.getElementById('inputSetNumber'),
     computedTitle: document.getElementById('computedTitle'),
 
     tagsTemplateSelect: document.getElementById('tagsTemplateSelect'),
+    mathTagsPanel: document.getElementById('mathTagsPanel'),
+    standardTagsPanel: document.getElementById('standardTagsPanel'),
+    mathTagChips: document.getElementById('mathTagChips'),
+    mathSelectedTags: document.getElementById('mathSelectedTags'),
+    mathTopicChips: document.getElementById('mathTopicChips'),
+    mathSubTopicPanel: document.getElementById('mathSubTopicPanel'),
+    mathSubTopicChips: document.getElementById('mathSubTopicChips'),
     computedTags: document.getElementById('computedTags'),
 
     inputVideoEnglish: document.getElementById('inputVideoEnglish'),
     linkCheckEnglish: document.getElementById('linkCheckEnglish'),
     titleStep5: document.getElementById('titleStep5'),
+    mathPrimaryVideoHint: document.getElementById('mathPrimaryVideoHint'),
 
     inputVideoBengali: document.getElementById('inputVideoBengali'),
     linkCheckBengali: document.getElementById('linkCheckBengali'),
@@ -73,6 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     inputPdfBengali: document.getElementById('inputPdfBengali'),
 
     inputTestSource: document.getElementById('inputTestSource'),
+    mathTestSourcePanel: document.getElementById('mathTestSourcePanel'),
+    standardTestSourcePanel: document.getElementById('standardTestSourcePanel'),
+    mathTestSourceSelect: document.getElementById('mathTestSourceSelect'),
     computedTestSource: document.getElementById('computedTestSource'),
 
     inputTopic: document.getElementById('inputTopic'),
@@ -103,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function init() {
     renderModeCards();
     populateSelectOptions(anchorData.mode);
+    applyMathUI();
+    if (anchorData.mode === MODES.MATH) loadMathTestFiles();
+    loadMathCurriculum();
     rebuildPreview();
     logger.success(TOOL_NAME, 'Application initialized successfully.');
   }
@@ -136,6 +166,85 @@ document.addEventListener('DOMContentLoaded', () => {
       case MODES.GI: return 'General Intelligence & Reasoning';
       default: return '';
     }
+  }
+
+  async function loadMathCurriculum() {
+    try {
+      const response = await fetch('math.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error(`math.json HTTP ${response.status}`);
+      mathCurriculum = await response.json();
+    } catch (error) {
+      logger.warn(TOOL_NAME, `Unable to load math.json: ${error.message}`);
+      mathCurriculum = { topics: [] };
+    }
+    renderMathSelectors();
+  }
+
+  function renderMathSelectors() {
+    if (!elements.mathTagChips) return;
+    elements.mathTagChips.innerHTML = '';
+    MATH_TAG_COMPONENTS.forEach(value => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `math-chip ${anchorData.mathTagSelections.includes(value) ? 'selected' : ''}`;
+      button.textContent = value;
+      button.addEventListener('click', () => {
+        anchorData.mathTagSelections = anchorData.mathTagSelections.includes(value)
+          ? anchorData.mathTagSelections.filter(v => v !== value)
+          : [...anchorData.mathTagSelections, value];
+        renderMathSelectors();
+        updateTagsComputation();
+      });
+      elements.mathTagChips.appendChild(button);
+    });
+    elements.mathSelectedTags.textContent = anchorData.mathTagSelections.join(', ') || '--';
+
+    elements.mathTopicChips.innerHTML = '';
+    (mathCurriculum.topics || []).forEach(topic => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `math-chip ${anchorData.mathTopic === topic.name ? 'selected' : ''}`;
+      button.textContent = topic.name;
+      button.addEventListener('click', () => {
+        anchorData.mathTopic = anchorData.mathTopic === topic.name ? '' : topic.name;
+        anchorData.mathSubTopicSelections = [];
+        renderMathSelectors();
+        updateTagsComputation();
+      });
+      elements.mathTopicChips.appendChild(button);
+    });
+
+    const selectedTopic = (mathCurriculum.topics || []).find(t => t.name === anchorData.mathTopic);
+    elements.mathSubTopicPanel.classList.toggle('hidden', !selectedTopic);
+    elements.mathSubTopicChips.innerHTML = '';
+    if (selectedTopic) {
+      (selectedTopic.subtopics || []).forEach(value => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `math-chip ${anchorData.mathSubTopicSelections.includes(value) ? 'selected' : ''}`;
+        button.textContent = value;
+        button.addEventListener('click', () => {
+          anchorData.mathSubTopicSelections = anchorData.mathSubTopicSelections.includes(value)
+            ? anchorData.mathSubTopicSelections.filter(v => v !== value)
+            : [...anchorData.mathSubTopicSelections, value];
+          renderMathSelectors();
+          updateTagsComputation();
+        });
+        elements.mathSubTopicChips.appendChild(button);
+      });
+    }
+  }
+
+  function applyMathUI() {
+    const isMath = anchorData.mode === MODES.MATH;
+    elements.mathTitleSourcePanel.classList.toggle('hidden', !isMath);
+    elements.standardTitleTemplatePanel.classList.toggle('hidden', isMath);
+    elements.mathTagsPanel.classList.toggle('hidden', !isMath);
+    elements.standardTagsPanel.classList.toggle('hidden', isMath);
+    elements.mathTestSourcePanel.classList.toggle('hidden', !isMath);
+    elements.standardTestSourcePanel.classList.toggle('hidden', isMath);
+    elements.mathPrimaryVideoHint.classList.toggle('hidden', !isMath);
+    renderMathSelectors();
   }
 
   function populateSelectOptions(mode) {
@@ -200,25 +309,61 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
     },
 
-    saveTitle() {
+    async saveTitle() {
       const err = document.getElementById('errTitleTemplate');
-      const val = elements.titleTemplateSelect.value;
-      const v = validateRequired(val, 'Title Template');
-      if (!v.isValid) {
-        err.textContent = v.error;
-        return false;
+      if (anchorData.mode !== MODES.MATH) {
+        const val = elements.titleTemplateSelect.value;
+        const v = validateRequired(val, 'Title Template');
+        if (!v.isValid) { err.textContent = v.error; return false; }
+        err.textContent = '';
+        anchorData.titleTemplate = val;
+        updateTitleComputation();
+        markStepCompleted(2); setNextStepActive(3); return true;
+      }
+
+      const url = elements.inputMathTitleYouTube.value.trim();
+      anchorData.mathTitleSourceURL = url;
+      anchorData.mathFetchedTitle = '';
+      anchorData.mathManualTitle = '';
+      anchorData.titleTemplate = '';
+
+      if (url) {
+        const v = validateYouTubeField(url);
+        if (!v.isValid || !v.videoId) { err.textContent = v.error || 'Enter a valid YouTube URL.'; return false; }
+        try {
+          const response = await fetch(`/api/developer/youtube-title?videoId=${encodeURIComponent(v.videoId)}`);
+          const data = await response.json();
+          if (!response.ok || data.status !== 'ok' || !data.title) throw new Error(data.message || 'Unable to retrieve YouTube title.');
+          anchorData.mathFetchedTitle = data.title.trim();
+          anchorData.titleTemplate = anchorData.mathFetchedTitle;
+          anchorData.mathPrimaryVideoId = v.videoId;
+          elements.mathFetchedTitle.textContent = anchorData.mathFetchedTitle;
+          elements.inputVideoEnglish.value = v.videoId;
+          elements.mathManualTitlePanel.classList.add('hidden');
+          elements.mathFetchedTitlePanel.classList.remove('hidden');
+        } catch (e) {
+          err.textContent = e.message;
+          return false;
+        }
+      } else {
+        elements.mathFetchedTitlePanel.classList.add('hidden');
+        elements.mathManualTitlePanel.classList.remove('hidden');
+        anchorData.mathPrimaryVideoId = '';
       }
       err.textContent = '';
-      anchorData.titleTemplate = val;
-      updateTitleComputation();
-      markStepCompleted(2);
-      setNextStepActive(3);
-      return true;
+      markStepCompleted(2); setNextStepActive(3); return true;
     },
 
     saveSet() {
       const err = document.getElementById('errSetNumber');
       const val = elements.inputSetNumber.value.trim();
+      if (anchorData.mode === MODES.MATH && !anchorData.mathFetchedTitle) {
+        const manual = elements.inputMathManualTitle.value.trim();
+        const titleCheck = validateRequired(manual, 'Manual Title');
+        if (!titleCheck.isValid) { document.getElementById('errSetNumber').textContent = titleCheck.error; return false; }
+        anchorData.mathManualTitle = manual;
+        anchorData.titleTemplate = manual;
+      }
       const v = validateNumeric(val, 'Set Number');
       if (!v.isValid) {
         err.textContent = v.error;
@@ -234,23 +379,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveTags() {
       const err = document.getElementById('errTagsTemplate');
+      if (anchorData.mode === MODES.MATH) {
+        if (!anchorData.mathTagSelections.length) { err.textContent = 'Select at least one Math tag component.'; return false; }
+        anchorData.tagsTemplate = 'math-custom';
+        updateTagsComputation();
+        err.textContent = '';
+        markStepCompleted(4); setNextStepActive(5); return true;
+      }
       const val = elements.tagsTemplateSelect.value;
       const v = validateRequired(val, 'Tag Group');
-      if (!v.isValid) {
-        err.textContent = v.error;
-        return false;
-      }
+      if (!v.isValid) { err.textContent = v.error; return false; }
       err.textContent = '';
       anchorData.tagsTemplate = val;
       updateTagsComputation();
-      markStepCompleted(4);
-      setNextStepActive(5);
-      return true;
+      markStepCompleted(4); setNextStepActive(5); return true;
     },
 
     saveEnglishVideo() {
       const err = document.getElementById('errVideoEnglish');
-      const val = elements.inputVideoEnglish.value.trim();
+      const val = anchorData.mode === MODES.MATH ? anchorData.mathPrimaryVideoId : elements.inputVideoEnglish.value.trim();
       const v = validateYouTubeField(val);
       if (!v.isValid) {
         err.textContent = v.error;
@@ -316,18 +463,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveTestSource() {
       const err = document.getElementById('errTestSource');
-      const val = elements.inputTestSource.value.trim();
-      const v = validateRequired(val, 'Question Bank Reference');
-      if (!v.isValid) {
-        err.textContent = v.error;
-        return false;
-      }
+      const raw = anchorData.mode === MODES.MATH
+        ? elements.mathTestSourceSelect.value.trim()
+        : elements.inputTestSource.value.trim();
+      const v = validateRequired(raw, 'Question Bank Reference');
+      if (!v.isValid) { err.textContent = v.error; return false; }
       err.textContent = '';
-      anchorData.testSourceRaw = val;
-      updateTestSourceComputation(val);
-      markStepCompleted(9);
-      setNextStepActive(10);
-      return true;
+      anchorData.testSourceRaw = raw.replace(/\.txt$/i, '');
+      updateTestSourceComputation(anchorData.testSourceRaw);
+      markStepCompleted(9); setNextStepActive(10); return true;
     },
 
     saveTopic() {
@@ -369,7 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  function executeStepSave(stepNum) {
+  async function executeStepSave(stepNum) {
     const handlerMap = {
       1: saveHandlers.saveMode,
       2: saveHandlers.saveTitle,
@@ -389,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const handler = handlerMap[stepNum];
     if (handler) {
       isDirty = true;
-      const success = handler();
+      const success = await handler();
       if (success) {
         rebuildPreview();
       }
@@ -409,10 +553,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateTagsComputation() {
+    if (anchorData.mode === MODES.MATH) {
+      const values = [...anchorData.mathTagSelections];
+      if (anchorData.mathTopic) values.push(anchorData.mathTopic);
+      values.push(...anchorData.mathSubTopicSelections);
+      anchorData.tags = values.join(', ');
+      elements.computedTags.textContent = anchorData.tags || '--';
+      return;
+    }
     const mode = anchorData.mode;
     const match = (TAG_TEMPLATES[mode] || []).find((t) => t.id === anchorData.tagsTemplate);
     anchorData.tags = match ? match.tags : anchorData.tagsTemplate;
     elements.computedTags.textContent = anchorData.tags || '--';
+  }
+
+  async function loadMathTestFiles() {
+    if (anchorData.mode !== MODES.MATH || !elements.mathTestSourceSelect) return;
+    try {
+      const response = await fetch('/api/developer/questions?action=files&topic=math', { cache: 'no-store' });
+      const data = await response.json();
+      if (!response.ok || data.status !== 'ok') throw new Error(data.message || 'Unable to list Math question files.');
+      elements.mathTestSourceSelect.innerHTML = '<option value="">-- Browse questions/math --</option>';
+      (data.data || []).forEach(file => {
+        const option = document.createElement('option');
+        option.value = String(file).replace(/\.txt$/i, '');
+        option.textContent = file;
+        elements.mathTestSourceSelect.appendChild(option);
+      });
+    } catch (error) {
+      elements.mathTestSourceSelect.innerHTML = `<option value="">Unable to load files</option>`;
+      logger.warn(TOOL_NAME, error.message);
+    }
   }
 
   function updateTestSourceComputation(rawInput) {
@@ -469,7 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-save')) {
       const stepNum = parseInt(e.target.getAttribute('data-step'), 10);
-      executeStepSave(stepNum);
+      executeStepSave(stepNum).catch(error => { logger.error(TOOL_NAME, error); toast.error(error.message || 'Unable to save this step.'); });
     } else if (e.target.classList.contains('btn-edit')) {
       const stepNum = parseInt(e.target.getAttribute('data-step'), 10);
       if (stepNum === 13) {
@@ -488,6 +659,21 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.inputTestSource.addEventListener('input', () => {
     const val = elements.inputTestSource.value.trim();
     updateTestSourceComputation(val);
+  });
+
+  elements.inputMathTitleYouTube?.addEventListener('input', () => {
+    anchorData.mathTitleSourceURL = elements.inputMathTitleYouTube.value.trim();
+  });
+
+  elements.inputMathManualTitle?.addEventListener('input', () => {
+    anchorData.mathManualTitle = elements.inputMathManualTitle.value.trim();
+    anchorData.titleTemplate = anchorData.mathManualTitle;
+    updateTitleComputation();
+  });
+
+  elements.mathTestSourceSelect?.addEventListener('change', () => {
+    const value = elements.mathTestSourceSelect.value.trim();
+    if (value) updateTestSourceComputation(value);
   });
 
   elements.btnDownload.addEventListener('click', () => {

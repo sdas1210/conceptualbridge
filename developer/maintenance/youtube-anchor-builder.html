@@ -44,21 +44,30 @@
                 </div>
             </section>
 
-            <!-- STEP 2: Title Template -->
+            <!-- STEP 2: Title Source -->
             <section id="step2" class="wizard-step locked">
                 <div class="step-header">
                     <span class="step-badge">2</span>
-                    <h2>Title Template</h2>
+                    <h2>Title Source</h2>
                     <span class="status-icon" id="statusStep2"></span>
                 </div>
                 <div class="step-body">
-                    <div class="form-group">
-                        <label for="titleTemplateSelect">Select Base Template <span class="required">*</span></label>
-                        <select id="titleTemplateSelect" class="form-control" disabled>
-                            <option value="">-- Select Template --</option>
-                        </select>
-                        <span class="error-text" id="errTitleTemplate"></span>
+                    <div id="mathTitleSourcePanel" class="math-only-panel hidden">
+                        <div class="form-group">
+                            <label for="inputMathTitleYouTube">YouTube Video URL <span class="optional">(Optional)</span></label>
+                            <input type="text" id="inputMathTitleYouTube" class="form-control" placeholder="Paste the YouTube video URL">
+                            <span class="hint-text">If supplied, the video's title will be used automatically. Leave blank to enter the title manually in Step 3.</span>
+                        </div>
                     </div>
+                    <div id="standardTitleTemplatePanel">
+                        <div class="form-group">
+                            <label for="titleTemplateSelect">Select Base Template <span class="required">*</span></label>
+                            <select id="titleTemplateSelect" class="form-control" disabled>
+                                <option value="">-- Select Template --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span class="error-text" id="errTitleTemplate"></span>
                     <div class="step-actions">
                         <button class="btn btn-primary btn-save" data-step="2" disabled>Save & Next</button>
                         <button class="btn btn-secondary btn-edit hidden" data-step="2">Edit</button>
@@ -66,14 +75,26 @@
                 </div>
             </section>
 
-            <!-- STEP 3: Set Number -->
+            <!-- STEP 3: Set Number / Math Manual Title -->
             <section id="step3" class="wizard-step locked">
                 <div class="step-header">
                     <span class="step-badge">3</span>
-                    <h2>Set Number</h2>
+                    <h2>Set Number &amp; Title</h2>
                     <span class="status-icon" id="statusStep3"></span>
                 </div>
                 <div class="step-body">
+                    <div id="mathManualTitlePanel" class="math-only-panel hidden">
+                        <div class="form-group">
+                            <label for="inputMathManualTitle">Manual Title <span class="required">*</span></label>
+                            <input type="text" id="inputMathManualTitle" class="form-control" placeholder="Enter the title manually">
+                        </div>
+                    </div>
+                    <div id="mathFetchedTitlePanel" class="math-only-panel hidden">
+                        <div class="preview-computed">
+                            <label>YouTube Title:</label>
+                            <div id="mathFetchedTitle" class="computed-box">--</div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="inputSetNumber">Numeric Set Index <span class="required">*</span></label>
                         <input type="text" id="inputSetNumber" class="form-control" placeholder="e.g. 01, 12, 105" disabled>
@@ -84,13 +105,13 @@
                         <div id="computedTitle" class="computed-box">--</div>
                     </div>
                     <div class="step-actions">
-                        <button class="btn btn-primary btn-save" data-step="3" disabled>Save & Next</button>
+                        <button class="btn btn-primary btn-save" data-step="3" disabled>Save &amp; Next</button>
                         <button class="btn btn-secondary btn-edit hidden" data-step="3">Edit</button>
                     </div>
                 </div>
             </section>
 
-            <!-- STEP 4: Tags Template -->
+            <!-- STEP 4: Tags -->
             <section id="step4" class="wizard-step locked">
                 <div class="step-header">
                     <span class="step-badge">4</span>
@@ -98,19 +119,39 @@
                     <span class="status-icon" id="statusStep4"></span>
                 </div>
                 <div class="step-body">
-                    <div class="form-group">
-                        <label for="tagsTemplateSelect">Select Tag Group <span class="required">*</span></label>
-                        <select id="tagsTemplateSelect" class="form-control" disabled>
-                            <option value="">-- Select Tags --</option>
-                        </select>
-                        <span class="error-text" id="errTagsTemplate"></span>
+                    <div id="mathTagsPanel" class="math-only-panel hidden">
+                        <div class="form-group">
+                            <label>Math Tag Components</label>
+                            <div id="mathTagChips" class="math-chip-grid"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Selected Tags</label>
+                            <div id="mathSelectedTags" class="selected-chip-box">--</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Math Topic</label>
+                            <div id="mathTopicChips" class="math-chip-grid"></div>
+                        </div>
+                        <div id="mathSubTopicPanel" class="form-group hidden">
+                            <label>Sub-Topics <span class="optional">(Multiple selection allowed)</span></label>
+                            <div id="mathSubTopicChips" class="math-chip-grid"></div>
+                        </div>
                     </div>
+                    <div id="standardTagsPanel">
+                        <div class="form-group">
+                            <label for="tagsTemplateSelect">Select Tag Group <span class="required">*</span></label>
+                            <select id="tagsTemplateSelect" class="form-control" disabled>
+                                <option value="">-- Select Tags --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span class="error-text" id="errTagsTemplate"></span>
                     <div class="preview-computed">
                         <label>Computed Tags Output:</label>
                         <div id="computedTags" class="computed-box">--</div>
                     </div>
                     <div class="step-actions">
-                        <button class="btn btn-primary btn-save" data-step="4" disabled>Save & Next</button>
+                        <button class="btn btn-primary btn-save" data-step="4" disabled>Save &amp; Next</button>
                         <button class="btn btn-secondary btn-edit hidden" data-step="4">Edit</button>
                     </div>
                 </div>
@@ -128,6 +169,7 @@
                         <label for="inputVideoEnglish">YouTube Video ID or URL <span class="optional">(Optional)</span></label>
                         <div class="input-with-action">
                             <input type="text" id="inputVideoEnglish" class="form-control" placeholder="URL or ID (e.g. H8yBPnB30Is)" disabled>
+                            <span id="mathPrimaryVideoHint" class="hint-text hidden">For MATH, this value is derived automatically from Step 2.</span>
                             <a id="linkCheckEnglish" href="#" target="_blank" class="btn btn-outline hidden">Check Link ↗</a>
                         </div>
                         <span class="error-text" id="errVideoEnglish"></span>
@@ -212,17 +254,28 @@
                     <span class="status-icon" id="statusStep9"></span>
                 </div>
                 <div class="step-body">
-                    <div class="form-group">
-                        <label for="inputTestSource">Question Bank Reference Code <span class="required">*</span></label>
-                        <input type="text" id="inputTestSource" class="form-control" placeholder="e.g. 1, abc, k5" disabled>
-                        <span class="error-text" id="errTestSource"></span>
+                    <div id="mathTestSourcePanel" class="math-only-panel hidden">
+                        <div class="form-group">
+                            <label for="mathTestSourceSelect">Math Question File <span class="required">*</span></label>
+                            <select id="mathTestSourceSelect" class="form-control">
+                                <option value="">-- Browse questions/math --</option>
+                            </select>
+                            <span class="hint-text">Choose a .txt file from questions/math/.</span>
+                        </div>
                     </div>
+                    <div id="standardTestSourcePanel">
+                        <div class="form-group">
+                            <label for="inputTestSource">Question Bank Reference Code <span class="required">*</span></label>
+                            <input type="text" id="inputTestSource" class="form-control" placeholder="e.g. 1, abc, k5" disabled>
+                        </div>
+                    </div>
+                    <span class="error-text" id="errTestSource"></span>
                     <div class="preview-computed">
                         <label>Computed Path:</label>
                         <div id="computedTestSource" class="computed-box">--</div>
                     </div>
                     <div class="step-actions">
-                        <button class="btn btn-primary btn-save" data-step="9" disabled>Save & Next</button>
+                        <button class="btn btn-primary btn-save" data-step="9" disabled>Save &amp; Next</button>
                         <button class="btn btn-secondary btn-edit hidden" data-step="9">Edit</button>
                     </div>
                 </div>
