@@ -4,8 +4,6 @@
  * Visual Compiler Interface for the Knowledge Index Engine
  */
 
-import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
-
 (function () {
     'use strict';
 
@@ -365,7 +363,33 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
             log("Aggregating Topics...", "info");
             log("Validating...", "info");
 
-            const engineResult = await discoverQuestionFiles(selectedSubject);
+            const response = await fetch(
+                `/api/developer/knowledge-index?subject=${encodeURIComponent(selectedSubject)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    },
+                    cache: "no-store"
+                }
+            );
+
+            let engineResult = null;
+
+            try {
+                engineResult = await response.json();
+            } catch (parseError) {
+                throw new Error(
+                    `Knowledge Index API returned invalid JSON (HTTP ${response.status}).`
+                );
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    engineResult?.message ||
+                    `Knowledge Index API failed with HTTP ${response.status}.`
+                );
+            }
 
             // Handle invalid engine response
             if (!engineResult || typeof engineResult !== "object") {
