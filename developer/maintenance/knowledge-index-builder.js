@@ -179,12 +179,33 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
         }));
 
         // --- 2. GLOBAL METADATA ARRAYS ---
+        // The v1.1 engine now returns effective question-level metadata and
+        // count-rich topic aggregates. Prefer those aggregates here so the
+        // generated library reflects Topic → SubTopic → Level counts even when
+        // file-level global metadata is blank.
         const topicsSet = new Set();
         const subTopicsSet = new Set();
         const levelsSet = new Set();
         const examsSet = new Set();
         const notificationsSet = new Set();
 
+        (rawTopics || []).forEach(topic => {
+            if (topic?.topic) topicsSet.add(topic.topic);
+            (topic?.subTopics || []).forEach(subTopic => {
+                if (subTopic) subTopicsSet.add(subTopic);
+            });
+            (topic?.levels || []).forEach(level => {
+                if (level !== null && level !== undefined && String(level).trim()) {
+                    levelsSet.add(String(level));
+                }
+            });
+            (topic?.exams || []).forEach(exam => {
+                if (exam) examsSet.add(exam);
+            });
+        });
+
+        // Preserve file-level metadata as a fallback for legacy files whose
+        // engine aggregate contains no effective question-level values.
         cleanFiles.forEach(file => {
             if (file.topic) topicsSet.add(file.topic);
             if (file.subTopic) subTopicsSet.add(file.subTopic);
@@ -202,70 +223,76 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
         };
 
         // --- 3. TOPICS & SUBTOPICS STRUCTURE BUILD ---
-        // Group clean files by Topic and SubTopic to build deep tree
-        const topicMap = new Map();
-
-        cleanFiles.forEach(file => {
-            const topicName = file.topic || "Uncategorized";
-
-            if (!topicMap.has(topicName)) {
-                topicMap.set(topicName, {
-                    name: topicName,
-                    questionCount: 0,
-                    sourceFilesSet: new Set(),
-                    levelsSet: new Set(),
-                    examsSet: new Set(),
-                    subTopicMap: new Map()
-                });
-            }
-
-            const tEntry = topicMap.get(topicName);
-            tEntry.questionCount += file.questionCount;
-            if (file.filename) tEntry.sourceFilesSet.add(file.filename);
-            if (file.level) tEntry.levelsSet.add(file.level);
-            if (file.exam) tEntry.examsSet.add(file.exam);
-
-            const subTopicName = file.subTopic || "Uncategorized";
-            if (!tEntry.subTopicMap.has(subTopicName)) {
-                tEntry.subTopicMap.set(subTopicName, {
-                    name: subTopicName,
-                    questionCount: 0,
-                    sourceFilesSet: new Set(),
-                    levelsSet: new Set()
-                });
-            }
-
-            const stEntry = tEntry.subTopicMap.get(subTopicName);
-            stEntry.questionCount += file.questionCount;
-            if (file.filename) stEntry.sourceFilesSet.add(file.filename);
-            if (file.level) stEntry.levelsSet.add(file.level);
-        });
-
-        const compiledTopics = Array.from(topicMap.values()).map(t => {
-            // Build subTopics array
-            const compiledSubTopics = Array.from(t.subTopicMap.values()).map(st => ({
-                name: st.name,
-                questionCount: st.questionCount,
-                fileCount: st.sourceFilesSet.size,
-                levels: sortList(st.levelsSet)
+        // Use the Knowledge Index Engine's effective aggregates directly.
+        // This preserves per-question metadata fallback and Level counts.
+        const compiledTopics = (rawTopics || []).map(topic => {
+            const subTopicDetails = (topic.subTopicDetails || []).map(detail => ({
+                name: detail.subTopic,
+                questionCount: detail.questionCount || 0,
+                fileCount: 0,
+                levels: sortList(Object.keys(detail.levelCounts || {})),
+                levelCounts: detail.levelCounts || {}
             }));
 
-            // Sort subTopics alphabetically
-            compiledSubTopics.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+            const sourceFiles = sortFileNames(topic.files || []);
 
+            // Derive file counts for sub-topics from the source file list when
+            // the engine does not provide a separate per-subtopic file count.
+            // Keep 0 rather than inventing a count. Runtime counts remain
+            // question-accurate.
             return {
-                name: t.name,
-                questionCount: t.questionCount,
-                fileCount: t.sourceFilesSet.size,
-                subTopicCount: compiledSubTopics.length,
-                levels: sortList(t.levelsSet),
-                exams: sortList(t.examsSet),
-                sourceFiles: sortFileNames(t.sourceFilesSet),
-                subTopics: compiledSubTopics
+                name: topic.topic || "Uncategorized",
+                questionCount: topic.totalQuestions || 0,
+                fileCount: topic.totalFiles || 0,
+                subTopicCount: subTopicDetails.length,
+                levels: sortList(topic.levels || []),
+                levelCounts: topic.levelCounts || {},
+                exams: sortList(topic.exams || []),
+                sourceFiles,
+                subTopics: subTopicDetails,
+                subTopicCounts: topic.subTopicCounts || {}
             };
         });
 
-        // Sort topics alphabetically
+        // Include any legacy file-only topics not represented by the engine
+        // aggregate. This is a compatibility safeguard.
+        const representedTopics = new Set(compiledTopics.map(topic => topic.name));
+        const legacyTopicMap = new Map();
+        cleanFiles.forEach(file => {
+            const topicName = file.topic || "Uncategorized";
+            if (representedTopics.has(topicName)) return;
+            if (!legacyTopicMap.has(topicName)) legacyTopicMap.set(topicName, []);
+            legacyTopicMap.get(topicName).push(file);
+        });
+
+        for (const [topicName, topicFiles] of legacyTopicMap.entries()) {
+            const subMap = new Map();
+            for (const file of topicFiles) {
+                const subName = file.subTopic || "Uncategorized";
+                if (!subMap.has(subName)) subMap.set(subName, { count: 0, levels: new Set() });
+                const sub = subMap.get(subName);
+                sub.count += file.questionCount || 0;
+                if (file.level) sub.levels.add(String(file.level));
+            }
+            compiledTopics.push({
+                name: topicName,
+                questionCount: topicFiles.reduce((sum, file) => sum + (file.questionCount || 0), 0),
+                fileCount: topicFiles.length,
+                subTopicCount: subMap.size,
+                levels: sortList(topicFiles.map(file => file.level).filter(Boolean)),
+                levelCounts: Object.fromEntries(topicFiles.reduce((map, file) => {
+                    if (file.level) map.set(String(file.level), (map.get(String(file.level)) || 0) + (file.questionCount || 0));
+                    return map;
+                }, new Map())),
+                exams: sortList(topicFiles.map(file => file.exam).filter(Boolean)),
+                sourceFiles: sortFileNames(topicFiles.map(file => file.filename)),
+                subTopics: Array.from(subMap.entries()).map(([name, detail]) => ({
+                    name, questionCount: detail.count, fileCount: 0, levels: sortList(detail.levels), levelCounts: {}
+                })),
+                subTopicCounts: Object.fromEntries(Array.from(subMap.entries()).map(([name, detail]) => [name, detail.count]))
+            });
+        }
+
         compiledTopics.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
         // --- 4. SUMMARY & STATISTICS CALCULATIONS ---
@@ -311,9 +338,9 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
         return {
             build: {
                 builder: "Knowledge Index Builder",
-                builderVersion: "1.1.0",
+                builderVersion: "1.2.0",
                 engineVersion: "1.0.0",
-                schemaVersion: "1.0.0",
+                schemaVersion: "1.1.0",
                 generatedBy: "Knowledge Index Builder",
                 subject: selectedSubject,
                 curriculum: `${selectedSubject}.json`,
