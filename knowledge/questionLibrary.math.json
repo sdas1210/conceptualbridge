@@ -1,1 +1,161 @@
-
+{
+    "build": {
+        "builder": "Knowledge Index Builder",
+        "builderVersion": "1.2.1",
+        "engineVersion": "1.1.0",
+        "schemaVersion": "1.1.0",
+        "generatedBy": "Knowledge Index Builder",
+        "subject": "math",
+        "curriculum": "math.json",
+        "generatedAt": "2026-08-12T18:22:09.948Z"
+    },
+    "summary": {
+        "totalFiles": 1,
+        "totalTopics": 1,
+        "totalSubTopics": 6,
+        "totalQuestions": 44,
+        "averageQuestionsPerFile": 44,
+        "largestTopic": "Simplification",
+        "largestTopicQuestions": 44
+    },
+    "metadata": {
+        "topics": [
+            "Simplification"
+        ],
+        "subTopics": [
+            "Algebra",
+            "Basic Simplification",
+            "Conceptual",
+            "Formula Based",
+            "Non-Terminating Decimal",
+            "Surds and Indices"
+        ],
+        "levels": [
+            "10"
+        ],
+        "exams": [
+            "RRB GROUP-D CBT-I"
+        ],
+        "notifications": [
+            "CEN-08/2024"
+        ]
+    },
+    "topics": [
+        {
+            "name": "Simplification",
+            "questionCount": 44,
+            "fileCount": 1,
+            "subTopicCount": 6,
+            "levels": [
+                "10"
+            ],
+            "levelCounts": {
+                "10": 44
+            },
+            "exams": [
+                "RRB GROUP-D CBT-I"
+            ],
+            "sourceFiles": [
+                1
+            ],
+            "subTopics": [
+                {
+                    "name": "Algebra",
+                    "questionCount": 1,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 1
+                    }
+                },
+                {
+                    "name": "Basic Simplification",
+                    "questionCount": 23,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 23
+                    }
+                },
+                {
+                    "name": "Conceptual",
+                    "questionCount": 1,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 1
+                    }
+                },
+                {
+                    "name": "Formula Based",
+                    "questionCount": 12,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 12
+                    }
+                },
+                {
+                    "name": "Non-Terminating Decimal",
+                    "questionCount": 4,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 4
+                    }
+                },
+                {
+                    "name": "Surds and Indices",
+                    "questionCount": 3,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 3
+                    }
+                }
+            ],
+            "subTopicCounts": {
+                "Algebra": 1,
+                "Basic Simplification": 23,
+                "Conceptual": 1,
+                "Formula Based": 12,
+                "Non-Terminating Decimal": 4,
+                "Surds and Indices": 3
+            }
+        }
+    ],
+    "files": [
+        {
+            "filename": "1.txt",
+            "relativePath": "questions/math/1.txt",
+            "subject": "MATHEMATICS",
+            "questionFormat": "QEN",
+            "questionCount": 44,
+            "topic": "Simplification",
+            "subTopic": null,
+            "level": "10",
+            "exam": "RRB GROUP-D CBT-I",
+            "notification": "CEN-08/2024"
+        }
+    ],
+    "statistics": {
+        "largestFile": "1.txt",
+        "largestFileQuestions": 44,
+        "smallestFile": "1.txt",
+        "smallestFileQuestions": 44,
+        "averageTopicSize": 44,
+        "averageSubTopicSize": 7.33
+    }
+}
