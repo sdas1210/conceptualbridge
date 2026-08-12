@@ -1326,3 +1326,261 @@ The project should resume from:
 > **Knowledge Index Engine Upgrade — Level Counts + Global/Individual Metadata Resolution**
 
 No previous project history should be discarded when creating the next master copy.
+
+
+------------------------------------------------------------------------
+
+# Session Update — 2026-08-13
+
+## YouTube Anchor Builder — Step 9 Priority Correction
+
+### Master-Copy Preservation Rule
+
+This document remains the **mother/master Project Status copy**.
+
+All previous project history, architecture decisions, completed milestones,
+constraints, and roadmap information above are preserved.
+
+**Do not replace, shorten, rewrite, or delete previous history merely to
+reflect this correction. Future status changes must be appended to this
+master copy.**
+
+---
+
+## 1. Current Verified Anchor Builder State
+
+The latest YouTube Anchor Builder build has been tested after the recent
+Math-mode UI correction.
+
+### Verified
+
+- ✅ MATH mode selection is working.
+- ✅ The Math-specific YouTube title-source field in Step 2 is now visible
+  and working.
+- ✅ The YouTube field workflow is working.
+- ✅ Steps 1 through 8 are working as expected.
+- ✅ Step 9 is reached successfully.
+
+The previously identified Math UI visibility issue has therefore been
+resolved and should be treated as completed.
+
+---
+
+## 2. Step 9 — Newly Identified Issue
+
+### Current Issue
+
+**Step 9 — Test Source File**
+
+The Step 9 Math interface is present, but the expected **browser / file
+selection option is not currently available to the user.**
+
+The current Step 9 design contains a Math Question File selector intended
+to browse/select a `.txt` file from:
+
+```text
+questions/math/
+```
+
+However, in the currently tested build, the user does not receive the
+expected browser/selection functionality.
+
+Therefore Step 9 is **not yet considered complete**.
+
+---
+
+## 3. Immediate Development Priority
+
+### ★ STEP 9 MUST BE FIXED FIRST
+
+Before continuing with the previously proposed development path, the next
+development session must first address:
+
+```text
+Step 9
+Test Source File
+        ↓
+Required browser / file-selection functionality
+        ↓
+Additional Step 9 requirements
+        ↓
+Step 9 validation
+```
+
+**Do not proceed directly to the Knowledge Index Engine Upgrade while this
+Step 9 requirement remains unresolved.**
+
+---
+
+## 4. Additional Requisite for Step 9
+
+The Step 9 fix must not be treated as merely a visual correction.
+
+Before implementation, the complete Step 9 requirement should be reviewed
+and finalized, including the **additional requisite(s)** associated with
+the browser/file-selection behavior.
+
+The exact additional requisite(s) are intentionally **not assumed or
+invented in this status document** until they are explicitly established
+during the Step 9 implementation session.
+
+This is a deliberate preservation rule: no unverified technical
+requirement should be silently converted into a project requirement.
+
+---
+
+## 5. Scope Control for Step 9
+
+The Step 9 work should be narrowly scoped.
+
+### Do
+
+- Fix the missing browser/file-selection functionality.
+- Verify the selected Math question file is correctly represented in the
+  Anchor Builder state.
+- Verify the resulting `Test_Source` value.
+- Verify the generated Anchor TXT remains compatible with the existing
+  Runtime/Anchor architecture.
+- Implement the additional Step 9 requisite(s) once explicitly defined.
+- Preserve all existing working Steps 1–8.
+- Preserve the existing shared Maintenance Framework architecture.
+
+### Do Not
+
+- Do not redesign the Anchor Builder.
+- Do not refactor the frozen Maintenance Framework.
+- Do not change the Runtime architecture as part of this fix.
+- Do not modify the Knowledge Index Engine yet.
+- Do not migrate the API layer yet.
+- Do not remove legacy APIs.
+- Do not discard or rewrite the existing master Project Status history.
+
+---
+
+## 6. Important Current Baseline
+
+The previous Master Continuation Point stated:
+
+```text
+★ CURRENT: Upgrade Knowledge Index Engine
+```
+
+That is now **temporarily superseded by a narrowly scoped Step 9
+correction**.
+
+The Knowledge Index Engine work is **not cancelled**.
+
+It is simply placed after the Step 9 completion and validation.
+
+---
+
+## 7. Corrected Development Order
+
+The immediate development sequence is now:
+
+```text
+Current Anchor Builder
+        ↓
+Step 9 browser/file-selection fix
+        ↓
+Additional Step 9 requisite(s)
+        ↓
+Step 9 validation
+        ↓
+Re-validate complete Anchor Builder workflow
+        ↓
+Knowledge Index Engine Upgrade
+        ↓
+Admin Portal Topic → Sub-Topic hierarchy
+        ↓
+Runtime filtering
+        ↓
+Tutorial Anchor filtering
+        ↓
+API Integration
+        ↓
+Live Quiz Portal Runtime validation
+```
+
+The previously documented Knowledge Index roadmap remains valid after this
+Step 9 checkpoint.
+
+---
+
+## 8. Previous Proposed Path — Preserved
+
+After Step 9 is completed, resume the previously agreed path:
+
+```text
+1. Upgrade questionLibraryEngine.js
+        ↓
+2. Regenerate / inspect Knowledge Index JSON
+        ↓
+3. Verify Topic/Sub-Topic/Level counts
+        ↓
+4. Upgrade Admin Portal statistics
+        ↓
+5. Verify expandable Topic → Sub-Topic UI
+        ↓
+6. Connect Runtime to Knowledge Index filtering
+        ↓
+7. Define Tutorial Anchor filtering
+        ↓
+8. Integrate fetch-tutorial-questions.js
+        ↓
+9. Integrate fetch-questions.js
+        ↓
+10. Live Quiz Portal Runtime validation
+```
+
+No item in that roadmap is deleted or abandoned.
+
+---
+
+## 9. Current Master Continuation Point
+
+### **CURRENT PRIORITY: Step 9 — Test Source File**
+
+The project should resume from:
+
+```text
+Anchor Builder
+    ↓
+Steps 1–8 verified
+    ↓
+★ CURRENT: Step 9 browser/file-selection fix
+    ↓
+Additional Step 9 requisite(s)
+    ↓
+Step 9 validation
+    ↓
+Knowledge Index Engine Upgrade
+```
+
+### Next file/component to review
+
+The Step 9 implementation should be reviewed against the current
+YouTube Anchor Builder HTML/JavaScript and its existing shared modules.
+
+No code change is authorized by this status update itself; this entry records
+the **priority and preservation state** for the next development session.
+
+---
+
+## Session Checkpoint — 2026-08-13
+
+**Master status preserved.**
+
+**Verified current state:** YouTube field and Steps 1–8 are working.
+
+**Open issue:** Step 9 does not currently provide the expected browser/file
+selection functionality.
+
+**Immediate next task:** Fix Step 9 first, together with its additional
+requisite(s), then validate it.
+
+**After Step 9:** Resume the previously documented Knowledge Index Engine
+Upgrade path.
+
+**Preservation requirement:** No previous project history or architectural
+decision is to be deleted from this master document.
