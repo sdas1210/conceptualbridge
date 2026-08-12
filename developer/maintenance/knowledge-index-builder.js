@@ -227,7 +227,7 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
         // This preserves per-question metadata fallback and Level counts.
         const compiledTopics = (rawTopics || []).map(topic => {
             const subTopicDetails = (topic.subTopicDetails || []).map(detail => ({
-                name: detail.subTopic,
+                name: detail.subTopic || null,
                 questionCount: detail.questionCount || 0,
                 fileCount: 0,
                 levels: sortList(Object.keys(detail.levelCounts || {})),
@@ -241,7 +241,7 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
             // Keep 0 rather than inventing a count. Runtime counts remain
             // question-accurate.
             return {
-                name: topic.topic || "Uncategorized",
+                name: topic.topic || null,
                 questionCount: topic.totalQuestions || 0,
                 fileCount: topic.totalFiles || 0,
                 subTopicCount: subTopicDetails.length,
@@ -254,57 +254,30 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
             };
         });
 
-        // Include any legacy file-only topics not represented by the engine
-        // aggregate. This is a compatibility safeguard.
-        const representedTopics = new Set(compiledTopics.map(topic => topic.name));
-        const legacyTopicMap = new Map();
-        cleanFiles.forEach(file => {
-            const topicName = file.topic || "Uncategorized";
-            if (representedTopics.has(topicName)) return;
-            if (!legacyTopicMap.has(topicName)) legacyTopicMap.set(topicName, []);
-            legacyTopicMap.get(topicName).push(file);
-        });
+        // Do not synthesize "Uncategorized" as a curriculum Topic/Sub-Topic.
+        // The Knowledge Index is question-metadata driven: when effective
+        // Topic/Sub-Topic metadata is absent, the absence remains absent.
+        // File-level metadata is retained in `files` for compatibility, but
+        // it must not manufacture a hierarchy node that does not exist in
+        // the question metadata.
 
-        for (const [topicName, topicFiles] of legacyTopicMap.entries()) {
-            const subMap = new Map();
-            for (const file of topicFiles) {
-                const subName = file.subTopic || "Uncategorized";
-                if (!subMap.has(subName)) subMap.set(subName, { count: 0, levels: new Set() });
-                const sub = subMap.get(subName);
-                sub.count += file.questionCount || 0;
-                if (file.level) sub.levels.add(String(file.level));
-            }
-            compiledTopics.push({
-                name: topicName,
-                questionCount: topicFiles.reduce((sum, file) => sum + (file.questionCount || 0), 0),
-                fileCount: topicFiles.length,
-                subTopicCount: subMap.size,
-                levels: sortList(topicFiles.map(file => file.level).filter(Boolean)),
-                levelCounts: Object.fromEntries(topicFiles.reduce((map, file) => {
-                    if (file.level) map.set(String(file.level), (map.get(String(file.level)) || 0) + (file.questionCount || 0));
-                    return map;
-                }, new Map())),
-                exams: sortList(topicFiles.map(file => file.exam).filter(Boolean)),
-                sourceFiles: sortFileNames(topicFiles.map(file => file.filename)),
-                subTopics: Array.from(subMap.entries()).map(([name, detail]) => ({
-                    name, questionCount: detail.count, fileCount: 0, levels: sortList(detail.levels), levelCounts: {}
-                })),
-                subTopicCounts: Object.fromEntries(Array.from(subMap.entries()).map(([name, detail]) => [name, detail.count]))
-            });
-        }
+        // Remove incomplete aggregate nodes rather than inventing names.
+        const validCompiledTopics = compiledTopics.filter(topic =>
+            topic && typeof topic.name === "string" && topic.name.trim()
+        );
 
-        compiledTopics.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+        validCompiledTopics.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
         // --- 4. SUMMARY & STATISTICS CALCULATIONS ---
         const totalQuestions = cleanFiles.reduce((sum, f) => sum + f.questionCount, 0);
-        const totalTopics = compiledTopics.length;
+        const totalTopics = validCompiledTopics.length;
         const totalSubTopics = globalMetadata.subTopics.length;
         const averageQuestionsPerFile = totalFiles > 0 ? parseFloat((totalQuestions / totalFiles).toFixed(2)) : 0;
 
         let largestTopic = null;
         let largestTopicQuestions = 0;
 
-        compiledTopics.forEach(t => {
+        validCompiledTopics.forEach(t => {
             if (t.questionCount > largestTopicQuestions) {
                 largestTopicQuestions = t.questionCount;
                 largestTopic = t.name;
@@ -338,8 +311,8 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
         return {
             build: {
                 builder: "Knowledge Index Builder",
-                builderVersion: "1.2.0",
-                engineVersion: "1.0.0",
+                builderVersion: "1.2.1",
+                engineVersion: "1.1.0",
                 schemaVersion: "1.1.0",
                 generatedBy: "Knowledge Index Builder",
                 subject: selectedSubject,
@@ -356,7 +329,7 @@ import { discoverQuestionFiles } from "../../services/questionLibraryEngine.js";
                 largestTopicQuestions: largestTopicQuestions
             },
             metadata: globalMetadata,
-            topics: compiledTopics,
+            topics: validCompiledTopics,
             files: cleanFiles,
             statistics: {
                 largestFile: largestFile,
