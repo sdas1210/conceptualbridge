@@ -2,8 +2,8 @@ import fs from "fs/promises";
 import path from "path";
 
 /**
- * Conceptual Bridge - Question Library Engine (v1.0)
- * Phase 1: File Discovery, Metadata Extraction, Topic Aggregation & Curriculum Validation
+ * Conceptual Bridge - Question Library Engine (v1.1)
+ * Phase 2: File Discovery, Metadata Inheritance, Topic/SubTopic/Level Aggregation & Curriculum Validation
  * 
  * Dynamically discovers, validates, and reads question TXT files, extracting metadata,
  * detecting question format, aggregating statistics by Topic, and validating against curriculum standards.
@@ -80,11 +80,19 @@ function subTopicName(st) {
 }
 
 /**
- * Reads global metadata header, detects question format (Q vs QEN), and counts total question blocks in a TXT file.
- * Stops scanning metadata immediately upon encountering the first question block marker (Q| or QEN|).
- * 
+ * Reads global metadata, detects question format, counts question blocks, and
+ * resolves effective metadata for every question.
+ *
+ * Metadata inheritance rule:
+ *   1. A non-blank global value is authoritative.
+ *   2. If the global value is blank, the individual question value is used.
+ *   3. The rule is evaluated independently for Topic, SubTopic, and Level.
+ *
+ * Only lightweight question metadata is indexed here; question text/options are
+ * intentionally not copied into the Knowledge Library.
+ *
  * @param {string} fullFilePath - Absolute or relative file path to read
- * @returns {Promise<Object>} Object containing extracted metadata fields, questionCount, and questionFormat
+ * @returns {Promise<Object>} File metadata plus lightweight question profiles
  */
 async function extractFileMetadata(fullFilePath) {
     const metadata = {
@@ -98,7 +106,22 @@ async function extractFileMetadata(fullFilePath) {
         marks: null,
         qtype: null,
         questionCount: 0,
-        questionFormat: null
+        questionFormat: null,
+        questionProfiles: []
+    };
+
+    const normalizeValue = (value) => {
+        const normalized = String(value ?? "").trim();
+        return normalized !== "" ? normalized : null;
+    };
+
+    const readTagValue = (line, tags) => {
+        for (const tag of tags) {
+            if (line.startsWith(`${tag}|`)) {
+                return normalizeValue(line.substring(tag.length + 1));
+            }
+        }
+        return undefined;
     };
 
     try {
@@ -106,6 +129,25 @@ async function extractFileMetadata(fullFilePath) {
         const lines = content.replace(/\r\n/g, "\n").split("\n");
 
         let firstQuestionReached = false;
+        let currentQuestion = null;
+
+        const saveCurrentQuestion = () => {
+            if (!currentQuestion) return;
+
+            const effectiveTopic = metadata.topic ?? currentQuestion.topic;
+            const effectiveSubTopic = metadata.subTopic ?? currentQuestion.subTopic;
+            const effectiveLevel = metadata.level ?? currentQuestion.level;
+
+            metadata.questionProfiles.push({
+                index: currentQuestion.index,
+                questionID: currentQuestion.questionID ?? null,
+                topic: effectiveTopic,
+                subTopic: effectiveSubTopic,
+                level: effectiveLevel
+            });
+
+            currentQuestion = null;
+        };
 
         for (const rawLine of lines) {
             const line = rawLine.trim();
@@ -113,75 +155,98 @@ async function extractFileMetadata(fullFilePath) {
 
             const isQTag = line.startsWith("Q|");
             const isQENTag = line.startsWith("QEN|");
-            const isQuestionMarker = isQTag || isQENTag;
 
-            if (isQuestionMarker) {
+            if (isQTag || isQENTag) {
+                saveCurrentQuestion();
+
                 if (!firstQuestionReached) {
                     firstQuestionReached = true;
                     metadata.questionFormat = isQENTag ? "QEN" : "Q";
                 }
-                metadata.questionCount++;
+
+                metadata.questionCount += 1;
+                currentQuestion = {
+                    index: metadata.questionCount,
+                    questionID: null,
+                    topic: null,
+                    subTopic: null,
+                    level: null
+                };
                 continue;
             }
 
-            // After first question block marker, only count subsequent question blocks
-            if (firstQuestionReached) {
-                continue;
-            }
+            if (!firstQuestionReached) {
+                // Global/file-level metadata is read only before the first question.
+                const globalTagValue = readTagValue(line, ["Exam"]);
+                if (globalTagValue !== undefined) metadata.exam = globalTagValue;
 
-            // Parse Global Metadata tags prior to the first question block
-            if (line.startsWith("Exam|")) {
-                const val = line.substring(5).trim();
-                metadata.exam = val !== "" ? val : null;
-            } else if (line.startsWith("Subject|")) {
-                const val = line.substring(8).trim();
-                metadata.subject = val !== "" ? val : null;
-            } else if (line.startsWith("Topic|")) {
-                const val = line.substring(6).trim();
-                metadata.topic = val !== "" ? val : null;
-            } else if (line.startsWith("SubTopic|")) {
-                const val = line.substring(9).trim();
-                metadata.subTopic = val !== "" ? val : null;
-            } else if (line.startsWith("Level|")) {
-                const val = line.substring(6).trim();
-                metadata.level = val !== "" ? val : null;
-            } else if (line.startsWith("Notification|") || line.startsWith("Notificaiton|")) {
-                const val = line.substring(line.indexOf("|") + 1).trim();
-                metadata.notification = val !== "" ? val : null;
-            } else if (line.startsWith("Type|")) {
-                const val = line.substring(5).trim();
-                metadata.type = val !== "" ? val : null;
-            } else if (line.startsWith("Marks|")) {
-                const val = line.substring(6).trim();
-                if (val !== "") {
-                    const parsedMarks = parseFloat(val);
-                    metadata.marks = !isNaN(parsedMarks) ? parsedMarks : val;
+                const subjectValue = readTagValue(line, ["Subject"]);
+                if (subjectValue !== undefined) metadata.subject = subjectValue;
+
+                const topicValue = readTagValue(line, ["Topic"]);
+                if (topicValue !== undefined) metadata.topic = topicValue;
+
+                const subTopicValue = readTagValue(line, ["SubTopic", "Sub-Topic"]);
+                if (subTopicValue !== undefined) metadata.subTopic = subTopicValue;
+
+                const levelValue = readTagValue(line, ["Level"]);
+                if (levelValue !== undefined) metadata.level = levelValue;
+
+                const notificationValue = readTagValue(line, ["Notification", "Notificaiton"]);
+                if (notificationValue !== undefined) metadata.notification = notificationValue;
+
+                const typeValue = readTagValue(line, ["Type"]);
+                if (typeValue !== undefined) metadata.type = typeValue;
+
+                const marksValue = readTagValue(line, ["Marks"]);
+                if (marksValue !== undefined) {
+                    const parsedMarks = parseFloat(marksValue);
+                    metadata.marks = !Number.isNaN(parsedMarks) ? parsedMarks : marksValue;
                 }
-            } else if (line.startsWith("QType|") || line.startsWith("QuestionType|")) {
-                const val = line.substring(line.indexOf("|") + 1).trim();
-                metadata.qtype = val !== "" ? val : null;
+
+                const qtypeValue = readTagValue(line, ["QType", "QuestionType"]);
+                if (qtypeValue !== undefined) metadata.qtype = qtypeValue;
+
+                continue;
             }
+
+            if (!currentQuestion) continue;
+
+            const questionTopic = readTagValue(line, ["Topic"]);
+            if (questionTopic !== undefined) currentQuestion.topic = questionTopic;
+
+            const questionSubTopic = readTagValue(line, ["SubTopic", "Sub-Topic"]);
+            if (questionSubTopic !== undefined) currentQuestion.subTopic = questionSubTopic;
+
+            const questionLevel = readTagValue(line, ["Level"]);
+            if (questionLevel !== undefined) currentQuestion.level = questionLevel;
+
+            const questionID = readTagValue(line, ["QuestionID", "QuestionId"]);
+            if (questionID !== undefined) currentQuestion.questionID = questionID;
         }
+
+        saveCurrentQuestion();
 
         return metadata;
     } catch (readError) {
-        // Safe fallback if file reading fails
         return metadata;
     }
 }
 
 /**
- * Groups processed question file objects by Topic and aggregates metadata metrics.
- * 
+ * Groups processed question file objects by effective Topic and aggregates
+ * Topic → SubTopic → Level question counts.
+ *
+ * Existing fields such as `subTopics` and `levels` are preserved for
+ * compatibility; count-rich structures are additive.
+ *
  * @param {Array<Object>} processedFiles - List of file metadata objects
  * @returns {Array<Object>} Sorted list of aggregated Topic objects
  */
 function aggregateTopics(processedFiles) {
     const topicMap = new Map();
 
-    for (const file of processedFiles) {
-        const topicName = file.topic || "Uncategorized";
-
+    const ensureTopic = (topicName) => {
         if (!topicMap.has(topicName)) {
             topicMap.set(topicName, {
                 topic: topicName,
@@ -190,50 +255,147 @@ function aggregateTopics(processedFiles) {
                 files: [],
                 subTopicsSet: new Set(),
                 levelsSet: new Set(),
-                examsSet: new Set()
+                examsSet: new Set(),
+                subTopicCounts: new Map(),
+                levelCounts: new Map()
             });
         }
+        return topicMap.get(topicName);
+    };
 
-        const topicEntry = topicMap.get(topicName);
+    for (const file of processedFiles) {
+        const fallbackTopic = file.topic || "Uncategorized";
+        const topicNamesInFile = new Set(
+            (file.questionProfiles || [])
+                .map(profile => profile.topic || fallbackTopic)
+        );
 
-        topicEntry.totalFiles += 1;
-        topicEntry.totalQuestions += file.questionCount || 0;
+        // Preserve one-file/one-topic accounting when no question-level profile
+        // supplies a more specific effective topic.
+        if (topicNamesInFile.size === 0) topicNamesInFile.add(fallbackTopic);
 
-        // Push numeric file ID (or filename if non-numeric)
-        topicEntry.files.push(file.numericId);
+        // File totals are assigned to the topic(s) represented by effective
+        // question metadata. If a file contains mixed topics, its question
+        // counts are distributed by actual question profiles.
+        const profiles = file.questionProfiles || [];
+        const profilesByTopic = new Map();
 
-        // Collect unique metadata attributes
-        if (file.subTopic) topicEntry.subTopicsSet.add(file.subTopic);
-        if (file.level) topicEntry.levelsSet.add(String(file.level));
-        if (file.exam) topicEntry.examsSet.add(file.exam);
+        for (const profile of profiles) {
+            const topicName = profile.topic || fallbackTopic;
+            if (!profilesByTopic.has(topicName)) profilesByTopic.set(topicName, []);
+            profilesByTopic.get(topicName).push(profile);
+        }
+
+        if (profilesByTopic.size === 0) {
+            const topicEntry = ensureTopic(fallbackTopic);
+            topicEntry.totalFiles += 1;
+            topicEntry.totalQuestions += file.questionCount || 0;
+            topicEntry.files.push(file.numericId);
+            if (file.subTopic) topicEntry.subTopicsSet.add(file.subTopic);
+            if (file.level) topicEntry.levelsSet.add(String(file.level));
+            if (file.exam) topicEntry.examsSet.add(file.exam);
+            continue;
+        }
+
+        for (const [topicName, topicProfiles] of profilesByTopic.entries()) {
+            const topicEntry = ensureTopic(topicName);
+            topicEntry.totalFiles += 1;
+            topicEntry.totalQuestions += topicProfiles.length;
+            topicEntry.files.push(file.numericId);
+            if (file.exam) topicEntry.examsSet.add(file.exam);
+
+            for (const profile of topicProfiles) {
+                const subTopicName = profile.subTopic || "Uncategorized";
+                const levelName = profile.level != null && String(profile.level).trim() !== ""
+                    ? String(profile.level).trim()
+                    : "Unspecified";
+
+                topicEntry.subTopicsSet.add(subTopicName);
+                topicEntry.levelsSet.add(levelName);
+
+                topicEntry.subTopicCounts.set(
+                    subTopicName,
+                    (topicEntry.subTopicCounts.get(subTopicName) || 0) + 1
+                );
+
+                if (!topicEntry.levelCounts.has(levelName)) {
+                    topicEntry.levelCounts.set(levelName, 0);
+                }
+                topicEntry.levelCounts.set(
+                    levelName,
+                    topicEntry.levelCounts.get(levelName) + 1
+                );
+
+                // Rich hierarchy: sub-topic → level → question count.
+                if (!topicEntry.levelCountsBySubTopic) {
+                    topicEntry.levelCountsBySubTopic = new Map();
+                }
+                if (!topicEntry.levelCountsBySubTopic.has(subTopicName)) {
+                    topicEntry.levelCountsBySubTopic.set(subTopicName, new Map());
+                }
+                const subLevelMap = topicEntry.levelCountsBySubTopic.get(subTopicName);
+                subLevelMap.set(levelName, (subLevelMap.get(levelName) || 0) + 1);
+            }
+        }
     }
 
-    // Transform Map entries into final JSON structures and apply required sorting
     const aggregatedTopics = Array.from(topicMap.values()).map(entry => {
-        // Sort files numerically if numeric, otherwise alphabetically
         entry.files.sort((a, b) => {
             const isANum = typeof a === "number";
             const isBNum = typeof b === "number";
             if (isANum && isBNum) return a - b;
             if (isANum && !isBNum) return -1;
             if (!isANum && isBNum) return 1;
-            return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
+            return String(a).localeCompare(String(b), undefined, {
+                numeric: true,
+                sensitivity: "base"
+            });
+        });
+
+        const subTopicCounts = Object.fromEntries(
+            Array.from(entry.subTopicCounts.entries())
+                .sort(([a], [b]) => a.localeCompare(b))
+        );
+
+        const levelCounts = Object.fromEntries(
+            Array.from(entry.levelCounts.entries())
+                .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+        );
+
+        const subTopics = Array.from(entry.subTopicsSet)
+            .sort((a, b) => a.localeCompare(b));
+
+        const subTopicDetails = subTopics.map(subTopic => {
+            const levelMap = entry.levelCountsBySubTopic?.get(subTopic) || new Map();
+            const levelCountsForSubTopic = Object.fromEntries(
+                Array.from(levelMap.entries())
+                    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+            );
+
+            return {
+                subTopic,
+                questionCount: entry.subTopicCounts.get(subTopic) || 0,
+                levelCounts: levelCountsForSubTopic
+            };
         });
 
         return {
             topic: entry.topic,
-            totalFiles: entry.totalFiles,
+            totalFiles: new Set(entry.files.map(String)).size,
             totalQuestions: entry.totalQuestions,
             files: entry.files,
-            subTopics: Array.from(entry.subTopicsSet).sort((a, b) => a.localeCompare(b)),
-            levels: Array.from(entry.levelsSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
-            exams: Array.from(entry.examsSet).sort((a, b) => a.localeCompare(b))
+            subTopics,
+            subTopicCounts,
+            subTopicDetails,
+            levels: Array.from(entry.levelsSet)
+                .sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
+            levelCounts,
+            exams: Array.from(entry.examsSet)
+                .sort((a, b) => a.localeCompare(b))
         };
     });
 
-    // Sort Topics alphabetically
-    aggregatedTopics.sort((a, b) => a.topic.localeCompare(b.topic));
-
+    aggregatedTopics.sort((a, b) => a.topic.localeCompare(b));
     return aggregatedTopics;
 }
 
@@ -274,47 +436,82 @@ async function validateCurriculum(processedFiles, subject) {
         let subTopicStatus = "PASS";
         const messages = [];
 
-        const hasTopic = file.topic !== null && file.topic.trim() !== "";
-        const hasSubTopic = file.subTopic !== null && file.subTopic.trim() !== "";
+        // Validate effective metadata, not merely the file-level header.
+        // When global metadata is blank, questionProfiles provide the fallback.
+        const effectiveProfiles = Array.isArray(file.questionProfiles) && file.questionProfiles.length > 0
+            ? file.questionProfiles
+            : [{
+                topic: file.topic,
+                subTopic: file.subTopic,
+                level: file.level
+            }];
 
-        // Check Blank Topic
-        if (!hasTopic) {
-            topicStatus = "FAIL";
-            messages.push("Blank Topic");
+        const effectiveTopicPairs = [];
+        const seenPairs = new Set();
+
+        for (const profile of effectiveProfiles) {
+            const effectiveTopic = profile.topic ?? null;
+            const effectiveSubTopic = profile.subTopic ?? null;
+            const pairKey = `${effectiveTopic ?? ""}|${effectiveSubTopic ?? ""}`;
+
+            if (!seenPairs.has(pairKey)) {
+                seenPairs.add(pairKey);
+                effectiveTopicPairs.push({
+                    topic: effectiveTopic,
+                    subTopic: effectiveSubTopic
+                });
+            }
         }
 
-        // Check Blank SubTopic
-        if (!hasSubTopic) {
-            subTopicStatus = "WARNING";
-            messages.push("Blank SubTopic");
+        if (effectiveTopicPairs.length === 0) {
+            effectiveTopicPairs.push({
+                topic: file.topic,
+                subTopic: file.subTopic
+            });
         }
 
-        if (validTopicsMap.size > 0) {
-            if (hasTopic) {
-                if (!validTopicsMap.has(file.topic)) {
+        for (const pair of effectiveTopicPairs) {
+            const hasTopic = pair.topic !== null && String(pair.topic).trim() !== "";
+            const hasSubTopic = pair.subTopic !== null && String(pair.subTopic).trim() !== "";
+
+            if (!hasTopic) {
+                topicStatus = "FAIL";
+                if (!messages.includes("Blank Topic")) messages.push("Blank Topic");
+                continue;
+            }
+
+            if (!hasSubTopic) {
+                if (subTopicStatus !== "FAIL") subTopicStatus = "WARNING";
+                if (!messages.includes("Blank SubTopic")) messages.push("Blank SubTopic");
+            }
+
+            if (validTopicsMap.size > 0 && hasTopic) {
+                if (!validTopicsMap.has(pair.topic)) {
                     topicStatus = "FAIL";
-                    messages.push("Unknown Topic");
-                    unknownTopicsSet.add(file.topic);
+                    if (!messages.includes("Unknown Topic")) messages.push("Unknown Topic");
+                    unknownTopicsSet.add(pair.topic);
                 } else {
-                    const validSubSet = validTopicsMap.get(file.topic);
+                    const validSubSet = validTopicsMap.get(pair.topic);
 
                     if (hasSubTopic) {
-                        if (!validSubSet.has(file.subTopic)) {
+                        if (!validSubSet.has(pair.subTopic)) {
                             subTopicStatus = "FAIL";
-                            messages.push("SubTopic does not belong to Topic");
-                            const key = `${file.topic}|${file.subTopic}`;
+                            if (!messages.includes("SubTopic does not belong to Topic")) {
+                                messages.push("SubTopic does not belong to Topic");
+                            }
+
+                            const key = `${pair.topic}|${pair.subTopic}`;
                             if (!unknownSubTopicsMap.has(key)) {
                                 unknownSubTopicsMap.set(key, {
-                                    topic: file.topic,
-                                    subTopic: file.subTopic
+                                    topic: pair.topic,
+                                    subTopic: pair.subTopic
                                 });
                             }
                         } else {
-                            // Record usage for unused curriculum detection
-                            if (!usedSubTopicsMap.has(file.topic)) {
-                                usedSubTopicsMap.set(file.topic, new Set());
+                            if (!usedSubTopicsMap.has(pair.topic)) {
+                                usedSubTopicsMap.set(pair.topic, new Set());
                             }
-                            usedSubTopicsMap.get(file.topic).add(file.subTopic);
+                            usedSubTopicsMap.get(pair.topic).add(pair.subTopic);
                         }
                     }
                 }
@@ -324,12 +521,11 @@ async function validateCurriculum(processedFiles, subject) {
         fileResults.push({
             filename: file.filename,
             numericId: file.numericId,
-            topicStatus: topicStatus,
-            subTopicStatus: subTopicStatus,
+            topicStatus,
+            subTopicStatus,
             validationMessage: messages.length > 0 ? messages.join(", ") : "PASS"
         });
 
-        // Tally summary counts
         if (topicStatus === "FAIL" || subTopicStatus === "FAIL") {
             summary.invalidFiles++;
         } else if (subTopicStatus === "WARNING") {
@@ -481,7 +677,8 @@ export async function discoverQuestionFiles(subject) {
                 type: meta.type,
                 marks: meta.marks,
                 qtype: meta.qtype,
-                questionCount: meta.questionCount
+                questionCount: meta.questionCount,
+                questionProfiles: meta.questionProfiles
             });
         }
 
