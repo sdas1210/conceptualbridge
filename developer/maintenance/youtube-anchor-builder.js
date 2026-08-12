@@ -609,6 +609,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyModeAdaptations() {
     const config = MODE_CONFIGURATION[anchorData.mode];
 
+    // Re-apply Math-specific UI whenever the mode is saved/switched.
+    // init() applies this once, but saveMode() reaches this function after
+    // the user changes from the default GACA mode to MATH.
+    applyMathUI();
+
     if (config.videoFields === 1) {
       elements.titleStep5.textContent = 'Primary YouTube Video';
       hide(elements.steps[6]);
