@@ -159,6 +159,40 @@
             transition: background 0.2s;
         }
         .btn-back:hover { background: rgba(255,255,255,0.15); }
+
+        /* Knowledge Index hierarchy */
+        .knowledge-index-wrapper { margin-top: 6px; }
+        .knowledge-index-section { margin-top: 18px; }
+        .knowledge-subject {
+            display:flex; align-items:center; justify-content:space-between; gap:10px;
+            padding:10px 12px; border-radius:8px;
+            background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.10);
+            color:#fff; font-weight:600;
+        }
+        .knowledge-topic {
+            display:flex; align-items:center; justify-content:space-between; gap:10px;
+            width:100%; padding:9px 10px; margin-top:6px;
+            border:1px solid rgba(255,255,255,0.08); border-radius:7px;
+            background:rgba(255,255,255,0.045); color:#fff;
+            cursor:pointer; text-align:left;
+        }
+        .knowledge-topic:hover { background:rgba(255,255,255,0.11); }
+        .knowledge-topic-name,.knowledge-subtopic-name,.knowledge-level-name {
+            min-width:0; overflow-wrap:anywhere;
+        }
+        .knowledge-count { flex:0 0 auto; opacity:.9; font-size:12px; }
+        .knowledge-topic-body { display:none; padding-left:14px; }
+        .knowledge-topic-body.open { display:block; }
+        .knowledge-subtopic {
+            display:flex; justify-content:space-between; gap:10px;
+            padding:7px 8px 4px; color:#e2e8f0; font-size:12px;
+        }
+        .knowledge-level-list { padding:0 8px 5px 22px; }
+        .knowledge-level {
+            display:flex; justify-content:space-between; gap:10px;
+            color:#cbd5e0; font-size:11px; padding:2px 0;
+        }
+        .knowledge-empty { color:#a0aec0; font-size:12px; padding:8px 10px; }
     </style>
 </head>
 <body>
@@ -219,6 +253,13 @@
                 </div>
             </div>
 
+            <div class="sections-analytics-wrapper knowledge-index-wrapper">
+                <h4>Topic / Sub-Topic / Level Distribution</h4>
+                <div id="knowledge-index-container">
+                    <div class="knowledge-empty">Loading Knowledge Index...</div>
+                </div>
+            </div>
+
             <a href="maintenance.html" class="btn-back">
                 ← Return to Maintenance Suite
             </a>
@@ -270,6 +311,151 @@
             loadAdminStats(token);
         }
 
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function countValue(value) {
+            if (typeof value === 'number' && Number.isFinite(value)) return value;
+            if (value && typeof value === 'object') {
+                const n = value.totalQuestions ?? value.questionCount ?? value.count;
+                if (typeof n === 'number' && Number.isFinite(n)) return n;
+            }
+            return 0;
+        }
+
+        function normalizeLevels(value) {
+            if (!value) return [];
+            if (Array.isArray(value)) {
+                return value.map(v => {
+                    if (v && typeof v === 'object') {
+                        return { name: v.level ?? v.name ?? '', count: countValue(v) };
+                    }
+                    return { name: v, count: 0 };
+                }).filter(v => v.name !== '');
+            }
+            if (typeof value === 'object') {
+                return Object.entries(value).map(([name, v]) => ({ name, count: countValue(v) }));
+            }
+            return [];
+        }
+
+        function normalizeSubTopics(topic) {
+            const value = topic?.subTopicDetails ?? topic?.subTopics;
+            if (!value) return [];
+            if (Array.isArray(value)) return value;
+            if (typeof value === 'object') {
+                return Object.entries(value).map(([name, v]) => ({
+                    name,
+                    ...(v && typeof v === 'object' ? v : { totalQuestions: countValue(v) })
+                }));
+            }
+            return [];
+        }
+
+        function renderKnowledgeIndex(hierarchy) {
+            const container = document.getElementById('knowledge-index-container');
+            if (!container) return;
+
+            if (!hierarchy || typeof hierarchy !== 'object') {
+                container.innerHTML = '<div class="knowledge-empty">Knowledge Index data is unavailable.</div>';
+                return;
+            }
+
+            const order = ['MATH', 'GI', 'GS', 'GACA'];
+            const labels = {
+                MATH: 'Mathematics',
+                GI: 'General Intelligence',
+                GS: 'General Science',
+                GACA: 'General Awareness & CA'
+            };
+
+            let output = '';
+
+            order.forEach(subject => {
+                const data = hierarchy[subject];
+                if (!data) return;
+
+                const topics = Array.isArray(data.topics) ? data.topics : [];
+                const total = countValue(data.totalQuestions);
+                let topicsHtml = '';
+
+                topics.forEach((topic, index) => {
+                    const name = topic.topic ?? topic.name ?? 'Unnamed Topic';
+                    const totalTopic = countValue(topic.totalQuestions ?? topic.questionCount);
+                    const subTopics = normalizeSubTopics(topic);
+
+                    let children = '';
+
+                    subTopics.forEach(sub => {
+                        const subName = sub.name ?? sub.subTopic ?? 'Unnamed Sub-Topic';
+                        const subCount = countValue(sub.totalQuestions ?? sub.questionCount);
+                        const levels = normalizeLevels(sub.levelCounts ?? sub.levels);
+
+                        children += `<div class="knowledge-subtopic">
+                            <span class="knowledge-subtopic-name">${escapeHtml(subName)}</span>
+                            <span class="knowledge-count">${escapeHtml(subCount)}</span>
+                        </div>`;
+
+                        if (levels.length) {
+                            children += `<div class="knowledge-level-list">${
+                                levels.map(level => `<div class="knowledge-level">
+                                    <span class="knowledge-level-name">Level ${escapeHtml(level.name)}</span>
+                                    <span class="knowledge-count">${escapeHtml(level.count)}</span>
+                                </div>`).join('')
+                            }</div>`;
+                        }
+                    });
+
+                    if (!children) {
+                        const levels = normalizeLevels(topic.levelCounts ?? topic.levels);
+                        if (levels.length) {
+                            children = `<div class="knowledge-level-list">${
+                                levels.map(level => `<div class="knowledge-level">
+                                    <span class="knowledge-level-name">Level ${escapeHtml(level.name)}</span>
+                                    <span class="knowledge-count">${escapeHtml(level.count)}</span>
+                                </div>`).join('')
+                            }</div>`;
+                        }
+                    }
+
+                    topicsHtml += `<button type="button" class="knowledge-topic"
+                        aria-expanded="false" data-topic-index="${index}">
+                        <span class="knowledge-topic-name">▶ ${escapeHtml(name)}</span>
+                        <span class="knowledge-count">${escapeHtml(totalTopic)}</span>
+                    </button>
+                    <div class="knowledge-topic-body" data-topic-body="${index}">
+                        ${children || '<div class="knowledge-empty">No Sub-Topic / Level breakdown available.</div>'}
+                    </div>`;
+                });
+
+                output += `<div class="knowledge-index-section">
+                    <div class="knowledge-subject">
+                        <span>${escapeHtml(labels[subject])}</span>
+                        <span class="knowledge-count">${escapeHtml(total)} Questions</span>
+                    </div>
+                    ${topicsHtml || '<div class="knowledge-empty">No Topic data available.</div>'}
+                </div>`;
+            });
+
+            container.innerHTML = output || '<div class="knowledge-empty">No Knowledge Index data available.</div>';
+
+            container.querySelectorAll('.knowledge-topic').forEach(button => {
+                button.addEventListener('click', () => {
+                    const index = button.dataset.topicIndex;
+                    const body = container.querySelector(`[data-topic-body="${index}"]`);
+                    const open = body.classList.toggle('open');
+                    button.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    const label = button.querySelector('.knowledge-topic-name');
+                    if (label) label.textContent = `${open ? '▼' : '▶'} ${label.textContent.replace(/^[▶▼]\s*/, '')}`;
+                });
+            });
+        }
+
         async function loadAdminStats(token) {
             const API_URL = `/api/admin-stats?token=${encodeURIComponent(token)}`;
 
@@ -300,6 +486,8 @@
                     
                     document.getElementById('count-gaca').innerText = stats.sections.GACA + ' Questions';
                     document.getElementById('fill-gaca').style.width = stats.allocationRatios.GACA + '%';
+
+                    renderKnowledgeIndex(stats.hierarchy);
                 }
             } catch (error) {
                 console.error('Failed to load metrics:', error);
