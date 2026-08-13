@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Tutorial Corner - Conceptual Bridge</title>
-    <style>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=G3YKcMEqUff1xDjRmYkL7htRP-zS7MCy5DdWG077WbXpiJBZQAa7FF_zE704R7AKiwo4ncp1n9JFR_7v2OURfyETrVAwpmyUrdfpCDT0pqEk56L4dMCfSWyJ23N_kFQO-g8Ffujgbdik3nJBk7ti5PxpR_qlR6xq1mBuGwBZ7IHoY4-RPW8AX4Fe5l8pbgE6QpVhyHWPFn4K4CY4RrelOk9joBk00zBi6b96_g51nElyCP29YQyAct7TmnAdFXldMCq1PoUGsZ8v54PtLRpvkx0f2MyOe8NMzlijjJl2dZIUwG3ZS1CO9LDKHK8MinF1mvHYXgTMheN-xPO4zTrRFg" charset="UTF-8"></script><style>
         body {
             margin: 0;
             font-family: 'Segoe UI', -apple-system, Arial, sans-serif;
@@ -311,7 +311,9 @@
                         `;
                     }
 
-                    const initialVideo = parsed.english;
+                    // Math anchors use Video|, while legacy bilingual anchors may use English|/Bengali|.
+                    // Prefer the explicit Video field when present, then fall back to legacy fields.
+                    const initialVideo = parsed.video || parsed.english || parsed.bengali || '';
                     
                     const hasValidEngPdf = parsed.pdf_english && parsed.pdf_english.toLowerCase() !== 'none';
                     const initialPdf = hasValidEngPdf ? `Resource/${parsed.pdf_english}` : '#';
@@ -389,7 +391,8 @@
             const data = cachedLoadedData[fileNum];
             if (!data) return;
 
-            const videoId = chosenLang === 'english' ? data.english : data.bengali;
+            // Math uses a single Video| field; bilingual legacy rows use English|/Bengali|.
+            const videoId = data.video || (chosenLang === 'english' ? data.english : data.bengali) || '';
             
             let pdfName = chosenLang === 'english' ? data.pdf_english : data.pdf_bengali;
             if (!pdfName || pdfName.toLowerCase() === 'none') {
