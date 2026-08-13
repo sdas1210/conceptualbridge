@@ -206,7 +206,7 @@
     <p class="subtitle">Select a curriculum module to unlock class files and chapter checkouts</p>
 
     <div class="hub-grid">
-        <div class="hub-card" onclick="openSubjectFolder('math')">
+        <div class="hub-card" id="card-math" onclick="openSubjectFolder('math')">
             <span class="hub-icon">📐</span>
             <h3 class="hub-title">Mathematics</h3>
         </div>
@@ -270,6 +270,13 @@
                 if (!loaded) return;
 
                 document.getElementById('card-ga').classList.add('active-hub');
+                document.getElementById('ga-table-section').style.display = 'block';
+                generateStudioTableLayout();
+            } else if (subjectType === 'math') {
+                const loaded = await loadTutorialList("MATH");
+                if (!loaded) return;
+
+                document.getElementById('card-math').classList.add('active-hub');
                 document.getElementById('ga-table-section').style.display = 'block';
                 generateStudioTableLayout();
             } else {
