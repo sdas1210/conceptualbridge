@@ -387,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
           anchorData.mathPrimaryVideoId = v.videoId;
           elements.mathFetchedTitle.textContent = anchorData.mathFetchedTitle;
           elements.inputVideoEnglish.value = v.videoId;
+          anchorData.english = v.videoId;
           elements.mathManualTitlePanel.classList.add('hidden');
           elements.mathFetchedTitlePanel.classList.remove('hidden');
         } catch (e) {
@@ -445,7 +446,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveEnglishVideo() {
       const err = document.getElementById('errVideoEnglish');
-      const val = anchorData.mode === MODES.MATH ? anchorData.mathPrimaryVideoId : elements.inputVideoEnglish.value.trim();
+
+      // Step 5 is a real YouTube input for every mode.
+      // In MATH it may already contain the ID fetched from Step 2,
+      // but the user must still be able to paste/edit it here.
+      const entered = elements.inputVideoEnglish.value.trim();
+      const val = entered || (anchorData.mode === MODES.MATH ? anchorData.mathPrimaryVideoId : '');
       const v = validateYouTubeField(val);
       if (!v.isValid) {
         err.textContent = v.error;
@@ -454,6 +460,10 @@ document.addEventListener('DOMContentLoaded', () => {
       err.textContent = '';
       anchorData.english = v.videoId;
       elements.inputVideoEnglish.value = v.videoId;
+
+      if (anchorData.mode === MODES.MATH) {
+        anchorData.mathPrimaryVideoId = v.videoId;
+      }
 
       if (v.videoId) {
         elements.linkCheckEnglish.href = buildPreviewURL(v.videoId);
@@ -704,6 +714,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     anchorData.mode = mode;
     renderModeCards();
+    populateSelectOptions(anchorData.mode);
+    applyMathUI();
+    applyModeAdaptations();
+
+    if (anchorData.mode === MODES.MATH) {
+      loadMathTestFiles();
+    }
   }
 
   document.addEventListener('click', (e) => {
@@ -809,6 +826,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.form-control').forEach((i) => (i.value = ''));
     hide(elements.linkCheckEnglish);
     hide(elements.linkCheckBengali);
+    elements.inputVideoEnglish.value = '';
+    elements.inputVideoBengali.value = '';
+    anchorData.mathPrimaryVideoId = '';
     elements.computedTitle.textContent = '--';
     elements.computedTags.textContent = '--';
     elements.computedTestSource.textContent = '--';
@@ -853,8 +873,12 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.titleTemplateSelect.value = anchorData.titleTemplate;
     elements.inputSetNumber.value = anchorData.setNumber;
     elements.tagsTemplateSelect.value = anchorData.tagsTemplate;
-    elements.inputVideoEnglish.value = anchorData.english;
+    elements.inputVideoEnglish.value = anchorData.english || anchorData.mathPrimaryVideoId || '';
     elements.inputVideoBengali.value = anchorData.bengali;
+
+    if (anchorData.mode === MODES.MATH && !anchorData.mathPrimaryVideoId) {
+      anchorData.mathPrimaryVideoId = anchorData.english || '';
+    }
     elements.inputPdfEnglish.value = anchorData.pdfEnglish === 'none' ? '' : anchorData.pdfEnglish;
     elements.inputPdfBengali.value = anchorData.pdfBengali === 'none' ? '' : anchorData.pdfBengali;
     elements.inputTestSource.value = anchorData.testSourceRaw;
