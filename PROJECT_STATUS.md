@@ -1584,3 +1584,246 @@ Upgrade path.
 
 **Preservation requirement:** No previous project history or architectural
 decision is to be deleted from this master document.
+
+------------------------------------------------------------------------
+
+# Session Update — 2026-08-14
+
+## Master-Copy Preservation Rule
+
+This document remains the **mother/master Project Status copy**.
+
+All previous project history, architecture decisions, completed milestones,
+constraints, roadmap items, and previous continuation points are preserved.
+
+**Do not delete, shorten, rewrite, or replace previous history unless
+absolutely necessary. Future status changes must be appended to this master
+copy.**
+
+---
+
+## 1. Current Verified State After Step 9 Work
+
+### YouTube Anchor Builder — MATH
+
+- ✅ Math Step 9 browser/file-selection functionality is working.
+- ✅ Math question files can be selected from `questions/math/`.
+- ✅ The selected source is represented through the existing `Test_Source` mechanism.
+- ✅ Existing Step 9 architecture was preserved.
+
+### Mathematics Topic / Sub-Topic Metadata
+
+- ✅ Step 10 uses a Topic dropdown populated from `developer/maintenance/math.json`.
+- ✅ Step 11 uses a dependent Sub-Topic dropdown populated from the selected Topic.
+- ✅ Blank Topic and Sub-Topic values remain permitted.
+- ✅ Changing Topic clears the previously selected Sub-Topic.
+- ✅ Step 12 Level remains a separate stage.
+
+---
+
+## 2. Tutorial Corner — Mathematics
+
+The Mathematics Tutorial Corner has been corrected and verified.
+
+### Math Tutorial File Loading
+
+The Math branch uses:
+
+```text
+/api/tutorial-files?subject=MATH
+```
+
+and the project folder:
+
+```text
+Video/MATH/
+```
+
+The existing tutorial-file loading and table-rendering mechanism is reused.
+
+### Math Anchor Video Field
+
+Math anchors use:
+
+```text
+Video|<YouTube Video ID>
+```
+
+For example:
+
+```text
+Video|Cjk0Bvi3C_4
+```
+
+The Tutorial Corner was corrected so Math uses the `Video|` field, while
+legacy bilingual anchors continue using their existing English/Bengali fields.
+
+Expected result:
+
+```text
+Video|Cjk0Bvi3C_4
+        ↓
+https://www.youtube.com/watch?v=Cjk0Bvi3C_4
+```
+
+---
+
+## 3. Maintenance CSS Standardization
+
+`youtube-anchor-builder.css` is the master visual reference for the Maintenance
+Suite. The following CSS files were reviewed for CSS-only visual
+standardization:
+
+```text
+developer/maintenance/proof-reader.css
+developer/maintenance/citation-remover.css
+developer/maintenance/shift-extractor.css
+```
+
+The rule is visual-only: HTML, JavaScript, IDs, classes, controls, processing
+logic, API calls, and workflows must remain unchanged.
+
+---
+
+# 4. Newly Preserved Future Work
+
+## A. Quiz Portal — New Box
+
+Add/update the new **Box** under `quiz-portal.html`.
+
+Inspect the current project before implementation and preserve unrelated
+Quiz Portal functionality.
+
+## B. YouTube Anchor Builder — GACA Mode
+
+Two GACA-specific changes remain planned:
+
+- **GACA Step 2** — update the GACA Mode behavior/UI.
+- **GACA Step 9** — update the GACA Mode behavior/UI.
+
+These are separate from the completed Math Step 9 work.
+
+## C. Answer Key Builder — Operations
+
+Update the operational behavior/workflow of:
+
+```text
+developer/maintenance/answer-key-builder.html
+developer/maintenance/answer-key-builder.js
+```
+
+Inspect the current implementation first. Preserve existing functionality.
+
+## D. Knowledge Index Builder — GACA Activation
+
+Activate/complete Knowledge Index Builder functionality for GACA. The existing
+Knowledge Index architecture must be extended rather than replaced.
+
+Previously established requirements remain authoritative:
+
+1. Level-wise question counts.
+2. Global metadata overrides individual metadata when the global value exists.
+3. If global metadata is blank, individual question metadata may supply the missing value.
+4. Topic, SubTopic and Level resolution is independent per field.
+5. TXT question files remain the source of truth.
+6. Generated JSON remains a derived/index layer.
+
+## E. Citation Remover — Three-Row Answer-Key Structure
+
+Update Citation Remover so its relevant output/operation follows the **three-row
+structure based on Answer Key Builder**.
+
+Before implementation:
+
+1. Inspect current Answer Key Builder output.
+2. Inspect current Citation Remover input/output.
+3. Define the exact three-row contract.
+4. Make the smallest necessary change.
+5. Preserve unrelated Citation Remover functionality.
+
+Do not guess the exact three-row format before inspecting the current files.
+
+---
+
+# 5. Preserved Master Development Order
+
+The existing roadmap remains valid. The additional work is preserved without
+cancelling or replacing the Knowledge Index / Runtime roadmap.
+
+```text
+Step 9 validation
+      ↓
+Knowledge Index Engine Upgrade
+      ↓
+Admin Portal Topic → Sub-Topic hierarchy
+      ↓
+Runtime filtering
+      ↓
+Tutorial Anchor filtering
+      ↓
+API Integration
+      ↓
+Live Quiz Portal Runtime validation
+      ↓
+Additional planned project improvements
+      ├── Quiz Portal new Box
+      ├── GACA Anchor Builder Step 2
+      ├── GACA Anchor Builder Step 9
+      ├── Answer Key Builder operations
+      ├── GACA Knowledge Index Builder activation
+      └── Citation Remover three-row Answer-Key structure
+```
+
+---
+
+# 6. Engineering Safety Rules — Reinforced
+
+- **Preserve this master Project Status history.**
+- **Do not delete previous project history.**
+- **Do not replace the mother copy with a shortened summary.**
+- Append new project status updates.
+- Treat the latest verified project state as the baseline.
+- Do not modify frozen architecture unless a verified bug or required feature demands it.
+- Do not delete legacy APIs during Runtime migration.
+- Do not create duplicate temporary indexes unless technically necessary.
+- Keep TXT files as the question source of truth.
+- Keep generated JSON as the derived/index layer.
+- Global metadata wins over individual metadata when the global field is populated.
+- Individual question metadata is used only when the corresponding global field is blank.
+- Resolve Topic, SubTopic and Level independently.
+- Inspect the current project before replacing files.
+- Prefer minimal, isolated changes.
+- Preserve working behavior.
+- Do not replace a working file wholesale for an unrelated feature.
+- Gemini or another AI assistant may be used when useful, but generated code must be reviewed against this master architecture before merging.
+- Delete or remove anything only when it is **absolutely necessary**, and document the reason.
+
+---
+
+# 7. Current Master Continuation Point
+
+Most recently completed immediate work:
+
+```text
+Math Step 9
+    ↓
+Math Tutorial Corner
+    ↓
+Math Video| YouTube handling
+```
+
+These are currently working.
+
+The newly recorded future work is:
+
+```text
+1. Quiz Portal — new Box
+2. GACA Anchor Builder — Step 2
+3. GACA Anchor Builder — Step 9
+4. Answer Key Builder — operations
+5. GACA Knowledge Index Builder activation
+6. Citation Remover — three-row Answer-Key structure
+```
+
+**No item above should be treated as completed until it has been implemented
+and verified in the actual current project.**
