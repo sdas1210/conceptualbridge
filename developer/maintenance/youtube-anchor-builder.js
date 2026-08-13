@@ -103,7 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     computedTestSource: document.getElementById('computedTestSource'),
 
     inputTopic: document.getElementById('inputTopic'),
+    standardTopicMetadataPanel: document.getElementById('standardTopicMetadataPanel'),
+    mathTopicMetadataPanel: document.getElementById('mathTopicMetadataPanel'),
+    mathTopicSelect: document.getElementById('mathTopicSelect'),
     inputSubTopic: document.getElementById('inputSubTopic'),
+    standardSubTopicMetadataPanel: document.getElementById('standardSubTopicMetadataPanel'),
+    mathSubTopicMetadataPanel: document.getElementById('mathSubTopicMetadataPanel'),
+    mathSubTopicSelect: document.getElementById('mathSubTopicSelect'),
     inputLevel: document.getElementById('inputLevel'),
 
     inputOutputFilename: document.getElementById('inputOutputFilename'),
@@ -178,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mathCurriculum = { topics: [] };
     }
     renderMathSelectors();
+    renderMathMetadataSelectors();
   }
 
   function renderMathSelectors() {
@@ -235,6 +242,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function renderMathMetadataSelectors() {
+    const topics = Array.isArray(mathCurriculum.topics) ? mathCurriculum.topics : [];
+    const topicSelect = elements.mathTopicSelect;
+    const subTopicSelect = elements.mathSubTopicSelect;
+    if (!topicSelect || !subTopicSelect) return;
+
+    topicSelect.innerHTML = '<option value="">-- Select Topic --</option>';
+    topics.forEach(topic => {
+      const option = document.createElement('option');
+      option.value = topic.name;
+      option.textContent = topic.name;
+      topicSelect.appendChild(option);
+    });
+
+    topicSelect.value = anchorData.topic || '';
+
+    subTopicSelect.innerHTML = '<option value="">-- Select Sub-Topic --</option>';
+    const selectedTopic = topics.find(topic => topic.name === (anchorData.topic || ''));
+    if (!selectedTopic) {
+      disable(subTopicSelect);
+      return;
+    }
+
+    (selectedTopic.subtopics || []).forEach(subTopic => {
+      const option = document.createElement('option');
+      option.value = subTopic;
+      option.textContent = subTopic;
+      subTopicSelect.appendChild(option);
+    });
+
+    enable(subTopicSelect);
+    subTopicSelect.value = anchorData.subTopic || '';
+  }
+
   function applyMathUI() {
     const isMath = anchorData.mode === MODES.MATH;
     elements.mathTitleSourcePanel.classList.toggle('hidden', !isMath);
@@ -244,7 +285,14 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.mathTestSourcePanel.classList.toggle('hidden', !isMath);
     elements.standardTestSourcePanel.classList.toggle('hidden', isMath);
     elements.mathPrimaryVideoHint.classList.toggle('hidden', !isMath);
+
+    elements.standardTopicMetadataPanel?.classList.toggle('hidden', isMath);
+    elements.mathTopicMetadataPanel?.classList.toggle('hidden', !isMath);
+    elements.standardSubTopicMetadataPanel?.classList.toggle('hidden', isMath);
+    elements.mathSubTopicMetadataPanel?.classList.toggle('hidden', !isMath);
+
     renderMathSelectors();
+    renderMathMetadataSelectors();
   }
 
   function populateSelectOptions(mode) {
@@ -475,14 +523,35 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     saveTopic() {
-      anchorData.topic = elements.inputTopic.value.trim();
+      const value = anchorData.mode === MODES.MATH
+        ? elements.mathTopicSelect.value.trim()
+        : elements.inputTopic.value.trim();
+
+      anchorData.topic = value;
+
+      if (anchorData.mode === MODES.MATH) {
+        elements.inputTopic.value = value;
+        anchorData.subTopic = '';
+        elements.inputSubTopic.value = '';
+        renderMathMetadataSelectors();
+      }
+
       markStepCompleted(10);
       setNextStepActive(11);
       return true;
     },
 
     saveSubTopic() {
-      anchorData.subTopic = elements.inputSubTopic.value.trim();
+      const value = anchorData.mode === MODES.MATH
+        ? elements.mathSubTopicSelect.value.trim()
+        : elements.inputSubTopic.value.trim();
+
+      anchorData.subTopic = value;
+
+      if (anchorData.mode === MODES.MATH) {
+        elements.inputSubTopic.value = value;
+      }
+
       markStepCompleted(11);
       setNextStepActive(12);
       return true;
@@ -609,17 +678,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyModeAdaptations() {
     const config = MODE_CONFIGURATION[anchorData.mode];
 
-    // Re-apply Math-specific UI whenever the mode is saved/switched.
-    // init() applies this once, but saveMode() reaches this function after
-    // the user changes from the default GACA mode to MATH.
-    applyMathUI();
-
-    // Populate the Math Step 9 file browser after switching from the
-    // default GACA mode to MATH. Previously this ran only during init().
-    if (anchorData.mode === MODES.MATH) {
-      loadMathTestFiles();
-    }
-
     if (config.videoFields === 1) {
       elements.titleStep5.textContent = 'Primary YouTube Video';
       hide(elements.steps[6]);
@@ -646,11 +704,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     anchorData.mode = mode;
     renderModeCards();
-    applyMathUI();
-
-    if (anchorData.mode === MODES.MATH) {
-      loadMathTestFiles();
-    }
   }
 
   document.addEventListener('click', (e) => {
@@ -665,6 +718,21 @@ document.addEventListener('DOMContentLoaded', () => {
       markStepUncompleted(stepNum);
       rebuildPreview();
     }
+  });
+
+  elements.mathTopicSelect?.addEventListener('change', () => {
+    anchorData.topic = elements.mathTopicSelect.value.trim();
+    anchorData.subTopic = '';
+    elements.inputTopic.value = anchorData.topic;
+    elements.inputSubTopic.value = '';
+    renderMathMetadataSelectors();
+    rebuildPreview();
+  });
+
+  elements.mathSubTopicSelect?.addEventListener('change', () => {
+    anchorData.subTopic = elements.mathSubTopicSelect.value.trim();
+    elements.inputSubTopic.value = anchorData.subTopic;
+    rebuildPreview();
   });
 
   elements.inputSetNumber.addEventListener('input', () => {

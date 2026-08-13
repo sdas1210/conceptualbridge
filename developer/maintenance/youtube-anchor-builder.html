@@ -289,9 +289,16 @@
                     <span class="status-icon" id="statusStep10"></span>
                 </div>
                 <div class="step-body">
-                    <div class="form-group">
+                    <div id="standardTopicMetadataPanel" class="form-group">
                         <label for="inputTopic">Topic Name <span class="optional">(Optional)</span></label>
                         <input type="text" id="inputTopic" class="form-control" placeholder="e.g. Trigonometry" disabled>
+                    </div>
+                    <div id="mathTopicMetadataPanel" class="form-group math-only-panel hidden">
+                        <label for="mathTopicSelect">Topic <span class="optional">(Optional)</span></label>
+                        <select id="mathTopicSelect" class="form-control" disabled>
+                            <option value="">-- Select Topic --</option>
+                        </select>
+                        <span class="hint-text">Topics are loaded from math.json.</span>
                     </div>
                     <div class="step-actions">
                         <button class="btn btn-primary btn-save" data-step="10" disabled>Save & Next</button>
@@ -308,9 +315,16 @@
                     <span class="status-icon" id="statusStep11"></span>
                 </div>
                 <div class="step-body">
-                    <div class="form-group">
+                    <div id="standardSubTopicMetadataPanel" class="form-group">
                         <label for="inputSubTopic">Sub-Topic Name <span class="optional">(Optional)</span></label>
                         <input type="text" id="inputSubTopic" class="form-control" placeholder="e.g. Heights and Distances" disabled>
+                    </div>
+                    <div id="mathSubTopicMetadataPanel" class="form-group math-only-panel hidden">
+                        <label for="mathSubTopicSelect">Sub-Topic <span class="optional">(Optional)</span></label>
+                        <select id="mathSubTopicSelect" class="form-control" disabled>
+                            <option value="">-- Select Sub-Topic --</option>
+                        </select>
+                        <span class="hint-text">Sub-Topics are filtered according to the selected Topic.</span>
                     </div>
                     <div class="step-actions">
                         <button class="btn btn-primary btn-save" data-step="11" disabled>Save & Next</button>
