@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     }
 
     const formattedSubject = subject.trim();
-    const allowedSubjects = ["GACA", "Math", "GI", "Science"];
+    const allowedSubjects = ["GACA", "MATH", "GI", "Science"];
 
     // 2. Validation: Check subject whitelist
     if (!allowedSubjects.includes(formattedSubject)) {
