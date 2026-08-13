@@ -614,6 +614,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // the user changes from the default GACA mode to MATH.
     applyMathUI();
 
+    // Populate the Math Step 9 file browser after switching from the
+    // default GACA mode to MATH. Previously this ran only during init().
+    if (anchorData.mode === MODES.MATH) {
+      loadMathTestFiles();
+    }
+
     if (config.videoFields === 1) {
       elements.titleStep5.textContent = 'Primary YouTube Video';
       hide(elements.steps[6]);
@@ -640,6 +646,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     anchorData.mode = mode;
     renderModeCards();
+    applyMathUI();
+
+    if (anchorData.mode === MODES.MATH) {
+      loadMathTestFiles();
+    }
   }
 
   document.addEventListener('click', (e) => {
