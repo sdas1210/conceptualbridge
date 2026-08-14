@@ -1,0 +1,377 @@
+/* =========================================
+   MAINTENANCE SUITE HUB
+   Glassmorphic Maintenance Theme
+   Direct Design Translation of Answer Key Builder
+========================================= */
+
+:root {
+    /* Color Palette from Answer Key Builder */
+    --bg-gradient-start: #0a1128;
+    --bg-gradient-end: #000411;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg-hover: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-hover: rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+    /* Text Colors */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    /* Accent Colors */
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-blue-glow: rgba(59, 130, 246, 0.35);
+
+    --accent-green: #22c55e;
+    --accent-green-hover: #16a34a;
+    --accent-green-glow: rgba(34, 197, 94, 0.35);
+
+    --accent-purple: #805ad5;
+    --accent-purple-hover: #6b46c1;
+
+    --accent-gray: #334155;
+    --accent-gray-hover: #475569;
+
+    /* Layout & Radius */
+    --border-radius-card: 16px;
+    --border-radius-btn: 10px;
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 35px 20px;
+    font-family:
+        'Segoe UI',
+        -apple-system,
+        BlinkMacSystemFont,
+        Roboto,
+        sans-serif;
+    color: var(--text-main);
+    background:
+        linear-gradient(
+            135deg,
+            var(--bg-gradient-start),
+            var(--bg-gradient-end)
+        );
+}
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.maintenance-container {
+    width: 100%;
+    max-width: 1100px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInUp .8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.header-icon {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    box-shadow: var(--glass-shadow);
+}
+
+h1 {
+    margin: 0 0 7px;
+    font-size: 2.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background:
+        linear-gradient(
+            to right,
+            #ffffff,
+            var(--text-muted)
+        );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: .95rem;
+}
+
+/* =========================================
+   TOOL GRID & CARDS
+========================================= */
+
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.tool-card {
+    min-height: 230px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-main);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-card);
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp .8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition:
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Ensure all content renders above shine elements */
+.tool-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Top border sheen */
+.tool-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Diagonal glass shine sweep */
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    z-index: 1;
+    background: linear-gradient(
+        45deg,
+        transparent 46%,
+        rgba(255, 255, 255, 0.01) 48.5%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0.01) 51.5%,
+        transparent 54%
+    );
+    transform: translate3d(-105%, -105%, 0);
+    animation: glassShineV2 7s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    animation-delay: var(--shine-delay, 1.5s);
+    pointer-events: none;
+    will-change: transform;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+    box-shadow:
+        0 14px 38px 0 rgba(0, 0, 0, 0.45),
+        0 0 20px 0 var(--accent-blue-glow);
+}
+
+.tool-card:hover::before {
+    background: linear-gradient(
+        45deg,
+        transparent 46%,
+        rgba(255, 255, 255, 0.02) 48.5%,
+        rgba(255, 255, 255, 0.18) 50%,
+        rgba(255, 255, 255, 0.02) 51.5%,
+        transparent 54%
+    );
+    animation-duration: 4.5s;
+}
+
+/* =========================================
+   CARD ICONS & TYPOGRAPHY
+========================================= */
+
+.tool-icon {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    background: rgba(2, 6, 23, 0.50);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    transition:
+        transform var(--transition-speed) ease,
+        border-color var(--transition-speed) ease;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.08);
+    border-color: var(--glass-border-hover);
+}
+
+.tool-card h2 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.tool-card p {
+    margin: 0;
+    max-width: 290px;
+    color: var(--text-muted);
+    font-size: .86rem;
+    line-height: 1.55;
+}
+
+/* =========================================
+   OPEN LABEL & STATUS BADGES
+========================================= */
+
+.open-tool {
+    margin-top: auto;
+    padding-top: 18px;
+    color: var(--accent-blue);
+    font-size: .84rem;
+    font-weight: 600;
+    opacity: .85;
+    transition:
+        color var(--transition-speed) ease,
+        transform var(--transition-speed) ease,
+        opacity var(--transition-speed) ease;
+}
+
+.tool-card:hover .open-tool {
+    opacity: 1;
+    color: #60a5fa;
+    transform: translateX(4px);
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer {
+    margin-top: 28px;
+    color: var(--text-dim);
+    font-size: .8rem;
+    opacity: 0;
+    animation: fadeIn .8s ease .7s forwards;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes glassShineV2 {
+    0% {
+        transform: translate3d(-105%, -105%, 0);
+    }
+    22% {
+        transform: translate3d(105%, 105%, 0);
+    }
+    100% {
+        transform: translate3d(105%, 105%, 0);
+    }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 950px) {
+    .maintenance-container {
+        max-width: 760px;
+    }
+
+    .tool-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    body {
+        padding: 20px;
+    }
+
+    .maintenance-container {
+        max-width: 400px;
+    }
+
+    .tool-grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    .tool-card {
+        min-height: 205px;
+    }
+}
