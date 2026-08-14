@@ -1,33 +1,53 @@
-/* ==========================================================================
-   Conceptual Bridge - Proof Reader Maintenance Suite
-   Design Language: Glassmorphism & Dark Cyber-Tech System
-   ========================================================================== */
+/* =========================================
+   PROOF READER
+   Glassmorphic Maintenance Theme
+   Direct Design Translation of Answer Key Builder
+========================================= */
 
 :root {
-    --bg-primary: #0a0e17;
-    --bg-secondary: #121824;
-    --bg-glass: rgba(18, 24, 36, 0.65);
-    --border-glass: rgba(255, 255, 255, 0.08);
-    --border-glass-active: rgba(0, 210, 255, 0.3);
-    
-    --text-main: #f0f4f8;
-    --text-muted: #8a99ad;
-    --text-dim: #526071;
+    /* Color Palette from Answer Key Builder */
+    --bg-gradient-start: #0a1128;
+    --bg-gradient-end: #000411;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg-hover: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-hover: rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 
-    --accent-blue: #00d2ff;
-    --accent-cyan: #00f2fe;
-    --accent-green: #00e676;
-    --accent-red: #ff5252;
-    --accent-warning: #ffab00;
+    /* Text Colors */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
 
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    /* Accent Colors */
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-blue-glow: rgba(59, 130, 246, 0.35);
 
-    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --radius-lg: 16px;
-    --radius-md: 10px;
-    --radius-sm: 6px;
+    --accent-green: #22c55e;
+    --accent-green-hover: #16a34a;
+    --accent-green-glow: rgba(34, 197, 94, 0.35);
+
+    --accent-purple: #805ad5;
+    --accent-purple-hover: #6b46c1;
+
+    --accent-orange: #dd6b20;
+    --accent-orange-hover: #c05621;
+
+    --accent-red: #ef4444;
+    --accent-red-glow: rgba(239, 68, 68, 0.35);
+
+    --accent-gray: #334155;
+    --accent-gray-hover: #475569;
+
+    /* Console & Editor Specifics */
+    --console-bg: rgba(2, 6, 23, 0.85);
+    --console-border: rgba(51, 65, 85, 0.6);
+
+    /* Layout & Radius */
+    --border-radius-card: 16px;
+    --border-radius-btn: 10px;
+    --transition-speed: 0.3s;
 }
 
 * {
@@ -38,15 +58,20 @@
 
 body {
     min-height: 100vh;
-    font-family: var(--font-sans);
+    font-family:
+        'Segoe UI',
+        -apple-system,
+        BlinkMacSystemFont,
+        Roboto,
+        sans-serif;
     color: var(--text-main);
-    background-color: var(--bg-primary);
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(0, 210, 255, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(0, 230, 118, 0.04) 0px, transparent 50%);
-    background-attachment: fixed;
-    padding: 24px;
-    line-height: 1.5;
+    background:
+        linear-gradient(
+            135deg,
+            var(--bg-gradient-start),
+            var(--bg-gradient-end)
+        );
+    padding: 35px 20px;
 }
 
 /* =========================================
@@ -59,7 +84,7 @@ body {
     margin: 0 auto;
     opacity: 0;
     transform: translateY(18px);
-    animation: fadeInUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: fadeInUp .8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* =========================================
@@ -69,26 +94,52 @@ body {
 .back-home {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 20px;
-    padding: 8px 16px;
-    color: var(--accent-blue);
+    margin-bottom: 18px;
+    padding: 8px 14px;
+    color: var(--text-main);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.05);
+    font-size: .85rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, .06);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-fast);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    transition:
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.back-home::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent,
+        rgba(255, 255, 255, 0.18),
+        transparent
+    );
+    transform: rotate(25deg);
+    transition: left 0.75s ease;
 }
 
 .back-home:hover {
-    color: var(--accent-cyan);
-    background: rgba(0, 210, 255, 0.08);
-    border-color: var(--border-glass-active);
+    background: rgba(255, 255, 255, .12);
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 0 15px var(--accent-blue-glow);
     transform: translateX(-3px);
+}
+
+.back-home:hover::after {
+    left: 150%;
 }
 
 /* =========================================
@@ -98,44 +149,99 @@ body {
 h1 {
     margin-bottom: 6px;
     text-align: center;
-    font-size: 1.75rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    color: var(--text-main);
+    background:
+        linear-gradient(
+            to right,
+            #ffffff,
+            var(--text-muted)
+        );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-    margin-bottom: 24px;
+    margin-bottom: 25px;
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: .95rem;
 }
 
 /* =========================================
-   GLASS CARDS / PANELS
+   GLASS CARDS
 ========================================= */
 
 .card {
     margin-bottom: 16px;
     padding: 20px;
-    background: var(--bg-glass);
+    background: var(--glass-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-card);
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    overflow: hidden;
+    transition:
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    pointer-events: none;
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent,
+        rgba(255, 255, 255, 0.08),
+        transparent
+    );
+    transform: rotate(25deg);
+    pointer-events: none;
+    transition: left 0.85s ease;
 }
 
 .card:hover {
-    border-color: var(--border-glass-active);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), 0 0 15px rgba(0, 210, 255, 0.05);
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+    box-shadow:
+        0 12px 36px 0 rgba(0, 0, 0, 0.45),
+        0 0 20px 0 var(--accent-blue-glow);
+    transform: translateY(-2px);
+}
+
+.card:hover::after {
+    left: 150%;
 }
 
 .card h2 {
-    margin-bottom: 14px;
+    margin-bottom: 15px;
     color: var(--text-main);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
 }
 
@@ -145,40 +251,45 @@ h1 {
 
 input[type="file"] {
     width: 100%;
-    padding: 10px 14px;
+    margin-bottom: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .05);
     color: var(--text-main);
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
+    font-family: inherit;
+    font-size: .9rem;
     outline: none;
-    transition: border-color var(--transition-fast);
+    transition:
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input[type="file"]:focus {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.15);
+    box-shadow: 0 0 10px var(--accent-blue-glow);
 }
 
 input[type="file"]::file-selector-button {
     margin-right: 12px;
-    padding: 6px 14px;
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.08);
+    padding: 8px 14px;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    background: var(--accent-gray);
     color: var(--text-main);
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: .85rem;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition:
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input[type="file"]::file-selector-button:hover {
-    background: rgba(0, 210, 255, 0.15);
-    border-color: var(--accent-blue);
-    color: var(--accent-cyan);
+    background: var(--accent-gray-hover);
+    border-color: var(--glass-border-hover);
 }
 
 /* =========================================
@@ -187,15 +298,13 @@ input[type="file"]::file-selector-button:hover {
 
 table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+    border-collapse: collapse;
 }
 
 td {
     padding: 10px 12px;
-    border-bottom: 1px solid var(--border-glass);
-    font-size: 0.9rem;
-    color: var(--text-main);
+    border-bottom: 1px solid var(--glass-border);
+    font-size: .92rem;
 }
 
 tr:last-child td {
@@ -209,8 +318,7 @@ td:first-child {
 }
 
 td:last-child {
-    color: var(--accent-cyan);
-    font-family: var(--font-mono);
+    color: var(--text-main);
     font-weight: 600;
 }
 
@@ -222,13 +330,18 @@ td:last-child {
     height: 220px;
     overflow: auto;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-md);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
-    color: var(--accent-green);
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    background: var(--console-bg);
+    border: 1px solid var(--console-border);
+    border-radius: 10px;
+    box-shadow: inset 0 3px 12px rgba(0, 0, 0, .45);
+    color: #38bdf8;
+    font-family:
+        'Cascadia Code',
+        'Fira Code',
+        Consolas,
+        "Courier New",
+        monospace;
+    font-size: .85rem;
     line-height: 1.6;
     white-space: pre-wrap;
 }
@@ -241,29 +354,37 @@ td:last-child {
     width: 130px;
     color: var(--text-muted);
     font-weight: 600;
-    font-family: var(--font-sans);
 }
 
 #editorLineText {
     width: 100%;
     min-height: 95px;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.35);
-    color: var(--text-main);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    padding: 14px;
+    background: var(--console-bg);
+    color: #eef7ff;
+    border: 1px solid var(--console-border);
+    border-radius: 9px;
+    font-family:
+        'Cascadia Code',
+        'Fira Code',
+        Consolas,
+        "Noto Sans Bengali",
+        "Courier New",
+        monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
     resize: vertical;
     outline: none;
-    transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 #editorLineText:not([readonly]) {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(15, 23, 42, 0.95);
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.15);
+    box-shadow: 0 0 14px var(--accent-blue-glow);
 }
 
 /* =========================================
@@ -281,17 +402,19 @@ td:last-child {
     flex: 1;
 }
 
+/* Smaller editor controls */
+
 .editor-buttons button {
     min-width: auto;
-    padding: 8px 14px;
-    font-size: 0.85rem;
+    padding: 10px 15px;
 }
+
+/* Navigation buttons */
 
 #previousLineBtn,
 #nextLineBtn {
-    min-width: 44px;
-    font-size: 1rem;
-    font-family: var(--font-sans);
+    min-width: 48px;
+    font-size: 17px;
 }
 
 /* =========================================
@@ -300,13 +423,12 @@ td:last-child {
 
 #editorStatus {
     margin-top: 15px;
-    padding: 11px 14px;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
+    padding: 11px 13px;
+    background: rgba(2, 6, 23, 0.50);
+    border: 1px solid var(--glass-border);
+    border-radius: 9px;
     color: var(--text-muted);
-    font-size: 0.85rem;
-    font-family: var(--font-sans);
+    font-size: .86rem;
 }
 
 /* =========================================
@@ -318,20 +440,27 @@ td:last-child {
     max-height: 400px;
     overflow: auto;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-md);
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    background: var(--console-bg);
+    border: 1px solid var(--console-border);
+    border-radius: 10px;
+    font-family:
+        'Cascadia Code',
+        'Fira Code',
+        Consolas,
+        "Courier New",
+        monospace;
+    font-size: .86rem;
     white-space: pre-wrap;
 }
+
+/* Individual validation error */
 
 .error-item {
     margin-bottom: 12px;
     padding: 12px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, .04);
     border-left: 4px solid var(--accent-red);
-    border-radius: var(--radius-sm);
+    border-radius: 8px;
 }
 
 .error-item:last-child {
@@ -340,16 +469,15 @@ td:last-child {
 
 .error-header {
     margin-bottom: 8px;
-    color: var(--accent-red);
-    font-weight: 600;
-    font-family: var(--font-sans);
+    color: #fca5a5;
+    font-weight: 700;
 }
 
 .error-context {
     padding: 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
+    background: rgba(2, 6, 23, 0.60);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
     color: var(--text-main);
     white-space: pre-wrap;
     word-break: break-word;
@@ -360,26 +488,57 @@ td:last-child {
 ========================================= */
 
 button {
-    min-width: 140px;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    font-weight: 500;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    border: 1px solid var(--border-glass);
-    background: rgba(255, 255, 255, 0.05);
+    min-width: 150px;
+    padding: 12px 18px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-btn);
+    background: var(--accent-gray);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: var(--text-main);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: all var(--transition-fast);
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        background var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        border-color var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transform: rotate(25deg);
+    pointer-events: none;
+    transition: left 0.75s ease;
 }
 
 button:not(:disabled):hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    background: var(--accent-gray-hover);
+    border-color: var(--glass-border-hover);
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, .35),
+        0 0 12px var(--accent-blue-glow);
+}
+
+button:not(:disabled):hover::after {
+    left: 150%;
 }
 
 button:active:not(:disabled) {
@@ -387,13 +546,13 @@ button:active:not(:disabled) {
 }
 
 button:disabled {
-    opacity: 0.4;
+    opacity: .38;
     cursor: not-allowed;
     box-shadow: none;
 }
 
 /* =========================================
-   ACTION BUTTONS & EDITOR-SPECIFIC BUTTONS
+   ACTION BUTTONS
 ========================================= */
 
 .buttons {
@@ -405,67 +564,76 @@ button:disabled {
 
 #processBtn:not(:disabled) {
     background: var(--accent-blue);
-    color: #000;
-    font-weight: 600;
     border-color: transparent;
+    box-shadow: 0 4px 14px var(--accent-blue-glow);
 }
 
 #processBtn:not(:disabled):hover {
-    background: var(--accent-cyan);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    background: var(--accent-blue-hover);
+    border-color: transparent;
+    box-shadow:
+        0 6px 20px rgba(37, 99, 235, 0.5),
+        0 0 16px var(--accent-blue-glow);
 }
 
 #downloadCorrectedBtn:not(:disabled) {
     background: var(--accent-green);
-    color: #000;
-    font-weight: 600;
     border-color: transparent;
+    box-shadow: 0 4px 14px var(--accent-green-glow);
 }
 
 #downloadCorrectedBtn:not(:disabled):hover {
-    box-shadow: 0 0 12px rgba(0, 230, 118, 0.3);
+    background: var(--accent-green-hover);
+    border-color: transparent;
+    box-shadow:
+        0 6px 20px rgba(34, 197, 94, 0.5),
+        0 0 16px var(--accent-green-glow);
 }
 
+/* =========================================
+   EDITOR-SPECIFIC ACTIVE BUTTONS
+========================================= */
+
 #editLineBtn:not(:disabled) {
-    background: rgba(0, 210, 255, 0.12);
-    color: var(--accent-blue);
-    border-color: rgba(0, 210, 255, 0.3);
+    background: var(--accent-blue);
+    border-color: transparent;
+    box-shadow: 0 4px 12px var(--accent-blue-glow);
 }
 
 #editLineBtn:not(:disabled):hover {
-    background: rgba(0, 210, 255, 0.2);
-    color: var(--accent-cyan);
+    background: var(--accent-blue-hover);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
 }
 
 #saveLineBtn:not(:disabled) {
-    background: rgba(0, 230, 118, 0.15);
-    color: var(--accent-green);
-    border-color: rgba(0, 230, 118, 0.3);
-    font-weight: 600;
+    background: var(--accent-green);
+    border-color: transparent;
+    box-shadow: 0 4px 12px var(--accent-green-glow);
 }
 
 #saveLineBtn:not(:disabled):hover {
-    background: rgba(0, 230, 118, 0.25);
+    background: var(--accent-green-hover);
+    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.45);
 }
 
 #passErrorBtn:not(:disabled) {
-    background: rgba(255, 171, 0, 0.15);
-    color: var(--accent-warning);
-    border-color: rgba(255, 171, 0, 0.3);
+    background: var(--accent-orange);
+    border-color: transparent;
 }
 
 #passErrorBtn:not(:disabled):hover {
-    background: rgba(255, 171, 0, 0.25);
+    background: var(--accent-orange-hover);
+    box-shadow: 0 6px 16px rgba(221, 107, 32, 0.4);
 }
 
 #revalidateBtn:not(:disabled) {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-main);
-    border-color: var(--border-glass);
+    background: var(--accent-purple);
+    border-color: transparent;
 }
 
 #revalidateBtn:not(:disabled):hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--accent-purple-hover);
+    box-shadow: 0 6px 16px rgba(128, 90, 213, 0.4);
 }
 
 /* =========================================
@@ -474,24 +642,26 @@ button:disabled {
 
 #console::-webkit-scrollbar,
 #errorReport::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
 }
 
 #console::-webkit-scrollbar-track,
 #errorReport::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(2, 6, 23, 0.6);
+    border-radius: 10px;
 }
 
 #console::-webkit-scrollbar-thumb,
 #errorReport::-webkit-scrollbar-thumb {
-    background: var(--border-glass);
-    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, .15);
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
 }
 
 #console::-webkit-scrollbar-thumb:hover,
 #errorReport::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, .32);
 }
 
 /* =========================================
@@ -499,6 +669,10 @@ button:disabled {
 ========================================= */
 
 @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
     to {
         opacity: 1;
         transform: translateY(0);
@@ -506,25 +680,25 @@ button:disabled {
 }
 
 /* =========================================
-   MOBILE RESPONSIVE
+   MOBILE
 ========================================= */
 
 @media (max-width: 700px) {
     body {
-        padding: 16px;
+        padding: 22px 14px;
     }
 
     h1 {
-        font-size: 1.4rem;
+        font-size: 1.65rem;
     }
 
     .card {
-        padding: 16px;
+        padding: 17px;
     }
 
     td {
-        padding: 8px 6px;
-        font-size: 0.825rem;
+        padding: 9px 6px;
+        font-size: .85rem;
     }
 
     .editor-table td:first-child {
