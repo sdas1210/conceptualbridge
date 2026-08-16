@@ -199,6 +199,10 @@
                 <option value="2">
                     2 Files — English TXT + Bengali TXT
                 </option>
+
+                <option value="3">
+                    3 Files — English TXT + Bengali TXT + ANS KEY
+                </option>
             
             </select>
         
@@ -246,7 +250,7 @@
         </h2>
     
     
-        <!-- TWO FILE MODE -->
+        <!-- SINGLE FILE MODE -->
     
         <div
             id="twoFileUploader"
@@ -273,14 +277,12 @@
     
                 </div>
     
-    
-    
             </div>
     
         </div>
     
     
-        <!-- THREE FILE MODE -->
+        <!-- BILINGUAL & 3-FILE MODE -->
     
         <div
             id="threeFileUploader"
@@ -324,6 +326,28 @@
                         Filename must end with B.txt
                     </span>
     
+                </div>
+
+                <!-- ANS KEY TXT FILE (3-File Mode) -->
+                <div
+                    id="answerKeyUploadBox"
+                    class="file-upload-box hidden"
+                >
+
+                    <label for="answerKeyTxtInput">
+                        ANS KEY TXT File
+                    </label>
+
+                    <input
+                        type="file"
+                        id="answerKeyTxtInput"
+                        accept=".txt"
+                    >
+
+                    <span class="input-help">
+                        Format: A| Value, B| Value, etc.
+                    </span>
+
                 </div>
     
             </div>
@@ -676,6 +700,29 @@
 
             </div>
 
+            <!-- 3-FILE ANSWER KEY METADATA DISPLAY -->
+            <div
+                id="answerKeyInfoPanel"
+                class="answer-key-info-panel hidden"
+            >
+                <div class="answer-key-meta-row">
+                    <div class="answer-key-meta-col">
+                        <span class="meta-label">Selected Answer:</span>
+                        <strong id="displaySelectedAnswer" class="meta-val highlight">–</strong>
+                    </div>
+                    <div id="displayOriginalKeyContainer" class="answer-key-meta-col hidden">
+                        <span class="meta-label">Original Answer Key:</span>
+                        <strong id="displayOriginalAnswer" class="meta-val warning">–</strong>
+                    </div>
+                </div>
+                <div class="answer-key-val-row">
+                    <span class="meta-label">Answer Key Value:</span>
+                    <div id="displayAnswerKeyValue" class="answer-key-val-box">
+                        –
+                    </div>
+                </div>
+            </div>
+
 
             <!-- NAVIGATION -->
 
@@ -746,7 +793,7 @@
 
             <tr>
 
-                <td>
+                <td id="progressLabelAnswered">
                     Answered
                 </td>
 
@@ -757,9 +804,22 @@
             </tr>
 
 
-            <tr>
+            <tr id="rowReceivedAnswer" class="hidden">
 
                 <td>
+                    Received Answer
+                </td>
+
+                <td id="receivedAnswerCount">
+                    0
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td id="progressLabelRemaining">
                     Remaining
                 </td>
 
@@ -815,7 +875,7 @@
          ANSWER GRID
     ====================================== -->
 
-    <div class="card">
+    <div class="card" id="answerGridSection">
 
         <h2>
             6. Answer Grid
@@ -853,9 +913,9 @@
 
         <table>
 
-            <tr>
+            <tr id="rowRequiredAnswers">
 
-                <td>
+                <td id="labelRequiredAnswers">
                     Required Answers
                 </td>
 
@@ -866,9 +926,9 @@
             </tr>
 
 
-            <tr>
+            <tr id="rowSelectedAnswers">
 
-                <td>
+                <td id="labelSelectedAnswers">
                     Answers Selected
                 </td>
 
@@ -879,9 +939,9 @@
             </tr>
 
 
-            <tr>
+            <tr id="rowMissingAnswers">
 
-                <td>
+                <td id="labelMissingAnswers">
                     Missing Answers
                 </td>
 
@@ -892,7 +952,7 @@
             </tr>
 
 
-            <tr>
+            <tr id="rowAnsoptEntries">
 
                 <td>
                     Ansopt Entries
@@ -905,7 +965,17 @@
             </tr>
 
 
-            
+            <tr id="rowChangedAnswers" class="hidden">
+
+                <td>
+                    Changed Answers
+                </td>
+
+                <td id="changedAnswersCount">
+                    0
+                </td>
+
+            </tr>
 
 
             <tr>
