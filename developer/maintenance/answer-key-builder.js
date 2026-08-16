@@ -529,13 +529,25 @@ function showCurrentQuestion() {
 
     document.getElementById("progressCurrentQuestion").textContent = displayedQuestion;
 
-    // Navigation buttons (Disabled if active editing)
+    const isThreeFileGACA = (builderMode === "gaca" && sourceMode === 3);
+
+    // Navigation buttons
     if (activeEditSide !== null) {
         previousBtn.disabled = true;
         nextBtn.disabled = true;
     } else {
         previousBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === totalQuestions - 1;
+
+        // In 3-file GACA mode, if on final question and not yet reviewed, keep Next enabled
+        if (
+            isThreeFileGACA &&
+            currentIndex === totalQuestions - 1 &&
+            !reviewed[currentIndex]
+        ) {
+            nextBtn.disabled = false;
+        } else {
+            nextBtn.disabled = currentIndex === totalQuestions - 1;
+        }
     }
 
     // Show selected answer button
@@ -547,7 +559,7 @@ function showCurrentQuestion() {
     });
 
     // 3-File Mode Specific Metadata Display
-    if (builderMode === "gaca" && sourceMode === 3 && answerKeyEntries[currentIndex]) {
+    if (isThreeFileGACA && answerKeyEntries[currentIndex]) {
         answerKeyInfoPanel.classList.remove("hidden");
         const currentAns = answers[currentIndex] || "–";
         const origAns = answerKeyEntries[currentIndex].option;
@@ -654,7 +666,9 @@ function nextQuestion() {
         }
     }
 
+    // If already at or beyond the final question, re-render to disable Next and stay on current block
     if (currentIndex >= totalQuestions - 1) {
+        showCurrentQuestion();
         return;
     }
 
@@ -1438,7 +1452,6 @@ function goToQuestionBlock(index) {
     if (index < 0 || index >= totalQuestions) return;
     if (sourceTotal > 0 && index >= sourceTotal) return;
 
-    // goToQuestionBlock strictly navigates and renders without auto-reviewing
     currentIndex = index;
     currentSourceBlockIndex = index;
 
@@ -1571,7 +1584,18 @@ function updateSourceNavigationButtons() {
         answerButtons.forEach(btn => btn.disabled = true);
     } else if (sessionActive) {
         previousBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === totalQuestions - 1;
+        
+        const isThreeFileGACA = (builderMode === "gaca" && sourceMode === 3);
+        if (
+            isThreeFileGACA &&
+            currentIndex === totalQuestions - 1 &&
+            !reviewed[currentIndex]
+        ) {
+            nextBtn.disabled = false;
+        } else {
+            nextBtn.disabled = currentIndex === totalQuestions - 1;
+        }
+
         answerButtons.forEach(btn => btn.disabled = false);
     }
 }
