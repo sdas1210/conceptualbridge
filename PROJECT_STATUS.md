@@ -1827,3 +1827,254 @@ The newly recorded future work is:
 
 **No item above should be treated as completed until it has been implemented
 and verified in the actual current project.**
+
+------------------------------------------------------------------------
+
+# Session Update — 2026-08-16
+
+## Master-Copy Preservation Rule
+
+This document remains the **mother/master Project Status copy**.
+
+All previous project history, architecture decisions, completed milestones,
+constraints, roadmap items, and continuation points are preserved.
+
+**Do not delete, shorten, rewrite, or replace previous history unless
+absolutely necessary. Future status changes must be appended to this master
+copy.**
+
+---
+
+## 1. Maintenance Suite — CSS Standardization Progress
+
+The Maintenance Suite CSS files were reviewed against the designated
+Answer Key Builder visual reference.
+
+The agreed rule remains:
+
+> CSS-only visual changes must not alter HTML structure, JavaScript,
+> IDs, classes, controls, processing logic, API calls, or workflows.
+
+### Verified CSS Standardization
+
+The following Maintenance tools have now been reviewed/standardized:
+
+```text
+developer/maintenance/shift-extractor.css
+developer/maintenance/proof-reader.css
+developer/maintenance/citation-remover.css
+```
+
+### Current result
+
+- ✅ Shift Extractor CSS — approved for the new visual system.
+- ✅ Proof Reader CSS — approved for the new visual system.
+- ✅ Citation Remover CSS — approved for the new visual system.
+- ✅ Existing tool-specific selectors and controls were preserved during
+  the CSS-only migration.
+- ✅ The old cyan visual system was replaced where appropriate by the
+  Answer Key Builder visual language.
+- ✅ No functional change was intentionally introduced by the CSS work.
+
+Old CSS files should be retained as reference/backup copies and should not
+be deleted merely because the new CSS has been approved.
+
+---
+
+## 2. Maintenance Suite — HTML/CSS/JS Separation
+
+The Maintenance Suite landing page was separated for maintainability.
+
+The baseline structure is now:
+
+```text
+developer/maintenance/maintenance.html
+developer/maintenance/maintenance-suite.css
+developer/maintenance/maintenance-suite.js
+```
+
+Responsibilities:
+
+```text
+maintenance.html
+    → HTML structure and tool links
+
+maintenance-suite.css
+    → Maintenance Suite visual styling and responsive rules
+
+maintenance-suite.js
+    → Maintenance Suite client-side animation/interaction logic
+```
+
+### Current status
+
+- ✅ Separation approved.
+- ✅ Answer Key Builder visual theme applied to the Maintenance Suite.
+- ✅ Existing Maintenance tool links preserved.
+- ✅ CSS and JavaScript separated from the HTML.
+- ✅ No unrelated tool functionality should be changed as part of this
+  separation.
+
+The separated Maintenance Suite should now be treated as the baseline.
+Do not perform another wholesale rewrite unless a verified bug or explicitly
+requested feature requires it.
+
+---
+
+## 3. Maintenance Suite — Visual Design Standard
+
+The current visual standard is:
+
+```text
+Answer Key Builder
+        ↓
+Master visual language
+        ↓
+Maintenance Suite + individual maintenance tools
+```
+
+This is a visual consistency rule, not a functional unification rule.
+
+Individual tools may retain tool-specific controls, statuses, validation
+states, and semantic colors where required by their existing behavior.
+
+---
+
+## 4. Current Verified Maintenance Baseline
+
+The current Maintenance baseline is:
+
+```text
+Maintenance Suite
+    ├── maintenance.html
+    ├── maintenance-suite.css
+    └── maintenance-suite.js
+
+Individual tools
+    ├── answer-key-builder.*
+    ├── citation-remover.*
+    ├── proof-reader.*
+    ├── shift-extractor.*
+    └── other existing maintenance tools
+```
+
+No working maintenance tool should be removed merely because the landing
+page or CSS has been reorganized.
+
+---
+
+## 5. Preserved Future Work — Still Not Completed
+
+The previously recorded future-work list remains active.
+
+These items are **not** marked completed by the Maintenance CSS work:
+
+1. Quiz Portal — new Box
+2. GACA Anchor Builder — Step 2
+3. GACA Anchor Builder — Step 9
+4. Answer Key Builder — operations
+5. GACA Knowledge Index Builder activation
+6. Citation Remover — three-row Answer-Key structure
+
+Important distinction:
+
+```text
+Citation Remover CSS standardization
+        = COMPLETED / APPROVED
+
+Citation Remover three-row Answer-Key operation
+        = NOT YET IMPLEMENTED
+```
+
+---
+
+## 6. Updated Development Order
+
+The preserved immediate future-work order remains:
+
+```text
+Current completed baseline
+        ↓
+1. Quiz Portal — new Box
+        ↓
+2. GACA Anchor Builder — Step 2
+        ↓
+3. GACA Anchor Builder — Step 9
+        ↓
+4. Answer Key Builder — operations
+        ↓
+5. GACA Knowledge Index Builder activation
+        ↓
+6. Citation Remover — three-row Answer-Key structure
+        ↓
+Previously documented Knowledge Index / Runtime roadmap
+```
+
+The previously documented Knowledge Index / Runtime roadmap is not
+cancelled or replaced by these additional tasks.
+
+---
+
+## 7. Engineering Safety Rules — Reinforced
+
+- **This document remains the mother/master Project Status file.**
+- Preserve all previous history.
+- Append new status updates rather than rewriting old ones.
+- Do not delete previous milestones merely because implementation evolves.
+- Keep working files as the baseline.
+- Prefer isolated, minimal changes.
+- Do not replace a working file wholesale for an unrelated feature.
+- CSS-only tasks must remain CSS-only.
+- HTML/CSS/JS separation must not silently introduce functional changes.
+- Keep old/reference versions when useful for rollback or comparison.
+- Do not mark a functional feature complete merely because its CSS has been
+  standardized.
+- The six preserved future-work items remain active until implemented and
+  verified in the actual project.
+- Delete anything only when it is **absolutely necessary**, and document
+  the reason.
+
+---
+
+## 8. Current Master Continuation Point
+
+The recent Maintenance Suite CSS and structure standardization work is now
+recorded as completed/approved.
+
+### Working / Approved
+
+```text
+Math Step 9
+Math Tutorial Corner
+Math Video| YouTube handling
+Maintenance Suite HTML/CSS/JS separation
+Maintenance CSS visual standardization
+```
+
+### Future Work
+
+```text
+1. Quiz Portal — new Box
+2. GACA Anchor Builder — Step 2
+3. GACA Anchor Builder — Step 9
+4. Answer Key Builder — operations
+5. GACA Knowledge Index Builder activation
+6. Citation Remover — three-row Answer-Key structure
+```
+
+No item in the future-work list should be marked completed until it has
+been implemented and verified in the actual current project.
+
+---
+
+## Session Checkpoint — 2026-08-16
+
+**Master status preserved and extended.**
+
+The uploaded `PROJECT_STATUS_MASTER_UPDATED_2026-08-14` remains the historical
+base of this master copy.
+
+This update has been appended rather than replacing earlier history.
+
+**Current master rule: preserve first, append second, delete only when
+absolutely necessary.**
