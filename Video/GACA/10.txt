@@ -1,7 +1,10 @@
 Title| 100 Most Important GK/GA Live Question Analysis (Set - 10)
 Tags| RRB Group D, 10, GACA, 100-Series, CEN 08/2024
-English| 
-Bengali|
+English| 5RX4E3gb76k
+Bengali| SyZmNak9fK8
 PDF_English| none
 PDF_Bengali| none
 Test_Source| questions/gaca/10.txt
+Topic| 
+Sub-Topic| 
+Level| 
