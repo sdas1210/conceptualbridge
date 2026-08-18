@@ -1,1150 +1,408 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Character Introducer | Conceptual Bridge
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="character-introducer.css"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Introducer | Conceptual Bridge</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/Resources/Favicon/favicon.ico">
+    <meta name="theme-color" content="#0D1B2A">
+    <link rel="stylesheet" href="character-introducer.css">
 </head>
-
-
 <body>
 
 <div class="page-shell">
 
-    <!-- =====================================
-         PAGE HEADER
-    ====================================== -->
-
-   <header class="page-header">
-
-    <a
-        href="maintenance.html"
-        class="maintenance-home-btn"
-        title="Back to Maintenance Home"
-    >
-        <span class="home-arrow">←</span>
-        <span>Maintenance Home</span>
+    <!-- NAVIGATION / BACK LINK -->
+    <a href="maintenance.html" class="maintenance-home-btn">
+        <span class="home-arrow">←</span> Maintenance Home
     </a>
 
-
-    <div>
-
-        <p class="eyebrow">
-            Conceptual Bridge Maintenance Suite
-        </p>
-
-        <h1>
-            Character Introducer
-        </h1>
-
+    <!-- HEADER -->
+    <header class="page-header">
+        <p class="eyebrow">Maintenance Suite</p>
+        <h1>✍️ Character Introducer</h1>
         <p class="page-description">
-            Upload and prepare a TXT file for controlled
-            line-level modification.
+            Execute controlled line, middle-string, and find-and-replace modifications across single lines, anchor-calculated patterns, or entire files.
         </p>
+    </header>
 
-    </div>
+    <div class="workspace">
 
-</header>
-
-
-    <main class="workspace">
-
-
-        <!-- =====================================
-             1. FILE UPLOAD
-        ====================================== -->
-
-        <section class="card">
-
+        <!-- 1. TXT FILE UPLOAD & SESSION FILE MANAGER -->
+        <section class="card" id="sectionFileUpload">
             <div class="section-heading-row">
-
                 <div>
-
-                    <span class="section-number">
-                        1
-                    </span>
-
-                    <h2>
-                        TXT File Upload
-                    </h2>
-
+                    <span class="section-number">1</span>
+                    <h2>TXT File Upload &amp; Session Manager</h2>
                 </div>
-
             </div>
-
-
-            <div class="upload-box">
-
-                <label for="txtFileInput">
-
-                    Select TXT File
-
-                </label>
-
-
-                <input
-                    type="file"
-                    id="txtFileInput"
-                    accept=".txt,text/plain"
-                >
-
-
-                <p class="input-help">
-
-                    Select the TXT file that you want
-                    to modify.
-
-                </p>
-
-            </div>
-
-
-            <div
-                id="fileStatus"
-                class="status-box"
-            >
-
-                No TXT file selected.
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================
-             2. OPERATION SELECTION
-        ====================================== -->
-
-        <section class="card">
-
-            <div class="section-heading-row">
-
-                <div>
-
-                    <span class="section-number">
-                        2
-                    </span>
-
-                    <h2>
-                        Select Operation
-                    </h2>
-
-                </div>
-
-            </div>
-
-
             <p class="section-description">
-
-                Choose what type of modification
-                you want to perform.
-
+                Upload one or multiple TXT files into the current browser session. Files retain independent working copies.
             </p>
 
-
-            <div
-                id="operationSelector"
-                class="operation-grid disabled-section"
-            >
-
-
-                <!-- WRITE IN LINE -->
-
-                <button
-                    type="button"
-                    class="operation-card"
-                    data-operation="write"
-                    disabled
-                >
-
-                    <span class="operation-icon">
-                        ✎
-                    </span>
-
-                    <span class="operation-title">
-                        Write in a Line
-                    </span>
-
-                    <span class="operation-description">
-                        Modify or introduce content
-                        within an existing line.
-                    </span>
-
-                </button>
-
-
-
-                <!-- CREATE NEW LINE -->
-
-                <button
-                    type="button"
-                    class="operation-card"
-                    data-operation="create"
-                    disabled
-                >
-
-                    <span class="operation-icon">
-                        ＋
-                    </span>
-
-                    <span class="operation-title">
-                        Create a New Line
-                    </span>
-
-                    <span class="operation-description">
-                        Introduce a completely new line
-                        into the TXT file.
-                    </span>
-
-                </button>
-
-
-
-                <!-- DELETE LINE -->
-
-                <button
-                    type="button"
-                    class="operation-card"
-                    data-operation="delete"
-                    disabled
-                >
-
-                    <span class="operation-icon">
-                        −
-                    </span>
-
-                    <span class="operation-title">
-                        Delete a Line
-                    </span>
-
-                    <span class="operation-description">
-                        Remove a selected line
-                        from the TXT file.
-                    </span>
-
-                </button>
-
-
+            <div class="upload-box">
+                <label for="txtFileInput">Browse / Add TXT File</label>
+                <input type="file" id="txtFileInput" accept=".txt" multiple>
+                <p class="input-help">Select one or more .txt files to manage in this session.</p>
             </div>
 
+            <!-- SESSION FILES LIST / DROPDOWN -->
+            <div id="sessionFilesContainer" class="session-files-wrapper hidden">
+                <div class="session-dropdown-row">
+                    <label for="sessionFileSelect">Current Session Files ▼</label>
+                    <select id="sessionFileSelect" class="session-select-control"></select>
+                </div>
+                <div id="fileStatusBox" class="status-box">No file selected.</div>
+            </div>
         </section>
 
-
-
-        <!-- =====================================
-             3. OPERATION WORKSPACE
-        ====================================== -->
-
-        <section class="card">
-
+        <!-- 2. SELECT OPERATION -->
+        <section class="card disabled-section" id="sectionSelectOperation">
             <div class="section-heading-row">
-
                 <div>
-
-                    <span class="section-number">
-                        3
-                    </span>
-
-                    <h2>
-                        Operation Workspace
-                    </h2>
-
+                    <span class="section-number">2</span>
+                    <h2>Select Operation</h2>
                 </div>
-
-
-                <span
-                    id="selectedOperationBadge"
-                    class="operation-badge"
-                >
-
-                    NO OPERATION SELECTED
-
-                </span>
-
             </div>
+            <p class="section-description">Choose the operation to execute on the currently active file.</p>
 
+            <div class="operation-grid">
+                <!-- 1. EDIT IN A LINE -->
+                <button type="button" class="operation-card" data-op="edit-line" id="opEditLine">
+                    <div class="operation-icon">✏️</div>
+                    <span class="operation-title">Edit in a Line</span>
+                    <span class="operation-description">Write at Start, Write at End, or Edit in the Middle relative to target characters.</span>
+                </button>
 
-            <div
-                id="operationWorkspace"
-                class="operation-workspace disabled-workspace"
-            >
+                <!-- 2. STRING SUBSTITUTE -->
+                <button type="button" class="operation-card" data-op="string-substitute" id="opStringSubstitute">
+                    <div class="operation-icon">🔄</div>
+                    <span class="operation-title">String Substitute</span>
+                    <span class="operation-description">Scan and replace target occurrences across a single match, repeated lines, or entire file.</span>
+                </button>
 
-                <div
-                    id="workspacePlaceholder"
-                    class="workspace-placeholder"
-                >
+                <!-- 3. CREATE NEW LINE -->
+                <button type="button" class="operation-card" data-op="create-line" id="opCreateLine">
+                    <div class="operation-icon">➕</div>
+                    <span class="operation-title">Create New Line</span>
+                    <span class="operation-description">Insert completely new lines Before or After target lines.</span>
+                </button>
 
-                    <span class="placeholder-icon">
-                        ✎
-                    </span>
-
-                    <strong>
-                        Select an operation
-                    </strong>
-
-                    <p>
-                        The required controls for the selected
-                        operation will appear here.
-                    </p>
-
-                </div>
-
-
-                <!--
-                    Detailed controls will be added later
-                    after the exact behavior of each operation
-                    is defined.
-                -->
-                <div
-                    id="writeWorkspace"
-                    class="operation-panel hidden"
-                >
-                
-                    <!-- WRITE MODE SELECTION -->
-                
-                    <div
-                        id="writeModeSelection"
-                        class="write-mode-section"
-                    >
-                
-                        <h3>
-                            Write in a Line
-                        </h3>
-                
-                        <p class="workspace-help">
-                            Choose where the payload should be written.
-                        </p>
-                
-                
-                        <div class="write-mode-grid">
-                
-                            <button
-                                type="button"
-                                id="writeStartBtn"
-                                class="write-mode-card"
-                            >
-                
-                                <span class="mode-icon">
-                                    ⇤
-                                </span>
-                
-                                <strong>
-                                    Write at Start of Line
-                                </strong>
-                
-                                <small>
-                                    Insert the payload at the beginning
-                                    of selected repeating lines.
-                                </small>
-                
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                class="write-mode-card"
-                                disabled
-                            >
-                
-                                <span class="mode-icon">
-                                    ⇥
-                                </span>
-                
-                                <strong>
-                                    Write Exactly at End
-                                </strong>
-                
-                                <small>
-                                    Function will be configured later.
-                                </small>
-                
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                class="write-mode-card"
-                                disabled
-                            >
-                
-                                <span class="mode-icon">
-                                    ↔
-                                </span>
-                
-                                <strong>
-                                    Write in Middle / Somewhere
-                                </strong>
-                
-                                <small>
-                                    Function will be configured later.
-                                </small>
-                
-                            </button>
-                
-                        </div>
-                
-                    </div>
-                
-                
-                    <!-- PAYLOAD ENTRY -->
-                
-                    <div
-                        id="payloadSection"
-                        class="payload-section hidden"
-                    >
-                
-                        <h3>
-                            Enter Payload
-                        </h3>
-                
-                        <p class="workspace-help">
-                            Type exactly what should be inserted
-                            at the start of each target line.
-                        </p>
-                
-                
-                        <textarea
-                            id="payloadInput"
-                            rows="4"
-                            placeholder="Type your payload here"
-                        ></textarea>
-                
-                
-                        <div class="payload-actions">
-                
-                            <button
-                                type="button"
-                                id="payloadOkBtn"
-                                class="workspace-primary-btn"
-                            >
-                                OK
-                            </button>
-                
-                        </div>
-                
-                    </div>
-                
-                
-                    <!-- SINGLE LINE NAVIGATOR -->
-                
-                    <div
-                        id="lineNavigator"
-                        class="line-navigator hidden"
-                    >
-                
-                        <div class="line-view-header">
-                
-                            <strong id="currentLineLabel">
-                                Line 1
-                            </strong>
-                
-                            <span id="anchorStatus">
-                                Select first and second anchor lines
-                            </span>
-                
-                        </div>
-                
-                
-                        <textarea
-                            id="currentLineViewer"
-                            rows="4"
-                            readonly
-                        ></textarea>
-                
-                
-                        <div class="line-controls">
-                
-                            <button
-                                type="button"
-                                id="previousLineBtn"
-                                title="Previous Line"
-                            >
-                                🔼
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                id="nextLineBtn"
-                                title="Next Line"
-                            >
-                                🔽
-                            </button>
-                
-                
-                            <div class="control-spacer"></div>
-                
-                
-                            <button
-                                type="button"
-                                id="firstAnchorBtn"
-                                title="Set First Anchor"
-                            >
-                                1️⃣
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                id="secondAnchorBtn"
-                                title="Set Second Anchor"
-                            >
-                                2️⃣
-                            </button>
-                
-                
-                            <div class="control-spacer"></div>
-                
-                
-                            <button
-                                type="button"
-                                id="adjustAnchorsBtn"
-                                title="Adjust Anchors"
-                            >
-                                ⚙️
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                id="runOperationBtn"
-                                title="Run Operation"
-                                disabled
-                            >
-                                🆗
-                            </button>
-                
-                        </div>
-                
-                
-                        <div class="anchor-summary">
-                
-                            <div>
-                                <span>First Anchor</span>
-                                <strong id="firstAnchorDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Second Anchor</span>
-                                <strong id="secondAnchorDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Calculated Gap</span>
-                                <strong id="gapDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Targets</span>
-                                <strong id="targetCountDisplay">—</strong>
-                            </div>
-                
-                        </div>
-                
-                    </div>
-                
-                </div>
-
-                <div
-                    id="createWorkspace"
-                    class="operation-panel hidden"
-                >
-                
-                    <!-- CREATE MODE SELECTION -->
-                
-                    <div
-                        id="createModeSelection"
-                        class="write-mode-section"
-                    >
-                
-                        <h3>
-                            Create a New Line
-                        </h3>
-                
-                        <p class="workspace-help">
-                            Choose what type of new line
-                            you want to create.
-                        </p>
-                
-                
-                        <div class="write-mode-grid">
-                
-                            <button
-                                type="button"
-                                id="createBlankLineBtn"
-                                class="write-mode-card"
-                            >
-                
-                                <span class="mode-icon">
-                                    ＋
-                                </span>
-                
-                                <strong>
-                                    Only New Line
-                                </strong>
-                
-                                <small>
-                                    Create one blank line immediately
-                                    after each calculated target line.
-                                </small>
-                
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                id="createPayloadLineBtn"
-                                class="write-mode-card"
-                            >
-                
-                                <span class="mode-icon">
-                                    ✎
-                                </span>
-                
-                                <strong>
-                                    New Line with Payload
-                                </strong>
-                
-                                <small>
-                                    Create a new line after each target
-                                    and place your payload on that line.
-                                </small>
-                
-                            </button>
-                
-                        </div>
-                
-                    </div>
-                
-                
-                    <!-- CREATE PAYLOAD -->
-                
-                    <div
-                        id="createPayloadSection"
-                        class="payload-section hidden"
-                    >
-                
-                        <h3>
-                            Enter New-Line Payload
-                        </h3>
-                
-                        <p class="workspace-help">
-                            Enter exactly what should appear
-                            on the newly created line.
-                        </p>
-                
-                
-                        <textarea
-                            id="createPayloadInput"
-                            rows="4"
-                            placeholder="Type your payload here"
-                        ></textarea>
-                
-                
-                        <div class="payload-actions">
-                
-                            <button
-                                type="button"
-                                id="createPayloadOkBtn"
-                                class="workspace-primary-btn"
-                            >
-                                OK
-                            </button>
-                
-                        </div>
-                
-                    </div>
-                
-                
-                    <!-- CREATE LINE NAVIGATOR -->
-                
-                    <div
-                        id="createLineNavigator"
-                        class="line-navigator hidden"
-                    >
-                
-                        <div class="line-view-header">
-                
-                            <strong id="createCurrentLineLabel">
-                                Line 1
-                            </strong>
-                
-                            <span id="createAnchorStatus">
-                                Select first and second target lines
-                            </span>
-                
-                        </div>
-                
-                
-                        <textarea
-                            id="createCurrentLineViewer"
-                            rows="4"
-                            readonly
-                        ></textarea>
-                
-                
-                        <div class="line-controls">
-                
-                            <button
-                                type="button"
-                                id="createPreviousLineBtn"
-                                title="Previous Line"
-                            >
-                                🔼
-                            </button>
-                
-                            <button
-                                type="button"
-                                id="createNextLineBtn"
-                                title="Next Line"
-                            >
-                                🔽
-                            </button>
-                
-                
-                            <div class="control-spacer"></div>
-                
-                
-                            <button
-                                type="button"
-                                id="createFirstAnchorBtn"
-                                title="Set First Target"
-                            >
-                                1️⃣
-                            </button>
-                
-                            <button
-                                type="button"
-                                id="createSecondAnchorBtn"
-                                title="Set Second Target"
-                            >
-                                2️⃣
-                            </button>
-                
-                
-                            <div class="control-spacer"></div>
-                
-                
-                            <button
-                                type="button"
-                                id="createAdjustAnchorsBtn"
-                                title="Adjust Targets"
-                            >
-                                ⚙️
-                            </button>
-                
-                            <button
-                                type="button"
-                                id="createRunOperationBtn"
-                                title="Create New Lines"
-                                disabled
-                            >
-                                🆗
-                            </button>
-                
-                        </div>
-                
-                
-                        <div class="anchor-summary">
-                
-                            <div>
-                                <span>First Target</span>
-                                <strong id="createFirstAnchorDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Second Target</span>
-                                <strong id="createSecondAnchorDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Original Gap</span>
-                                <strong id="createGapDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>New Lines</span>
-                                <strong id="createTargetCountDisplay">—</strong>
-                            </div>
-                
-                        </div>
-                
-                    </div>
-                
-                </div>
-
-              
-
-
-                <div
-                    id="deleteWorkspace"
-                    class="operation-panel hidden"
-                >
-                
-                    <!-- DELETE MODE SELECTION -->
-                
-                    <div
-                        id="deleteModeSelection"
-                        class="write-mode-section"
-                    >
-                
-                        <h3>
-                            Delete a Line
-                        </h3>
-                
-                        <p class="workspace-help">
-                            Choose how the targeted lines should be removed.
-                        </p>
-                
-                
-                        <div class="write-mode-grid">
-                
-                            <button
-                                type="button"
-                                id="deleteCompleteBtn"
-                                class="write-mode-card"
-                            >
-                
-                                <span class="mode-icon">
-                                    🗑️
-                                </span>
-                
-                                <strong>
-                                    Delete Completely
-                                </strong>
-                
-                                <small>
-                                    Remove each targeted physical line
-                                    completely from the TXT file.
-                                </small>
-                
-                            </button>
-                
-                
-                            <button
-                                type="button"
-                                id="deleteBackspaceBtn"
-                                class="write-mode-card"
-                            >
-                
-                                <span class="mode-icon">
-                                    ⌫
-                                </span>
-                
-                                <strong>
-                                    Use Backspace
-                                </strong>
-                
-                                <small>
-                                    Remove the newline before each target
-                                    and join it to the previous line.
-                                </small>
-                
-                            </button>
-                
-                        </div>
-                
-                    </div>
-                
-                
-                    <!-- DELETE LINE NAVIGATOR -->
-                
-                    <div
-                        id="deleteLineNavigator"
-                        class="line-navigator hidden"
-                    >
-                
-                        <div class="line-view-header">
-                
-                            <strong id="deleteCurrentLineLabel">
-                                Line 1
-                            </strong>
-                
-                            <span id="deleteAnchorStatus">
-                                Select first and second target lines
-                            </span>
-                
-                        </div>
-                
-                
-                        <textarea
-                            id="deleteCurrentLineViewer"
-                            rows="4"
-                            readonly
-                        ></textarea>
-                
-                
-                        <div class="line-controls">
-                
-                            <button
-                                type="button"
-                                id="deletePreviousLineBtn"
-                                title="Previous Line"
-                            >
-                                🔼
-                            </button>
-                
-                            <button
-                                type="button"
-                                id="deleteNextLineBtn"
-                                title="Next Line"
-                            >
-                                🔽
-                            </button>
-                
-                
-                            <div class="control-spacer"></div>
-                
-                
-                            <button
-                                type="button"
-                                id="deleteFirstAnchorBtn"
-                                title="Set First Target"
-                            >
-                                1️⃣
-                            </button>
-                
-                            <button
-                                type="button"
-                                id="deleteSecondAnchorBtn"
-                                title="Set Second Target"
-                            >
-                                2️⃣
-                            </button>
-                
-                
-                            <div class="control-spacer"></div>
-                
-                
-                            <button
-                                type="button"
-                                id="deleteAdjustAnchorsBtn"
-                                title="Adjust Targets"
-                            >
-                                ⚙️
-                            </button>
-                
-                            <button
-                                type="button"
-                                id="deleteRunOperationBtn"
-                                title="Run Delete Operation"
-                                disabled
-                            >
-                                🆗
-                            </button>
-                
-                        </div>
-                
-                
-                        <div class="anchor-summary">
-                
-                            <div>
-                                <span>First Target</span>
-                                <strong id="deleteFirstAnchorDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Second Target</span>
-                                <strong id="deleteSecondAnchorDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Original Gap</span>
-                                <strong id="deleteGapDisplay">—</strong>
-                            </div>
-                
-                            <div>
-                                <span>Targets</span>
-                                <strong id="deleteTargetCountDisplay">—</strong>
-                            </div>
-                
-                        </div>
-                
-                    </div>
-                
-                </div>
-
-
+                <!-- 4. DELETE LINE -->
+                <button type="button" class="operation-card" data-op="delete-line" id="opDeleteLine">
+                    <div class="operation-icon">🗑️</div>
+                    <span class="operation-title">Delete Line</span>
+                    <span class="operation-description">Remove selected target lines completely across the file.</span>
+                </button>
             </div>
-
         </section>
 
-
-
-        <!-- =====================================
-             4. FILE INFORMATION
-        ====================================== -->
-
-        <section class="card">
-
+        <!-- 3. OPERATION WORKSPACE -->
+        <section class="card disabled-section" id="sectionWorkspace">
             <div class="section-heading-row">
-
                 <div>
+                    <span class="section-number">3</span>
+                    <h2>Operation Workspace</h2>
+                </div>
+                <span id="activeOpBadge" class="operation-badge hidden">NO OPERATION SELECTED</span>
+            </div>
 
-                    <span class="section-number">
-                        4
-                    </span>
+            <div id="workspaceBody" class="operation-workspace">
+                <div class="workspace-placeholder" id="workspacePlaceholder">
+                    <div class="placeholder-icon">⚙️</div>
+                    <strong>Select an operation above</strong>
+                    <p>Configuration controls and target line selectors will display here.</p>
+                </div>
 
-                    <h2>
-                        File Information
-                    </h2>
+                <!-- =========================================
+                     A. EDIT IN A LINE WORKSPACE
+                     ========================================= -->
+                <div id="panelEditLine" class="operation-panel hidden">
+                    <p class="workspace-help">Choose insertion point: At Start, At End, or In the Middle/Somewhere.</p>
+                    
+                    <div class="write-mode-grid">
+                        <button type="button" class="write-mode-card" data-mode="start" id="btnEditStart">
+                            <div class="mode-icon">⏮️</div>
+                            <strong>At Start of Line</strong>
+                            <small>Prepend text directly before line content</small>
+                        </button>
 
+                        <button type="button" class="write-mode-card" data-mode="end" id="btnEditEnd">
+                            <div class="mode-icon">⏭️</div>
+                            <strong>At End of Line</strong>
+                            <small>Append text directly to the end of the line</small>
+                        </button>
+
+                        <button type="button" class="write-mode-card" data-mode="middle" id="btnEditMiddle">
+                            <div class="mode-icon">🎯</div>
+                            <strong>In the Middle / Somewhere</strong>
+                            <small>Add, replace, or delete relative to target strings</small>
+                        </button>
+                    </div>
+
+                    <!-- SUB-PANEL: START / END OF LINE -->
+                    <div id="subPanelStartEnd" class="payload-section hidden">
+                        <div class="input-form-group">
+                            <label for="editStartEndPayload">Payload Text to Write:</label>
+                            <textarea id="editStartEndPayload" placeholder="Enter text to write..."></textarea>
+                        </div>
+                        <div class="payload-actions">
+                            <button type="button" id="btnProceedStartEnd" class="workspace-primary-btn">Configure Target Lines →</button>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL: MIDDLE / SOMEWHERE OF LINE -->
+                    <div id="subPanelMiddle" class="payload-section hidden">
+                        <div class="middle-config-box">
+                            <!-- Action Selection -->
+                            <div class="form-group-radio">
+                                <label class="radio-section-label">Action:</label>
+                                <div class="radio-options-row">
+                                    <label><input type="radio" name="middleAction" value="add" checked> Add</label>
+                                    <label><input type="radio" name="middleAction" value="delete"> Delete</label>
+                                </div>
+                            </div>
+
+                            <!-- Target String Input -->
+                            <div class="input-form-group">
+                                <label for="middleTargetString">Target String / Character:</label>
+                                <input type="text" id="middleTargetString" placeholder="e.g. by, 5., CAT">
+                            </div>
+
+                            <!-- IF ADD: Payload & Operation Type -->
+                            <div id="middleAddOptions">
+                                <div class="input-form-group">
+                                    <label for="middleAddPayload">Payload Text:</label>
+                                    <textarea id="middleAddPayload" placeholder="Enter text to insert or substitute..."></textarea>
+                                </div>
+                                <div class="form-group-radio">
+                                    <label class="radio-section-label">Payload Operation:</label>
+                                    <div class="radio-options-row">
+                                        <label><input type="radio" name="middleAddOp" value="insert" checked> Insert (Target Remains)</label>
+                                        <label><input type="radio" name="middleAddOp" value="substitute"> Substitute (Replaces Target)</label>
+                                    </div>
+                                </div>
+                                <div id="middleInsertPositionRow" class="form-group-radio">
+                                    <label class="radio-section-label">Insert Position:</label>
+                                    <div class="radio-options-row">
+                                        <label><input type="radio" name="middleInsertPos" value="before" checked> Before Target</label>
+                                        <label><input type="radio" name="middleInsertPos" value="after"> After Target</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IF DELETE: Delete Position & Specific Encounter Selection -->
+                            <div id="middleDeleteOptions" class="hidden">
+                                <div class="form-group-radio">
+                                    <label class="radio-section-label">Delete Position:</label>
+                                    <div class="radio-options-row">
+                                        <label><input type="radio" name="middleDeletePos" value="before" checked> Before Target (Beginning through Target)</label>
+                                        <label><input type="radio" name="middleDeletePos" value="after"> After Target (Target through End of Line)</label>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Encounter Picker for Multiple Encounters Delete -->
+                                <div id="middleDeleteEncounterSelectBox" class="encounter-picker-row hidden">
+                                    <label for="middleTargetEncounterIndex" class="encounter-label">Select Encounter occurrence to modify:</label>
+                                    <div class="encounter-input-wrap">
+                                        <span>Encounter #</span>
+                                        <input type="number" id="middleTargetEncounterIndex" value="1" min="1" step="1">
+                                        <span id="encounterCountHint" class="encounter-hint">(Encounter 1 = 1st match, 2 = 2nd match, etc.)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Encounter Mode -->
+                            <div class="form-group-radio">
+                                <label class="radio-section-label">Encounter Mode (per eligible line):</label>
+                                <div class="radio-options-row">
+                                    <label><input type="radio" name="middleEncounter" value="first" checked> First Encounter</label>
+                                    <label><input type="radio" name="middleEncounter" value="multiple"> Multiple Encounters</label>
+                                </div>
+                            </div>
+
+                            <!-- Scope of Eligible Lines -->
+                            <div class="form-group-radio">
+                                <label class="radio-section-label">Scope of Lines to Process:</label>
+                                <div class="radio-options-row">
+                                    <label><input type="radio" name="middleScope" value="single" checked> Single Line</label>
+                                    <label><input type="radio" name="middleScope" value="multiple"> Multiple Lines (Anchors)</label>
+                                    <label><input type="radio" name="middleScope" value="entire"> Entire Text File</label>
+                                </div>
+                            </div>
+
+                            <div class="payload-actions">
+                                <button type="button" id="btnProceedMiddle" class="workspace-primary-btn">Apply &amp; Select Targets →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================
+                     B. STRING SUBSTITUTE WORKSPACE
+                     ========================================= -->
+                <div id="panelStringSubstitute" class="operation-panel hidden">
+                    <p class="workspace-help">Search and replace strings across the active file.</p>
+                    
+                    <div class="middle-config-box">
+                        <div class="input-form-group">
+                            <label for="substituteFindString">Find / Target String:</label>
+                            <input type="text" id="substituteFindString" placeholder="Target text to find...">
+                        </div>
+
+                        <div class="input-form-group">
+                            <label for="substituteReplaceString">Replace With (Leave empty to delete):</label>
+                            <input type="text" id="substituteReplaceString" placeholder="Replacement text...">
+                        </div>
+
+                        <div class="form-group-radio">
+                            <label class="radio-section-label">Scope:</label>
+                            <div class="radio-options-row">
+                                <label><input type="radio" name="substituteScope" value="single" checked> Single Occurrence</label>
+                                <label><input type="radio" name="substituteScope" value="multiple"> Multiple Lines (Anchors)</label>
+                                <label><input type="radio" name="substituteScope" value="entire"> Entire Text File</label>
+                            </div>
+                        </div>
+
+                        <div class="payload-actions">
+                            <button type="button" id="btnProceedSubstitute" class="workspace-primary-btn">Scan / Configure Scope →</button>
+                        </div>
+                    </div>
+
+                    <!-- Single Occurrence Interactive Finder -->
+                    <div id="substituteSingleMatchBox" class="single-match-view hidden">
+                        <div class="match-card">
+                            <div class="match-header">
+                                <span id="matchCounterText">Match Found</span>
+                                <strong id="matchLineNumber">Line --</strong>
+                            </div>
+                            <pre id="matchLineContent" class="match-content"></pre>
+                            <div class="match-actions">
+                                <button type="button" id="btnReplaceSingleMatch" class="workspace-primary-btn">Replace This</button>
+                                <button type="button" id="btnNextSingleMatch" class="workspace-secondary-btn">Next Match →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================
+                     C. CREATE NEW LINE WORKSPACE
+                     ========================================= -->
+                <div id="panelCreateLine" class="operation-panel hidden">
+                    <p class="workspace-help">Insert a completely new line Before or After target lines.</p>
+                    
+                    <div class="write-mode-grid">
+                        <button type="button" class="write-mode-card" data-create-pos="before" id="btnCreateBefore">
+                            <div class="mode-icon">⬆️</div>
+                            <strong>Insert Before Line</strong>
+                            <small>Create a new line immediately above target line</small>
+                        </button>
+                        <button type="button" class="write-mode-card" data-create-pos="after" id="btnCreateAfter">
+                            <div class="mode-icon">⬇️</div>
+                            <strong>Insert After Line</strong>
+                            <small>Create a new line immediately below target line</small>
+                        </button>
+                    </div>
+
+                    <div id="subPanelCreatePayload" class="payload-section hidden">
+                        <div class="input-form-group">
+                            <label for="createLinePayload">New Line Content to Insert:</label>
+                            <textarea id="createLinePayload" placeholder="Enter content for the new line..."></textarea>
+                        </div>
+                        <div class="payload-actions">
+                            <button type="button" id="btnProceedCreate" class="workspace-primary-btn">Configure Target Lines →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================
+                     D. DELETE LINE WORKSPACE
+                     ========================================= -->
+                <div id="panelDeleteLine" class="operation-panel hidden">
+                    <p class="workspace-help">Remove specified target lines completely from the file.</p>
+                    <div class="payload-actions" style="justify-content: flex-start;">
+                        <button type="button" id="btnProceedDelete" class="workspace-primary-btn">Configure Lines to Delete →</button>
+                    </div>
+                </div>
+
+                <!-- =========================================
+                     REUSABLE LINE NAVIGATOR / ANCHOR SELECTOR
+                     ========================================= -->
+                <div id="lineNavigatorSection" class="line-navigator-box hidden">
+                    <div class="line-view-header">
+                        <strong id="lineNavigatorTitle">Line Inspector &amp; Anchor Selector</strong>
+                        <span id="anchorStatus">Select First Anchor</span>
+                    </div>
+
+                    <textarea id="lineViewText" readonly spellcheck="false"></textarea>
+
+                    <div class="line-controls">
+                        <button type="button" id="navStartBtn" title="Jump to Start">⏮</button>
+                        <button type="button" id="navPrev10Btn" title="Back 10 Lines">⏪</button>
+                        <button type="button" id="navPrevBtn" title="Previous Line">◀</button>
+
+                        <button type="button" id="btnSetAnchor1" class="anchor-btn" title="Set First Anchor">A1</button>
+                        <button type="button" id="btnSetAnchor2" class="anchor-btn" title="Set Second Anchor">A2</button>
+
+                        <button type="button" id="navNextBtn" title="Next Line">▶</button>
+                        <button type="button" id="navNext10Btn" title="Forward 10 Lines">⏩</button>
+                        <button type="button" id="navEndBtn" title="Jump to End">⏭</button>
+                    </div>
+
+                    <!-- Single-line target selector button -->
+                    <div id="singleLineSelectRow" class="single-line-action-row hidden">
+                        <button type="button" id="btnSelectCurrentLine" class="workspace-primary-btn">Select Current Line as Target</button>
+                    </div>
+
+                    <div id="anchorSummaryBox" class="anchor-summary hidden">
+                        <div><span>First Anchor</span><strong id="sumAnchor1">--</strong></div>
+                        <div><span>Second Anchor</span><strong id="sumAnchor2">--</strong></div>
+                        <div><span>Calculated Gap</span><strong id="sumGap">--</strong></div>
+                        <div><span>Target Lines Found</span><strong id="sumTotalTargets">--</strong></div>
+                    </div>
                 </div>
 
             </div>
+        </section>
 
-
+        <!-- 4. ACTIVE FILE INFORMATION -->
+        <section class="card disabled-section" id="sectionFileInfo">
+            <div class="section-heading-row">
+                <div>
+                    <span class="section-number">4</span>
+                    <h2>Active File Information</h2>
+                </div>
+            </div>
             <div class="info-grid">
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        File Name
-                    </span>
-
-                    <strong id="infoFileName">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Total Lines
-                    </span>
-
-                    <strong id="infoTotalLines">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Selected Operation
-                    </span>
-
-                    <strong id="infoOperation">
-                        —
-                    </strong>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Status
-                    </span>
-
-                    <strong id="infoStatus">
-                        WAITING FOR FILE
-                    </strong>
-
-                </div>
-
-
+                <div class="info-item"><span class="info-label">Active File</span><strong id="infoFileName">--</strong></div>
+                <div class="info-item"><span class="info-label">Total Lines</span><strong id="infoTotalLines">--</strong></div>
+                <div class="info-item"><span class="info-label">Target Lines</span><strong id="infoTargetCount">--</strong></div>
+                <div class="info-item"><span class="info-label">Status</span><strong id="infoStatus">Ready</strong></div>
             </div>
-
         </section>
 
-
-
-        <!-- =====================================
-             5. PROCESSING CONSOLE
-        ====================================== -->
-
-        <section class="card">
-
+        <!-- 5. PROCESSING CONSOLE -->
+        <section class="card" id="sectionConsole">
             <div class="section-heading-row">
-
                 <div>
-
-                    <span class="section-number">
-                        5
-                    </span>
-
-                    <h2>
-                        Processing Console
-                    </h2>
-
+                    <span class="section-number">5</span>
+                    <h2>Processing Console</h2>
                 </div>
-
             </div>
-
-
-            <pre
-                id="console"
-                class="console-box"
-            >Waiting for TXT file...</pre>
-
+            <pre id="consoleBox" class="console-box">Waiting for files...</pre>
         </section>
 
-
-
-        <!-- =====================================
-             ACTIONS
-        ====================================== -->
-
+        <!-- 6. ACTIONS (RUN OPERATION & DOWNLOAD) -->
         <div class="page-actions">
-
-
-            <button
-                type="button"
-                id="newSessionBtn"
-                class="secondary-btn"
-                disabled
-            >
-
-                New Session
-
-            </button>
-
-
-            <button
-                type="button"
-                id="downloadBtn"
-                class="primary-btn"
-                disabled
-            >
-
-                Download Modified TXT
-
-            </button>
-
-
+            <button type="button" id="btnNewSession" class="secondary-btn">New Session</button>
+            <button type="button" id="btnRunOperation" class="primary-btn" disabled>Run Operation</button>
+            <button type="button" id="btnDownload" class="primary-btn" disabled>Download Modified TXT</button>
         </div>
 
-
-    </main>
-
+    </div>
 </div>
 
-
 <script src="character-introducer.js"></script>
-
 </body>
-
 </html>
