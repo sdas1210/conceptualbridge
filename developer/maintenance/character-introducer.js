@@ -576,17 +576,17 @@ function renderNoMoreMatches() {
 }
 
 function handleNextSingleMatch() {
-  if (currentSingleMatchIndex < singleMatches.length - 1) {
-    currentSingleMatchIndex++;
-    updateSingleOccurrenceUI();
-  } else {
-    const nextBtn = document.getElementById('singleNextMatchBtn');
-    if (nextBtn) {
-      nextBtn.disabled = true;
+    if (currentMatchIndex < substituteMatches.length - 1) {
+        currentMatchIndex++;
+        renderCurrentSingleMatch();
+    } else {
+        btnNextSingleMatch.disabled = true;
+        btnNextSingleMatch.textContent = "No More Matches";
+        renderNoMoreMatches();
     }
-    updateSingleMatchStatus("No More Matches");
-  }
 }
+
+
 function handleReplaceSingleMatch() {
     if (substituteMatches.length === 0 || currentMatchIndex >= substituteMatches.length) return;
 
