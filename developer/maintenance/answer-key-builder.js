@@ -265,7 +265,12 @@ let englishFileModified = false;
 let bengaliFileModified = false;
 let builderMode = "gaca";
 
-
+function isAnswerKeyMode() {
+    return (
+        (builderMode === "gaca" && sourceMode === 3) ||
+        (builderMode === "math" && sourceMode === 2)
+    );
+}
 
 // =========================================
 // EVENT LISTENERS
