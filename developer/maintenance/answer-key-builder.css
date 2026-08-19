@@ -504,7 +504,7 @@ h1 {
 }
 
 /* =========================================
-   QUESTION BLOCK EDITOR CONTROLS (TARGET FIX)
+   QUESTION BLOCK EDITOR CONTROLS
 ========================================= */
 
 .editor-controls {
@@ -612,7 +612,7 @@ h1 {
     box-shadow: 0 0 20px var(--accent-green-glow);
 }
 
-/* 3-FILE ANSWER KEY VALUE & METADATA PANEL */
+/* ANSWER KEY VALUE & METADATA PANEL */
 
 .answer-key-info-panel {
     margin-top: 18px;
@@ -797,7 +797,7 @@ td:last-child {
     border-color: rgba(74, 222, 128, 0.45);
 }
 
-/* Changed in 3-File Mode = Yellow */
+/* Changed in Answer Key Review Mode = Yellow */
 .answer-grid-item.changed {
     background: rgba(255, 171, 0, 0.25);
     border-color: rgba(255, 171, 0, 0.6);
