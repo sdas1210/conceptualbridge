@@ -60,7 +60,7 @@ const fileCountInput =
     document.getElementById("fileCountInput");
 
 
-// 1-file mode uploader container
+// 1-file & Math 2-file mode uploader container
 const twoFileUploader =
     document.getElementById("twoFileUploader");
 
@@ -68,7 +68,7 @@ const singleTxtInput =
     document.getElementById("singleTxtInput");
 
 
-// 2-file & 3-file mode uploader container
+// 2-file & 3-file mode uploader container (GACA)
 const threeFileUploader =
     document.getElementById("threeFileUploader");
 
@@ -78,7 +78,7 @@ const englishTxtInput =
 const bengaliTxtInput =
     document.getElementById("bengaliTxtInput");
 
-// 3-file mode ANS KEY elements
+// ANS KEY elements (Shared for GACA 3-File & MATH 2-File)
 const answerKeyUploadBox =
     document.getElementById("answerKeyUploadBox");
 
@@ -231,17 +231,17 @@ let currentIndex = 0;
 let answers = [];
 let sessionActive = false;
 
-let sourceMode = 1; // 1, 2, or 3
+let sourceMode = 1; // GACA: 1, 2, 3 | MATH: 1, 2
 let currentSourceBlockIndex = 0;
 
 
-// Single TXT mode
+// Single TXT mode (GACA 1-File, MATH 1-File, MATH 2-File)
 let singleTxtFile = null;
 let singleTxtText = "";
 let singleBlocks = [];
 
 
-// Bilingual mode
+// Bilingual mode (GACA 2-File & 3-File)
 let englishTxtFile = null;
 let bengaliTxtFile = null;
 let englishTxtText = "";
@@ -250,7 +250,7 @@ let englishBlocks = [];
 let bengaliBlocks = [];
 
 
-// 3-File ANS KEY mode
+// ANS KEY mode (GACA 3-File & MATH 2-File)
 let answerKeyFile = null;
 let answerKeyText = "";
 let answerKeyEntries = []; // [{ option: "A", value: "..." }]
@@ -321,6 +321,19 @@ mathModeBtn.addEventListener("click", () => setBuilderMode("math"));
 
 
 // =========================================
+// HELPER: IS ANSWER KEY REVIEW MODE
+// =========================================
+
+function isAnswerKeyReviewModeActive() {
+    return (
+        (builderMode === "gaca" && sourceMode === 3) ||
+        (builderMode === "math" && sourceMode === 2)
+    );
+}
+
+
+
+// =========================================
 // BUILDER MODE
 // =========================================
 
@@ -337,12 +350,43 @@ function setBuilderMode(mode) {
 
     selectedBuilderMode.textContent = builderMode === "math" ? "MATH" : "GACA";
 
+    // Populate fileCountInput options based on builder mode
+    fileCountInput.innerHTML = "";
+
     if (builderMode === "math") {
-        fileCountInput.value = "1";
-        fileCountInput.disabled = true;
+        const opt1 = document.createElement("option");
+        opt1.value = "1";
+        opt1.textContent = "1 File — Question TXT";
+        opt1.selected = true;
+
+        const opt2 = document.createElement("option");
+        opt2.value = "2";
+        opt2.textContent = "2 Files — Question TXT + ANS KEY";
+
+        fileCountInput.appendChild(opt1);
+        fileCountInput.appendChild(opt2);
+
+        fileCountInput.disabled = false;
         handleSourceModeChange();
-        fileStatus.textContent = "Math Mode: Select one TXT file. Question blocks are detected from QEN|.";
+        fileStatus.textContent = "Math Mode: Select 1 File or 2 Files.";
     } else {
+        const opt1 = document.createElement("option");
+        opt1.value = "1";
+        opt1.textContent = "1 File — Question TXT";
+        opt1.selected = true;
+
+        const opt2 = document.createElement("option");
+        opt2.value = "2";
+        opt2.textContent = "2 Files — English TXT + Bengali TXT";
+
+        const opt3 = document.createElement("option");
+        opt3.value = "3";
+        opt3.textContent = "3 Files — English TXT + Bengali TXT + ANS KEY";
+
+        fileCountInput.appendChild(opt1);
+        fileCountInput.appendChild(opt2);
+        fileCountInput.appendChild(opt3);
+
         fileCountInput.disabled = false;
         handleSourceModeChange();
         fileStatus.textContent = "GACA Mode: Existing Answer Key Builder workflow.";
@@ -436,7 +480,7 @@ function startAnswerSession() {
         return;
     }
 
-    // 3-File Mode Strict Pre-Flight Validation
+    // 3-File GACA Mode Pre-Flight Validation
     if (builderMode === "gaca" && sourceMode === 3) {
         if (!englishTxtFile || !bengaliTxtFile || !answerKeyFile) {
             alert("Please upload English TXT, Bengali TXT, and ANS KEY TXT files before starting.");
@@ -465,12 +509,39 @@ function startAnswerSession() {
         }
     }
 
+    // 2-File MATH Mode Pre-Flight Validation
+    if (builderMode === "math" && sourceMode === 2) {
+        if (!singleTxtFile || !answerKeyFile) {
+            alert("Please upload Question TXT and ANS KEY TXT files before starting.");
+            return;
+        }
+
+        const mathCount = singleBlocks.length;
+        const ansCount = answerKeyEntries.length;
+
+        if (mathCount === 0 || ansCount === 0) {
+            alert("One or more files have no valid entries or question blocks.");
+            return;
+        }
+
+        if (mathCount !== ansCount || total !== ansCount) {
+            alert(
+                `Source Count Mismatch:\n` +
+                `Total Questions: ${total}\n` +
+                `Question TXT Blocks: ${mathCount}\n` +
+                `ANS KEY Entries: ${ansCount}\n\n` +
+                `All counts must match exactly.`
+            );
+            return;
+        }
+    }
+
     totalQuestions = total;
     initialQuestion = initial;
     currentIndex = 0;
 
     // Initialize Answer State
-    if (builderMode === "gaca" && sourceMode === 3) {
+    if (isAnswerKeyReviewModeActive()) {
         answers = answerKeyEntries.map(entry => entry.option);
         reviewed = new Array(totalQuestions).fill(false);
         changed = new Array(totalQuestions).fill(false);
@@ -507,6 +578,13 @@ function startAnswerSession() {
         log(`Bengali blocks found: ${bengaliBlocks.length}`);
         log("All three sources aligned.");
         log(`Question 1 answer loaded: ${answers[0]}`);
+    } else if (builderMode === "math" && sourceMode === 2) {
+        log(`Question TXT loaded: ${singleTxtFile.name}`);
+        log(`ANS KEY loaded: ${answerKeyFile.name}`);
+        log(`Question blocks found: ${singleBlocks.length}`);
+        log(`Answer Key entries found: ${answerKeyEntries.length}`);
+        log("Sources aligned.");
+        log(`Question 1 answer loaded: ${answers[0]}`);
     }
 
     renderAnswerGrid();
@@ -529,7 +607,7 @@ function showCurrentQuestion() {
 
     document.getElementById("progressCurrentQuestion").textContent = displayedQuestion;
 
-    const isThreeFileGACA = (builderMode === "gaca" && sourceMode === 3);
+    const isKeyReviewMode = isAnswerKeyReviewModeActive();
 
     // Navigation buttons
     if (activeEditSide !== null) {
@@ -538,9 +616,9 @@ function showCurrentQuestion() {
     } else {
         previousBtn.disabled = currentIndex === 0;
 
-        // In 3-file GACA mode, if on final question and not yet reviewed, keep Next enabled
+        // In Answer Key Review mode (GACA 3-file or Math 2-file), if on final question and not yet reviewed, keep Next enabled
         if (
-            isThreeFileGACA &&
+            isKeyReviewMode &&
             currentIndex === totalQuestions - 1 &&
             !reviewed[currentIndex]
         ) {
@@ -558,8 +636,8 @@ function showCurrentQuestion() {
         }
     });
 
-    // 3-File Mode Specific Metadata Display
-    if (isThreeFileGACA && answerKeyEntries[currentIndex]) {
+    // Answer Key Mode Specific Metadata Display
+    if (isKeyReviewMode && answerKeyEntries[currentIndex]) {
         answerKeyInfoPanel.classList.remove("hidden");
         const currentAns = answers[currentIndex] || "–";
         const origAns = answerKeyEntries[currentIndex].option;
@@ -595,9 +673,9 @@ function selectAnswer(answer) {
     const oldAnswer = answers[answeredIndex];
     answers[answeredIndex] = answer;
 
-    // In 3-file mode, check if answer was modified from original ANS KEY
+    // In answer key review mode, check if answer was modified from original ANS KEY
     // Note: Selecting an answer does NOT mark the question as reviewed
-    if (builderMode === "gaca" && sourceMode === 3 && answerKeyEntries[answeredIndex]) {
+    if (isAnswerKeyReviewModeActive() && answerKeyEntries[answeredIndex]) {
         const origOption = answerKeyEntries[answeredIndex].option;
         changed[answeredIndex] = (answer !== origOption);
 
@@ -617,7 +695,7 @@ function selectAnswer(answer) {
         updateProgress();
         validateOutput();
 
-        // Auto-advance for Mode 1 & Mode 2
+        // Auto-advance for standard modes
         if (answeredIndex < totalQuestions - 1) {
             const nextIndex = answeredIndex + 1;
             const sourceTotal = getSourceBlockCount();
@@ -656,8 +734,8 @@ function nextQuestion() {
         return;
     }
 
-    // 3-File Mode: nextQuestion() is the single authoritative action that marks review complete
-    if (builderMode === "gaca" && sourceMode === 3) {
+    // Answer Key Review Mode: nextQuestion() is the single authoritative action that marks review complete
+    if (isAnswerKeyReviewModeActive()) {
         if (!reviewed[currentIndex]) {
             reviewed[currentIndex] = true;
             log(`Question ${initialQuestion + currentIndex} reviewed.`);
@@ -698,7 +776,7 @@ function renderAnswerGrid() {
             item.classList.add("answered");
         }
 
-        if (builderMode === "gaca" && sourceMode === 3 && changed[i]) {
+        if (isAnswerKeyReviewModeActive() && changed[i]) {
             item.classList.add("changed");
         }
 
@@ -737,7 +815,7 @@ function updateGridItem(index) {
         item.classList.remove("answered");
     }
 
-    if (builderMode === "gaca" && sourceMode === 3) {
+    if (isAnswerKeyReviewModeActive()) {
         if (changed[index]) {
             item.classList.add("changed");
         } else {
@@ -767,13 +845,13 @@ function updateCurrentGridItem() {
 // =========================================
 
 function updateProgress() {
-    const isThreeFileGACA = (builderMode === "gaca" && sourceMode === 3);
+    const isKeyReviewMode = isAnswerKeyReviewModeActive();
 
     let progressCount = 0;
     let remaining = 0;
     let percentage = 0;
 
-    if (isThreeFileGACA) {
+    if (isKeyReviewMode) {
         progressLabelAnswered.textContent = "Answer Reviewed";
         progressLabelRemaining.textContent = "Remaining Review";
         rowReceivedAnswer.classList.remove("hidden");
@@ -812,9 +890,9 @@ function updateProgress() {
     } else if (progressCount === 0) {
         statusText = "0% — NOT STARTED";
     } else if (progressCount === totalQuestions) {
-        statusText = isThreeFileGACA ? "100% — REVIEW COMPLETED" : "100% — COMPLETED";
+        statusText = isKeyReviewMode ? "100% — COMPLETED" : "100% — COMPLETED";
     } else {
-        statusText = isThreeFileGACA ? `${percentage}% — IN REVIEW` : `${percentage}% — IN PROGRESS`;
+        statusText = isKeyReviewMode ? `${percentage}% — IN REVIEW` : `${percentage}% — IN PROGRESS`;
     }
 
     document.getElementById("progressStatus").textContent = statusText;
@@ -828,13 +906,13 @@ function updateProgress() {
 function validateOutput() {
     if (!sessionActive) return false;
 
-    const isThreeFileGACA = (builderMode === "gaca" && sourceMode === 3);
+    const isKeyReviewMode = isAnswerKeyReviewModeActive();
     const selectedAnswers = answers.filter(answer => ["A", "B", "C", "D"].includes(answer));
     const selectedCount = selectedAnswers.length;
     const missingCount = totalQuestions - selectedCount;
     const standardEntries = selectedCount;
 
-    if (isThreeFileGACA) {
+    if (isKeyReviewMode) {
         labelRequiredAnswers.textContent = "Required Reviews";
         labelSelectedAnswers.textContent = "Questions Reviewed";
         labelMissingAnswers.textContent = "Remaining Reviews";
@@ -908,7 +986,7 @@ function logCompletionOnce() {
     if (completionLogged) return;
     completionLogged = true;
 
-    if (builderMode === "gaca" && sourceMode === 3) {
+    if (isAnswerKeyReviewModeActive()) {
         log("All questions reviewed and validated.");
         log("Output Validation: PASSED");
         log(`Ansopt Entries: ${totalQuestions}`);
@@ -975,7 +1053,7 @@ function downloadStandardFile() {
     }, currentDelay);
 
     // Download edited sources if modified
-    if (sourceMode === 1) {
+    if (sourceMode === 1 || (builderMode === "math" && sourceMode === 2)) {
         if (singleFileModified && singleTxtFile) {
             currentDelay += 300;
             setTimeout(() => {
@@ -1053,7 +1131,7 @@ function startNewSession() {
 
     totalQuestionsInput.disabled = false;
     initialQuestionInput.disabled = false;
-    fileCountInput.disabled = builderMode === "math";
+    fileCountInput.disabled = false;
 
     totalQuestionsInput.value = 100;
     initialQuestionInput.value = 1;
@@ -1119,38 +1197,56 @@ function handleSourceModeChange() {
     sourceMode = Number(fileCountInput.value);
     currentSourceBlockIndex = 0;
 
-    // Mode 1: Single Question TXT
-    if (sourceMode === 1) {
-        twoFileUploader.classList.remove("hidden");
-        threeFileUploader.classList.add("hidden");
-        answerKeyUploadBox.classList.add("hidden");
+    if (builderMode === "math") {
+        if (sourceMode === 1) {
+            twoFileUploader.classList.remove("hidden");
+            threeFileUploader.classList.add("hidden");
+            answerKeyUploadBox.classList.add("hidden");
 
-        singleEditorMode.classList.remove("hidden");
-        splitEditorMode.classList.add("hidden");
+            singleEditorMode.classList.remove("hidden");
+            splitEditorMode.classList.add("hidden");
 
-        fileStatus.textContent = "Single TXT mode: Select one question TXT file.";
-    } 
-    // Mode 2: 2 Files (English + Bengali)
-    else if (sourceMode === 2) {
-        twoFileUploader.classList.add("hidden");
-        threeFileUploader.classList.remove("hidden");
-        answerKeyUploadBox.classList.add("hidden");
+            fileStatus.textContent = "Math Single TXT mode: Select one question TXT file.";
+        } else if (sourceMode === 2) {
+            twoFileUploader.classList.remove("hidden");
+            threeFileUploader.classList.add("hidden");
+            answerKeyUploadBox.classList.remove("hidden");
 
-        singleEditorMode.classList.add("hidden");
-        splitEditorMode.classList.remove("hidden");
+            singleEditorMode.classList.remove("hidden");
+            splitEditorMode.classList.add("hidden");
 
-        fileStatus.textContent = "Bilingual TXT mode: Select matching E.txt and B.txt files.";
-    } 
-    // Mode 3: 3 Files (English + Bengali + ANS KEY)
-    else if (sourceMode === 3) {
-        twoFileUploader.classList.add("hidden");
-        threeFileUploader.classList.remove("hidden");
-        answerKeyUploadBox.classList.remove("hidden");
+            fileStatus.textContent = "Math 2-File Mode: Select Question TXT and ANS KEY TXT files.";
+        }
+    } else {
+        // GACA Mode
+        if (sourceMode === 1) {
+            twoFileUploader.classList.remove("hidden");
+            threeFileUploader.classList.add("hidden");
+            answerKeyUploadBox.classList.add("hidden");
 
-        singleEditorMode.classList.add("hidden");
-        splitEditorMode.classList.remove("hidden");
+            singleEditorMode.classList.remove("hidden");
+            splitEditorMode.classList.add("hidden");
 
-        fileStatus.textContent = "3-File Mode: Select matching E.txt, B.txt, and ANS KEY TXT files.";
+            fileStatus.textContent = "Single TXT mode: Select one question TXT file.";
+        } else if (sourceMode === 2) {
+            twoFileUploader.classList.add("hidden");
+            threeFileUploader.classList.remove("hidden");
+            answerKeyUploadBox.classList.add("hidden");
+
+            singleEditorMode.classList.add("hidden");
+            splitEditorMode.classList.remove("hidden");
+
+            fileStatus.textContent = "Bilingual TXT mode: Select matching E.txt and B.txt files.";
+        } else if (sourceMode === 3) {
+            twoFileUploader.classList.add("hidden");
+            threeFileUploader.classList.remove("hidden");
+            answerKeyUploadBox.classList.remove("hidden");
+
+            singleEditorMode.classList.add("hidden");
+            splitEditorMode.classList.remove("hidden");
+
+            fileStatus.textContent = "3-File Mode: Select matching E.txt, B.txt, and ANS KEY TXT files.";
+        }
     }
 
     renderSourceBlock();
@@ -1222,7 +1318,7 @@ function parseSourceBlocks(text, displayMode) {
 
 
 // =========================================
-// ANS KEY PARSER (Dedicated 3-File Mode)
+// ANS KEY PARSER (Shared GACA & MATH)
 // =========================================
 
 function parseAnswerKeyText(text) {
@@ -1274,7 +1370,12 @@ async function loadSingleTxt() {
         currentSourceBlockIndex = 0;
 
         singleEditorFileName.textContent = file.name;
-        fileStatus.textContent = `${file.name} loaded — ${singleBlocks.length} question blocks found.`;
+
+        if (builderMode === "math" && sourceMode === 2) {
+            updateMath2FileStatus();
+        } else {
+            fileStatus.textContent = `${file.name} loaded — ${singleBlocks.length} question blocks found.`;
+        }
 
         renderSourceBlock();
         log(`Question TXT loaded: ${file.name}`);
@@ -1347,7 +1448,7 @@ async function loadBengaliTxt() {
 
 
 // =========================================
-// LOAD ANS KEY TXT (3-File Mode)
+// LOAD ANS KEY TXT
 // =========================================
 
 async function loadAnswerKeyTxt() {
@@ -1356,7 +1457,11 @@ async function loadAnswerKeyTxt() {
         answerKeyFile = null;
         answerKeyText = "";
         answerKeyEntries = [];
-        updateBilingualFileStatus();
+        if (builderMode === "math" && sourceMode === 2) {
+            updateMath2FileStatus();
+        } else {
+            updateBilingualFileStatus();
+        }
         return;
     }
 
@@ -1369,7 +1474,11 @@ async function loadAnswerKeyTxt() {
             answerKeyFile = null;
             answerKeyText = "";
             answerKeyEntries = [];
-            updateBilingualFileStatus();
+            if (builderMode === "math" && sourceMode === 2) {
+                updateMath2FileStatus();
+            } else {
+                updateBilingualFileStatus();
+            }
             return;
         }
 
@@ -1380,11 +1489,33 @@ async function loadAnswerKeyTxt() {
         log(`ANS KEY loaded: ${file.name}`);
         log(`Answer Key entries found: ${answerKeyEntries.length}`);
 
-        updateBilingualFileStatus();
+        if (builderMode === "math" && sourceMode === 2) {
+            updateMath2FileStatus();
+        } else {
+            updateBilingualFileStatus();
+        }
     } catch (err) {
         console.error(err);
         alert("Error loading ANS KEY TXT file.");
     }
+}
+
+
+function updateMath2FileStatus() {
+    if (!singleTxtFile || !answerKeyFile) {
+        fileStatus.textContent = "Waiting for Question TXT and ANS KEY TXT files.";
+        return;
+    }
+
+    const mathCount = singleBlocks.length;
+    const ansCount = answerKeyEntries.length;
+
+    if (mathCount !== ansCount) {
+        fileStatus.textContent = `⚠ Source count mismatch — Question TXT: ${mathCount}, ANS KEY: ${ansCount}. Answer review cannot start.`;
+        return;
+    }
+
+    fileStatus.textContent = `✓ Question blocks: ${mathCount}\n✓ Answer Key entries: ${ansCount}\n✓ All sources aligned.`;
 }
 
 
@@ -1465,7 +1596,7 @@ function goToQuestionBlock(index) {
 // =========================================
 
 function renderSourceBlock(syncAnswer = true) {
-    if (sourceMode === 1) {
+    if (sourceMode === 1 || (builderMode === "math" && sourceMode === 2)) {
         renderSingleSourceBlock(syncAnswer);
     } else {
         renderBilingualSourceBlock(syncAnswer);
@@ -1541,7 +1672,9 @@ function clampSourceBlockIndex(total) {
 // =========================================
 
 function getSourceBlockCount() {
-    if (sourceMode === 1) return singleBlocks.length;
+    if (sourceMode === 1 || (builderMode === "math" && sourceMode === 2)) {
+        return singleBlocks.length;
+    }
     return Math.max(englishBlocks.length, bengaliBlocks.length);
 }
 
@@ -1585,9 +1718,9 @@ function updateSourceNavigationButtons() {
     } else if (sessionActive) {
         previousBtn.disabled = currentIndex === 0;
         
-        const isThreeFileGACA = (builderMode === "gaca" && sourceMode === 3);
+        const isKeyReviewMode = isAnswerKeyReviewModeActive();
         if (
-            isThreeFileGACA &&
+            isKeyReviewMode &&
             currentIndex === totalQuestions - 1 &&
             !reviewed[currentIndex]
         ) {
@@ -1722,7 +1855,7 @@ function mergeVisibleQuestionFields(originalBlock, editedVisibleBlock) {
 
 
 function rebuildEditedSourceTexts() {
-    if (sourceMode === 1) {
+    if (sourceMode === 1 || (builderMode === "math" && sourceMode === 2)) {
         singleTxtText = singleBlocks.map(block => block.originalText).join("\n\n");
         return;
     }
