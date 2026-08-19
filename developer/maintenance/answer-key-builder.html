@@ -250,7 +250,7 @@
         </h2>
     
     
-        <!-- SINGLE FILE MODE -->
+        <!-- SINGLE / MATH UPLOADER -->
     
         <div
             id="twoFileUploader"
@@ -282,7 +282,7 @@
         </div>
     
     
-        <!-- BILINGUAL & 3-FILE MODE -->
+        <!-- BILINGUAL UPLOADER (GACA) -->
     
         <div
             id="threeFileUploader"
@@ -327,31 +327,32 @@
                     </span>
     
                 </div>
-
-                <!-- ANS KEY TXT FILE (3-File Mode) -->
-                <div
-                    id="answerKeyUploadBox"
-                    class="file-upload-box hidden"
-                >
-
-                    <label for="answerKeyTxtInput">
-                        ANS KEY TXT File
-                    </label>
-
-                    <input
-                        type="file"
-                        id="answerKeyTxtInput"
-                        accept=".txt"
-                    >
-
-                    <span class="input-help">
-                        Format: A| Value, B| Value, etc.
-                    </span>
-
-                </div>
     
             </div>
     
+        </div>
+
+        <!-- REUSABLE ANS KEY UPLOAD BOX (GACA 3-File & MATH 2-File) -->
+        <div
+            id="answerKeyUploadBox"
+            class="file-upload-box hidden"
+            style="margin-top: 16px;"
+        >
+
+            <label for="answerKeyTxtInput">
+                ANS KEY TXT File
+            </label>
+
+            <input
+                type="file"
+                id="answerKeyTxtInput"
+                accept=".txt"
+            >
+
+            <span class="input-help">
+                Format: A| Value, B| Value, etc.
+            </span>
+
         </div>
     
     
@@ -700,7 +701,7 @@
 
             </div>
 
-            <!-- 3-FILE ANSWER KEY METADATA DISPLAY -->
+            <!-- ANSWER KEY METADATA DISPLAY -->
             <div
                 id="answerKeyInfoPanel"
                 class="answer-key-info-panel hidden"
