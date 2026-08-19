@@ -2078,3 +2078,363 @@ This update has been appended rather than replacing earlier history.
 
 **Current master rule: preserve first, append second, delete only when
 absolutely necessary.**
+
+------------------------------------------------------------------------
+
+# Session Update — 2026-08-19
+
+## Character Introducer — Functional Enhancement and Stabilization
+
+### Master-Copy Preservation Rule
+
+This document remains the **mother/master Project Status copy**.
+
+All previous project history, architecture decisions, completed milestones,
+constraints, roadmap items, and continuation points above are preserved.
+
+**Do not delete, shorten, rewrite, or replace previous history merely to reflect
+this Character Introducer work. Future status changes must continue to be
+appended to this master copy.**
+
+---
+
+## 1. Character Introducer — Current Functional Scope
+
+The Character Introducer maintenance tool has been extended and reviewed as a
+working multi-operation text-maintenance editor.
+
+The current implementation includes the existing text-editing workflow and the
+newer operation model discussed during this development phase, including:
+
+- Current-session TXT file management.
+- File selection through the current-session file mechanism.
+- Write operation.
+- Write at the end of a line.
+- Edit in the middle / somewhere.
+- Add / Delete behavior for middle operations.
+- Target-character based operations.
+- Before-target / after-target behavior.
+- First-encounter / multiple-encounter handling.
+- String Substitute operation.
+- Single-line, multiple-line and entire-file substitution scopes where
+  applicable to the existing implementation.
+- Controlled single-occurrence review/replacement workflow.
+- Existing line navigation and anchor-related functionality.
+- Existing Create Line and Delete Line functionality.
+- Existing download/session workflow.
+
+The project rule remains that existing functionality must be preserved when a
+new operation is introduced.
+
+---
+
+## 2. Character Introducer — Single Occurrence Correction
+
+A significant clarification was made for the meaning of **Single Occurrence**.
+
+### Agreed Definition
+
+> **One occurrence only = one matching occurrence in one physical line.**
+
+For Single Occurrence String Substitute:
+
+- The scanner works line by line.
+- A physical line containing the target produces a maximum of one match.
+- Only the **first occurrence** of the target on that line is eligible for the
+  Single Occurrence replacement.
+- Additional occurrences of the same target on that physical line are not
+  presented as separate Single Occurrence matches.
+- After processing a line, navigation continues to the next physical line
+  containing the target.
+
+Example:
+
+```text
+Line 10: Catch and Catch again.
+Line 20: Nothing here.
+Line 30: Catch here.
+```
+
+The Single Occurrence match sequence is:
+
+```text
+Match 1 → Line 10
+Match 2 → Line 30
+```
+
+It must not become three matches merely because Line 10 contains two
+occurrences.
+
+---
+
+## 3. Single Occurrence — Replacement and Stale-Match Handling
+
+The corrected implementation was reviewed after the Gemini-generated surgical
+changes were integrated into the full master JavaScript.
+
+### Verified behavior
+
+- The Single Occurrence scanner records one match per physical line.
+- The replacement operation uses the first occurrence on the selected line.
+- Remaining occurrences on the same line are left untouched.
+- After a replacement, the current physical line is considered processed for
+  the Single Occurrence workflow.
+- The subsequent scan begins from the next physical line.
+- The scanner is rebuilt after editing so stale match references are not reused.
+- The Next Match workflow does not wrap from the final match back to the first
+  match.
+- The final match correctly reaches a **No More Matches** state.
+
+Example:
+
+```text
+Before:
+Catch and Catch again.
+
+Replace first Catch with Cold:
+
+After:
+Cold and Catch again.
+```
+
+The second `Catch` remains untouched and is not presented as another
+Single-Occurrence match for the same line.
+
+---
+
+## 4. Character Introducer — Multiple Encounters Preserved
+
+The Single Occurrence correction must remain separate from the existing
+**Multiple Encounters** behavior.
+
+For Middle / Somewhere operations, when a line contains multiple target
+occurrences, the user may specify which encounter is to be acted upon.
+
+Example:
+
+```text
+ABC CAT DEF CAT GHI CAT JKL
+```
+
+Selecting Encounter 2 targets the second `CAT`.
+
+The existing Multiple Encounters workflow was intentionally preserved rather
+than replaced by the Single Occurrence implementation.
+
+This distinction is now an explicit engineering rule:
+
+```text
+Single Occurrence
+    → one match per physical line
+    → first occurrence only
+
+Multiple Encounters
+    → explicit occurrence selection
+    → selected occurrence is acted upon
+```
+
+---
+
+## 5. Character Introducer — CSS Theme Standardization
+
+The Character Introducer CSS was migrated toward the established **Answer Key
+Builder visual language**.
+
+The agreed rule remains:
+
+> CSS changes are visual-only and must not alter HTML structure, JavaScript,
+> IDs, classes, controls, processing logic, API calls, or workflows.
+
+### Current CSS direction
+
+The Character Introducer now uses the Answer Key Builder-inspired visual system,
+including the existing glass-card approach, dark/blue visual language,
+accented controls, responsive layouts, operation cards, navigator styling,
+and Single Occurrence match presentation.
+
+The CSS was reviewed specifically to ensure that tool-specific selectors and
+controls required by the Character Introducer JavaScript remain available.
+
+A small compatibility rule was identified and retained for the line navigator:
+
+```css
+.line-controls button:disabled {
+    opacity: 0.38;
+}
+```
+
+This restores the specific disabled-state appearance previously supplied by
+the Character Introducer navigator CSS while retaining the broader Answer Key
+Builder-inspired visual theme.
+
+---
+
+## 6. Character Introducer — CSS / Function Separation Rule
+
+The Character Introducer visual migration is **not** a functional rewrite.
+
+The following must remain unchanged when CSS is updated:
+
+- JavaScript behavior.
+- Operation selection logic.
+- Session/file handling.
+- String substitution logic.
+- Single Occurrence logic.
+- Multiple Encounter logic.
+- Create/Delete operations.
+- Anchor behavior.
+- Line navigation behavior.
+- Download behavior.
+- Existing HTML IDs and JavaScript-dependent classes.
+
+Any future visual correction should therefore be performed in CSS unless a
+verified functional defect requires HTML or JavaScript changes.
+
+---
+
+## 7. Character Introducer — Master JavaScript Handling Rule
+
+The full Character Introducer JavaScript remains the functional master.
+
+Gemini-generated code supplied during the Single Occurrence correction was
+handled as **surgical patches**, not as a wholesale replacement of the master
+application JavaScript.
+
+The following principle is now recorded:
+
+```text
+Master JavaScript
+    ↓
+Preserve complete application architecture
+    ↓
+Apply only verified surgical corrections
+    ↓
+Do not replace the whole master with isolated Gemini snippets
+```
+
+This prevents incompatible variable/function names from being introduced by
+standalone snippets into the established Character Introducer architecture.
+
+---
+
+## 8. Character Introducer — Current Verification State
+
+### Verified / approved
+
+```text
+Character Introducer master JavaScript architecture       ✅
+Single Occurrence — one match per physical line           ✅
+Single Occurrence — first occurrence replacement           ✅
+Single Occurrence — no wrap-around                         ✅
+Single Occurrence — stale-match protection                 ✅
+Multiple Encounters — selected encounter preserved         ✅
+Middle / Somewhere operations                              ✅
+Current-session file workflow                              ✅
+Answer Key Builder-inspired Character CSS                  ✅
+CSS-only visual migration principle                        ✅
+```
+
+### Verification limitation
+
+The JavaScript and CSS have been reviewed for structural consistency during
+this development session. Final browser-level regression testing of the
+complete Character Introducer HTML + CSS + JavaScript combination remains the
+appropriate final validation step before declaring the tool fully production
+frozen.
+
+Therefore the Character Introducer should be treated as a **corrected master
+candidate / ready-for-browser-regression-test baseline**, rather than being
+marked as permanently frozen solely from source inspection.
+
+---
+
+## 9. Preservation of Previously Planned Work
+
+The previously recorded future-work list remains active and is **not replaced**
+by the Character Introducer work.
+
+```text
+1. Quiz Portal — new Box
+2. GACA Anchor Builder — Step 2
+3. GACA Anchor Builder — Step 9
+4. Answer Key Builder — operations
+5. GACA Knowledge Index Builder activation
+6. Citation Remover — three-row Answer-Key structure
+```
+
+These items must continue to be treated according to their recorded status and
+must not be marked completed merely because unrelated Character Introducer
+work was completed.
+
+---
+
+## 10. Additional Preservation Note — Answer Key Builder Three-File Mode
+
+The proposed Answer Key Builder enhancement for the three-file mode remains a
+separate functional workstream.
+
+The requirement recorded during this phase is:
+
+```text
+English TXT + Bengali TXT + ANS KEY TXT
+```
+
+The supplied answer-key TXT contains one answer entry per question, for example:
+
+```text
+A| Gorkha Rifles
+C| S Mahendra Dev
+C| DHRUV64
+A| 4
+B| Section 3A(2)
+```
+
+The intended validation rule is that the number of question blocks in the
+English and Bengali files must equal the number of answer entries received
+from the answer-key TXT before the review workflow proceeds.
+
+The intended workflow also includes automatic loading of the supplied answer
+key into the Answer Selection section, review/change tracking, answer-grid
+state changes, and the existing output/download behavior.
+
+**This requirement is preserved as a functional work item unless it has been
+separately implemented and verified in the actual current project. It is not
+marked completed by this status update.**
+
+---
+
+# Session Checkpoint — 2026-08-19
+
+### Current stable baseline
+
+```text
+Project Status Master
+        ↓
+Maintenance Framework v2.1
+        ↓
+Anchor Builder / Math Tutorial work preserved
+        ↓
+Maintenance CSS standardization preserved
+        ↓
+Character Introducer functional corrections
+        ↓
+Character Introducer Answer Key Builder visual theme
+        ↓
+★ CURRENT: Character Introducer browser regression validation
+```
+
+### Immediate safety rule
+
+Do not regenerate or replace the Character Introducer JavaScript wholesale.
+Preserve the current corrected master candidate and make only isolated changes
+when a verified defect is found.
+
+Do not modify working CSS-derived functionality through JavaScript changes.
+Keep CSS-only requests CSS-only.
+
+### Master-copy rule
+
+**Preserve first. Append second. Delete only when absolutely necessary, and
+record the reason whenever deletion is unavoidable.**
+
+------------------------------------------------------------------------
