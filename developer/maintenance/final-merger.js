@@ -884,17 +884,11 @@ function parseDifficultyFile(text) {
 
             /*
                 =====================================
-                FORMAT 2 — NEW Q| FORMAT
+                FORMAT 2 — Q| FORMAT
                 =====================================
 
                 Q| What is the capital...
                 Difficulty Rating: 7.25
-
-                Q| Who invented...
-                Difficulty Rating: 5.80
-
-                Question number is assigned
-                sequentially according to Q| order.
             */
 
             if (
@@ -960,9 +954,6 @@ function parseDifficultyFile(text) {
 
                 Difficulty Rating: 7.88
                 Difficulty: 7.88
-
-                Any line beginning with
-                "Difficulty" followed by ":"
             */
 
             if (
@@ -1610,11 +1601,6 @@ function getCompareString(content) {
 
         - Ignore leading whitespace
         - Compare first 10 characters
-
-        Q| Which...
-        Q|Which...
-
-        are treated identically.
     */
 
     return String(
@@ -1636,26 +1622,9 @@ function normalizeShiftValue(value) {
             .trim();
 
 
-    /*
-        Examples accepted:
-
-        27/11/2025 9:00 AM 10:30 AM
-
-        27/11/2025 9:00 AM - 10:30 AM
-
-        27/11/2025 09:00AM--10:30am
-
-        Output:
-
-        27/11/2025 9:00 AM - 10:30 AM
-    */
-
-
     const match =
         original.match(
-
             /^(.+?)\s+(\d{1,2}:\d{2})\s*(AM|PM)\s*(?:-+\s*)?(\d{1,2}:\d{2})\s*(AM|PM)$/i
-
         );
 
 
@@ -1771,18 +1740,6 @@ function generateFinalOutput() {
                 english.Shift
             ).value;
 
-
-        /*
-            Preserve GA Writer merge format:
-
-            English / Bengali
-
-            Then:
-
-            Shift|
-            Correct|
-            Difficulty|
-        */
 
         const block = [
 
@@ -2243,6 +2200,8 @@ let mathValidationPassed = false;
 
 let mathFinalOutput = "";
 
+let mathParseIssues = [];
+
 
 // =========================================
 // NORMALIZE LINE ENDINGS
@@ -2276,7 +2235,7 @@ async function readMathFile(file) {
 // =========================================
 // PARSE QUESTION FILE
 //
-// Every QEN| starts a new block.
+// Every QEN| followed by QBN| starts a new block.
 // =========================================
 
 function parseMathQuestionBlocks(text) {
@@ -2290,32 +2249,58 @@ function parseMathQuestionBlocks(text) {
 
     let currentBlock = [];
 
+    mathParseIssues = [];
 
-    for (const line of lines) {
 
-        if (
-            /^\s*QEN\|/i.test(line)
-        ) {
+    for (let i = 0; i < lines.length; i++) {
 
-            if (
-                currentBlock.length > 0
-            ) {
+        const line = lines[i];
 
-                blocks.push(
-                    currentBlock
-                        .join("\n")
-                        .trim()
-                );
+        if (/^\s*QEN\|/i.test(line)) {
+
+            // Look ahead to the next non-empty line
+            let nextNonEmptyLine = null;
+            let nextNonEmptyIndex = -1;
+
+            for (let j = i + 1; j < lines.length; j++) {
+                if (lines[j].trim() !== "") {
+                    nextNonEmptyLine = lines[j];
+                    nextNonEmptyIndex = j;
+                    break;
+                }
             }
 
+            // Must begin with QBN|
+            if (nextNonEmptyLine && /^\s*QBN\|/i.test(nextNonEmptyLine)) {
 
-            currentBlock = [
-                line
-            ];
+                if (currentBlock.length > 0) {
+                    blocks.push(
+                        currentBlock
+                            .join("\n")
+                            .trim()
+                    );
+                }
 
-        } else if (
-            currentBlock.length > 0
-        ) {
+                currentBlock = [
+                    line
+                ];
+
+            } else {
+
+                // Invalid QEN| block candidate: Not followed by QBN|
+                mathParseIssues.push({
+                    line: i + 1,
+                    text: line.trim(),
+                    details: nextNonEmptyLine
+                        ? `Line ${nextNonEmptyIndex + 1} begins with "${nextNonEmptyLine.trim().substring(0, 15)}..." instead of QBN|`
+                        : "End of file reached with no corresponding QBN| line found."
+                });
+
+                // Do not append invalid candidate into currentBlock
+                continue;
+            }
+
+        } else if (currentBlock.length > 0) {
 
             currentBlock.push(
                 line
@@ -2325,9 +2310,7 @@ function parseMathQuestionBlocks(text) {
     }
 
 
-    if (
-        currentBlock.length > 0
-    ) {
+    if (currentBlock.length > 0) {
 
         blocks.push(
             currentBlock
@@ -2344,7 +2327,7 @@ function parseMathQuestionBlocks(text) {
 // =========================================
 // PARSE ANSWER FILE
 //
-// Only standalone A / B / C / D lines count.
+// Standalone A / B / C / D lines count.
 // =========================================
 
 function parseMathAnswers(text) {
@@ -2370,10 +2353,9 @@ function parseMathAnswers(text) {
 // =========================================
 // PARSE DIFFICULTY FILE
 //
-// Expected:
-//
-// Question: Simplify:
-// Difficulty: 8.35
+// Supports:
+// Question: ... / QEN| ...
+// Difficulty Rating: ... / Difficulty: ...
 // =========================================
 
 function parseMathDifficulty(text) {
@@ -2394,13 +2376,15 @@ function parseMathDifficulty(text) {
             rawLine.trim();
 
 
+        // Formats: Question: ... OR QEN| ...
         if (
-            /^Question\s*:/i.test(line)
+            /^Question\s*:/i.test(line) ||
+            /^QEN\|/i.test(line)
         ) {
 
             question =
                 line.replace(
-                    /^Question\s*:\s*/i,
+                    /^(?:Question\s*:\s*|QEN\|\s*)/i,
                     ""
                 ).trim();
 
@@ -2408,14 +2392,15 @@ function parseMathDifficulty(text) {
         }
 
 
+        // Formats: Difficulty Rating: ... OR Difficulty: ...
         if (
-            /^Difficulty\s*:/i.test(line) &&
+            /^Difficulty(?:\s+Rating)?\s*:/i.test(line) &&
             question !== null
         ) {
 
             const difficulty =
                 line.replace(
-                    /^Difficulty\s*:\s*/i,
+                    /^Difficulty(?:\s+Rating)?\s*:\s*/i,
                     ""
                 ).trim();
 
@@ -2454,13 +2439,35 @@ function detectMathFileType(
         normalizeMathText(text);
 
 
-    // QUESTION FILE
+    // QUESTION FILE: Contains valid QEN| line
 
     if (
         /^\s*QEN\|/im.test(
             normalized
         )
     ) {
+
+        const parsedBlocks =
+            parseMathQuestionBlocks(
+                normalized
+            );
+
+        // If it also contains Difficulty fields, verify if it's a difficulty file
+        const hasDifficultyTag =
+            /^\s*Difficulty(?:\s+Rating)?\s*:/im.test(normalized);
+
+        const hasQbnTag =
+            /^\s*QBN\|/im.test(normalized);
+
+        if (hasDifficultyTag && !hasQbnTag) {
+
+            return {
+                type: "difficulty",
+                name: name,
+                text: normalized,
+                data: parseMathDifficulty(normalized)
+            };
+        }
 
         return {
 
@@ -2474,9 +2481,7 @@ function detectMathFileType(
                 normalized,
 
             data:
-                parseMathQuestionBlocks(
-                    normalized
-                )
+                parsedBlocks
 
         };
     }
@@ -2488,7 +2493,7 @@ function detectMathFileType(
         /^\s*Question\s*:/im.test(
             normalized
         ) &&
-        /^\s*Difficulty\s*:/im.test(
+        /^\s*Difficulty(?:\s+Rating)?\s*:/im.test(
             normalized
         )
     ) {
@@ -2807,6 +2812,33 @@ mathAnalyzeBtn.addEventListener(
 
         mathDifficultyRecords =
             mathDifficultyFile.data;
+
+
+        // Check if question parsing encountered malformed QEN| lines
+        if (mathParseIssues && mathParseIssues.length > 0) {
+
+            document.getElementById(
+                "mathValidationStatus"
+            ).textContent =
+                "FAILED";
+
+            const report =
+                document.getElementById(
+                    "mathIssueReport"
+                );
+
+            report.textContent =
+                "❌ Malformed Math Question Block(s) Detected:\n\n" +
+                mathParseIssues.map(issue =>
+                    `Line ${issue.line}: "${issue.text}"\nError: ${issue.details}`
+                ).join("\n\n");
+
+            report.classList.remove(
+                "hidden"
+            );
+
+            return;
+        }
 
 
         // DISPLAY FILE INFORMATION
