@@ -1,0 +1,9 @@
+Title| 🔥 RRB GROUP D Mathematics Series #01 | Number System- Prime Number | PYQ Based | Bengali Explanation (Set - 1)
+Tags| RRB, Group D, CEN - 08/2024, Mathematics, 10, Number System, Prime No.
+Video| N9EB7AoHvDA
+PDF_English| none
+PDF_Bengali| none
+Test_Source| questions/math/1.txt
+Topic| Number System
+Sub-Topic| Prime No.
+Level| 10
