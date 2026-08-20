@@ -1,0 +1,505 @@
+Exam| RRB GROUP-D CBT-I
+Subject| MATHEMATICS
+Topic| Number System
+SubTopic| Prime No.
+Level| 10
+Notification| CEN-08/2024
+Type| PYQ
+Marks| 1
+QType| MCQ
+ImageFolder| NO
+
+QEN| Find the total prime numbers between 146 and 196.
+QBN| 146 এবং 196 এর মধ্যে মোট মৌলিক সংখ্যা কতগুলি তা নির্ণয় করো।
+Common| 
+Image| 
+A| 12
+B| 11
+C| 10
+D| 13
+Shift| 11/12/2025 4:30 PM - 6:00 PM
+Correct| C
+Difficulty| 7.88
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000045
+
+QEN| Find the number of all possible distinct pairs of two coprime integers such that their product is 180.
+QBN| দুটি পরস্পর মৌলিক (coprime) পূর্ণসংখ্যার সমস্ত সম্ভাব্য পৃথক জোড়ের সংখ্যা নির্ণয় করো যাদের গুণফল 180।
+Common| 
+Image| 
+A| 4
+B| 3
+C| 5
+D| 2
+Shift| 09/01/2026 9:00 AM - 10:30 AM
+Correct| A
+Difficulty| 5.12
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000046
+
+QEN| The number of prime numbers between 472 and 486 is:
+QBN| 472 এবং 486 এর মধ্যে মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 3
+B| 4
+C| 2
+D| 1
+Shift| 23/12/2025 12:45 PM - 2:15 PM
+Correct| C
+Difficulty| 6.24
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000047
+
+QEN| Let a, b, \alpha and \beta be prime numbers. n is the number of ordered pairs of a and b where, $2<a<b<50$ and $b-a=2$. Also, a and β are the least and the greatest prime numbers less than 50. What is the value of-
+QBN| ধরা যাক a, b, a এবং β হলো মৌলিক সংখ্যা। n হলো a এবং b এর ক্রমি জোড়ের সংখ্যা যেখানে $2<a<b<50$ এবং $b-a=2$। এছাড়াও, a এবং β হলো 50 এর কম যথাক্রমে ক্ষুদ্রতম ও বৃহত্তম মৌলিক সংখ্যা।  তাহলে প্রদত্ত রাশির মান​ কত?
+Common| 
+Image| 
+A| 294
+B| 598
+C| 354
+D| 493
+Shift| 10/02/2026 12:45 PM - 2:15 PM
+Correct| A
+Difficulty| 6.01
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000048
+
+QEN| The number of prime numbers lying between 480 and 489 is:
+QBN| 480 এবং 489 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 2
+B| 1
+C| 3
+D| 0
+Shift| 03/12/2025 4:30 PM - 6:00 PM
+Correct| B
+Difficulty| 8.32
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000049
+
+QEN| The number of prime numbers lying between 386 and 395 is:
+QBN| 386 এবং 395 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 3
+B| 1
+C| 0
+D| 2
+Shift| 04/12/2025 4:30 PM - 6:00 PM
+Correct| B
+Difficulty| 8.05
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000050
+
+QEN| The number of prime numbers between 445 and 456 is:
+QBN| 445 এবং 456 এর মধ্যে মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 1
+B| 2
+C| 3
+D| 0
+Shift| 03/02/2026 9:00 AM - 10:30 AM
+Correct| A
+Difficulty| 9.02
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000051
+
+QEN| The number of prime numbers lying between 309 and 320 is:
+QBN| 309 এবং 320 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 5
+B| 1
+C| 3
+D| 4
+Shift| 11/12/2025 9:00 AM - 10:30 AM
+Correct| C
+Difficulty| 5.40
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000052
+
+QEN| The number of prime numbers lying between 374 and 384 is:
+QBN| 374 এবং 384 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 3
+B| 0
+C| 1
+D| 2
+Shift| 27/11/2025 12:45 PM - 2:15 PM
+Correct| C
+Difficulty| 6.90
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000053
+
+QEN| The number of prime numbers lying between 469 and 474 is:
+QBN| 469 এবং 474 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 3
+B| 2
+C| 1
+D| 0
+Shift| 04/02/2026 12:45 PM - 2:15 PM
+Correct| C
+Difficulty| 5.14
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000054
+
+QEN| The number of prime numbers lying between 440 and 452 is:
+QBN| 440 এবং 452 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 1
+B| 3
+C| 2
+D| 0
+Shift| 04/12/2025 9:00 AM - 10:30 AM
+Correct| C
+Difficulty| 5.99
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000055
+
+QEN| The number of prime numbers lying between 376 and 384 is:
+QBN| 376 এবং 384 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 4
+B| 2
+C| 1
+D| 3
+Shift| 04/02/2026 4:30 PM - 6:00 PM
+Correct| B
+Difficulty| 7.28
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000056
+
+QEN| The sum of the first 21 prime numbers is:
+QBN| প্রথম 21 টি মৌলিক সংখ্যার সমষ্টি হলো:
+Common| 
+Image| 
+A| 709
+B| 712
+C| 717
+D| 710
+Shift| 30/12/2025 4:30 PM - 6:00 PM
+Correct| D
+Difficulty| 5.13
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000057
+
+QEN| The number of prime numbers between 368 and 376 is:
+QBN| 368 এবং 376 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 2
+B| 1
+C| 3
+D| 0
+Shift| 05/02/2026 9:00 AM - 10:30 AM
+Correct| A
+Difficulty| 5.90
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000058
+
+QEN| The number of prime numbers between 358 and 368 is:
+QBN| 358 এবং 368 এর মধ্যে মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 1
+B| 2
+C| 4
+D| 3
+Shift| 05/02/2026 12:45 PM - 2:15 PM
+Correct| B
+Difficulty| 7.93
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000059
+
+QEN| The sum of the first 19 prime numbers is:
+QBN| প্রথম 19 টি মৌলিক সংখ্যার সমষ্টি হলো:
+Common| 
+Image| 
+A| 564
+B| 571
+C| 570
+D| 568
+Shift| 27/12/2025 12:45 PM - 2:15 PM
+Correct| C
+Difficulty| 7.46
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000060
+
+QEN| The sum of the first 17 prime numbers is:
+QBN| প্রথম 17 টি মৌলিক সংখ্যার সমষ্টি হলো:
+Common| 
+Image| 
+A| 439
+B| 441
+C| 436
+D| 440
+Shift| 30/12/2025 9:00 AM - 10:30 AM
+Correct| D
+Difficulty| 6.00
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000061
+
+QEN| The sum of twin prime numbers is 36. Find the product of the twin prime numbers.
+QBN| জমজ মৌলিক সংখ্যা দুটির যোগফল 36। জমজ মৌলিক সংখ্যা দুটির গুণফল নির্ণয় করো।
+Common| 
+Image| 
+A| 155
+B| 299
+C| 203
+D| 323
+Shift| 09/01/2026 12:45 PM - 2:15 PM
+Correct| C
+Difficulty| 7.66
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000062
+
+QEN| The sum of the first 16 prime numbers is:
+QBN| প্রথম 16 টি মৌলিক সংখ্যার সমষ্টি হলো:
+Common| 
+Image| 
+A| 376
+B| 381
+C| 382
+D| 385
+Shift| 30/12/2025 9:00 AM - 10:30 AM
+Correct| B
+Difficulty| 8.64
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000063
+
+QEN| The number of prime numbers lying between 415 and 428 is:
+QBN| 415 এবং 428 এর মধ্যে থাকা মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 7
+B| 6
+C| 2
+D| 4
+Shift| 29/12/2025 9:00 AM - 10:30 AM
+Correct| D
+Difficulty| 5.04
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000064
+
+QEN| Which of the following pairs of numbers are relatively prime to each other?
+QBN| নিচের কোন সংখ্যা জোড়াটি পরস্পর মৌলিক?
+Common| 
+Image| 
+A| (68, 85)
+B| (65, 91)
+C| (102, 153)
+D| (52, 105)
+Shift| 30/12/2025 12:45 PM - 2:15 PM
+Correct| A
+Difficulty| 8.63
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000065
+
+QEN| What is the difference between the average of prime numbers between 60 and 70 and the average of multiples of 4 between 50 and 58?
+QBN| 60 এবং 70 এর মধ্যে থাকা মৌলিক সংখ্যাগুলির গড় এবং 50 এবং 58 এর মধ্যে থাকা 4 এর গুণিতকগুলির গড়ের মধ্যে পার্থক্য কত?
+Common| 
+Image| 
+A| 11
+B| 9
+C| 10
+D| 1
+Shift| 08/01/2026 12:45 PM - 2:15 PM
+Correct| C
+Difficulty| 8.14
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000066
+
+QEN| The sum of the first 13 prime numbers is:
+QBN| প্রথম 13 টি মৌলিক সংখ্যার সমষ্টি হলো:
+Common| 
+Image| 
+A| 241
+B| 235
+C| 243
+D| 238
+Shift| 04/02/2026 12:45 PM - 2:15 PM
+Correct| B
+Difficulty| 6.54
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000067
+
+QEN| What is the difference between the average of prime numbers between 20 and 40 and the average of multiples of 2 between 10 and 30?
+QBN| 20 এবং 40 এর মধ্যে থাকা মৌলিক সংখ্যাগুলির গড় এবং 10 এবং 30 এর মধ্যে থাকা 2 এর গুণিতকগুলির গড়ের মধ্যে পার্থক্য কত?
+Common| 
+Image| 
+A| 20
+B| 10
+C| 1
+D| 18
+Shift| 22/12/2025 4:30 PM - 6:00 PM
+Correct| D
+Difficulty| 5.71
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000068
+
+QEN| The sum of the first pair of two-digit twin prime numbers is:
+QBN| প্রথম জোড়া দুই অঙ্কের জমজ মৌলিক সংখ্যার যোগফল হলো:
+Common| 
+Image| 
+A| 24
+B| 36
+C| 48
+D| 60
+Shift| 12/12/2025 9:00 AM - 10:30 AM
+Correct| B
+Difficulty| 9.31
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000069
+
+QEN| The sum of the first 11 prime numbers is:
+QBN| প্রথম 11টি মৌলিক সংখ্যার যোগফল হলো:
+Common| 
+Image| 
+A| 160
+B| 162
+C| 164
+D| 165
+Shift| 17/12/2025 4:30 PM - 6:00 PM
+Correct| D
+Difficulty| 6.52
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000070
+
+QEN| The sum of the first 9 prime numbers is:
+QBN| প্রথম 9 টি মৌলিক সংখ্যার যোগফল হলো:
+Common| 
+Image| 
+A| 100
+B| 96
+C| 102
+D| 101
+Shift| 09/12/2025 4:30 PM - 6:00 PM
+Correct| D
+Difficulty| 5.43
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000071
+
+QEN| The sum of the first 12 prime numbers is:
+QBN| প্রথম 12 টি মৌলিক সংখ্যার যোগফল হলো:
+Common| 
+Image| 
+A| 201
+B| 199
+C| 197
+D| 202
+Shift| 08/12/2025 4:30 PM - 6:00 PM
+Correct| B
+Difficulty| 5.44
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000072
+
+QEN| The sum of the first 5 prime numbers is:
+QBN| প্রথম 5টি মৌলিক সংখ্যার যোগফল হলো:
+Common| 
+Image| 
+A| 26
+B| 27
+C| 28
+D| 32
+Shift| 02/02/2025 4:30 PM - 6:00 PM
+Correct| A
+Difficulty| 8.82
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000073
+
+QEN| The sum of the first 10 prime numbers is:
+QBN| প্রথম 10টি মৌলিক সংখ্যার যোগফল হলো:
+Common| 
+Image| 
+A| 130
+B| 133
+C| 129
+D| 131
+Shift| 02/02/2025 4:30 PM - 6:00 PM
+Correct| D
+Difficulty| 7.72
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000074
+
+QEN| Which of the options has the two prime numbers whose product is the biggest even number less than 30?
+QBN| কোন বিকল্পটিতে এমন দুটি মৌলিক সংখ্যা রয়েছে যাদের গুণফল 30-এর চেয়ে ছোট বৃহত্তম জোড় সংখ্যা?
+Common| 
+Image| 
+A| 3 and 11
+B| 3 and 7
+C| 2 and 5
+D| 2 and 13
+Shift| 27/12/2025 9:00 AM - 10:30 AM
+Correct| B
+Difficulty| 8.63
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000075
+
+QEN| The number of prime numbers between 308 and 320 is:
+QBN| 308 এবং 320-এর মধ্যে মৌলিক সংখ্যার সংখ্যা হলো:
+Common| 
+Image| 
+A| 3
+B| 7
+C| 6
+D| 1
+Shift| 24/12/2025 4:30 PM - 6:00 PM
+Correct| C
+Difficulty| 8.29
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000076
+
+QEN| Which of the following is NOT a prime number?
+QBN| নিচের কোনটি মৌলিক সংখ্যা নয়?
+Common| 
+Image| 
+A| 51
+B| 79
+C| 31
+D| 67
+Shift| 11/12/2025 9:00 AM - 10:30 AM
+Correct| A
+Difficulty| 7.42
+Topic| 
+SubTopic| Prime No.
+QuestionID| MATH-000077
