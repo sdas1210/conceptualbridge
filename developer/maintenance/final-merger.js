@@ -2202,6 +2202,8 @@ let mathFinalOutput = "";
 
 let mathParseIssues = [];
 
+let mathManualAlignmentOverride = false;
+
 
 // =========================================
 // NORMALIZE LINE ENDINGS
@@ -2439,63 +2441,26 @@ function detectMathFileType(
         normalizeMathText(text);
 
 
-    // QUESTION FILE: Contains valid QEN| line
+    // 1. DIFFICULTY FILE:
+    // Case A: Contains "Question:" and "Difficulty"
+    // Case B: Contains "QEN|" and "Difficulty" (without "QBN|")
+
+    const hasDifficultyTag =
+        /^\s*Difficulty(?:\s+Rating)?\s*:/im.test(normalized);
+
+    const hasQuestionColon =
+        /^\s*Question\s*:/im.test(normalized);
+
+    const hasQenTag =
+        /^\s*QEN\|/im.test(normalized);
+
+    const hasQbnTag =
+        /^\s*QBN\|/im.test(normalized);
+
 
     if (
-        /^\s*QEN\|/im.test(
-            normalized
-        )
-    ) {
-
-        const parsedBlocks =
-            parseMathQuestionBlocks(
-                normalized
-            );
-
-        // If it also contains Difficulty fields, verify if it's a difficulty file
-        const hasDifficultyTag =
-            /^\s*Difficulty(?:\s+Rating)?\s*:/im.test(normalized);
-
-        const hasQbnTag =
-            /^\s*QBN\|/im.test(normalized);
-
-        if (hasDifficultyTag && !hasQbnTag) {
-
-            return {
-                type: "difficulty",
-                name: name,
-                text: normalized,
-                data: parseMathDifficulty(normalized)
-            };
-        }
-
-        return {
-
-            type:
-                "question",
-
-            name:
-                name,
-
-            text:
-                normalized,
-
-            data:
-                parsedBlocks
-
-        };
-    }
-
-
-    // DIFFICULTY FILE
-
-    if (
-        /^\s*Question\s*:/im.test(
-            normalized
-        ) &&
-        /^\s*Difficulty(?:\s+Rating)?\s*:/im.test(
-            normalized
-        )
+        (hasQuestionColon && hasDifficultyTag) ||
+        (hasQenTag && hasDifficultyTag && !hasQbnTag)
     ) {
 
         return {
@@ -2518,7 +2483,33 @@ function detectMathFileType(
     }
 
 
-    // ANSWER FILE
+    // 2. QUESTION FILE:
+    // Contains QEN| and is not a difficulty file
+
+    if (hasQenTag) {
+
+        return {
+
+            type:
+                "question",
+
+            name:
+                name,
+
+            text:
+                normalized,
+
+            data:
+                parseMathQuestionBlocks(
+                    normalized
+                )
+
+        };
+    }
+
+
+    // 3. ANSWER FILE:
+    // All non-blank lines are standalone A, B, C, or D
 
     const nonBlankLines =
         normalized
@@ -2603,7 +2594,7 @@ function normalizeMathQuestion(
         )
 
         .replace(
-            /^\s*Question\s*:\s*/i,
+            /^\s*Question\s*:/i,
             ""
         )
 
@@ -2619,6 +2610,183 @@ function normalizeMathQuestion(
 
 
 // =========================================
+// RESET MATH MANUAL OVERRIDE ON FILE CHANGE
+// =========================================
+
+function resetMathManualOverride() {
+
+    mathManualAlignmentOverride = false;
+    removeMathBypassControls();
+}
+
+mathFile1.addEventListener("change", resetMathManualOverride);
+mathFile2.addEventListener("change", resetMathManualOverride);
+mathFile3.addEventListener("change", resetMathManualOverride);
+
+
+// =========================================
+// DYNAMIC MATH BYPASS UI CONTROLS
+// =========================================
+
+function removeMathBypassControls() {
+
+    const existingContainer =
+        document.getElementById("mathBypassControlRow");
+
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+}
+
+function showMathBypassControls() {
+
+    removeMathBypassControls();
+
+    const report =
+        document.getElementById("mathIssueReport");
+
+    if (!report) return;
+
+    const controlRow =
+        document.createElement("div");
+
+    controlRow.id =
+        "mathBypassControlRow";
+
+    controlRow.style.display =
+        "flex";
+
+    controlRow.style.gap =
+        "12px";
+
+    controlRow.style.marginTop =
+        "15px";
+
+    controlRow.style.flexWrap =
+        "wrap";
+
+
+    // 1. RE-CHECK BUTTON
+    const recheckBtn =
+        document.createElement("button");
+
+    recheckBtn.type =
+        "button";
+
+    recheckBtn.textContent =
+        "🔄 Re-check Alignment";
+
+    recheckBtn.style.padding =
+        "8px 14px";
+
+    recheckBtn.style.fontSize =
+        "0.85rem";
+
+    recheckBtn.style.fontWeight =
+        "600";
+
+    recheckBtn.style.borderRadius =
+        "8px";
+
+    recheckBtn.style.cursor =
+        "pointer";
+
+    recheckBtn.addEventListener("click", () => {
+        mathAnalyzeBtn.click();
+    });
+
+
+    // 2. ACCEPT & BYPASS BUTTON
+    const bypassBtn =
+        document.createElement("button");
+
+    bypassBtn.type =
+        "button";
+
+    bypassBtn.textContent =
+        "⚠️ Accept & Bypass Question Alignment";
+
+    bypassBtn.style.padding =
+        "8px 14px";
+
+    bypassBtn.style.fontSize =
+        "0.85rem";
+
+    bypassBtn.style.fontWeight =
+        "600";
+
+    bypassBtn.style.borderRadius =
+        "8px";
+
+    bypassBtn.style.cursor =
+        "pointer";
+
+    bypassBtn.style.background =
+        "rgba(255, 171, 0, 0.2)";
+
+    bypassBtn.style.borderColor =
+        "rgba(255, 171, 0, 0.5)";
+
+    bypassBtn.style.color =
+        "#ffd54f";
+
+    bypassBtn.addEventListener("click", handleMathManualBypass);
+
+
+    controlRow.appendChild(recheckBtn);
+    controlRow.appendChild(bypassBtn);
+
+    report.parentNode.insertBefore(
+        controlRow,
+        report.nextSibling
+    );
+}
+
+function handleMathManualBypass() {
+
+    const confirmed =
+        window.confirm(
+            "Automatic Question Alignment failed.\n\n" +
+            "The Question and Difficulty files have matching block counts, " +
+            "but their question text differs in representation.\n\n" +
+            "Do you want to manually accept the block-by-block alignment?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    mathManualAlignmentOverride = true;
+
+    // Update alignment & validation statuses
+    document.getElementById("mathAlignmentStatus").textContent =
+        "MANUALLY ACCEPTED";
+
+    document.getElementById("mathValidationStatus").textContent =
+        "PASSED — MANUALLY VALIDATED";
+
+    mathValidationPassed = true;
+    mathMergeBtn.disabled = false;
+
+    // Hide issue report & bypass buttons
+    document.getElementById("mathIssueReport").classList.add("hidden");
+    removeMathBypassControls();
+
+    // Log audit message to console
+    const mathConsole = document.getElementById("mathConsole");
+    mathConsole.textContent +=
+        "\n\n========================================\n" +
+        "MANUAL QUESTION ALIGNMENT OVERRIDE\n" +
+        "Math Question Alignment: ACCEPTED BY USER\n" +
+        "Pairing Method: BLOCK-BY-BLOCK\n" +
+        "Automatic Alignment: FAILED\n" +
+        "Manual Validation: ACCEPTED\n" +
+        "========================================\n" +
+        "Ready to generate Final.txt.";
+}
+
+
+// =========================================
 // ANALYZE THREE FILES
 // =========================================
 
@@ -2627,6 +2795,8 @@ mathAnalyzeBtn.addEventListener(
     "click",
 
     async () => {
+
+        removeMathBypassControls();
 
         const files = [
 
@@ -2953,6 +3123,9 @@ mathAnalyzeBtn.addEventListener(
         // QUESTION ALIGNMENT VALIDATION
         // =================================
 
+        let alignmentMismatchFound = false;
+        let mismatchDetails = "";
+
         for (
 
             let i = 0;
@@ -2996,52 +3169,50 @@ mathAnalyzeBtn.addEventListener(
                 difficultyQuestion
             ) {
 
-                document.getElementById(
-                    "mathAlignmentStatus"
-                ).textContent =
-                    "FAILED";
+                alignmentMismatchFound = true;
 
-
-                document.getElementById(
-                    "mathValidationStatus"
-                ).textContent =
-                    "FAILED";
-
-
-                const report =
-                    document.getElementById(
-                        "mathIssueReport"
-                    );
-
-
-                report.textContent =
-
+                mismatchDetails =
                     "❌ Question Alignment Mismatch\n\n" +
-
                     "Block: " +
                     (i + 1) +
                     "\n\n" +
-
                     "Question File:\n" +
                     questionLine +
                     "\n\n" +
-
                     "Difficulty File:\n" +
-
                     "Question: " +
+                    mathDifficultyRecords[i].question;
 
-                    mathDifficultyRecords[i]
-                        .question;
-
-
-                report.classList.remove(
-                    "hidden"
-                );
-
-
-                return;
+                break;
             }
 
+        }
+
+
+        if (alignmentMismatchFound) {
+
+            document.getElementById(
+                "mathAlignmentStatus"
+            ).textContent =
+                "FAILED";
+
+            document.getElementById(
+                "mathValidationStatus"
+            ).textContent =
+                "FAILED";
+
+            const report =
+                document.getElementById(
+                    "mathIssueReport"
+                );
+
+            report.textContent = mismatchDetails;
+            report.classList.remove("hidden");
+
+            // Since File Detection = PASSED and Block Count = PASSED, show manual bypass controls
+            showMathBypassControls();
+
+            return;
         }
 
 
