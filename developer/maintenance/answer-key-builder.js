@@ -1376,6 +1376,12 @@ async function loadSingleTxt() {
 
         singleEditorFileName.textContent = file.name;
 
+        // Automatically synchronize Total Questions with detected block count
+        if (singleBlocks.length > 0) {
+            totalQuestionsInput.value = singleBlocks.length;
+            updateSessionPreview();
+        }
+
         if (builderMode === "math" && sourceMode === 2) {
             updateMath2FileStatus();
         } else {
@@ -1417,6 +1423,13 @@ async function loadEnglishTxt() {
     currentSourceBlockIndex = 0;
 
     englishEditorFileName.textContent = file.name;
+
+    // Automatically synchronize Total Questions with detected English block count
+    if (englishBlocks.length > 0) {
+        totalQuestionsInput.value = englishBlocks.length;
+        updateSessionPreview();
+    }
+
     updateBilingualFileStatus();
     renderSourceBlock();
 }
@@ -1783,11 +1796,32 @@ function saveBlockEdit(side) {
     if (activeEditSide !== side) return;
 
     if (side === "single") {
-        const block = singleBlocks[currentSourceBlockIndex];
-        block.displayText = singleBlockEditor.value;
-        block.originalText = singleBlockEditor.value;
+        const block =
+            singleBlocks[
+                currentSourceBlockIndex
+            ];
+
+        const updatedVisible =
+            singleBlockEditor.value;
+
+        block.originalText =
+            mergeVisibleQuestionFields(
+                block.originalText,
+                updatedVisible
+            );
+
         singleFileModified = true;
-        singleBlockEditor.readOnly = true;
+
+        block.displayText =
+            extractQuestionOptionLines(
+                block.originalText
+            );
+
+        singleBlockEditor.value =
+            block.displayText;
+
+        singleBlockEditor.readOnly =
+            true;
     } else if (side === "english") {
         const block = englishBlocks[currentSourceBlockIndex];
         const updatedVisible = englishBlockEditor.value;
@@ -1818,10 +1852,24 @@ function saveBlockEdit(side) {
 // =========================================
 
 function extractQuestionOptionLines(blockText) {
+    const isMath = (builderMode === "math");
+
     return blockText
         .split("\n")
         .filter(line => {
             const trimmed = line.trimStart();
+
+            if (isMath) {
+                return (
+                    trimmed.startsWith("QEN|") ||
+                    trimmed.startsWith("QBN|") ||
+                    trimmed.startsWith("A|") ||
+                    trimmed.startsWith("B|") ||
+                    trimmed.startsWith("C|") ||
+                    trimmed.startsWith("D|")
+                );
+            }
+
             return (
                 trimmed.startsWith("Q|") ||
                 trimmed.startsWith("A|") ||
@@ -1835,13 +1883,23 @@ function extractQuestionOptionLines(blockText) {
 
 
 function mergeVisibleQuestionFields(originalBlock, editedVisibleBlock) {
+    const isMath = (builderMode === "math");
     const editedMap = {};
+
+    const tagRegex = isMath
+        ? /^([ABCD]|QEN|QBN)\|/i
+        : /^([ABCD]|Q)\|/i;
+
+    const fullTagRegex = isMath
+        ? /^([ABCD]|QEN|QBN)\|(.*)$/i
+        : /^([ABCD]|Q)\|(.*)$/i;
 
     editedVisibleBlock.split("\n").forEach(line => {
         const trimmed = line.trimStart();
-        const match = trimmed.match(/^([QABCD])\|(.*)$/i);
+        const match = trimmed.match(fullTagRegex);
         if (match) {
-            editedMap[match[1].toUpperCase()] = `${match[1].toUpperCase()}|${match[2]}`;
+            const tag = match[1].toUpperCase();
+            editedMap[tag] = `${tag}|${match[2]}`;
         }
     });
 
@@ -1849,11 +1907,20 @@ function mergeVisibleQuestionFields(originalBlock, editedVisibleBlock) {
         .split("\n")
         .map(line => {
             const trimmed = line.trimStart();
-            const match = trimmed.match(/^([QABCD])\|/i);
-            if (!match) return line;
+            const match = trimmed.match(tagRegex);
+            if (!match) {
+                /*
+                    Preserve:
+                    Common|, Image|, Shift|, Correct|,
+                    Difficulty|, Topic|, SubTopic|, etc.
+                */
+                return line;
+            }
 
             const key = match[1].toUpperCase();
-            return editedMap[key] !== undefined ? editedMap[key] : line;
+            return (editedMap[key] !== undefined)
+                ? editedMap[key]
+                : line;
         })
         .join("\n");
 }
