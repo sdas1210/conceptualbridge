@@ -7,19 +7,20 @@
         "generatedBy": "Knowledge Index Builder",
         "subject": "math",
         "curriculum": "math.json",
-        "generatedAt": "2026-08-12T18:22:09.948Z"
+        "generatedAt": "2026-08-20T19:22:54.886Z"
     },
     "summary": {
-        "totalFiles": 1,
-        "totalTopics": 1,
-        "totalSubTopics": 6,
-        "totalQuestions": 44,
-        "averageQuestionsPerFile": 44,
+        "totalFiles": 2,
+        "totalTopics": 2,
+        "totalSubTopics": 7,
+        "totalQuestions": 77,
+        "averageQuestionsPerFile": 38.5,
         "largestTopic": "Simplification",
         "largestTopicQuestions": 44
     },
     "metadata": {
         "topics": [
+            "Number System",
             "Simplification"
         ],
         "subTopics": [
@@ -28,6 +29,7 @@
             "Conceptual",
             "Formula Based",
             "Non-Terminating Decimal",
+            "Prime No.",
             "Surds and Indices"
         ],
         "levels": [
@@ -41,6 +43,40 @@
         ]
     },
     "topics": [
+        {
+            "name": "Number System",
+            "questionCount": 33,
+            "fileCount": 1,
+            "subTopicCount": 1,
+            "levels": [
+                "10"
+            ],
+            "levelCounts": {
+                "10": 33
+            },
+            "exams": [
+                "RRB GROUP-D CBT-I"
+            ],
+            "sourceFiles": [
+                1
+            ],
+            "subTopics": [
+                {
+                    "name": "Prime No.",
+                    "questionCount": 33,
+                    "fileCount": 0,
+                    "levels": [
+                        "10"
+                    ],
+                    "levelCounts": {
+                        "10": 33
+                    }
+                }
+            ],
+            "subTopicCounts": {
+                "Prime No.": 33
+            }
+        },
         {
             "name": "Simplification",
             "questionCount": 44,
@@ -56,7 +92,7 @@
                 "RRB GROUP-D CBT-I"
             ],
             "sourceFiles": [
-                1
+                4
             ],
             "subTopics": [
                 {
@@ -142,6 +178,18 @@
             "relativePath": "questions/math/1.txt",
             "subject": "MATHEMATICS",
             "questionFormat": "QEN",
+            "questionCount": 33,
+            "topic": "Number System",
+            "subTopic": "Prime No.",
+            "level": "10",
+            "exam": "RRB GROUP-D CBT-I",
+            "notification": "CEN-08/2024"
+        },
+        {
+            "filename": "4.txt",
+            "relativePath": "questions/math/4.txt",
+            "subject": "MATHEMATICS",
+            "questionFormat": "QEN",
             "questionCount": 44,
             "topic": "Simplification",
             "subTopic": null,
@@ -151,11 +199,11 @@
         }
     ],
     "statistics": {
-        "largestFile": "1.txt",
+        "largestFile": "4.txt",
         "largestFileQuestions": 44,
         "smallestFile": "1.txt",
-        "smallestFileQuestions": 44,
-        "averageTopicSize": 44,
-        "averageSubTopicSize": 7.33
+        "smallestFileQuestions": 33,
+        "averageTopicSize": 38.5,
+        "averageSubTopicSize": 11
     }
 }
