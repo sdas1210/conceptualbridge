@@ -1662,7 +1662,8 @@
                 questionText = getLocalizedText(currentItem.text, activeQuestionLanguage);
             }
             
-            document.getElementById("target-question-text").innerHTML = `
+            const questionContainer = document.getElementById("target-question-text");
+            questionContainer.innerHTML = `
                 <div class="question-text">
                     ${questionText}
                 </div>
@@ -1674,11 +1675,8 @@
                 }
             `;
 
-            // Trigger KaTeX rendering specifically for the equation container if present
-            const eqContainer = document.querySelector('.question-common');
-            if (eqContainer) {
-                renderKatexInElement(eqContainer);
-            }
+            // Trigger KaTeX rendering across the complete question container (text + equation)
+            renderKatexInElement(questionContainer);
                         
             const container = document.getElementById('target-options-container'); 
             const feedbackContainer = document.getElementById('review-feedback-container'); 
