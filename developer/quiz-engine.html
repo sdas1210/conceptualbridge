@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCS iON Digital Assessment Engine</title>
-    <link rel="stylesheet" href="quiz-engine.css">
+    
+    <!-- KaTeX 0.18.4 CDN Dependencies -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="css/quiz-engine.css">
 </head>
 <body>
 
@@ -161,7 +167,6 @@
                     align-items:center;
                  ">
             
-                
                     <strong>Developer Mode</strong>
                 
                     <select id="topicSelect" onchange="onDeveloperTopicChanged()"></select>
@@ -185,10 +190,11 @@
                             onclick="developerNextQuestion()">
                         Next ▶
                     </button>
-                
-                                
-            
             </div>
+
+            <!-- Lightweight Developer Validation Banner -->
+            <div id="developer-validation-banner" style="display:none; padding:8px 25px; background:#fffbeb; border-bottom:1px solid #fef3c7; color:#92400e; font-size:0.88rem; font-weight:bold;"></div>
+
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
                 <select class="lang-selector-header" id="view-lang-select" onchange="toggleViewLanguage()">
@@ -198,6 +204,14 @@
             </div>
             
             <div class="question-content">
+                <!-- Dedicated Common Context/Equation Section Container -->
+                <div id="target-common-container" class="question-common" style="display: none; margin-bottom: 16px; padding: 12px 16px; background-color: #f8fafc; border: 1px solid var(--tcs-border); border-radius: 6px; font-weight: 500;"></div>
+
+                <!-- Dedicated Question Image Container -->
+                <div id="target-image-container" style="display: none; margin-bottom: 16px; text-align: center;">
+                    <img id="target-question-image" src="" alt="Question Diagram" style="max-width: 100%; max-height: 300px; border-radius: 4px; border: 1px solid var(--tcs-border);" onerror="handleImageLoadError()">
+                </div>
+
                 <div id="target-question-text" style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;"></div>
                 <div class="options-container" id="target-options-container"></div>
                 
@@ -242,9 +256,7 @@
             <button class="btn-tcs btn-blue" id="action-btn-submit" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
         </div>
 
-        
         <div class="developer-panel">
-
             <div class="developer-title">
                 Developer Inspector
             </div>
@@ -305,8 +317,7 @@
                     <strong id="metaSubTopic">-</strong>
                 </div>
             </div>
-
-</div>
+        </div>
     </div>
 
     <div class="report-page-container" id="quiz-report-workspace">
@@ -385,6 +396,6 @@
 
     <div id="fallback-screen-holder"></div>
 
-    <script src="quiz-engine.js"></script>
+    <script src="js/quiz-engine.js"></script>
 </body>
 </html>
