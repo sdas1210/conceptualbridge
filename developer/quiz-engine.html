@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCS iON Digital Assessment Engine</title>
-    <link rel="stylesheet" href="../quiz-engine.css">
+    <link rel="stylesheet" href="css/quiz-engine.css">
 </head>
 <body>
 
@@ -164,7 +164,7 @@
                 
                     <strong>Developer Mode</strong>
                 
-                    <select id="topicSelect"></select>
+                    <select id="topicSelect" onchange="onDeveloperTopicChanged()"></select>
                 
                     <select id="fileSelect"></select>
                 
@@ -385,6 +385,6 @@
 
     <div id="fallback-screen-holder"></div>
 
-    <script src="../quiz-engine.js"></script>
+    <script src="js/quiz-engine.js"></script>
 </body>
 </html>
