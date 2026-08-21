@@ -2438,3 +2438,866 @@ Keep CSS-only requests CSS-only.
 record the reason whenever deletion is unavoidable.**
 
 ------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+
+# Session Update — 2026-08-21
+
+## Master-Copy Preservation Rule — Reinforced
+
+This document remains the **mother/master Project Status copy**.
+
+All previous project history, architecture decisions, completed milestones,
+constraints, roadmap items, continuation points, and unresolved work are
+preserved.
+
+**This update is appended to the existing master copy. No previous history
+has been deleted or rewritten.**
+
+The current rule remains:
+
+```text
+Preserve first
+    ↓
+Append new verified status
+    ↓
+Delete only when absolutely necessary
+    ↓
+Document any unavoidable deletion
+```
+
+---
+
+## 1. Quiz Portal — Mathematics Answer Key Builder Enhancement
+
+### New Math Mode
+
+The Answer Key Builder was extended with a new Mathematics source mode:
+
+```text
+2 Files — Question TXT + ANS KEY
+```
+
+The purpose is to allow Mathematics question files to be processed with a
+separate answer-key TXT, following the established answer-key workflow used
+by GACA where applicable.
+
+### Current intended input
+
+```text
+Question TXT
+    +
+ANS KEY TXT
+```
+
+The Answer Key Builder must derive the number of questions from the uploaded
+question source rather than relying on a manually entered default.
+
+This was required because the Mathematics source contained 33 questions while
+the input field initially remained at the old default of 100.
+
+### Automatic Question Count
+
+The question-count field was changed so that the builder can automatically
+take the question count from the uploaded TXT source.
+
+This supports both:
+
+```text
+GACA
+MATH
+```
+
+without requiring the user to manually change the total-question value when
+the uploaded source contains a different number of questions.
+
+### Math Answer-Key Loading
+
+During development, the Math two-file mode initially loaded the answer-key
+entries but did not populate the Answer Selection array correctly.
+
+The debugging process established that:
+
+```text
+answerKeyEntriesLength = 33
+answersLength = 0
+```
+
+was caused by the session/question-count initialization still using the
+incorrect default total of 100.
+
+After correcting the question count to the actual source count, the Math
+workflow was able to align the answer-key entries with the question count.
+
+### Preservation Rule
+
+The GACA mode must remain unchanged unless a shared fix is demonstrably
+required by both modes.
+
+The Mathematics-specific enhancement is therefore scoped to Math mode.
+
+---
+
+## 2. Answer Key Builder — Bilingual / Slash Divider Compatibility
+
+The Mathematics two-file mode was also considered against bilingual question
+content.
+
+The established compatibility requirement is that bilingual content may use
+the project's existing slash-divider representation where that representation
+is still present.
+
+The implementation must not assume that every bilingual source has already
+been converted to separate `QEN|` and `QBN|` fields.
+
+This compatibility requirement remains important while the question-format
+migration continues.
+
+---
+
+## 3. Final Merger — Mathematics Question Block Recognition
+
+The Final Merger was identified as requiring broader question-block
+recognition for Mathematics.
+
+### New Question Block Recognition
+
+The Final Merger should additionally recognize:
+
+```text
+QEN|
+```
+
+as the beginning of a Mathematics question block.
+
+For validation that the block is actually a bilingual/text question, the
+next line should be tested for:
+
+```text
+QBN|
+```
+
+This is an additional recognition path and does not remove the existing GACA
+question-block handling.
+
+### Difficulty File Compatibility
+
+The Difficulty TXT reader must support both:
+
+```text
+Question:
+```
+
+and:
+
+```text
+QEN|
+```
+
+as valid question identifiers for difficulty mapping.
+
+This is specifically an additive compatibility requirement for Mathematics.
+
+### Scope Rule
+
+The Mathematics recognition enhancement must not break existing GACA
+question-block parsing.
+
+---
+
+## 4. Math Validation — Manual Bypass Requirement
+
+A validation issue was identified when Mathematics question text contained
+LaTeX/KateX syntax that was interpreted by the validation layer.
+
+A manual bypass/validation option was therefore required so that valid
+mathematical source text is not incorrectly rejected merely because it
+contains mathematical notation.
+
+The bypass is intended as a controlled developer/content-authoring mechanism,
+not as a replacement for validation.
+
+---
+
+## 5. Quiz Portal — KaTeX Mathematics Rendering
+
+The Quiz Portal Mathematics rendering was investigated and corrected.
+
+### KaTeX Version
+
+The Quiz Portal was updated to:
+
+```text
+KaTeX 0.18.4
+```
+
+The KaTeX CSS, core JavaScript, and auto-render JavaScript were updated
+consistently to the same version.
+
+### QEN/QBN Rendering Rule
+
+The working rendering implementation preserves the question text as text
+before KaTeX rendering rather than injecting the question through HTML.
+
+The critical behavior is:
+
+```text
+Question text
+    ↓
+textContent
+    ↓
+question container
+    ↓
+renderKatexInElement(...)
+```
+
+This is important for mathematical expressions containing comparison
+characters such as:
+
+```text
+$2<a<b<50$
+```
+
+The working implementation must not be changed to an unsafe `innerHTML`
+insertion for QEN/QBN question text.
+
+### Common Section Font Rule
+
+The Common section has a deliberately enlarged mathematical presentation for
+JEE/NEET-style content.
+
+The enlarged KaTeX styling is scoped to:
+
+```css
+.question-common .katex
+```
+
+QEN and QBN mathematical content must retain the normal question font size.
+
+This distinction is now an explicit Quiz Portal rendering rule.
+
+### Verification Status
+
+The KaTeX 0.18.4 upgrade was source-reviewed after implementation.
+
+The QEN/QBN text-based rendering path and Common-section sizing were confirmed
+to remain intact.
+
+---
+
+## 6. Quiz Portal — HTML/CSS/JS Separation
+
+After the KaTeX implementation was stabilized, the Quiz Portal was separated
+from the previous single-file structure.
+
+### New Structure
+
+```text
+quiz-portal.html
+quiz-portal.css
+quiz-portal.js
+```
+
+The separation was performed as a structural change rather than a functional
+rewrite.
+
+### Preservation Requirements
+
+The following were intentionally preserved:
+
+- HTML IDs
+- CSS classes
+- JavaScript functions
+- event handlers
+- API endpoints
+- question rendering
+- QEN/QBN behavior
+- KaTeX 0.18.4
+- Common-section mathematical sizing
+- responsive/mobile behavior
+- navigation
+- review behavior
+- answer selection
+- existing application logic
+
+The separated version was source-reviewed and considered structurally
+appropriate for browser testing.
+
+### Master Handling
+
+The previously working single-file version remains a useful rollback/reference
+baseline.
+
+The separated version should become the new operational baseline only after
+browser-level regression testing.
+
+---
+
+## 7. Developer Quiz Engine — New Development Direction
+
+A significant workflow decision was made during this session.
+
+Instead of repeatedly validating question implementation through the live
+student Quiz Portal, development will first be validated through the
+Developer Quiz Engine.
+
+### New Development Principle
+
+```text
+Question Source
+    ↓
+Developer Quiz Engine
+    ↓
+Parse
+    ↓
+Render
+    ↓
+Inspect
+    ↓
+Validate
+    ↓
+Only then
+    ↓
+Live Quiz Portal
+```
+
+The purpose is to make the Developer Portal a controlled question
+implementation/test environment.
+
+This reduces the need to use the live student test merely to verify whether
+a newly authored question renders correctly.
+
+---
+
+## 8. Developer Quiz Engine — Existing Foundation
+
+The current Developer Quiz Engine already contains the basic foundation for
+this workflow, including:
+
+- Topic selection
+- File selection
+- Developer file loading
+- Question counter
+- Previous / Next navigation
+- Question palette
+- Language selection
+- Question rendering
+- Option rendering
+- Developer Inspector
+- Question metadata display
+- Review functionality
+
+The existing developer API loading architecture is preserved.
+
+### Architectural Requirement
+
+The Developer Portal must ultimately consume the same canonical question
+representation/parser architecture used by the production runtime.
+
+It must not become a separate parser implementation that interprets question
+TXT files differently from the live Quiz Portal.
+
+The desired architecture is:
+
+```text
+Question TXT
+    ↓
+Canonical Parser
+    ↓
+Standard Question Object
+    ↓
+Developer Renderer
+    ↓
+Developer Inspector
+
+and
+
+Question TXT
+    ↓
+Canonical Parser
+    ↓
+Standard Question Object
+    ↓
+Production Renderer
+```
+
+This prevents the Developer Portal from reporting a question as valid when the
+live Quiz Portal would interpret it differently.
+
+---
+
+## 9. Developer Quiz Engine — Phase 0 Structural Separation
+
+Before implementing new Developer Portal functionality, the existing
+single-file Developer Quiz Engine was separated into:
+
+```text
+developer/
+├── quiz-engine.html
+├── css/
+│   └── quiz-engine.css
+└── js/
+    └── quiz-engine.js
+```
+
+### Separation Rule
+
+This was treated as **Phase 0 — Structural Separation**.
+
+The objective was only:
+
+```text
+One working HTML file
+        ↓
+HTML + CSS + JavaScript
+```
+
+No new Developer Portal functionality was intentionally introduced during
+the separation.
+
+### Preserved
+
+The separation must preserve:
+
+- developer-mode initialization
+- topic loading
+- file loading
+- API endpoints
+- question rendering
+- question navigation
+- palette navigation
+- language switching
+- answer selection
+- review behavior
+- developer inspector
+- metadata fields
+- existing inline event-handler compatibility
+
+### Current Status
+
+The separated files are a **working structural baseline candidate**.
+
+However, source inspection identified that the Developer Engine still uses
+the older question-rendering mechanism and does not yet contain the same
+KaTeX/QEN/QBN rendering path that was established in the Quiz Portal.
+
+Therefore:
+
+```text
+Phase 0 — structural separation       = completed structurally
+Phase 1 — Developer rendering upgrade = not yet completed
+```
+
+Browser-level testing remains required before declaring the separated
+Developer Engine permanently frozen.
+
+---
+
+## 10. Developer Portal — Phase 1 Roadmap
+
+The new Developer Portal work will proceed in controlled stages.
+
+### Phase 1A — Developer Loader Foundation
+
+First stabilize:
+
+```text
+Topic
+  ↓
+File
+  ↓
+Load
+  ↓
+API
+  ↓
+Question Count
+  ↓
+Question 1
+  ↓
+Previous / Next
+  ↓
+Question Palette
+```
+
+Required validation includes:
+
+1. Topic loading.
+2. File loading.
+3. Correct folder/source mapping.
+4. Correct file selection.
+5. API error handling.
+6. Empty-file handling.
+7. Invalid-question handling.
+8. Counter reset.
+9. Navigation reset.
+10. Question count derived from the actual loaded source.
+
+### Phase 1B — Canonical Question Rendering
+
+After the loader foundation is stable, align the Developer Renderer with the
+canonical question format.
+
+Required support will include, as applicable to the current parser:
+
+```text
+QEN|
+QBN|
+Common|
+Image|
+A|
+B|
+C|
+D|
+Shift|
+Correct|
+Difficulty|
+Topic|
+SubTopic|
+QuestionID|
+```
+
+The exact final parser contract must be verified against the current project
+before implementation.
+
+### Phase 1C — Mathematics Rendering
+
+The Developer Portal must eventually be able to validate:
+
+- inline KaTeX
+- display KaTeX
+- QEN mathematical content
+- QBN mathematical content
+- comparison operators
+- fractions
+- powers
+- roots
+- subscripts
+- inequalities
+- multi-line mathematical expressions
+- mathematical options
+- Common-section equations
+
+The Developer Portal should become the first place to identify a rendering
+problem before the question reaches the live Quiz Portal.
+
+---
+
+## 11. Developer Inspector — Planned Enhancement
+
+The existing Developer Inspector is already useful, but the intended future
+direction is to expand it into a true parser/rendering diagnostic panel.
+
+Potential categories:
+
+```text
+Question ID
+Question Type
+Language Available
+QEN
+QBN
+Common
+Image
+
+Exam
+Notification
+Topic
+SubTopic
+Level
+Difficulty
+Marks
+Correct Answer
+```
+
+A future parser-validation section should be able to indicate:
+
+```text
+Parser Status
+Question ID
+QEN
+QBN
+Options
+Correct
+Difficulty
+Topic
+SubTopic
+```
+
+The implementation should be added only after the canonical parser/output
+contract is established.
+
+---
+
+## 12. Developer Portal — Raw / Parsed / Rendered Inspection
+
+A future developer workflow should ideally expose three levels:
+
+```text
+RAW SOURCE
+    ↓
+PARSED QUESTION OBJECT
+    ↓
+RENDERED QUESTION
+```
+
+This will allow a developer to determine whether an error originates in:
+
+- the TXT source,
+- the parser,
+- the question object,
+- or the renderer.
+
+This is a planned Developer Portal capability and is not marked completed.
+
+---
+
+## 13. Important Architectural Rule — No Duplicate Parser
+
+The Developer Portal must not develop a second independent question parser if
+the project already has a canonical parser/service capable of supplying the
+standard question object.
+
+The intended architecture remains:
+
+```text
+TXT Source of Truth
+        ↓
+Canonical Parsing Layer
+        ↓
+Standard Question Object
+        ├── Developer Portal
+        └── Production Quiz Portal
+```
+
+This rule is consistent with the existing project principle that runtime
+components should consume standardized artifacts rather than duplicate
+maintenance logic.
+
+---
+
+## 14. Current Development Direction — Updated
+
+The previous 2026-08-19 continuation point was focused on Character Introducer
+browser regression validation.
+
+The project direction has now been adjusted for the current development
+workflow.
+
+The immediate working direction is:
+
+```text
+Character Introducer
+    ↓
+Existing maintenance work preserved
+
+Quiz Portal
+    ↓
+KaTeX 0.18.4 verified
+    ↓
+HTML/CSS/JS separation completed
+
+Developer Quiz Engine
+    ↓
+Phase 0 structural separation completed
+    ↓
+★ CURRENT: Developer Portal Phase 1A
+       Developer Loader Foundation
+    ↓
+Canonical Question Rendering
+    ↓
+Mathematics / KaTeX validation
+    ↓
+Developer Inspector enhancement
+    ↓
+Live Quiz Portal validation
+```
+
+This does **not** cancel the previously documented Knowledge Index, Runtime,
+Anchor Builder, Answer Key Builder, or Citation Remover roadmap.
+
+Those items remain preserved unless separately completed and verified.
+
+---
+
+## 15. Preserved Previous Roadmap
+
+The existing project roadmap remains active.
+
+Previously documented items include:
+
+```text
+Knowledge Index Engine Upgrade
+    ↓
+Admin Portal Topic → Sub-Topic hierarchy
+    ↓
+Runtime filtering
+    ↓
+Tutorial Anchor filtering
+    ↓
+API Integration
+    ↓
+Live Quiz Portal Runtime validation
+```
+
+and the previously recorded maintenance work:
+
+```text
+Quiz Portal — New Box
+GACA Anchor Builder — Step 2
+GACA Anchor Builder — Step 9
+Answer Key Builder — operations
+GACA Knowledge Index Builder activation
+Citation Remover — three-row Answer-Key structure
+```
+
+None of these are deleted merely because the Developer Portal workflow has
+been prioritized.
+
+---
+
+## 16. Current Verified / Working Baseline
+
+### Working / Source-Reviewed
+
+```text
+Math Step 9
+Math Tutorial Corner
+Math Video| YouTube handling
+Maintenance Suite HTML/CSS/JS separation
+Maintenance CSS visual standardization
+Character Introducer corrected master candidate
+Character Introducer Answer Key Builder-inspired CSS
+Answer Key Builder Math two-file mode — implemented and debugged
+Automatic question-count loading from uploaded question TXT
+Quiz Portal KaTeX 0.18.4 implementation
+Quiz Portal QEN/QBN KaTeX rendering fix
+Quiz Portal Common-section KaTeX sizing
+Quiz Portal HTML/CSS/JS separation
+Developer Quiz Engine HTML/CSS/JS structural separation
+```
+
+### Requires Browser / End-to-End Verification
+
+```text
+Character Introducer final browser regression
+Separated Quiz Portal browser regression
+Separated Developer Quiz Engine browser regression
+Developer Portal Phase 1A loader validation
+```
+
+### Not Yet Completed
+
+```text
+Developer Portal canonical parser integration
+Developer Portal full QEN/QBN renderer
+Developer Portal Math/KaTeX diagnostic rendering
+Developer Inspector parser diagnostics
+Raw / Parsed / Rendered developer views
+Knowledge Index Engine Upgrade
+Admin Portal Topic → Sub-Topic hierarchy
+Runtime filtering
+API Runtime integration
+Full live Runtime validation
+```
+
+---
+
+## 17. Engineering Safety Rules — Current Master
+
+The following rules remain mandatory:
+
+- Preserve all previous Project Status history.
+- Append new status updates rather than rewriting old history.
+- Do not delete previous milestones merely because implementation evolves.
+- Keep working files as the baseline.
+- Prefer isolated, minimal changes.
+- Do not replace a working file wholesale for an unrelated feature.
+- CSS-only tasks must remain CSS-only.
+- HTML/CSS/JS separation must not silently introduce functional changes.
+- Keep old/reference versions when useful for rollback or comparison.
+- Do not mark a functional feature complete merely because its CSS or
+  structure has been changed.
+- Keep TXT question files as the source of truth.
+- Keep generated JSON as a derived/index layer.
+- Global metadata wins over individual metadata when the global field exists.
+- Individual question metadata is used only when the corresponding global
+  field is blank.
+- Resolve Topic, SubTopic and Level independently.
+- Do not create a duplicate parser when an existing canonical parser can be
+  reused.
+- Developer Portal and Production Portal should ultimately consume the same
+  canonical question representation.
+- Do not change GACA behavior merely to implement a Math-specific feature.
+- Preserve KaTeX 0.18.4 and the verified QEN/QBN rendering strategy.
+- Do not globally enlarge QEN/QBN KaTeX when only the Common section requires
+  enlarged mathematical presentation.
+- Do not regenerate or replace the Character Introducer master JavaScript
+  wholesale.
+- Delete or remove anything only when it is **absolutely necessary**, and
+  document the reason.
+
+---
+
+## 18. Current Master Continuation Point — 2026-08-21
+
+### ★ CURRENT DEVELOPMENT PRIORITY
+
+**Developer Quiz Engine — Phase 1A: Developer Loader Foundation**
+
+The next work should focus on making the separated Developer Portal a reliable
+test environment before expanding it with advanced parser diagnostics.
+
+Recommended order:
+
+```text
+Phase 0
+Developer HTML/CSS/JS separation
+        ↓
+Phase 1A
+Developer Loader Foundation
+        ↓
+Phase 1B
+Canonical Question Rendering
+        ↓
+Phase 1C
+QEN/QBN + Mathematics + KaTeX validation
+        ↓
+Phase 1D
+Developer Inspector / Diagnostics
+        ↓
+Browser regression
+        ↓
+Use Developer Portal as primary question-validation environment
+        ↓
+Live Quiz Portal validation only after Developer approval
+```
+
+### Immediate rule
+
+Do not begin a large-scale Developer Portal rewrite.
+
+Inspect the current separated files first and make only the smallest necessary
+changes for Phase 1A.
+
+The Developer Portal should evolve incrementally from the separated baseline.
+
+---
+
+## Session Checkpoint — 2026-08-21
+
+**Master status preserved and extended.**
+
+The Project Status document has been updated by appending the 2026-08-21
+development changes to the existing master copy.
+
+No earlier project history has been removed.
+
+The current project principle remains:
+
+> **Preserve first. Append second. Delete only when absolutely necessary.**
+
+The current development focus is now:
+
+> **Developer Portal Phase 1A — Loader Foundation**, followed by canonical
+> question rendering and mathematical/QEN/QBN validation.
+
