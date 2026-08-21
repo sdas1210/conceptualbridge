@@ -199,11 +199,8 @@
     
         -webkit-overflow-scrolling:touch;
     }
-    .katex{
-        font-size: 2em;
-    }
     .question-common .katex{
-        font-size: 1em;
+        font-size: clamp(1.3rem, 3vw, 2.5rem);
     }
     .options-container {
         margin-top:20px;
@@ -1663,17 +1660,19 @@
             }
             
             const questionContainer = document.getElementById("target-question-text");
-            questionContainer.innerHTML = `
-                <div class="question-text">
-                    ${questionText}
-                </div>
-            
-                ${
-                    currentItem.equation
-                        ? `<div class="question-common">${currentItem.equation}</div>`
-                        : ""
-                }
-            `;
+            questionContainer.innerHTML = '';
+
+            const qTextDiv = document.createElement("div");
+            qTextDiv.className = "question-text";
+            qTextDiv.textContent = questionText;
+            questionContainer.appendChild(qTextDiv);
+
+            if (currentItem.equation) {
+                const eqDiv = document.createElement("div");
+                eqDiv.className = "question-common";
+                eqDiv.textContent = currentItem.equation;
+                questionContainer.appendChild(eqDiv);
+            }
 
             // Trigger KaTeX rendering across the complete question container (text + equation)
             renderKatexInElement(questionContainer);
@@ -1682,7 +1681,6 @@
             const feedbackContainer = document.getElementById('review-feedback-container'); 
             container.innerHTML = ''; 
             feedbackContainer.innerHTML = ''; 
-            renderKatexInElement(feedbackContainer);
             
             const optArray =
                 activeQuestionLanguage === "EN"
@@ -1720,20 +1718,30 @@
                 } 
 
                 const localizedOption = getLocalizedText(opt, activeQuestionLanguage); 
-                const optHtml = `
-                    <div class="option-row ${statusClass}" ${!isReviewModeActive ? `onclick="selectOptionIndex(${idx})"` : ''}>
-                        <input type="radio" name="tcs-opt" id="opt-${idx}" ${isCheckedAttr} ${isReviewModeActive ? 'disabled' : ''}>
-                        <label style="cursor:${isReviewModeActive ? 'default' : 'pointer'}; width:100%; font-weight:600;" for="opt-${idx}">
-                            (${String.fromCharCode(65 + idx)}) ${localizedOption}
-                        </label>
-                    </div>
-                `; 
-                const container = document.getElementById("target-options-container");
 
-                /* build all options */
-                
-                renderKatexInElement(container);
-                container.insertAdjacentHTML('beforeend', optHtml); 
+                const optRow = document.createElement("div");
+                optRow.className = `option-row ${statusClass}`;
+                if (!isReviewModeActive) {
+                    optRow.onclick = () => selectOptionIndex(idx);
+                }
+
+                const optInput = document.createElement("input");
+                optInput.type = "radio";
+                optInput.name = "tcs-opt";
+                optInput.id = `opt-${idx}`;
+                if (isCheckedAttr) optInput.checked = true;
+                if (isReviewModeActive) optInput.disabled = true;
+
+                const optLabel = document.createElement("label");
+                optLabel.style.cursor = isReviewModeActive ? 'default' : 'pointer';
+                optLabel.style.width = "100%";
+                optLabel.style.fontWeight = "600";
+                optLabel.htmlFor = `opt-${idx}`;
+                optLabel.textContent = `(${String.fromCharCode(65 + idx)}) ${localizedOption}`;
+
+                optRow.appendChild(optInput);
+                optRow.appendChild(optLabel);
+                container.appendChild(optRow);
             }); 
             renderKatexInElement(container);
 
@@ -1741,67 +1749,87 @@
                 const correctOptionText = getLocalizedText(optArray[correctChoice], activeQuestionLanguage);
 
                 if (userChoice === null) {
-                    feedbackContainer.innerHTML = `
-                    
-            <div class="review-status-box">
-                <div class="review-card pink compact">
-                    <div class="review-card-title">
-                        ⚪ QUESTION NOT ATTEMPTED
-                    </div>
-                    <div class="review-answer-inline">
-                        ✅ CORRECT ANSWER :- (${String.fromCharCode(65 + correctChoice)}) ${correctOptionText}
-                    </div>
-                </div>
-                ${renderLearnModule()}
-            </div>
-            `;
-            renderKatexInElement(feedbackContainer);
+                    const statusBox = document.createElement("div");
+                    statusBox.className = "review-status-box";
+
+                    const card = document.createElement("div");
+                    card.className = "review-card pink compact";
+
+                    const cardTitle = document.createElement("div");
+                    cardTitle.className = "review-card-title";
+                    cardTitle.textContent = "⚪ QUESTION NOT ATTEMPTED";
+
+                    const ansInline = document.createElement("div");
+                    ansInline.className = "review-answer-inline";
+                    ansInline.textContent = `✅ CORRECT ANSWER :- (${String.fromCharCode(65 + correctChoice)}) ${correctOptionText}`;
+
+                    card.appendChild(cardTitle);
+                    card.appendChild(ansInline);
+                    statusBox.appendChild(card);
+                    statusBox.insertAdjacentHTML('beforeend', renderLearnModule());
+                    feedbackContainer.appendChild(statusBox);
                 } else if (userChoice === correctChoice) {
                     const userOptionText = getLocalizedText(optArray[userChoice], activeQuestionLanguage);
-                    feedbackContainer.innerHTML = `
-            <div class="review-status-box">
-                <div class="review-card blue compact">
-                    <div class="review-card-title">
-                        ✅ YOUR SELECTED ANSWER IS CORRECT :-
-                        <span class="review-answer-inline">
-                            (${String.fromCharCode(65 + userChoice)})
-                            ${userOptionText}
-                        </span>
-                    </div>
-                </div>
-                ${renderLearnModule()}
-            </div>
-            `;
-            renderKatexInElement(feedbackContainer);
-                    
+
+                    const statusBox = document.createElement("div");
+                    statusBox.className = "review-status-box";
+
+                    const card = document.createElement("div");
+                    card.className = "review-card blue compact";
+
+                    const cardTitle = document.createElement("div");
+                    cardTitle.className = "review-card-title";
+                    cardTitle.textContent = "✅ YOUR SELECTED ANSWER IS CORRECT :- ";
+
+                    const ansSpan = document.createElement("span");
+                    ansSpan.className = "review-answer-inline";
+                    ansSpan.textContent = `(${String.fromCharCode(65 + userChoice)}) ${userOptionText}`;
+
+                    cardTitle.appendChild(ansSpan);
+                    card.appendChild(cardTitle);
+                    statusBox.appendChild(card);
+                    statusBox.insertAdjacentHTML('beforeend', renderLearnModule());
+                    feedbackContainer.appendChild(statusBox);
                 } else {
                     const userOptionText = getLocalizedText(optArray[userChoice], activeQuestionLanguage);
-                    feedbackContainer.innerHTML = `
-                    
-            <div class="review-status-box">
-                <div class="review-card red compact">
-                    <div class="review-card-title">
-                        ❌ YOUR SELECTED ANSWER :-
-                        <span class="review-answer-inline">
-                            (${String.fromCharCode(65 + userChoice)})
-                            ${userOptionText}
-                        </span>
-                    </div>
-                </div>
-                <div class="review-card green compact">
-                    <div class="review-card-title">
-                        ✅ CORRECT ANSWER :-
-                        <span class="review-answer-inline">
-                            (${String.fromCharCode(65 + correctChoice)})
-                            ${correctOptionText}
-                        </span>
-                    </div>
-                </div>
-                ${renderLearnModule()}
-            </div>
-            `;
-            renderKatexInElement(feedbackContainer);
+
+                    const statusBox = document.createElement("div");
+                    statusBox.className = "review-status-box";
+
+                    const cardRed = document.createElement("div");
+                    cardRed.className = "review-card red compact";
+
+                    const cardTitleRed = document.createElement("div");
+                    cardTitleRed.className = "review-card-title";
+                    cardTitleRed.textContent = "❌ YOUR SELECTED ANSWER :- ";
+
+                    const ansSpanRed = document.createElement("span");
+                    ansSpanRed.className = "review-answer-inline";
+                    ansSpanRed.textContent = `(${String.fromCharCode(65 + userChoice)}) ${userOptionText}`;
+
+                    cardTitleRed.appendChild(ansSpanRed);
+                    cardRed.appendChild(cardTitleRed);
+
+                    const cardGreen = document.createElement("div");
+                    cardGreen.className = "review-card green compact";
+
+                    const cardTitleGreen = document.createElement("div");
+                    cardTitleGreen.className = "review-card-title";
+                    cardTitleGreen.textContent = "✅ CORRECT ANSWER :- ";
+
+                    const ansSpanGreen = document.createElement("span");
+                    ansSpanGreen.className = "review-answer-inline";
+                    ansSpanGreen.textContent = `(${String.fromCharCode(65 + correctChoice)}) ${correctOptionText}`;
+
+                    cardTitleGreen.appendChild(ansSpanGreen);
+                    cardGreen.appendChild(cardTitleGreen);
+
+                    statusBox.appendChild(cardRed);
+                    statusBox.appendChild(cardGreen);
+                    statusBox.insertAdjacentHTML('beforeend', renderLearnModule());
+                    feedbackContainer.appendChild(statusBox);
                 }
+                renderKatexInElement(feedbackContainer);
             } 
             const questionContent = document.querySelector(".question-content");
 
