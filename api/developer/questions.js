@@ -5,7 +5,7 @@ import { parseQuestionFile } from "../../services/bilingualQuestionParser.js";
 const QUESTIONS_ROOT = path.join(process.cwd(), 'questions');
 
 /**
- * Validates that target path stays safely within /questions/
+ * Validates that the requested target path stays strictly inside /questions/
  */
 function isSafePath(baseDir, targetPath) {
     const relative = path.relative(baseDir, targetPath);
@@ -20,14 +20,13 @@ export default async function handler(req, res) {
     const {
         action = "",
         topic = "",
-        file = "",
-        id = ""
+        file = ""
     } = req.query;
 
     if (!fs.existsSync(QUESTIONS_ROOT)) {
         return res.status(500).json({
             status: 'error',
-            message: 'Questions root directory not found'
+            message: 'Questions directory not found on server'
         });
     }
 
@@ -117,7 +116,7 @@ function getFiles(topic, res) {
 }
 
 /**
- * Loads and parses a single question file using the universal parser
+ * Loads and parses a single question file using the existing universal parser
  */
 function loadFile(topic, file, res) {
     if (!topic || !file) {
