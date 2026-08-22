@@ -1,315 +1,155 @@
 import fs from 'fs';
 import path from 'path';
-import { parseQuestionFile } from "../../services/questionParser.js";
+import { parseQuestionFile } from "../../services/bilingualQuestionParser.js";
+
+const QUESTIONS_ROOT = path.join(process.cwd(), 'questions');
+
+/**
+ * Validates that target path stays safely within /questions/
+ */
+function isSafePath(baseDir, targetPath) {
+    const relative = path.relative(baseDir, targetPath);
+    return relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+}
 
 export default async function handler(req, res) {
-
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/json');
 
     const {
         action = "",
-        topic = "GACA",
+        topic = "",
         file = "",
-        id = "",
-        search = ""
+        id = ""
     } = req.query;
 
-    let targetFolder = 'math';
-
-    if (topic === 'GI') targetFolder = 'gi';
-    if (topic === 'GS') targetFolder = 'gs';
-    if (topic === 'GACA' || topic === 'gaca') targetFolder = 'gaca';
+    if (!fs.existsSync(QUESTIONS_ROOT)) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'Questions root directory not found'
+        });
+    }
 
     try {
-        
-       switch (action) {
-    
-                case "topics":
-                    return getTopics(res);
-               
-                case "files":
-                    return getFiles(topic, res);
-               
-           case "load":
+        switch (action) {
+            case "topics":
+                return getTopics(res);
+            case "files":
+                return getFiles(topic, res);
+            case "load":
                 return loadFile(topic, file, res);
-               
-               
-                case "":
-                    break;      // Old behaviour
-            
-                default:
-            
-                    return res.status(400).json({
-            
-                        status: "error",
-            
-                        message: "Unknown developer action"
-            
-                    });
-            
-            }
-
-        const folderPath = path.join(
-                process.cwd(),
-                'questions',
-                targetFolder
-            );
-
-        if (!fs.existsSync(folderPath)) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Question folder not found'
-            });
-        }
-
-        let allQuestions = [];
-
-        // -------------------------
-        // Load ONE FILE
-        // -------------------------
-
-        if (file) {
-
-            const filePath = path.join(folderPath, file);
-
-            if (!fs.existsSync(filePath)) {
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'File not found'
+            default:
+                return res.status(400).json({
+                    status: "error",
+                    message: "Unknown developer action"
                 });
-            }
-
-            allQuestions = parseQuestionFile(
-                filePath,
-                targetFolder
-            );
-
         }
+    } catch (err) {
+        return res.status(500).json({
+            status: 'error',
+            message: err.message
+        });
+    }
+}
 
-        // -------------------------
-        // Load ENTIRE FOLDER
-        // -------------------------
-
-        else {
-
-            const txtFiles = fs.readdirSync(folderPath)
-                .filter(f => f.endsWith('.txt'))
-                .sort((a, b) =>
-                    a.localeCompare(
-                        b,
-                        undefined,
-                        { numeric: true }
-                    )
-                );
-
-            for (const currentFile of txtFiles) {
-
-                const filePath = path.join(
-                    folderPath,
-                    currentFile
-                );
-
-                const parsed = parseQuestionFile(
-                    filePath,
-                    targetFolder
-                );
-
-                parsed.forEach(q => {
-
-                    q.__file = currentFile;
-
-                });
-
-                allQuestions.push(...parsed);
-
-            }
-
-        }
-
-        // -------------------------
-        // Find by Question Number
-        // -------------------------
-
-        
-
-        // -------------------------
-        // Find by Question ID
-        // -------------------------
-
-        if (id) {
-
-            const found = allQuestions.find(
-                q => String(q.id) === String(id)
-            );
-
-            if (!found) {
-
-                return res.status(404).json({
-
-                    status: 'error',
-
-                    message: 'Question ID not found'
-
-                });
-
-            }
-
-            return res.status(200).json({
-
-                status: 'ok',
-
-                question: found
-
-            });
-
-        }
-
-        // -------------------------
-        // Return Everything
-        // -------------------------
+/**
+ * Dynamically scans /questions/ for immediate subdirectories
+ */
+function getTopics(res) {
+    try {
+        const entries = fs.readdirSync(QUESTIONS_ROOT, { withFileTypes: true });
+        const topics = entries
+            .filter(dirent => dirent.isDirectory())
+            .map(dirent => dirent.name)
+            .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
         return res.status(200).json({
-
-            status: 'ok',
-
-            totalQuestions: allQuestions.length,
-
-            data: allQuestions
-
+            status: "ok",
+            version: "1.0",
+            data: topics
         });
-
-    }
-
-    catch (err) {
-
+    } catch (err) {
         return res.status(500).json({
-
-            status: 'error',
-
-            message: err.message
-
+            status: "error",
+            message: "Failed to scan topics directory"
         });
-
     }
-
 }
-    function getTopics(res) {
 
-    return res.status(200).json({
-
-        status: "ok",
-
-        version: "0.1",
-
-        data: [
-            "GACA"
-        ]
-
-    });
-
-}
-// ==========================================
-// Developer Helper Functions
-// ==========================================
-
+/**
+ * Dynamically scans /questions/<topic>/ for all .txt files
+ */
 function getFiles(topic, res) {
-
-    let targetFolder = "gaca";
-
-    if (topic === "GI") targetFolder = "gi";
-    if (topic === "GS") targetFolder = "gs";
-    if (topic === "math") targetFolder = "math";
-
-    const folderPath = path.join(
-        process.cwd(),
-        "questions",
-        targetFolder
-    );
-
-    if (!fs.existsSync(folderPath)) {
-
-        return res.status(404).json({
-
+    if (!topic || typeof topic !== 'string') {
+        return res.status(400).json({
             status: "error",
-
-            message: "Folder not found"
-
+            message: "Topic parameter is required"
         });
-
     }
 
-    const txtFiles = fs.readdirSync(folderPath)
+    const folderPath = path.join(QUESTIONS_ROOT, topic.toLowerCase());
 
-        .filter(file => file.toLowerCase().endsWith(".txt"))
+    if (!isSafePath(QUESTIONS_ROOT, folderPath) || !fs.existsSync(folderPath)) {
+        return res.status(404).json({
+            status: "error",
+            message: `Question topic folder "${topic}" not found`
+        });
+    }
 
-        .sort((a, b) =>
-            a.localeCompare(
-                b,
-                undefined,
-                { numeric: true }
-            )
-        );
+    try {
+        const txtFiles = fs.readdirSync(folderPath)
+            .filter(file => file.toLowerCase().endsWith(".txt"))
+            .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
-    return res.status(200).json({
-
-        status: "ok",
-
-        version: "0.2",
-
-        totalFiles: txtFiles.length,
-
-        data: txtFiles
-
-    });
-
+        return res.status(200).json({
+            status: "ok",
+            version: "1.0",
+            totalFiles: txtFiles.length,
+            data: txtFiles
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "error",
+            message: "Failed to read files for topic"
+        });
+    }
 }
 
-
-
+/**
+ * Loads and parses a single question file using the universal parser
+ */
 function loadFile(topic, file, res) {
-
-    let targetFolder = "gaca";
-
-    if (topic === "GI") targetFolder = "gi";
-    if (topic === "GS") targetFolder = "gs";
-    if (topic === "math") targetFolder = "math";
-
-    const filePath = path.join(
-        process.cwd(),
-        "questions",
-        targetFolder,
-        file
-    );
-
-    if (!fs.existsSync(filePath)) {
-
-        return res.status(404).json({
-
+    if (!topic || !file) {
+        return res.status(400).json({
             status: "error",
-
-            message: "File not found"
-
+            message: "Both topic and file parameters are required"
         });
-
     }
 
-    const questions = parseQuestionFile(
-        filePath,
-        targetFolder
-    );
+    const folderPath = path.join(QUESTIONS_ROOT, topic.toLowerCase());
+    const filePath = path.join(folderPath, file);
 
-    return res.status(200).json({
+    if (!isSafePath(QUESTIONS_ROOT, filePath) || !fs.existsSync(filePath)) {
+        return res.status(404).json({
+            status: "error",
+            message: `File "${file}" not found in topic "${topic}"`
+        });
+    }
 
-        status: "ok",
+    try {
+        const questions = parseQuestionFile(filePath, topic.toLowerCase());
 
-        version: "0.3",
-
-        questionCount: questions.length,
-
-        data: questions
-
-    });
-
+        return res.status(200).json({
+            status: "ok",
+            version: "1.0",
+            questionCount: questions.length,
+            data: questions
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "error",
+            message: `Failed to parse question file: ${err.message}`
+        });
+    }
 }
