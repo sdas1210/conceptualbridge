@@ -165,35 +165,37 @@
                     display:flex;
                     gap:12px;
                     align-items:center;
+                    flex-wrap: wrap;
                  ">
-            
                     <strong>Developer Mode</strong>
-                
                     <select id="topicSelect" onchange="onDeveloperTopicChanged()"></select>
-                
                     <select id="fileSelect"></select>
+                    <button id="loadBtn" onclick="loadDeveloperFile()">Load</button>
                 
-                    <button id="loadBtn" onclick="loadDeveloperFile()">
-                        Load
-                    </button>
-                
-                    <span id="developerCounter"
-                          style="font-weight:bold;margin-left:20px;">
-                        0 / 0
-                    </span>
-                    <button id="prevDeveloperBtn"
-                            onclick="developerPreviousQuestion()">
-                        ◀ Prev
-                    </button>
-                    
-                    <button id="nextDeveloperBtn"
-                            onclick="developerNextQuestion()">
-                        Next ▶
-                    </button>
+                    <span id="developerCounter" style="font-weight:bold; margin-left:12px;">0 / 0</span>
+                    <button id="prevDeveloperBtn" onclick="developerPreviousQuestion()">◀ Prev</button>
+                    <button id="nextDeveloperBtn" onclick="developerNextQuestion()">Next ▶</button>
             </div>
 
-            <!-- Lightweight Developer Validation Banner -->
-            <div id="developer-validation-banner" style="display:none; padding:8px 25px; background:#fffbeb; border-bottom:1px solid #fef3c7; color:#92400e; font-size:0.88rem; font-weight:bold;"></div>
+            <!-- Phase 2: File-Level Diagnostic Summary & Filter Toolbar -->
+            <div id="developer-summary-bar" class="diagnostic-summary-bar" style="display: none;">
+                <div class="diag-metrics">
+                    <span class="diag-metric-pill total" id="sum-total">Total: 0</span>
+                    <span class="diag-metric-pill pass" id="sum-pass">PASS: 0</span>
+                    <span class="diag-metric-pill warning" id="sum-warning">WARN: 0</span>
+                    <span class="diag-metric-pill error" id="sum-error">ERR: 0</span>
+                </div>
+                <div class="diag-filters">
+                    <span style="font-size:0.8rem; font-weight:bold; color:#4b5563;">Filter:</span>
+                    <button class="diag-filter-btn active" id="flt-all" onclick="applyDiagnosticFilter('ALL')">ALL</button>
+                    <button class="diag-filter-btn" id="flt-pass" onclick="applyDiagnosticFilter('PASS')">PASS</button>
+                    <button class="diag-filter-btn" id="flt-warning" onclick="applyDiagnosticFilter('WARNING')">WARNING</button>
+                    <button class="diag-filter-btn" id="flt-error" onclick="applyDiagnosticFilter('ERROR')">ERROR</button>
+                </div>
+            </div>
+
+            <!-- Phase 2: Active Question Diagnostic Badge & Issues Banner -->
+            <div id="developer-validation-banner" class="diagnostic-active-banner" style="display: none;"></div>
 
             <div class="question-header">
                 <span id="question-number-title">Question No. 1</span>
@@ -204,10 +206,8 @@
             </div>
             
             <div class="question-content">
-                <!-- Dedicated Common Context/Equation Section Container -->
                 <div id="target-common-container" class="question-common" style="display: none; margin-bottom: 16px; padding: 12px 16px; background-color: #f8fafc; border: 1px solid var(--tcs-border); border-radius: 6px; font-weight: 500;"></div>
 
-                <!-- Dedicated Question Image Container -->
                 <div id="target-image-container" style="display: none; margin-bottom: 16px; text-align: center;">
                     <img id="target-question-image" src="" alt="Question Diagram" style="max-width: 100%; max-height: 300px; border-radius: 4px; border: 1px solid var(--tcs-border);" onerror="handleImageLoadError()">
                 </div>
@@ -216,7 +216,6 @@
                 <div class="options-container" id="target-options-container"></div>
                 
                 <div id="review-feedback-container"></div>
-                
                 <div class="meta-bottom-right" id="shift-label-view"></div>
             </div>
 
@@ -256,65 +255,58 @@
             <button class="btn-tcs btn-blue" id="action-btn-submit" style="margin: 15px; border-radius: 4px;" onclick="triggerExamSubmission()">Submit Exam</button>
         </div>
 
+        <!-- Phase 2: Enhanced Developer Diagnostics & Multi-Tab Inspector -->
         <div class="developer-panel">
             <div class="developer-title">
-                Developer Inspector
+                Developer Inspector & Diagnostics
+            </div>
+
+            <div class="inspector-tab-strip">
+                <button class="insp-tab-btn active" onclick="switchInspectorTab('metadata')">Metadata</button>
+                <button class="insp-tab-btn" onclick="switchInspectorTab('diagnostics')">Diagnostics</button>
+                <button class="insp-tab-btn" onclick="switchInspectorTab('source')">Source</button>
+                <button class="insp-tab-btn" onclick="switchInspectorTab('parsed')">Parsed</button>
+                <button class="insp-tab-btn" onclick="switchInspectorTab('diff')">Diff</button>
             </div>
         
-            <div id="developerMetaContainer">
-                <div class="meta-row">
-                    <span>Question ID</span>
-                    <strong id="metaQuestionId">-</strong>
+            <div id="inspectorTabContent" style="flex:1; overflow-y:auto; padding:12px;">
+                <!-- Tab 1: Metadata -->
+                <div id="tab-pane-metadata" class="insp-tab-pane">
+                    <div class="meta-row" id="row-metaQuestionId"><span>Question ID</span><strong id="metaQuestionId">-</strong></div>
+                    <div class="meta-row" id="row-metaDifficulty"><span>Difficulty</span><strong id="metaDifficulty">-</strong></div>
+                    <div class="meta-row" id="row-metaLevel"><span>Level</span><strong id="metaLevel">-</strong></div>
+                    <div class="meta-row" id="row-metaMarks"><span>Marks</span><strong id="metaMarks">-</strong></div>
+                    <div class="meta-row" id="row-metaType"><span>Question Type</span><strong id="metaType">-</strong></div>
+                    <div class="meta-row" id="row-metaAnswer"><span>Answer</span><strong id="metaAnswer">-</strong></div>
+                    <div class="meta-row" id="row-metaImage"><span>Image</span><strong id="metaImage">-</strong></div>
+                    <div class="meta-row" id="row-metaNotification"><span>Notification</span><strong id="metaNotification">-</strong></div>
+                    <div class="meta-row" id="row-metaExam"><span>Exam</span><strong id="metaExam">-</strong></div>
+                    <div class="meta-row" id="row-metaTopic"><span>Topic</span><strong id="metaTopic">-</strong></div>
+                    <div class="meta-row" id="row-metaSubTopic"><span>Sub Topic</span><strong id="metaSubTopic">-</strong></div>
                 </div>
-        
-                <div class="meta-row">
-                    <span>Difficulty</span>
-                    <strong id="metaDifficulty">-</strong>
+
+                <!-- Tab 2: Question Diagnostics -->
+                <div id="tab-pane-diagnostics" class="insp-tab-pane" style="display: none;">
+                    <div id="diag-detail-status-pill" style="margin-bottom: 10px; font-weight: bold;"></div>
+                    <div id="diag-detail-issues-list"></div>
                 </div>
-        
-                <div class="meta-row">
-                    <span>Level</span>
-                    <strong id="metaLevel">-</strong>
+
+                <!-- Tab 3: Read-Only Raw Source Block -->
+                <div id="tab-pane-source" class="insp-tab-pane" style="display: none;">
+                    <div style="font-size:0.75rem; font-weight:bold; color:#6b7280; margin-bottom:6px;">RAW SOURCE BLOCK (READ ONLY)</div>
+                    <pre id="raw-source-display" class="code-view-box">No source available.</pre>
                 </div>
-        
-                <div class="meta-row">
-                    <span>Marks</span>
-                    <strong id="metaMarks">-</strong>
+
+                <!-- Tab 4: Parsed Data Object -->
+                <div id="tab-pane-parsed" class="insp-tab-pane" style="display: none;">
+                    <div style="font-size:0.75rem; font-weight:bold; color:#6b7280; margin-bottom:6px;">PARSED OBJECT JSON (READ ONLY)</div>
+                    <pre id="parsed-object-display" class="code-view-box">No parsed object.</pre>
                 </div>
-        
-                <div class="meta-row">
-                    <span>Question Type</span>
-                    <strong id="metaType">-</strong>
-                </div>
-        
-                <div class="meta-row">
-                    <span>Answer</span>
-                    <strong id="metaAnswer">-</strong>
-                </div>
-        
-                <div class="meta-row">
-                    <span>Image</span>
-                    <strong id="metaImage">-</strong>
-                </div>
-        
-                <div class="meta-row">
-                    <span>Notification</span>
-                    <strong id="metaNotification">-</strong>
-                </div>
-        
-                <div class="meta-row">
-                    <span>Exam</span>
-                    <strong id="metaExam">-</strong>
-                </div>
-        
-                <div class="meta-row">
-                    <span>Topic</span>
-                    <strong id="metaTopic">-</strong>
-                </div>
-        
-                <div class="meta-row">
-                    <span>Sub Topic</span>
-                    <strong id="metaSubTopic">-</strong>
+
+                <!-- Tab 5: Source vs Parsed Diff / Discrepancy -->
+                <div id="tab-pane-diff" class="insp-tab-pane" style="display: none;">
+                    <div style="font-size:0.75rem; font-weight:bold; color:#6b7280; margin-bottom:6px;">SOURCE VS PARSED MAPPING</div>
+                    <div id="diff-comparison-display"></div>
                 </div>
             </div>
         </div>
@@ -326,49 +318,16 @@
             <p>Conceptual Bridge Evaluation Analytics Matrix Engine</p>
             
             <table class="metrics-table">
-                <tr>
-                    <td>Total Questions</td>
-                    <td id="res-total">0</td>
-                </tr>
-                <tr>
-                    <td>Total Attempted</td>
-                    <td id="res-attempted">0</td>
-                </tr>
-                <tr>
-                    <td>Total Correct Answers</td>
-                    <td id="res-correct" style="color: #16a34a;">0</td>
-                </tr>
-                <tr>
-                    <td>Total Wrong Answers</td>
-                    <td id="res-wrong" style="color: #dc2626;">0</td>
-                </tr>
-                <tr>
-                    <td>Negative Marking Applied</td>
-                    <td>0.33 Per Mistake</td>
-                </tr>
-                <tr class="highlight-total-row">
-                    <td>Total Marks Obtained</td>
-                    <td id="res-final-score">0.00</td>
-                </tr>
-                <tr>
-                    <td>📊 Paper Difficulty</td>
-                    <td id="res-difficulty">--</td>
-                </tr>
-                
-                <tr>
-                    <td>🎯 Dynamic Cut-off Marks</td>
-                    <td id="res-passmark">--</td>
-                </tr>
-                
-                <tr>
-                    <td>🏆 Result Status</td>
-                    <td id="res-result">--</td>
-                </tr>
-                
-                <tr>
-                    <td>⭐ Performance Rating</td>
-                    <td id="res-rating">--</td>
-                </tr>
+                <tr><td>Total Questions</td><td id="res-total">0</td></tr>
+                <tr><td>Total Attempted</td><td id="res-attempted">0</td></tr>
+                <tr><td>Total Correct Answers</td><td id="res-correct" style="color: #16a34a;">0</td></tr>
+                <tr><td>Total Wrong Answers</td><td id="res-wrong" style="color: #dc2626;">0</td></tr>
+                <tr><td>Negative Marking Applied</td><td>0.33 Per Mistake</td></tr>
+                <tr class="highlight-total-row"><td>Total Marks Obtained</td><td id="res-final-score">0.00</td></tr>
+                <tr><td>📊 Paper Difficulty</td><td id="res-difficulty">--</td></tr>
+                <tr><td>🎯 Dynamic Cut-off Marks</td><td id="res-passmark">--</td></tr>
+                <tr><td>🏆 Result Status</td><td id="res-result">--</td></tr>
+                <tr><td>⭐ Performance Rating</td><td id="res-rating">--</td></tr>
             </table>
 
             <div class="report-btn-stack">
