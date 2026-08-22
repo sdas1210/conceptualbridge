@@ -3301,3 +3301,744 @@ The current development focus is now:
 > **Developer Portal Phase 1A — Loader Foundation**, followed by canonical
 > question rendering and mathematical/QEN/QBN validation.
 
+
+
+---
+
+# Session Update — 2026-08-23
+
+## Developer Quiz Engine / Developer Portal — Phase Deployment Status
+
+### Master-Copy Preservation Rule
+
+This document remains the **mother/master Project Status copy**.
+
+All previous project history, architecture decisions, completed milestones, constraints,
+roadmap items, continuation points, and previously identified incomplete paths are
+preserved.
+
+**No previous history has been deleted or rewritten in this update.**
+
+The standing rule remains:
+
+> **Preserve first. Append second. Delete only when absolutely necessary.**
+
+This update records the verified Developer Portal deployment path and separates
+completed work from remaining upgrades.
+
+---
+
+## 1. Developer Portal Development Path — Historical + Current Status
+
+The Developer Quiz Engine was established as the controlled environment for
+question implementation and validation before relying on the live student Quiz
+Portal. This architectural direction remains unchanged. The existing master
+document already records that workflow as:
+
+```text
+Question Source
+      ↓
+Developer Quiz Engine
+      ↓
+Parse
+      ↓
+Render
+      ↓
+Validate
+      ↓
+Only then
+      ↓
+Live Quiz Portal
+```
+
+The purpose is to reduce the need to use the live student test merely to verify
+whether newly authored questions render correctly.
+
+This architecture is preserved. fileciteturn406file2L324-L345
+
+---
+
+## 2. Developer Portal Phase 0 — Structural Separation
+
+### Status: ✅ COMPLETE / DEPLOYED
+
+The original single-file Developer Quiz Engine was separated into:
+
+```text
+developer/
+├── quiz-engine.html
+├── css/
+│   └── quiz-engine.css
+└── js/
+    └── quiz-engine.js
+```
+
+This was the original **Phase 0 — Structural Separation** baseline. fileciteturn406file4L434-L448
+
+### Preservation
+
+The separated architecture remains the baseline.
+
+No wholesale rewrite should be performed merely because later phases add
+functionality.
+
+---
+
+## 3. Developer Portal Phase 1 — Loader Foundation
+
+### Status: ✅ COMPLETE / DEPLOYED
+
+The Developer Portal loader was upgraded from a limited/hard-coded topic/file
+workflow to a dynamic Developer API-driven loader.
+
+### Verified capabilities
+
+- Dynamic topic discovery.
+- GACA availability.
+- MATH availability.
+- Dynamic discovery of additional question folders.
+- Dynamic discovery of `.txt` files within the selected folder.
+- Case-independent future-folder handling.
+- `.txt` restriction on direct question-file loading.
+- Developer-only question loading through `/api/developer/questions`.
+- Existing shared parser architecture retained.
+- Existing question navigation retained.
+
+### Architectural rule
+
+The Developer Portal must continue consuming the canonical question
+representation rather than becoming a second independent parser.
+
+The master architecture explicitly requires the Developer Portal and production
+Quiz Portal to consume the same canonical representation. fileciteturn406file0L116-L131
+
+### Deployment status
+
+```text
+Phase 1 — Developer Loader Foundation
+                ↓
+             DEPLOYED
+                ↓
+             COMPLETE
+```
+
+---
+
+## 4. Developer Portal Phase 1B — Canonical Question Rendering
+
+### Status: ✅ COMPLETE / DEPLOYED
+
+The Developer Portal now renders the parsed question object using the canonical
+question representation.
+
+The implementation preserves:
+
+- QEN
+- QBN
+- Common
+- Equation
+- A/B/C/D options
+- Bengali option content where available
+- Correct answer
+- Difficulty
+- QuestionID
+- other parser-provided metadata
+
+### Fallback rule
+
+Where Bengali question content is unavailable, English remains available as the
+fallback presentation.
+
+### Architectural requirement
+
+The Developer Portal is not permitted to introduce a second parser merely to
+render questions differently from production.
+
+This follows the master rule:
+
+```text
+TXT Source of Truth
+        ↓
+Canonical Parsing Layer
+        ↓
+Standard Question Object
+        ├── Developer Portal
+        └── Production Quiz Portal
+```
+
+The existing master document identifies this as a required architectural
+principle. fileciteturn406file0L116-L134
+
+### Status
+
+```text
+Phase 1B — Canonical Question Rendering
+                ↓
+             DEPLOYED
+                ↓
+             COMPLETE
+```
+
+---
+
+## 5. Developer Portal Phase 1C — Mathematics / KaTeX Rendering
+
+### Status: ✅ COMPLETE / DEPLOYED
+
+The Developer Portal now participates in the project's verified mathematical
+rendering strategy.
+
+### Preserved requirements
+
+- KaTeX **0.18.4** remains the version baseline.
+- QEN does not receive an arbitrary global font-size enlargement.
+- QBN does not receive an arbitrary global font-size enlargement.
+- Common-section mathematical content may use the enlarged mathematical
+  presentation required by the project.
+- Inline mathematical expressions remain supported.
+- Display mathematical expressions remain supported.
+- Inequalities remain supported.
+- Multi-line mathematical expressions remain supported.
+- Mathematical options remain supported.
+- Common-section equations remain supported.
+
+The existing master document specifically records the rule that QEN/QBN should
+not be globally enlarged when only the Common section requires enlarged
+mathematical presentation. fileciteturn406file0L187-L190
+
+### Status
+
+```text
+Phase 1C — Mathematics / KaTeX Rendering
+                ↓
+             DEPLOYED
+                ↓
+             COMPLETE
+```
+
+---
+
+## 6. Developer Portal Phase 1D — Inspector / Diagnostics
+
+### Status: ✅ COMPLETE / DEPLOYED
+
+The Developer Portal has now advanced beyond the earlier Phase 1A–1C roadmap
+and the previously planned Inspector/Diagnostics capability has been
+implemented and deployed.
+
+### Implemented capabilities
+
+#### Question validation
+
+The Developer Portal can diagnose question-level structural issues including:
+
+- QuestionID
+- missing question content
+- missing options
+- correct-answer validity
+- Difficulty
+- image-related checks
+- bilingual content conditions
+- duplicate QuestionID conditions
+
+#### Diagnostic classification
+
+Questions can be classified using:
+
+```text
+PASS
+WARNING
+ERROR
+```
+
+#### File-level diagnostics
+
+The Developer Portal can provide diagnostic totals such as:
+
+```text
+Total Questions
+PASS
+WARNING
+ERROR
+```
+
+#### Diagnostic filtering
+
+The Developer Portal supports filtering by diagnostic status.
+
+#### Diagnostic palette
+
+Question navigation/palette status can reflect diagnostic condition while
+preserving the separate question-navigation state.
+
+#### Metadata inspection
+
+The Developer Portal provides a developer-oriented metadata inspection view.
+
+#### Source inspection
+
+The Developer Portal can expose the original question source block for the
+selected question.
+
+#### Parsed-object inspection
+
+The Developer Portal can expose the parsed/normalized question object.
+
+#### Source vs Parsed comparison
+
+The Developer Portal provides a diagnostic comparison between original source
+and parsed representation.
+
+This fulfills the previously planned Raw / Parsed / Rendered developer workflow
+direction recorded in the master document. fileciteturn406file0L100-L112
+
+### Status
+
+```text
+Phase 1D — Developer Inspector / Diagnostics
+                ↓
+             DEPLOYED
+                ↓
+             COMPLETE
+```
+
+---
+
+## 7. Developer API — Phase 1/1D Supporting Upgrade
+
+### Status: ✅ COMPLETE / DEPLOYED
+
+The Developer API endpoint:
+
+```text
+api/developer/questions.js
+```
+
+was extended without replacing the existing Developer API contract.
+
+The existing actions remain conceptually:
+
+```text
+?action=topics
+?action=files&topic=...
+?action=load&topic=...&file=...
+```
+
+The load response retains the parsed question data and additionally provides
+the original source blocks required by the Developer Inspector.
+
+### Important compatibility rule
+
+The existing parsed `data` response must remain intact.
+
+The raw source capability is an additive Developer-only diagnostic capability.
+
+### Shared parser protection
+
+The shared:
+
+```text
+services/bilingualQuestionParser.js
+```
+
+remains a protected production dependency.
+
+It must not be replaced merely to support Developer diagnostics.
+
+---
+
+## 8. Developer Portal Deployment Baseline — Current
+
+### Deployed Developer files
+
+The current Developer Portal Phase 1/Inspector baseline consists of:
+
+```text
+developer/quiz-engine.html
+developer/css/quiz-engine.css
+developer/js/quiz-engine.js
+api/developer/questions.js
+```
+
+### Protected shared dependency
+
+```text
+services/bilingualQuestionParser.js
+```
+
+### Production files intentionally outside this Developer Portal deployment
+
+The Developer Portal work must not silently modify the production Quiz Portal
+pipeline.
+
+The existing production/runtime files remain governed by their own roadmap and
+regression requirements.
+
+---
+
+## 9. Developer Portal Phase Status Summary
+
+```text
+Phase 0
+HTML/CSS/JS Structural Separation
+        ↓
+        ✅ COMPLETE / DEPLOYED
+
+Phase 1A
+Developer Loader Foundation
+        ↓
+        ✅ COMPLETE / DEPLOYED
+
+Phase 1B
+Canonical Question Rendering
+        ↓
+        ✅ COMPLETE / DEPLOYED
+
+Phase 1C
+Mathematics / KaTeX Rendering
+        ↓
+        ✅ COMPLETE / DEPLOYED
+
+Phase 1D
+Developer Inspector / Diagnostics
+        ↓
+        ✅ COMPLETE / DEPLOYED
+```
+
+### Current conclusion
+
+The complete currently deployed Developer Portal foundation is:
+
+> **Phase 0 + Phase 1A + Phase 1B + Phase 1C + Phase 1D = COMPLETE / DEPLOYED**
+
+The Developer Portal can now be treated as the primary controlled question
+implementation/inspection environment, subject to the remaining browser and
+end-to-end verification rules documented below.
+
+---
+
+## 10. Previously Incomplete Developer Portal Path — Superseded, Not Deleted
+
+The earlier master copy stated that the following Developer Portal capabilities
+were not yet completed:
+
+```text
+Developer Portal canonical parser integration
+Developer Portal full QEN/QBN renderer
+Developer Portal Math/KaTeX diagnostic rendering
+Developer Inspector parser diagnostics
+Raw / Parsed / Rendered developer views
+```
+
+Those entries described the state **before the current deployment**.
+
+They are preserved as historical records.
+
+Their current status is now:
+
+```text
+Canonical parser integration       → ✅ COMPLETE / DEPLOYED
+Full QEN/QBN renderer              → ✅ COMPLETE / DEPLOYED
+Math/KaTeX diagnostic rendering    → ✅ COMPLETE / DEPLOYED
+Developer Inspector diagnostics    → ✅ COMPLETE / DEPLOYED
+Raw / Parsed / Rendered inspection → ✅ COMPLETE / DEPLOYED
+```
+
+No earlier history is deleted.
+
+---
+
+## 11. Developer Portal — Remaining Upgrade Opportunities
+
+### Status: ⏳ NOT YET COMPLETED
+
+The completion of the current Developer Portal phases does **not** mean that
+the Developer Portal has no future upgrades.
+
+Future upgrades should be treated as separate options rather than retroactively
+marking the current phases incomplete.
+
+Potential future work may include:
+
+1. Additional validation rules as new question formats are introduced.
+2. More detailed parser/source discrepancy reporting.
+3. Expanded field-level diagnostics.
+4. More comprehensive KaTeX failure diagnostics.
+5. Additional image/reference validation.
+6. Automated regression-test fixtures.
+7. Developer-side question search/filtering.
+8. Question-object export for debugging.
+9. Browser-level automated Developer Portal regression testing.
+10. Integration with future Knowledge Index diagnostics where appropriate.
+11. Additional subject/folder-specific developer tooling.
+12. Performance improvements if the question library grows substantially.
+
+These are **upgrade options**, not current completion failures.
+
+When requested later, provide these as selectable options and allow the user to
+choose which upgrade path to implement.
+
+---
+
+## 12. Previously Incomplete Project Paths — Preserve and Mark Separately
+
+The Developer Portal completion does **not** cancel the project's previously
+recorded incomplete paths.
+
+The following remain open unless separately verified and completed:
+
+```text
+Knowledge Index Engine Upgrade
+    ├── Level-wise question counts
+    ├── Global/individual metadata inheritance
+    └── Topic/SubTopic/Level resolution
+
+Admin Portal
+    └── Topic → Sub-Topic hierarchical statistics
+
+Runtime
+    ├── Knowledge Index filtering
+    ├── Tutorial Anchor filtering
+    ├── API integration
+    └── Live Quiz Portal end-to-end Runtime validation
+
+Quiz Portal
+    └── New Box
+
+YouTube Anchor Builder
+    ├── GACA Step 2
+    └── GACA Step 9
+
+Answer Key Builder
+    └── Operations workflow
+
+Knowledge Index Builder
+    └── GACA activation
+
+Citation Remover
+    └── Three-row Answer-Key operation
+```
+
+These remain preserved from the earlier master roadmap and must not be treated
+as deleted or replaced by the Developer Portal work.
+
+---
+
+## 13. Important Distinction — Developer Portal Phases vs Runtime Phase Numbers
+
+The project contains multiple independent phase systems.
+
+### Developer Portal phases
+
+```text
+Phase 0
+Phase 1A
+Phase 1B
+Phase 1C
+Phase 1D
+```
+
+These describe the **Developer Quiz Engine / Developer Portal evolution**.
+
+### Runtime roadmap phases
+
+The earlier project roadmap separately contains:
+
+```text
+Runtime Integration
+Phase 2
+```
+
+That Runtime Phase 2 is **NOT the same thing** as Developer Portal Phase 2.
+
+Therefore the completion of Developer Portal Phase 1D must not be recorded as
+completion of the Runtime Integration Phase 2.
+
+The earlier Runtime roadmap remains intact. fileciteturn406file3L420-L429
+
+---
+
+## 14. Developer Portal — Future Phase Structure
+
+To avoid confusion in future sessions, any new Developer Portal work should
+continue from:
+
+```text
+Phase 0
+Structural Separation
+        ↓
+Phase 1A
+Loader Foundation
+        ↓
+Phase 1B
+Canonical Rendering
+        ↓
+Phase 1C
+Math / KaTeX
+        ↓
+Phase 1D
+Inspector / Diagnostics
+        ↓
+★ FUTURE DEVELOPER PORTAL UPGRADES
+```
+
+Future work should receive a new explicit phase/sub-phase name before
+implementation.
+
+Do not retroactively reopen a completed phase merely because a new feature is
+requested.
+
+---
+
+## 15. Master Decision — Developer Portal Baseline Frozen for Now
+
+### Current status
+
+**Developer Portal Phase 0–1D: COMPLETE / DEPLOYED**
+
+The current deployed Developer Portal should now be treated as a stable
+baseline.
+
+No additional Developer Portal architectural rewrite should begin automatically.
+
+Future changes should be:
+
+- explicitly requested,
+- narrowly scoped,
+- tested against the current baseline,
+- recorded as a new upgrade,
+- and appended to this master document.
+
+---
+
+## 16. Current Master Development Position — 2026-08-23
+
+The project now has two important continuation tracks:
+
+### Track A — Developer Portal
+
+```text
+Developer Portal Phase 0–1D
+        ↓
+        ✅ COMPLETE / DEPLOYED
+        ↓
+Future upgrades available by choice
+```
+
+### Track B — Main Project Roadmap
+
+```text
+Existing preserved roadmap
+        ↓
+Knowledge Index
+        ↓
+Admin Portal
+        ↓
+Runtime filtering
+        ↓
+Tutorial Anchor filtering
+        ↓
+API Integration
+        ↓
+Live Quiz Portal Runtime validation
+```
+
+The main roadmap remains unchanged unless a later verified project decision
+supersedes it.
+
+---
+
+## 17. User-Selection Rule for Future Developer Portal Work
+
+When the user later asks:
+
+> "What options are needed to complete/upgrade the Developer Portal?"
+
+provide a structured list of available upgrades, grouped by:
+
+```text
+A. Diagnostics
+B. Rendering / Math
+C. Source / Parser Inspection
+D. Validation
+E. Regression Testing
+F. Performance
+G. Developer UX
+H. Integration
+```
+
+For each option provide:
+
+- what it does,
+- why it is useful,
+- whether it is required or optional,
+- dependencies,
+- risk/scope,
+- and recommended order.
+
+**Do not automatically implement any of those future options.**
+
+The user will choose which option to pursue.
+
+---
+
+## 18. Master Preservation / Deletion Rule — Reaffirmed
+
+The following rule applies to every future update:
+
+> **Preserve the master copy.**
+>
+> **Preserve previous history.**
+>
+> **Append new verified status.**
+>
+> **Mark superseded paths rather than deleting them.**
+>
+> **Delete nothing unless it is absolutely necessary.**
+>
+> **If deletion becomes necessary, record exactly what was removed and why.**
+
+This update itself has been appended to the existing master document.
+
+---
+
+## Session Checkpoint — 2026-08-23
+
+**Master status preserved and extended.**
+
+### Newly recorded completed deployment
+
+```text
+Developer Portal Phase 0
+    ✅ Complete / Deployed
+
+Developer Portal Phase 1A
+    ✅ Complete / Deployed
+
+Developer Portal Phase 1B
+    ✅ Complete / Deployed
+
+Developer Portal Phase 1C
+    ✅ Complete / Deployed
+
+Developer Portal Phase 1D
+    ✅ Complete / Deployed
+```
+
+### Current Developer Portal baseline
+
+> **Stable Developer Portal Phase 0–1D deployment.**
+
+### Remaining project roadmap
+
+> Existing Knowledge Index, Admin Portal, Runtime, API Integration, Quiz
+> Portal, Anchor Builder, Answer Key Builder, Knowledge Index Builder, and
+> Citation Remover paths remain preserved and separately tracked.
+
+### Next Developer Portal action
+
+> **No automatic upgrade. Wait for user-selected upgrade option.**
+
+### Master rule
+
+> **Preserve first. Append second. Delete only when absolutely necessary.**
