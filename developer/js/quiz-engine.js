@@ -5,6 +5,9 @@ const activeTopic = urlParams.get('topic') || 'Mathematics';
 const questionLimit = sourceFile ? 10 : (parseInt(urlParams.get('limit')) || 10);
 
 let examDataMatrix = [];
+let sourceBlocksMatrix = [];
+let questionDiagnosticsCache = [];
+let activeDiagnosticFilter = 'ALL';
 
 let paperDifficulty = 5;
 let dynamicPassMark = 0;
@@ -44,48 +47,201 @@ function renderMathInSubtree(element) {
 }
 
 /**
- * Lightweight structural validator for the active question object
+ * Robust Phase 2 Question Diagnostic Engine (Read-Only)
+ * Evaluates a single question object against all objective structural requirements
  * @param {Object} item 
- * @returns {Array<string>} list of validation warning messages
+ * @param {number} index 
+ * @param {Array<Object>} allQuestions 
+ * @returns {{ status: 'PASS'|'WARNING'|'ERROR', issues: Array<{ severity: 'ERROR'|'WARNING', field: string, message: string }> }}
  */
-function validateQuestionObject(item) {
-    if (!item) return ["Question object is undefined or empty."];
-    const warnings = [];
+function runQuestionDiagnostics(item, index, allQuestions = []) {
+    if (!item || typeof item !== 'object') {
+        return {
+            status: 'ERROR',
+            issues: [{ severity: 'ERROR', field: 'General', message: 'Question object is undefined or empty.' }]
+        };
+    }
 
-    const questionId = item.QuestionID || item.id || item.questionId;
-    if (!questionId) warnings.push("Missing QuestionID");
+    const issues = [];
 
+    // 1. QuestionID Validation
+    const qid = item.QuestionID || item.id || item.questionId || "";
+    if (!qid || String(qid).trim() === "") {
+        issues.push({ severity: 'ERROR', field: 'metaQuestionId', message: 'QuestionID is missing or blank.' });
+    } else {
+        const isDuplicate = allQuestions.some((other, oIdx) => {
+            if (oIdx === index || !other) return false;
+            const otherId = other.QuestionID || other.id || other.questionId || "";
+            return String(otherId).trim() === String(qid).trim();
+        });
+        if (isDuplicate) {
+            issues.push({ severity: 'ERROR', field: 'metaQuestionId', message: `Duplicate QuestionID "${qid}" detected in this file.` });
+        }
+    }
+
+    // 2. Question Text (QEN / QBN)
     const engText = item.questionEnglish || item.text || "";
     const bngText = item.questionBengali || item.textBn || "";
-    if (!engText && !bngText) warnings.push("Missing Question Text (QEN/QBN)");
 
+    if (!engText || String(engText).trim() === "") {
+        issues.push({ severity: 'ERROR', field: 'target-question-text', message: 'English question text (QEN|) is missing or empty.' });
+    }
+    if (!bngText || String(bngText).trim() === "") {
+        issues.push({ severity: 'WARNING', field: 'target-question-text', message: 'Bengali question text (QBN|) is missing. English fallback is active.' });
+    }
+
+    // 3. Options A-D Validation
     const optA = item.optionEnglish?.a || item.a || "";
     const optB = item.optionEnglish?.b || item.b || "";
     const optC = item.optionEnglish?.c || item.c || "";
     const optD = item.optionEnglish?.d || item.d || "";
 
-    if (!optA && !optB && !optC && !optD) {
-        warnings.push("Missing all Options (A-D)");
-    } else if (!optA || !optB || !optC || !optD) {
-        warnings.push("Incomplete Option set (requires A, B, C, D)");
+    const optArray = [
+        { label: 'A', val: optA },
+        { label: 'B', val: optB },
+        { label: 'C', val: optC },
+        { label: 'D', val: optD }
+    ];
+
+    optArray.forEach(opt => {
+        if (!opt.val || String(opt.val).trim() === "") {
+            issues.push({ severity: 'ERROR', field: 'target-options-container', message: `Option ${opt.label} is missing or empty.` });
+        }
+    });
+
+    // Check for identical duplicate option values
+    const filledOpts = optArray.filter(o => o.val && String(o.val).trim() !== "");
+    for (let i = 0; i < filledOpts.length; i++) {
+        for (let j = i + 1; j < filledOpts.length; j++) {
+            if (String(filledOpts[i].val).trim().toLowerCase() === String(filledOpts[j].val).trim().toLowerCase()) {
+                issues.push({ severity: 'WARNING', field: 'target-options-container', message: `Duplicate option text between (${filledOpts[i].label}) and (${filledOpts[j].label}).` });
+            }
+        }
     }
 
-    if (item.correct === null || item.correct === undefined || isNaN(item.correct)) {
-        if (!item.correctLetter) warnings.push("Missing Correct Answer (Correct|)");
+    // 4. Correct Answer Validation
+    const rawCorrect = item.correct;
+    const correctLetter = item.correctLetter || (rawCorrect !== null && rawCorrect !== undefined && !isNaN(rawCorrect) ? String.fromCharCode(65 + Number(rawCorrect)) : "");
+
+    if (rawCorrect === null || rawCorrect === undefined || isNaN(rawCorrect) || rawCorrect < 0 || rawCorrect > 3) {
+        if (!['A', 'B', 'C', 'D'].includes(String(correctLetter).toUpperCase())) {
+            issues.push({ severity: 'ERROR', field: 'metaAnswer', message: `Correct answer "${correctLetter || rawCorrect || 'None'}" is invalid. Expected A, B, C, or D.` });
+        }
     }
 
-    return warnings;
+    // 5. Difficulty Validation
+    const diff = item.difficulty;
+    if (diff !== undefined && diff !== null && diff !== "") {
+        const numDiff = parseFloat(diff);
+        if (isNaN(numDiff) || numDiff < 1 || numDiff > 10) {
+            issues.push({ severity: 'WARNING', field: 'metaDifficulty', message: `Difficulty value "${diff}" is outside recommended range (1-10).` });
+        }
+    }
+
+    // 6. Image Reference Validation
+    if (item.image && String(item.image).trim() !== "") {
+        const imgStr = String(item.image).trim();
+        if (imgStr.endsWith("/") || imgStr === "none") {
+            issues.push({ severity: 'WARNING', field: 'metaImage', message: `Image path reference "${imgStr}" may be incomplete or empty.` });
+        }
+    }
+
+    // Derive overall status
+    let overallStatus = 'PASS';
+    if (issues.some(i => i.severity === 'ERROR')) {
+        overallStatus = 'ERROR';
+    } else if (issues.some(i => i.severity === 'WARNING')) {
+        overallStatus = 'WARNING';
+    }
+
+    return { status: overallStatus, issues };
 }
 
-function updateValidationStatusDisplay(warnings) {
-    const banner = document.getElementById("developer-validation-banner");
-    if (!banner) return;
-    if (warnings.length === 0) {
-        banner.style.display = "none";
-        banner.innerHTML = "";
-    } else {
-        banner.style.display = "block";
-        banner.innerHTML = `⚠️ <strong>Question Validation Notice:</strong> ${warnings.join(" | ")}`;
+/**
+ * Calculates and caches diagnostic records for all questions in the loaded file
+ */
+function recalculateFileDiagnostics() {
+    questionDiagnosticsCache = examDataMatrix.map((q, idx) => runQuestionDiagnostics(q, idx, examDataMatrix));
+
+    let passCount = 0;
+    let warnCount = 0;
+    let errCount = 0;
+
+    questionDiagnosticsCache.forEach(d => {
+        if (d.status === 'PASS') passCount++;
+        else if (d.status === 'WARNING') warnCount++;
+        else if (d.status === 'ERROR') errCount++;
+    });
+
+    const summaryBar = document.getElementById('developer-summary-bar');
+    if (summaryBar) {
+        if (examDataMatrix.length === 0) {
+            summaryBar.style.display = 'none';
+        } else {
+            summaryBar.style.display = 'flex';
+            document.getElementById('sum-total').textContent = `Total: ${examDataMatrix.length}`;
+            document.getElementById('sum-pass').textContent = `PASS: ${passCount}`;
+            document.getElementById('sum-warning').textContent = `WARN: ${warnCount}`;
+            document.getElementById('sum-error').textContent = `ERR: ${errCount}`;
+        }
+    }
+}
+
+/**
+ * Applies active diagnostic filter (ALL, PASS, WARNING, ERROR) to palette and navigation
+ * @param {'ALL'|'PASS'|'WARNING'|'ERROR'} filterType 
+ */
+function applyDiagnosticFilter(filterType) {
+    activeDiagnosticFilter = filterType;
+
+    ['all', 'pass', 'warning', 'error'].forEach(id => {
+        const btn = document.getElementById(`flt-${id}`);
+        if (btn) btn.classList.remove('active');
+    });
+    const activeBtn = document.getElementById(`flt-${filterType.toLowerCase()}`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    renderPaletteGrid();
+
+    // If current question does not match filter, jump to first matching question
+    if (filterType !== 'ALL' && questionDiagnosticsCache[activeIndex]?.status !== filterType) {
+        const nextMatch = questionDiagnosticsCache.findIndex(d => d.status === filterType);
+        if (nextMatch !== -1) {
+            jumpToQuestion(nextMatch);
+        }
+    }
+}
+
+/**
+ * Switches right panel inspector tabs (metadata, diagnostics, source, parsed, diff)
+ * @param {string} tabName 
+ */
+function switchInspectorTab(tabName) {
+    const tabNames = ['metadata', 'diagnostics', 'source', 'parsed', 'diff'];
+    const tabBtns = document.querySelectorAll('.insp-tab-btn');
+
+    tabBtns.forEach((btn, idx) => {
+        if (tabNames[idx] === tabName) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+
+    tabNames.forEach(name => {
+        const pane = document.getElementById(`tab-pane-${name}`);
+        if (pane) pane.style.display = (name === tabName) ? 'block' : 'none';
+    });
+}
+
+/**
+ * Focuses developer attention onto a specific inspector field
+ * @param {string} elementId 
+ */
+function focusDiagnosticField(elementId) {
+    switchInspectorTab('metadata');
+    const targetRow = document.getElementById(`row-${elementId}`) || document.getElementById(elementId);
+    if (targetRow) {
+        document.querySelectorAll('.meta-row').forEach(r => r.classList.remove('focused-field'));
+        targetRow.classList.add('focused-field');
+        targetRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 }
 
@@ -140,9 +296,7 @@ async function loadDeveloperFileList(topic) {
     const fileSelect = document.getElementById("fileSelect");
     fileSelect.innerHTML = "";
 
-    if (!topic) {
-        return;
-    }
+    if (!topic) return;
 
     try {
         const fileResponse = await fetch(
@@ -220,7 +374,6 @@ async function executeStandardExamCornerFetch() {
     } catch (err) { showMissingFileScreen(); } 
 }
 
-// ADVANCED TUTORIAL PARSER WITH AUTOMATIC OPTION SCRAMBLING
 async function parseTutorialTextFileMatrix(filePath) {
     try {
         const response = await fetch(filePath);
@@ -357,17 +510,12 @@ function submitConcernFormDetails() {
 
     fetch('/api/submit-report', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reportPayload)
     })
     .then(response => {
-        if (response.ok) {
-            alert("Thank you! Your concern has been submitted safely to the server.");
-        } else {
-            alert("Report package processed internally, but sync node threw a routing mismatch response.");
-        }
+        if (response.ok) alert("Thank you! Your concern has been submitted safely to the server.");
+        else alert("Report package processed internally, but sync node threw a routing mismatch response.");
         closeConcernReportModal();
     })
     .catch(err => {
@@ -474,6 +622,7 @@ function renderExamWindow() {
     const imageContainer = document.getElementById('target-image-container');
     const imageElem = document.getElementById('target-question-image');
     const shiftLabel = document.getElementById('shift-label-view');
+    const banner = document.getElementById('developer-validation-banner');
 
     if (examDataMatrix.length === 0) {
         questionTextElem.textContent = "No questions loaded.";
@@ -482,14 +631,15 @@ function renderExamWindow() {
         commonContainer.style.display = "none";
         imageContainer.style.display = "none";
         shiftLabel.innerText = "";
+        if (banner) banner.style.display = "none";
         document.getElementById('question-number-title').innerText = "Question No. 0";
-        updateValidationStatusDisplay([]);
         renderPaletteGrid();
-        updateDeveloperInspector(null);
+        updateDeveloperInspector(null, null);
         return;
     }
 
     const currentItem = examDataMatrix[activeIndex]; 
+    const currentRawSource = sourceBlocksMatrix[activeIndex] || "";
     
     if (questionStates[activeIndex] === 0 && !isReviewModeActive) { 
         questionStates[activeIndex] = 1; 
@@ -665,13 +815,41 @@ function renderExamWindow() {
         questionContent.scrollTop = 0;
     }
 
-    // Run Developer Validator
-    const validationWarnings = validateQuestionObject(currentItem);
-    updateValidationStatusDisplay(validationWarnings);
+    // Phase 2: Diagnostic Evaluation for Active Question
+    const diag = questionDiagnosticsCache[activeIndex] || runQuestionDiagnostics(currentItem, activeIndex, examDataMatrix);
+    renderActiveQuestionDiagnostics(diag);
 
     renderPaletteGrid(); 
-    updateDeveloperInspector(currentItem);
-} 
+    updateDeveloperInspector(currentItem, currentRawSource, diag);
+}
+
+/**
+ * Displays diagnostic status banner and issues on the active question workspace
+ * @param {{ status: 'PASS'|'WARNING'|'ERROR', issues: Array<{ severity: 'ERROR'|'WARNING', field: string, message: string }> }} diag 
+ */
+function renderActiveQuestionDiagnostics(diag) {
+    const banner = document.getElementById('developer-validation-banner');
+    if (!banner) return;
+
+    banner.className = `diagnostic-active-banner ${diag.status.toLowerCase()}`;
+    banner.style.display = 'block';
+
+    if (diag.status === 'PASS') {
+        banner.innerHTML = `<strong>Status: PASS</strong> — No structural issues detected for this question.`;
+    } else {
+        const titleIcon = diag.status === 'ERROR' ? '🚫' : '⚠️';
+        const issuesHtml = diag.issues.map(i => `
+            <div class="diag-issue-item ${i.severity.toLowerCase()}" onclick="focusDiagnosticField('${i.field}')">
+                <strong>[${i.severity}]</strong> ${i.message}
+            </div>
+        `).join('');
+
+        banner.innerHTML = `
+            <div><strong>${titleIcon} Status: ${diag.status}</strong> (${diag.issues.length} item${diag.issues.length > 1 ? 's' : ''})</div>
+            <div style="margin-top:4px;">${issuesHtml}</div>
+        `;
+    }
+}
 
 function selectOptionIndex(idx) { 
     if (isReviewModeActive) return; 
@@ -722,26 +900,45 @@ function jumpToQuestion(idx) {
     renderExamWindow(); 
 } 
 
+/**
+ * Renders question palette cells with dual Status Badges (✓, !, ✕) and ARIA support
+ */
 function renderPaletteGrid() { 
     const grid = document.getElementById('palette-grid-holder'); 
     grid.innerHTML = ''; 
     
-    questionStates.forEach((stateValue, idx) => { 
+    questionStates.forEach((stateValue, idx) => {
+        const diag = questionDiagnosticsCache[idx] || { status: 'PASS' };
+
+        // Apply diagnostic filter
+        if (activeDiagnosticFilter !== 'ALL' && diag.status !== activeDiagnosticFilter) {
+            return;
+        }
+
         const isActive = idx === activeIndex; 
         let computedStateClass = `state-${stateValue}`;
 
         if (isReviewModeActive && stateValue === 2) {
             const userSelection = selectedAnswers[idx];
-            const officialCorrectAnswer = examDataMatrix[idx].correct;
+            const officialCorrectAnswer = examDataMatrix[idx]?.correct;
 
             if (userSelection !== officialCorrectAnswer) {
                 computedStateClass = 'state-wrong-review';
             }
         }
 
+        let diagSymbol = '✓';
+        if (diag.status === 'WARNING') diagSymbol = '!';
+        if (diag.status === 'ERROR') diagSymbol = '✕';
+
         const cellHtml = `
-            <div class="palette-cell ${computedStateClass} ${isActive ? 'active-cell' : ''}" onclick="jumpToQuestion(${idx})">
+            <div class="palette-cell ${computedStateClass} diag-${diag.status.toLowerCase()} ${isActive ? 'active-cell' : ''}" 
+                 onclick="jumpToQuestion(${idx})"
+                 aria-label="Question ${idx + 1}, Exam State: ${stateValue}, Diagnostic Status: ${diag.status}"
+                 role="button"
+                 tabindex="0">
                 ${idx + 1}
+                <span class="diag-badge" title="Diagnostic: ${diag.status}">${diagSymbol}</span>
             </div>
         `; 
         grid.insertAdjacentHTML('beforeend', cellHtml); 
@@ -882,10 +1079,13 @@ function generateShortNote(questionIndex){
 }
 
 /*=========================================================
-    Developer Inspector
+    Phase 2: Comprehensive Multi-Tab Developer Inspector
 =========================================================*/
 
-function updateDeveloperInspector(question){
+function updateDeveloperInspector(question, rawSource = "", diag = null) {
+    // Reset focus
+    document.querySelectorAll('.meta-row').forEach(r => r.classList.remove('focused-field'));
+
     if (!question) {
         document.getElementById("metaQuestionId").textContent = "-";
         document.getElementById("metaDifficulty").textContent = "-";
@@ -898,44 +1098,168 @@ function updateDeveloperInspector(question){
         document.getElementById("metaExam").textContent = "-";
         document.getElementById("metaTopic").textContent = "-";
         document.getElementById("metaSubTopic").textContent = "-";
+
+        document.getElementById("raw-source-display").textContent = "No source block available.";
+        document.getElementById("parsed-object-display").textContent = "No parsed object.";
+        document.getElementById("diff-comparison-display").innerHTML = "<em>No comparison data.</em>";
         return;
     }
 
-    document.getElementById("metaQuestionId").textContent =
-        question.QuestionID || question.id || question.questionId || "-";
+    // 1. Tab: Metadata
+    document.getElementById("metaQuestionId").textContent = question.QuestionID || question.id || question.questionId || "-";
+    document.getElementById("metaDifficulty").textContent = question.difficulty ?? "-";
+    document.getElementById("metaLevel").textContent = question.level || "-";
+    document.getElementById("metaMarks").textContent = question.marks || "-";
+    document.getElementById("metaType").textContent = question.qType || question.type || "-";
+    document.getElementById("metaAnswer").textContent = question.correctLetter ?? (question.correct !== undefined && question.correct !== null ? String.fromCharCode(65 + Number(question.correct)) : "-");
+    document.getElementById("metaImage").textContent = question.image ? "Available" : "None";
+    document.getElementById("metaNotification").textContent = question.notification || "-";
+    document.getElementById("metaExam").textContent = question.exam || "-";
+    document.getElementById("metaTopic").textContent = question.topic || "-";
+    document.getElementById("metaSubTopic").textContent = question.subTopic || "-";
 
-    document.getElementById("metaDifficulty").textContent =
-        question.difficulty ?? "-";
+    // 2. Tab: Diagnostics Detail
+    if (diag) {
+        const pill = document.getElementById("diag-detail-status-pill");
+        pill.innerHTML = `<span class="diag-metric-pill ${diag.status.toLowerCase()}">Status: ${diag.status}</span>`;
 
-    document.getElementById("metaLevel").textContent =
-        question.level || "-";
+        const issuesList = document.getElementById("diag-detail-issues-list");
+        if (diag.issues.length === 0) {
+            issuesList.innerHTML = `<p style="color:#166534; font-size:0.85rem;">✓ All structural checks passed cleanly.</p>`;
+        } else {
+            issuesList.innerHTML = diag.issues.map(i => `
+                <div class="diag-issue-item ${i.severity.toLowerCase()}" onclick="focusDiagnosticField('${i.field}')" style="margin-bottom:6px;">
+                    <div><strong>[${i.severity}] ${i.field}:</strong> ${i.message}</div>
+                </div>
+            `).join('');
+        }
+    }
 
-    document.getElementById("metaMarks").textContent =
-        question.marks || "-";
+    // 3. Tab: Read-Only Raw Source Block
+    document.getElementById("raw-source-display").textContent = rawSource || "Raw source block not found for this question index.";
 
-    document.getElementById("metaType").textContent =
-        question.qType || question.type || "-";
+    // 4. Tab: Read-Only Parsed Object JSON
+    document.getElementById("parsed-object-display").textContent = JSON.stringify(question, null, 2);
 
-    document.getElementById("metaAnswer").textContent =
-        question.correctLetter ??
-        (question.correct !== undefined && question.correct !== null
-            ? String.fromCharCode(65 + Number(question.correct))
-            : "-");
+    // 5. Tab: Source vs Parsed Diff Mapping
+    renderSourceVsParsedDiff(rawSource, question);
+}
 
-    document.getElementById("metaImage").textContent =
-        question.image ? "Available" : "None";
+/**
+ * Generates an analytical discrepancy comparison between original TXT source lines and the parsed object
+ * @param {string} rawSource 
+ * @param {Object} question 
+ */
+function renderSourceVsParsedDiff(rawSource, question) {
+    const container = document.getElementById('diff-comparison-display');
+    if (!container) return;
 
-    document.getElementById("metaNotification").textContent =
-        question.notification || "-";
+    if (!rawSource || !question) {
+        container.innerHTML = "<em>No comparison data.</em>";
+        return;
+    }
 
-    document.getElementById("metaExam").textContent =
-        question.exam || "-";
+    const sourceLines = rawSource.split('\n').map(l => l.trim()).filter(Boolean);
+    const sourceKeyMap = {};
 
-    document.getElementById("metaTopic").textContent =
-        question.topic || "-";
+    sourceLines.forEach(line => {
+        const pipeIdx = line.indexOf('|');
+        if (pipeIdx !== -1) {
+            const key = line.substring(0, pipeIdx).trim().toUpperCase();
+            const val = line.substring(pipeIdx + 1).trim();
+            sourceKeyMap[key] = val;
+        }
+    });
 
-    document.getElementById("metaSubTopic").textContent =
-        question.subTopic || "-";
+    let html = '';
+
+    // Check Question Text
+    if (sourceKeyMap['QEN'] || sourceKeyMap['Q']) {
+        const srcText = sourceKeyMap['QEN'] || sourceKeyMap['Q'];
+        const parsedText = question.questionEnglish || question.text;
+        const matched = srcText === parsedText;
+        html += `
+            <div class="diff-row">
+                <span class="diff-field-name">Question (English)</span>
+                <span class="diff-status-tag ${matched ? 'matched' : 'discrepancy'}">${matched ? 'MATCHED' : 'PARSER DISCREPANCY'}</span>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Source: ${srcText}</div>
+                <div style="font-size:0.75rem; color:#0f172a;">Parsed: ${parsedText || 'None'}</div>
+            </div>
+        `;
+    }
+
+    // Check QBN
+    if (sourceKeyMap['QBN']) {
+        const srcBng = sourceKeyMap['QBN'];
+        const parsedBng = question.questionBengali || question.textBn;
+        const matched = srcBng === parsedBng;
+        html += `
+            <div class="diff-row">
+                <span class="diff-field-name">Question (Bengali)</span>
+                <span class="diff-status-tag ${matched ? 'matched' : 'discrepancy'}">${matched ? 'MATCHED' : 'PARSER DISCREPANCY'}</span>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Source: ${srcBng}</div>
+                <div style="font-size:0.75rem; color:#0f172a;">Parsed: ${parsedBng || 'None'}</div>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="diff-row">
+                <span class="diff-field-name">Question (Bengali)</span>
+                <span class="diff-status-tag derived">NORMALIZED / DERIVED</span>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Source: <em>Missing</em></div>
+                <div style="font-size:0.75rem; color:#0f172a;">Parsed: ${question.questionBengali || question.textBn || 'English Fallback'}</div>
+            </div>
+        `;
+    }
+
+    // Check Options A-D
+    ['A', 'B', 'C', 'D'].forEach(opt => {
+        if (sourceKeyMap[opt]) {
+            const srcOpt = sourceKeyMap[opt];
+            const parsedOptEng = question.optionEnglish ? question.optionEnglish[opt.toLowerCase()] : question[opt.toLowerCase()];
+            const matched = srcOpt.includes(parsedOptEng || '');
+            html += `
+                <div class="diff-row">
+                    <span class="diff-field-name">Option ${opt}</span>
+                    <span class="diff-status-tag ${matched ? 'matched' : 'discrepancy'}">${matched ? 'MATCHED' : 'PARSER DISCREPANCY'}</span>
+                    <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Source: ${srcOpt}</div>
+                    <div style="font-size:0.75rem; color:#0f172a;">Parsed (EN): ${parsedOptEng}</div>
+                </div>
+            `;
+        }
+    });
+
+    // Check Correct Answer
+    if (sourceKeyMap['CORRECT']) {
+        const srcCorrect = sourceKeyMap['CORRECT'];
+        const parsedCorrect = question.correctLetter || (question.correct !== null ? String.fromCharCode(65 + Number(question.correct)) : "");
+        const matched = srcCorrect.toUpperCase() === parsedCorrect.toUpperCase();
+        html += `
+            <div class="diff-row">
+                <span class="diff-field-name">Correct Answer</span>
+                <span class="diff-status-tag ${matched ? 'matched' : 'discrepancy'}">${matched ? 'MATCHED' : 'PARSER DISCREPANCY'}</span>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Source: ${srcCorrect}</div>
+                <div style="font-size:0.75rem; color:#0f172a;">Parsed: ${parsedCorrect} (Index: ${question.correct})</div>
+            </div>
+        `;
+    }
+
+    // Check QuestionID
+    if (sourceKeyMap['QUESTIONID']) {
+        const srcId = sourceKeyMap['QUESTIONID'];
+        const parsedId = question.QuestionID || question.id;
+        const matched = srcId === parsedId;
+        html += `
+            <div class="diff-row">
+                <span class="diff-field-name">QuestionID</span>
+                <span class="diff-status-tag ${matched ? 'matched' : 'discrepancy'}">${matched ? 'MATCHED' : 'PARSER DISCREPANCY'}</span>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Source: ${srcId}</div>
+                <div style="font-size:0.75rem; color:#0f172a;">Parsed: ${parsedId}</div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = html || '<em>No direct source keys matched.</em>';
 }
 
 async function loadDeveloperFile() {
@@ -968,7 +1292,9 @@ async function loadDeveloperFile() {
         if (payload.status !== "ok" || !Array.isArray(payload.data)) {
             alert(payload.message || "Unable to load question file.");
             examDataMatrix = [];
+            sourceBlocksMatrix = [];
             activeIndex = 0;
+            recalculateFileDiagnostics();
             updateDeveloperCounter();
             renderExamWindow();
             return;
@@ -977,27 +1303,34 @@ async function loadDeveloperFile() {
         if (payload.data.length === 0) {
             alert("The selected file contains 0 valid questions.");
             examDataMatrix = [];
+            sourceBlocksMatrix = [];
             activeIndex = 0;
+            recalculateFileDiagnostics();
             updateDeveloperCounter();
             renderExamWindow();
             return;
         }
 
         examDataMatrix = payload.data;
+        sourceBlocksMatrix = Array.isArray(payload.sourceBlocks) ? payload.sourceBlocks : [];
         activeIndex = 0;
-        updateDeveloperCounter();
+        activeDiagnosticFilter = 'ALL';
 
         selectedAnswers = new Array(examDataMatrix.length).fill(null);
         questionStates = new Array(examDataMatrix.length).fill(0);
         questionStates[0] = 1;
 
+        recalculateFileDiagnostics();
+        updateDeveloperCounter();
         setupGlobalExamMetrics(topic);
         renderExamWindow();
     } catch (err) {
         console.error("Failed to load developer question file:", err);
         alert("Failed to communicate with developer API.");
         examDataMatrix = [];
+        sourceBlocksMatrix = [];
         activeIndex = 0;
+        recalculateFileDiagnostics();
         updateDeveloperCounter();
         renderExamWindow();
     } finally {
@@ -1009,20 +1342,44 @@ async function loadDeveloperFile() {
 function developerPreviousQuestion() {
     if (examDataMatrix.length === 0) return;
 
-    if (activeIndex > 0) {
-        activeIndex--;
-        updateDeveloperCounter();
-        renderExamWindow();
+    if (activeDiagnosticFilter === 'ALL') {
+        if (activeIndex > 0) {
+            activeIndex--;
+            updateDeveloperCounter();
+            renderExamWindow();
+        }
+    } else {
+        // Find previous question matching filter
+        for (let i = activeIndex - 1; i >= 0; i--) {
+            if (questionDiagnosticsCache[i]?.status === activeDiagnosticFilter) {
+                activeIndex = i;
+                updateDeveloperCounter();
+                renderExamWindow();
+                break;
+            }
+        }
     }
 }
 
 function developerNextQuestion() {
     if (examDataMatrix.length === 0) return;
 
-    if (activeIndex < examDataMatrix.length - 1) {
-        activeIndex++;
-        updateDeveloperCounter();
-        renderExamWindow();
+    if (activeDiagnosticFilter === 'ALL') {
+        if (activeIndex < examDataMatrix.length - 1) {
+            activeIndex++;
+            updateDeveloperCounter();
+            renderExamWindow();
+        }
+    } else {
+        // Find next question matching filter
+        for (let i = activeIndex + 1; i < examDataMatrix.length; i++) {
+            if (questionDiagnosticsCache[i]?.status === activeDiagnosticFilter) {
+                activeIndex = i;
+                updateDeveloperCounter();
+                renderExamWindow();
+                break;
+            }
+        }
     }
 }
 
