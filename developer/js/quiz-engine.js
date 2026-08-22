@@ -124,7 +124,7 @@ async function initializeDeveloperMode() {
         topics.forEach(topic => {
             const option = document.createElement("option");
             option.value = topic;
-            option.textContent = topic;
+            option.textContent = topic.toUpperCase();
             topicSelect.appendChild(option);
         });
 
@@ -319,10 +319,11 @@ function setupGlobalExamMetrics(topicName) {
     }
 
     let formattedSectionTitle = topicName; 
-    if (topicName === 'GACA' || topicName === 'gaca' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; 
-    else if (topicName === 'GS' || topicName === 'gs') formattedSectionTitle = 'GENERAL SCIENCE'; 
-    else if (topicName === 'GI' || topicName === 'gi') formattedSectionTitle = 'GENERAL INTELLIGENCE'; 
-    else if (topicName === 'Mathematics' || topicName === 'math') formattedSectionTitle = 'MATHEMATICS'; 
+    if (topicName.toUpperCase() === 'GACA' || topicName === 'GACA Short Assessment') formattedSectionTitle = 'GENERAL AWARENESS & CURRENT AFFAIRS'; 
+    else if (topicName.toUpperCase() === 'GS') formattedSectionTitle = 'GENERAL SCIENCE'; 
+    else if (topicName.toUpperCase() === 'GI') formattedSectionTitle = 'GENERAL INTELLIGENCE'; 
+    else if (topicName.toUpperCase() === 'MATH' || topicName.toUpperCase() === 'MATHEMATICS') formattedSectionTitle = 'MATHEMATICS'; 
+    else formattedSectionTitle = topicName.toUpperCase();
     
     document.getElementById('active-section-label').innerText = formattedSectionTitle; 
     document.getElementById('wizard-exam-main-title').innerText = `${formattedSectionTitle} - LIVE EXAM MODULE`; 
