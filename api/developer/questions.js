@@ -87,15 +87,29 @@ function getFiles(topic, res) {
         });
     }
 
-    const folderPath = path.join(QUESTIONS_ROOT, topic.toLowerCase());
+    const entries = fs.readdirSync(QUESTIONS_ROOT, { withFileTypes: true });
 
-    if (!isSafePath(QUESTIONS_ROOT, folderPath) || !fs.existsSync(folderPath)) {
+    const actualTopic = entries
+        .find(entry =>
+            entry.isDirectory() &&
+            entry.name.toLowerCase() === topic.toLowerCase()
+        )?.name;
+    
+    if (!actualTopic) {
         return res.status(404).json({
             status: "error",
             message: `Question topic folder "${topic}" not found`
         });
     }
-
+    
+    const folderPath = path.join(QUESTIONS_ROOT, actualTopic);
+    
+    if (!isSafePath(QUESTIONS_ROOT, folderPath)) {
+        return res.status(400).json({
+            status: "error",
+            message: "Invalid topic path"
+        });
+    }
     try {
         const txtFiles = fs.readdirSync(folderPath)
             .filter(file => file.toLowerCase().endsWith(".txt"))
@@ -126,9 +140,36 @@ function loadFile(topic, file, res) {
         });
     }
 
-    const folderPath = path.join(QUESTIONS_ROOT, topic.toLowerCase());
-    const filePath = path.join(folderPath, file);
+    const entries = fs.readdirSync(QUESTIONS_ROOT, { withFileTypes: true });
 
+    const actualTopic = entries
+        .find(entry =>
+            entry.isDirectory() &&
+            entry.name.toLowerCase() === topic.toLowerCase()
+        )?.name;
+    
+    if (!actualTopic) {
+        return res.status(404).json({
+            status: "error",
+            message: `Question topic folder "${topic}" not found`
+        });
+    }
+    
+    if (
+        typeof file !== "string" ||
+        !file.toLowerCase().endsWith(".txt") ||
+        file.includes("/") ||
+        file.includes("\\")
+    ) {
+        return res.status(400).json({
+            status: "error",
+            message: "Only valid .txt question files are allowed"
+        });
+    }
+    
+    const folderPath = path.join(QUESTIONS_ROOT, actualTopic);
+    const filePath = path.join(folderPath, file);
+    
     if (!isSafePath(QUESTIONS_ROOT, filePath) || !fs.existsSync(filePath)) {
         return res.status(404).json({
             status: "error",
@@ -137,7 +178,7 @@ function loadFile(topic, file, res) {
     }
 
     try {
-        const questions = parseQuestionFile(filePath, topic.toLowerCase());
+        const questions = parseQuestionFile(filePath, actualTopic.toLowerCase());
 
         return res.status(200).json({
             status: "ok",
