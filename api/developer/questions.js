@@ -12,6 +12,38 @@ function isSafePath(baseDir, targetPath) {
     return relative && !relative.startsWith('..') && !path.isAbsolute(relative);
 }
 
+/**
+ * Deterministically splits raw TXT file into question blocks matching parsed questions
+ * @param {string} content 
+ * @returns {Array<string>}
+ */
+function extractRawSourceBlocks(content) {
+    const lines = content.replace(/\r\n/g, '\n').split('\n');
+    const blocks = [];
+    let currentLines = [];
+    let hasStarted = false;
+
+    for (const rawLine of lines) {
+        const line = rawLine.trim();
+        if (line.startsWith("QEN|") || line.startsWith("Q|")) {
+            if (hasStarted && currentLines.length > 0) {
+                blocks.push(currentLines.join('\n').trim());
+                currentLines = [];
+            }
+            hasStarted = true;
+        }
+        if (hasStarted) {
+            currentLines.push(rawLine);
+        }
+    }
+
+    if (hasStarted && currentLines.length > 0) {
+        blocks.push(currentLines.join('\n').trim());
+    }
+
+    return blocks;
+}
+
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -88,28 +120,24 @@ function getFiles(topic, res) {
     }
 
     const entries = fs.readdirSync(QUESTIONS_ROOT, { withFileTypes: true });
+    const matchedEntry = entries.find(entry => entry.isDirectory() && entry.name.toLowerCase() === topic.toLowerCase());
 
-    const actualTopic = entries
-        .find(entry =>
-            entry.isDirectory() &&
-            entry.name.toLowerCase() === topic.toLowerCase()
-        )?.name;
-    
-    if (!actualTopic) {
+    if (!matchedEntry) {
         return res.status(404).json({
             status: "error",
             message: `Question topic folder "${topic}" not found`
         });
     }
-    
-    const folderPath = path.join(QUESTIONS_ROOT, actualTopic);
-    
+
+    const folderPath = path.join(QUESTIONS_ROOT, matchedEntry.name);
+
     if (!isSafePath(QUESTIONS_ROOT, folderPath)) {
         return res.status(400).json({
             status: "error",
             message: "Invalid topic path"
         });
     }
+
     try {
         const txtFiles = fs.readdirSync(folderPath)
             .filter(file => file.toLowerCase().endsWith(".txt"))
@@ -141,20 +169,15 @@ function loadFile(topic, file, res) {
     }
 
     const entries = fs.readdirSync(QUESTIONS_ROOT, { withFileTypes: true });
+    const matchedEntry = entries.find(entry => entry.isDirectory() && entry.name.toLowerCase() === topic.toLowerCase());
 
-    const actualTopic = entries
-        .find(entry =>
-            entry.isDirectory() &&
-            entry.name.toLowerCase() === topic.toLowerCase()
-        )?.name;
-    
-    if (!actualTopic) {
+    if (!matchedEntry) {
         return res.status(404).json({
             status: "error",
             message: `Question topic folder "${topic}" not found`
         });
     }
-    
+
     if (
         typeof file !== "string" ||
         !file.toLowerCase().endsWith(".txt") ||
@@ -166,10 +189,10 @@ function loadFile(topic, file, res) {
             message: "Only valid .txt question files are allowed"
         });
     }
-    
-    const folderPath = path.join(QUESTIONS_ROOT, actualTopic);
+
+    const folderPath = path.join(QUESTIONS_ROOT, matchedEntry.name);
     const filePath = path.join(folderPath, file);
-    
+
     if (!isSafePath(QUESTIONS_ROOT, filePath) || !fs.existsSync(filePath)) {
         return res.status(404).json({
             status: "error",
@@ -178,13 +201,16 @@ function loadFile(topic, file, res) {
     }
 
     try {
-        const questions = parseQuestionFile(filePath, actualTopic.toLowerCase());
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const questions = parseQuestionFile(filePath, matchedEntry.name.toLowerCase());
+        const sourceBlocks = extractRawSourceBlocks(fileContent);
 
         return res.status(200).json({
             status: "ok",
             version: "1.0",
             questionCount: questions.length,
-            data: questions
+            data: questions,
+            sourceBlocks: sourceBlocks
         });
     } catch (err) {
         return res.status(500).json({
