@@ -441,34 +441,18 @@ function startClockCountdown() {
 }
 
 /**
- * Universal text localization resolver: handles QEN/QBN properties and legacy slash formats
- * @param {string|Object} rawInput 
- * @param {string} bngAlternative 
+ * Safe field-based localization resolver: uses canonical English and Bengali fields without splitting on slashes
+ * @param {string} engText 
+ * @param {string} bngText 
  * @returns {string}
  */
-function getLocalizedText(rawInput, bngAlternative = "") {
-    if (!rawInput && !bngAlternative) return "";
-
+function getLocalizedText(engText, bngText = "") {
     if (currentLanguage === "BN") {
-        if (bngAlternative && String(bngAlternative).trim() !== "") {
-            return String(bngAlternative).trim();
-        }
-        if (typeof rawInput === "string" && rawInput.includes("/")) {
-            const parts = rawInput.split("/");
-            if (parts.length >= 2 && parts[1].trim() !== "") {
-                return parts[1].trim();
-            }
+        if (bngText !== undefined && bngText !== null && String(bngText).trim() !== "") {
+            return String(bngText).trim();
         }
     }
-
-    if (typeof rawInput === "string") {
-        if (rawInput.includes("/")) {
-            return rawInput.split("/")[0].trim();
-        }
-        return rawInput.trim();
-    }
-
-    return String(rawInput || bngAlternative || "").trim();
+    return String(engText ?? bngText ?? "").trim();
 }
 
 function toggleViewLanguage() { 
@@ -545,7 +529,7 @@ function renderExamWindow() {
         imageElem.src = "";
     }
 
-    // Render Question Text (QEN/QBN with Bengali fallback) safely using textContent
+    // Render Question Text safely using textContent
     const engText = currentItem.questionEnglish || currentItem.text || "";
     const bngText = currentItem.questionBengali || currentItem.textBn || "";
     const resolvedQuestionText = getLocalizedText(engText, bngText);
@@ -556,7 +540,7 @@ function renderExamWindow() {
     container.innerHTML = ''; 
     feedbackContainer.innerHTML = ''; 
     
-    // Resolve Options A-D (handling both object maps and root fields)
+    // Resolve Options A-D
     const rawOptions = [
         { eng: currentItem.optionEnglish?.a || currentItem.a || "", bn: currentItem.optionBengali?.a || currentItem.aBn || "" },
         { eng: currentItem.optionEnglish?.b || currentItem.b || "", bn: currentItem.optionBengali?.b || currentItem.bBn || "" },
